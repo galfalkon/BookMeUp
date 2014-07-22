@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/business_profile_creation_edtBusinessName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/business_profile_creation_edtBusinessNameHint"
+        android:inputType="text" />
+
+    <TableLayout>
+
+        <TableRow>
+            <EditText
+                android:id="@+id/business_profile_creation_edtBusinessDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/business_profile_creation_edtBusinessDescriptionHint"
+                android:inputType="text" />
+            <EditText 
+                android:layout_weight="2"
+                android:text="asdsa"/>
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>

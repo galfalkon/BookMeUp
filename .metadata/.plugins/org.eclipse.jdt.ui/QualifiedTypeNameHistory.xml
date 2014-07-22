@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="com.parse.ParseObject"/>
+<fullyQualifiedTypeName name="com.gling.bookmeup.MainActivity"/>
+<fullyQualifiedTypeName name="android.app.Application"/>
+<fullyQualifiedTypeName name="android.app.Fragment"/>
+<fullyQualifiedTypeName name="android.app.FragmentManager"/>
+<fullyQualifiedTypeName name="com.gling.bookmeup.fragments.UserTypeSelectionFragment"/>
+<fullyQualifiedTypeName name="android.content.Context"/>
+<fullyQualifiedTypeName name="android.app.Activity"/>
+<fullyQualifiedTypeName name="android.support.v7.app.ActionBarActivity"/>
+<fullyQualifiedTypeName name="android.support.v4.app.FragmentManager"/>
+<fullyQualifiedTypeName name="com.gling.bookmeup.main.FragmentsSwitcher"/>
+<fullyQualifiedTypeName name="android.support.v4.app.FragmentActivity"/>
+<fullyQualifiedTypeName name="android.R"/>
+<fullyQualifiedTypeName name="android.R.id"/>
+<fullyQualifiedTypeName name="com.gling.bookmeup.main.MainActivity"/>
+<fullyQualifiedTypeName name="com.gling.bookmeup.fragments.LoginFragment"/>
+<fullyQualifiedTypeName name="android.util.SparseArray"/>
+<fullyQualifiedTypeName name="com.gling.bookmeup.fragments.EMailSignUpFragment"/>
+<fullyQualifiedTypeName name="android.widget.Button"/>
+<fullyQualifiedTypeName name="android.support.v4.app.Fragment"/>
+<fullyQualifiedTypeName name="android.view.View.OnClickListener"/>
+<fullyQualifiedTypeName name="android.widget.EditText"/>
+<fullyQualifiedTypeName name="com.parse.ParseUser"/>
+<fullyQualifiedTypeName name="com.parse.SignUpCallback"/>
+<fullyQualifiedTypeName name="com.parse.ParseException"/>
+<fullyQualifiedTypeName name="android.view.View"/>
+<fullyQualifiedTypeName name="com.gling.bookmeup.fragments.EMailLoginFragment"/>
+<fullyQualifiedTypeName name="com.parse.LogInCallback"/>
+<fullyQualifiedTypeName name="com.gling.bookmeup.main.FragmentsFlowManager"/>
+<fullyQualifiedTypeName name="com.gling.bookmeup.fragments.MainScreen"/>
+<fullyQualifiedTypeName name="android.widget.ProgressBar"/>
+<fullyQualifiedTypeName name="android.app.ProgressDialog"/>
+<fullyQualifiedTypeName name="android.content.DialogInterface.OnCancelListener"/>
+<fullyQualifiedTypeName name="android.util.Log"/>
+<fullyQualifiedTypeName name="com.parse.ParseFacebookUtils"/>
+<fullyQualifiedTypeName name="com.gling.bookmeup.main.ClickableFragment"/>
+<fullyQualifiedTypeName name="com.gling.bookmeup.R"/>
+<fullyQualifiedTypeName name="com.gling.bookmeup.R.layout"/>
+<fullyQualifiedTypeName name="com.gling.bookmeup.R.id"/>
+<fullyQualifiedTypeName name="android.widget.Toast"/>
+<fullyQualifiedTypeName name="com.parse.ParseAnalytics"/>
+<fullyQualifiedTypeName name="java.util.Map"/>
+<fullyQualifiedTypeName name="java.util.HashMap"/>
+</qualifiedTypeNameHistroy>

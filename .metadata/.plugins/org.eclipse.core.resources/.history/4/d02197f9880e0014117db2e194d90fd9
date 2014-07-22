@@ -1,0 +1,13 @@
+package com.gling.bookmeup.fragments;
+
+import android.support.v4.app.Fragment;
+import android.view.View;
+
+public class UserTypeSelectionFragment extends Fragment {
+	private final String TAG = "MainActivity";
+	
+	@Override
+	public View getView() {
+		return super.getView();
+	}
+}
