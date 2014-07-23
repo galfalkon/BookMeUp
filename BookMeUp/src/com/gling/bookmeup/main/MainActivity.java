@@ -12,7 +12,7 @@ import com.parse.ParseAnalytics;
 
 public class MainActivity extends ActionBarActivity {
 	private static final String TAG = "MainActivity";
-	
+	int i = 5;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.i(TAG, "onCreate");
