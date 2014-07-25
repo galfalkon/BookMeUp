@@ -55,7 +55,7 @@ public class EMailLoginFragment extends OnClickListenerFragment {
 		String password = edtPassword.getText().toString();
 
 		Log.i(TAG, "Showing a progress dialog");
-		final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), "Loging in...", "Please wait");
+		final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Loging in...");
 
 		ParseUser.logInInBackground(userName, password, new LogInCallback() {
 			@Override
