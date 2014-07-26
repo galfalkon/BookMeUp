@@ -73,9 +73,9 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 				new int[] {android.R.id.text1, android.R.id.text2},
 				
 				listOfChildGroups,
-				android.R.layout.simple_expandable_list_item_2, 
-				new String[] { ExpandableListKeys.GroupItem.CLIENT_NAME, ExpandableListKeys.GroupItem.SERVICE_NAME }, 
-				new int[] { android.R.id.text1, android.R.id.text2 });
+				R.layout.expandable_bookings_list_item, 
+				new String[] { ExpandableListKeys.GroupItem.CLIENT_NAME, ExpandableListKeys.GroupItem.SERVICES, ExpandableListKeys.GroupItem.DATE }, 
+				new int[] { R.id.expandable_bookings_list_item_txtClientName, R.id.expandable_bookings_list_item_txtServices, R.id.expandable_bookings_list_item_txtDate });
 
 		ExpandableListView expandableListView = (ExpandableListView) view.findViewById(R.id.business_bookings_explistViewBookings);
 		expandableListView.setAdapter(_expandableListAdapter);
@@ -157,8 +157,9 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 		}
 		
 		public static class GroupItem {
-			public final static String CLIENT_NAME = "TITLE";
-			public final static String SERVICE_NAME = "SERVICE_NAME";
+			public final static String CLIENT_NAME = "CLIENT_NAME";
+			public final static String SERVICES = "SERVICES";
+			public final static String DATE = "DATE";
 		}
 	}
 	
@@ -178,7 +179,8 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 		public Map<String, String> toMap() {
 			Map<String, String> map = new HashMap<String, String>();
 			map.put(ExpandableListKeys.GroupItem.CLIENT_NAME, _clientName);
-			map.put(ExpandableListKeys.GroupItem.SERVICE_NAME, _serviceName);
+			map.put(ExpandableListKeys.GroupItem.SERVICES, _serviceName);
+			map.put(ExpandableListKeys.GroupItem.DATE, _date.toString());
 			return map;
 		}
 	}
