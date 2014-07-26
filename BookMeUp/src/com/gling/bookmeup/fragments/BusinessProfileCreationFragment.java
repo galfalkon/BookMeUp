@@ -92,7 +92,7 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
 		
 		ParseObject newBusiness = new ParseObject(BusinessesClass.CLASS_NAME);
 		newBusiness.put(BusinessesClass.Keys.USERNAME, currentUser.getUsername());
-		newBusiness.put(BusinessesClass.Keys.DISPLAY_NAME, edtBusinessName.getText().toString());
+		newBusiness.put(BusinessesClass.Keys.NAME, edtBusinessName.getText().toString());
 		newBusiness.put(BusinessesClass.Keys.DESCRIPTION, edtBusinessDescription.getText().toString());
 		newBusiness.put(BusinessesClass.Keys.OPENING_HOURS, edtBusinessOpeningHours.getText().toString());
 		newBusiness.put(BusinessesClass.Keys.IMAGE, getByteArrayFromImageView(imgBusinessImage)); // TODO move to utils

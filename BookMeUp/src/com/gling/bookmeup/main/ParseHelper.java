@@ -7,6 +7,7 @@ public class ParseHelper {
 		
 		public static class Keys {
 			public static final String ID = "objectId";
+			public static final String NAME = "name";
 			public static final String FAVOURITES = "favourites";
 		}
 	}
@@ -17,7 +18,7 @@ public class ParseHelper {
 		public static class Keys {
 			public static final String ID = "objectId";
 			public static final String USERNAME = "username";
-			public static final String DISPLAY_NAME = "displayName";
+			public static final String NAME = "name";
 			public static final String DESCRIPTION = "description";
 			public static final String CATEGORY = "category";
 			public static final String OPENING_HOURS = "openingHours";
@@ -31,8 +32,8 @@ public class ParseHelper {
 		public final static String CLASS_NAME = "Bookings";
 		
 		public static class Keys {
-			public static final String CLIENT_ID = "clientId";
-			public static final String BUSINESS_ID = "businessId";
+			public static final String CLIENT_POINTER = "clientPointer";
+			public static final String BUSINESS_POINTER = "businessPointer";
 			public static final String DATE = "date";
 			public static final String SERVICES = "services";
 			public static final String IS_APPROVED = "isApproved";
