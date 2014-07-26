@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 public class CustomerMainScreen extends OnClickListenerFragment implements OnClickListener {
 
-	private static final String TAG = "MainActivity";
+	private static final String TAG = "CustomerMainActivity";
 
 	@Override
 	protected int getFragmentLayoutId() {

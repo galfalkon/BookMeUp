@@ -6,10 +6,12 @@ import android.util.Log;
 import android.util.SparseArray;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.fragments.BusinessMainScreen;
+import com.gling.bookmeup.fragments.BusinessProfileCreationFragment;
+import com.gling.bookmeup.fragments.CustomerMainScreen;
 import com.gling.bookmeup.fragments.EMailLoginFragment;
 import com.gling.bookmeup.fragments.EMailSignUpFragment;
-import com.gling.bookmeup.fragments.LoginFragment;
-import com.gling.bookmeup.fragments.CustomerMainScreen;
+import com.gling.bookmeup.fragments.UserTypeSelectionFragment;
 
 /**
  * This class wraps all transitions from the different fragments in the application.
@@ -26,18 +28,21 @@ public class FragmentsFlowManager {
 		_buttonIdsToFragmentName = new SparseArray<String>();
 		
 		// user_type_selection
-		_buttonIdsToFragmentName.put(R.id.user_type_selection_btnBusiness, LoginFragment.class.getName());
-		_buttonIdsToFragmentName.put(R.id.user_type_selection_btnCustomer, LoginFragment.class.getName());
+		_buttonIdsToFragmentName.put(R.id.user_type_selection_btnBusiness, BusinessProfileCreationFragment.class.getName());
+		_buttonIdsToFragmentName.put(R.id.user_type_selection_btnCustomer, CustomerMainScreen.class.getName());
 		
 		// login
 		_buttonIdsToFragmentName.put(R.id.login_btnLoginWithEMail, EMailLoginFragment.class.getName());
 		_buttonIdsToFragmentName.put(R.id.login_btnSignUp, EMailSignUpFragment.class.getName());
 		
 		// E-Mail sign up
-		_buttonIdsToFragmentName.put(R.id.email_signup_btnContinue, CustomerMainScreen.class.getName());		
+		_buttonIdsToFragmentName.put(R.id.email_signup_btnContinue, UserTypeSelectionFragment.class.getName());		
 		
 		// E-Mail login
 		_buttonIdsToFragmentName.put(R.id.email_login_btnContinue, CustomerMainScreen.class.getName());
+		
+		// Business profile creation
+		_buttonIdsToFragmentName.put(R.id.business_profile_creation_btnCreate, BusinessMainScreen.class.getName());
 	}
 	
 	public static void goToNextFragment(FragmentActivity fragmentActivity, int buttonClickedId) {

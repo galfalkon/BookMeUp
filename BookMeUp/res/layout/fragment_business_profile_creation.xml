@@ -9,13 +9,42 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/business_profile_creation_edtBusinessNameHint"
-        android:inputType="text" />
+        android:inputType="text">
+        <requestFocus />
+    </EditText>
+
+    <ImageView
+        android:id="@+id/business_profile_creation_imgBusinessImage"
+        android:layout_width="112dp"
+        android:layout_height="112dp"
+        android:src="@android:drawable/ic_menu_gallery" />
 
     <EditText
         android:id="@+id/business_profile_creation_edtBusinessDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/business_profile_creation_edtBusinessDescriptionHint"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:hint="@string/business_profile_creation_edtBusinessDescriptionHint" />
+    
+    <EditText
+        android:id="@+id/business_profile_creation_edtBusinessOpeningHours"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/business_profile_creation_edtBusinessOpeningHoursHint"
         android:inputType="text" />
+
+    <ListView
+        android:id="@+id/business_profile_creation_lstBusinessServices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/business_profile_creation_lstBusinessServicesDescription" >
+    </ListView>
+    
+    <Button
+        android:layout_width="match_parent" 
+        android:layout_height="wrap_content"
+        android:id="@+id/business_profile_creation_btnCreate"
+        android:text="@string/business_profile_creation_btnCreateProfile" />
 
 </LinearLayout>

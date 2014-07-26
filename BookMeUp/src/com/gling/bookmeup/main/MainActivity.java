@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.fragments.UserTypeSelectionFragment;
+import com.gling.bookmeup.fragments.LoginFragment;
 import com.parse.ParseAnalytics;
 
 public class MainActivity extends ActionBarActivity {
@@ -22,7 +22,7 @@ public class MainActivity extends ActionBarActivity {
 
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, new UserTypeSelectionFragment()).commit();
+					.add(R.id.container, new LoginFragment()).commit();
 		}
 		
 		// Track application opens
