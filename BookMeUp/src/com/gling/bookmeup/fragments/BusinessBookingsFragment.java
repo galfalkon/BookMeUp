@@ -68,9 +68,9 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 				getActivity(),
 				
 				groupHeadersData,
-				android.R.layout.simple_expandable_list_item_2,
+				R.layout.expandable_bookings_list_header,
 				new String[] { ExpandableListKeys.GroupHeader.HEADER_TITLE, ExpandableListKeys.GroupHeader.NUM_OF_ITEMS},
-				new int[] {android.R.id.text1, android.R.id.text2},
+				new int[] {R.id.expandable_bookings_list_header_txtTitle, R.id.expandable_bookings_list_header_txtNumOfItems},
 				
 				listOfChildGroups,
 				R.layout.expandable_bookings_list_item, 
