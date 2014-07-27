@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">BookMeUp!</string>
     <string name="action_settings">Settings</string>
-    
+
     <!-- Login screen -->
     <string name="login_btnLoginWithGoogleText">Login with Google</string>
     <string name="login_btnLoginWithFacebookText">Login with Facebook</string>
     <string name="login_btnLoginWithEMailText">Login with Email</string>
     <string name="login_btnSignUpText">Sign up!</string>
-    
+
     <!-- Main screen -->
     <string name="customer_main_screen_btnBarbersText">Barbers</string>
     <string name="customer_main_screen_btnCosmeticsText">Cosmetics</string>
     <string name="customer_main_screen_btnDentistsText">Dentists</string>
     <string name="customer_main_screen_btnGaragesText">Garages</string>
-    
+
     <!-- User type selection -->
     <string name="user_type_selection_btnCustomerText">I\'m a Customer</string>
     <string name="user_type_selection_btnBusinessText">I\'m a Business</string>
-    
+
     <!-- email signup -->
     <string name="email_signup_btnContinueText">Continue</string>
     <string name="email_signup_edtUserNameHint">User name</string>
@@ -32,6 +33,12 @@
     <string name="email_login_edtUserNameHint">User name</string>
     <string name="email_login_edtPasswordHint">Password</string>
     <string name="email_login_txtForgotPasswordText">Forgot Your Password?</string>
+
+    <!-- Business screen -->
+    <string name="title_activity_business">BookMeUp! - For Business</string>
+    <string name="title_section_calendar">Calendar</string>
+    <string name="title_section_bookings">Bookings</string>
+    <string name="title_section_client_list">Client List</string>
     
     <!-- Business profile creation -->
     <string name="business_profile_creation_edtBusinessNameHint">Business name</string>
@@ -40,4 +47,6 @@
     <string name="business_profile_creation_imgProfilePicutureDescription">Profile Picture</string>
     <string name="business_profile_creation_lstBusinessServicesDescription">Services</string>
     <string name="business_profile_creation_btnCreateProfile">Create Profile</string>
+    <string name="action_business_profile_edit">Business</string>
+
 </resources>

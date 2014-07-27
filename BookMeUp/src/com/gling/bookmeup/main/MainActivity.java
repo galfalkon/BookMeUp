@@ -1,16 +1,21 @@
 package com.gling.bookmeup.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.business.BusinessActivity;
 import com.gling.bookmeup.fragments.LoginFragment;
 import com.parse.ParseAnalytics;
 
 public class MainActivity extends ActionBarActivity {
+	
+	public final static String EXTRA_MESSAGE = "com.gling.bookmeup.MESSAGE";
 	private static final String TAG = "MainActivity";
 	
 	@Override
@@ -42,10 +47,17 @@ public class MainActivity extends ActionBarActivity {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
+		switch (item.getItemId()) {
+        case R.id.action_business_profile_edit:
+        	Intent intent = new Intent(this, BusinessActivity.class);
+            intent.putExtra(EXTRA_MESSAGE, "hi there");
+            startActivity(intent);
+            return true;
+        case R.id.action_settings:
+            // openSettings();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+    }
 	}
 }
