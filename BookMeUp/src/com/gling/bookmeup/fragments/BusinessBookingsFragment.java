@@ -99,20 +99,13 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 	}
 
 	private void inflateListsWithFutureBookings() {
-		// TOOD: The business ParseObject is created here temporarily. We'll need to store this ParseObject for a business user and use it here.
+		// TODO: The businessId should be saved in the shared preferences during the profile creation. 
 		final String businessId = "UwnJrO4XIq";
-		ParseQuery<ParseObject> businessQuery = new ParseQuery<ParseObject>(BusinessesClass.CLASS_NAME).whereEqualTo("objectId", businessId);
-		ParseObject businessParseObject = new ParseObject(BusinessesClass.CLASS_NAME);
-		try {
-			businessParseObject = businessQuery.getFirst();
-		} catch (ParseException e) {
-			Log.e(TAG, "Exceptin: " + e.getMessage());
-			e.printStackTrace();
-			return;
-		}
+		final ParseQuery<ParseObject> innerBusinessPointerQuery = new ParseQuery<ParseObject>(BusinessesClass.CLASS_NAME).
+				whereEqualTo(BusinessesClass.Keys.ID, businessId);
 		
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(BookingsClass.CLASS_NAME).
-				whereEqualTo(BookingsClass.Keys.BUSINESS_POINTER, businessParseObject).
+				whereMatchesQuery(BookingsClass.Keys.BUSINESS_POINTER, innerBusinessPointerQuery).
 				whereGreaterThan(BookingsClass.Keys.DATE, new Date());
 		query.include(BookingsClass.Keys.BUSINESS_POINTER);
 		query.include(BookingsClass.Keys.CLIENT_POINTER);

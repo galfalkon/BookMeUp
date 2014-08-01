@@ -32,6 +32,7 @@ public class ParseHelper {
 		public final static String CLASS_NAME = "Bookings";
 		
 		public static class Keys {
+			public static final String ID = "objectId";
 			public static final String CLIENT_POINTER = "clientPointer";
 			public static final String BUSINESS_POINTER = "businessPointer";
 			public static final String DATE = "date";
