@@ -1,0 +1,50 @@
+package com.gling.bookmeup.fragments;
+
+import com.gling.bookmeup.R;
+import com.gling.bookmeup.main.ClickableFragment;
+import com.gling.bookmeup.main.FragmentsFlowManager;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+
+public class CustomerMainScreen extends ClickableFragment implements OnClickListener {
+
+	private static final String TAG = "MainActivity";
+
+	@Override
+	protected int getFragmentLayoutId() {
+		return R.layout.fragment_customer_main_screen;
+	}
+	
+//	@Override
+//	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//			Bundle savedInstanceState) {
+//		Log.i(TAG, "onCreateView");
+//
+//		View rootView = inflater.inflate(R.layout.fragment_main_screen,
+//				container, false);
+//		
+//		// Set event listeners
+//		rootView.findViewById(R.id.main_screen_btnBabrbers).setOnClickListener(this);
+//		rootView.findViewById(R.id.main_screen_btnCosmetics).setOnClickListener(this);
+//
+//		return rootView;
+//	}
+//
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.main_screen_btnBabrbers:
+			Log.i(TAG, "main_screen_btnBabrbers clicked");
+			break;
+		case R.id.main_screen_btnCosmetics:
+			Log.i(TAG, "main_screen_btnCosmetics clicked");
+			break;
+		}
+	}
+}

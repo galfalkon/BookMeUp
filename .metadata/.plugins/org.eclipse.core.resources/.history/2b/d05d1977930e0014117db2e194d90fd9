@@ -1,0 +1,52 @@
+package com.gling.bookmeup.main;
+
+import java.util.HashMap;
+
+import com.gling.bookmeup.fragments.LoginFragment;
+
+import com.gling.bookmeup.R;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.util.SparseArray;
+
+/**
+ * Singleton that controls all fragments transitions that are triggered by click events
+ * @author Gal Falkon
+ */
+public class FragmentsFlowManager {
+	private static final String TAG = "FragmentsFlowManager";
+
+	private static SparseArray<String> _buttonIdsToFragmentName;
+	
+	private static void initializeFlowTable() {
+		_buttonIdsToFragmentName = new SparseArray<String>();
+		
+		_buttonIdsToFragmentName.put(R.id.user_type_selection_btnBusiness, LoginFragment.class.getName());
+		_buttonIdsToFragmentName.put(R.id.user_type_selection_btnCustomer, LoginFragment.class.getName());
+	}
+	
+	public static void goToNextFragment(FragmentActivity fragmentActivity, int buttonClickedId) {
+		Log.i(TAG, "goToNextFragment");
+		
+		if (_buttonIdsToFragmentName == null)
+		{
+			initializeFlowTable();
+		}
+		
+		
+		if (_buttonIdsToFragmentName.indexOfKey(buttonClickedId) < 0)
+		{
+			Log.i(TAG, "No transition after a click on the given button");
+			
+			// TODO: handle error
+			return;
+		}
+		
+		fragmentActivity.getSupportFragmentManager().
+		beginTransaction().
+		addToBackStack(null).
+		replace(R.id.container, Fragment.instantiate(fragmentActivity, _buttonIdsToFragmentName.get(buttonClickedId))).
+		commit();
+	}
+}

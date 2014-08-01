@@ -1,0 +1,17 @@
+package com.gling.bookmeup;
+
+import android.app.Application;
+
+public class BookMeUpApplication extends Application {
+	
+	private final String PARSE_APPLICATION_ID = "0Uye8FHMnsklraYbqnMDxtg0rbQRKEqZSVO6BHPa";
+	private final String PARSE_CLIENT_KEY = "5dB8I0UZWFaTtYpE3OUn7CWwPzxYxe2yBqE7uhS3";
+	
+	
+	@Override
+	public void onCreate() {
+		// TODO Auto-generated method stub
+		super.onCreate();
+	}
+
+}

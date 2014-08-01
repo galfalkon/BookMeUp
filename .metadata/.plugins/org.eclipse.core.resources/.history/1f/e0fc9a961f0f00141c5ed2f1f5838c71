@@ -1,0 +1,59 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.gling.bookmeup.main.MainActivity$EMailSignUpFragment" >
+
+    <EditText
+        android:id="@+id/email_signup_edtUserName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/email_signup_edtUserNameHint"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/email_signup_edtEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/email_signup_edtEmailHint"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/email_signup_edtEmailVerification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/email_signup_edtEmailVerificationHint"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/email_signup_edtPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/email_signup_edtPasswordHint"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/email_signup_edtPasswordVerification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/email_signup_edtPasswordVerificationHint"
+        android:inputType="textPassword" />
+
+    <TextView
+        android:layout_width="match_parent" 
+        android:layout_height="wrap_content"
+        style="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+        android:text="You will receive and e-mail message for verification "/>
+    
+    <Button
+        android:id="@+id/email_signup_btnContinue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/email_signup_btnContinueText" />
+
+</LinearLayout>
