@@ -1,7 +1,0 @@
-package com.gling.bookmeup.fragments;
-
-import com.gling.bookmeup.main.ClickableFragment;
-
-public class BusinessProfileFragment extends ClickableFragment {
-
-}
