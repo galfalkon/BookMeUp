@@ -36,6 +36,9 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 	
 	Map<String, String> _approvedBookingsGroupHeaderData;
 	private List<Map<String, String>> _approvedBookingsData;
+	
+	// TODO: Temporary! The businessId should be saved in the shared preferences during the profile creation. 
+	private static final String BUSINESS_ID = "1Q5MxL3CzB";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
