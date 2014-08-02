@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.zip.Inflater;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -16,20 +13,15 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -38,13 +30,11 @@ import android.widget.Toast;
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
-import com.gling.bookmeup.main.ParseHelper.BackEndFunctions.SendMessageToClients;
 import com.gling.bookmeup.main.ParseHelper.BookingsClass;
 import com.gling.bookmeup.main.ParseHelper.BusinessesClass;
 import com.gling.bookmeup.main.ParseHelper.ClientsClass;
 import com.parse.FindCallback;
 import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -192,14 +182,15 @@ public class BusinessClientListFragment  extends OnClickListenerFragment {
 		    	// Build a list of the ids of all selected clients
 		    	List<String> clientsIds = new ArrayList<String>();
 				for (Client client : _filteredClients) {
-					Log.i(TAG, "client id " + client._id + " selected? " + client._isSelected);
-					clientsIds.add(client._id);
+					if (client._isSelected) {
+						clientsIds.add(client._id);
+					}
 				}
 				
 				// Call the back end function
-				ParseHelper.BackEndFunctions.SendMessageToClients.callInBackground(BUSINESS_ID, clientsIds, message, new FunctionCallback<Void>() {
+				ParseHelper.BackEndFunctions.SendMessageToClients.callInBackground(BUSINESS_ID, clientsIds, message, new FunctionCallback<String>() {
 					@Override
-					public void done(Void object, ParseException e) {
+					public void done(String object, ParseException e) {
 						Log.i(TAG, "callFunctionInBackground done");
 						
 						if (e != null) {

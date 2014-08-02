@@ -9,6 +9,16 @@ import com.parse.ParseCloud;
 
 public class ParseHelper {
 
+	public static class Installation {
+		public static final String CLASS_NAME = "Installation";
+
+		public static class Keys {
+			public static final String ID = "objectId";
+			public static final String BUSINESS_POINTER = "businessPointer";
+			public static final String CLIENT_POINTER = "clientPointer";
+		}
+	}
+	
 	public static class ClientsClass {
 		public static final String CLASS_NAME = "Clients";
 
@@ -49,16 +59,17 @@ public class ParseHelper {
 	}
 
 	public static class BackEndFunctions {
+		
 		public static class SendMessageToClients {
 			private static final String FUNCTION_NAME = "sendMessageToClients";
 			
 			private static class Parameters {
 				public static final String BUSINESS_ID = "businessId";
-				public static final String CLIENTS_IDS = "clients";
+				public static final String CLIENTS_IDS = "clientsIds";
 				public static final String MESSAGE = "message";
 			}
 			
-			public static void callInBackground(String businessId, List<String> clientsIds, String message, FunctionCallback<Void> callback) {
+			public static void callInBackground(String businessId, List<String> clientsIds, String message, FunctionCallback<String> callback) {
 				// Build a parameters object for the back end function
 				final Map<String, Object> params = new HashMap<String, Object>();
 				params.put(Parameters.BUSINESS_ID, businessId);
