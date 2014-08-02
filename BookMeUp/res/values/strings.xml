@@ -48,5 +48,11 @@
     <string name="business_profile_creation_lstBusinessServicesDescription">Services</string>
     <string name="business_profile_creation_btnCreateProfile">Create Profile</string>
     <string name="action_business_profile_edit">Business</string>
+    
+    <!-- Business client list -->
+    <string name="business_client_list_btnFilterBySpendings">Spendings</string>
+    <string name="business_client_list_btnFilterByLastVisit">Last visit</string>
+    <string name="business_client_list_btnSendMessage">Send message</string>
+    <string name="business_client_list_btnSendOffer">Send offer</string>
 
 </resources>

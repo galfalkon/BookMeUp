@@ -12,13 +12,10 @@
 <fullyQualifiedTypeName name="android.support.v4.app.FragmentManager"/>
 <fullyQualifiedTypeName name="com.gling.bookmeup.main.FragmentsSwitcher"/>
 <fullyQualifiedTypeName name="android.support.v4.app.FragmentActivity"/>
-<fullyQualifiedTypeName name="android.R"/>
-<fullyQualifiedTypeName name="android.R.id"/>
 <fullyQualifiedTypeName name="com.gling.bookmeup.main.MainActivity"/>
 <fullyQualifiedTypeName name="com.gling.bookmeup.fragments.LoginFragment"/>
 <fullyQualifiedTypeName name="android.util.SparseArray"/>
 <fullyQualifiedTypeName name="com.gling.bookmeup.fragments.EMailSignUpFragment"/>
-<fullyQualifiedTypeName name="android.widget.Button"/>
 <fullyQualifiedTypeName name="android.support.v4.app.Fragment"/>
 <fullyQualifiedTypeName name="android.view.View.OnClickListener"/>
 <fullyQualifiedTypeName name="android.widget.EditText"/>
@@ -43,4 +40,22 @@
 <fullyQualifiedTypeName name="com.parse.ParseAnalytics"/>
 <fullyQualifiedTypeName name="java.util.Map"/>
 <fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="com.parse.ParseQuery"/>
+<fullyQualifiedTypeName name="com.gling.bookmeup.main.ParseHelper.BookingsClass"/>
+<fullyQualifiedTypeName name="com.parse.FindCallback"/>
+<fullyQualifiedTypeName name="com.gling.bookmeup.fragments.BusinessClientListFragment.Client"/>
+<fullyQualifiedTypeName name="com.gling.bookmeup.main.ParseHelper.ClientsClass"/>
+<fullyQualifiedTypeName name="com.gling.bookmeup.main.ParseHelper.ClientsClass.Keys"/>
+<fullyQualifiedTypeName name="com.gling.bookmeup.main.ParseHelper.BookingsClass.Keys"/>
+<fullyQualifiedTypeName name="android.widget.Filter.FilterListener"/>
+<fullyQualifiedTypeName name="com.gling.bookmeup.fragments.BusinessClientListFragment.LastVisitFilter"/>
+<fullyQualifiedTypeName name="android.widget.Filter.FilterResults"/>
+<fullyQualifiedTypeName name="com.gling.bookmeup.fragments.BusinessClientListFragment.ClientsFilter"/>
+<fullyQualifiedTypeName name="com.gling.bookmeup.fragments.BusinessClientListFragment.ClientsArrayAdapter"/>
+<fullyQualifiedTypeName name="com.gling.bookmeup.fragments.BusinessClientListFragment"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="android.widget.Button"/>
+<fullyQualifiedTypeName name="android.R.id"/>
+<fullyQualifiedTypeName name="android.R"/>
+<fullyQualifiedTypeName name="android.R.color"/>
 </qualifiedTypeNameHistroy>

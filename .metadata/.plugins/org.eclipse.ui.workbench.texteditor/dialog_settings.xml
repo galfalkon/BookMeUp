@@ -13,19 +13,23 @@
 		<item value="false" key="isRegEx"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="Hint" key="selection"/>
+		<item value="business_client_list_btnSendOffer" key="selection"/>
 		<list key="findhistory">
-			<item value="Hint"/>
-			<item value="Hnit"/>
-			<item value="EMail"/>
-			<item value="email"/>
-			<item value="eMail"/>
-			<item value="Emai"/>
-			<item value="signup"/>
-			<item value=""/>
+			<item value="business_client_list_btnSendOffer"/>
+			<item value="OnClick"/>
+			<item value="onClick"/>
+			<item value="TextView"/>
+			<item value="getView"/>
+			<item value="where"/>
+			<item value="_filteredClients"/>
+			<item value="filterByLastVisit"/>
 		</list>
 		<list key="replacehistory">
 			<item value="login"/>
 		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.GotoLineAction$GotoLineDialog_dialogBounds">
+		<item value="260" key="DIALOG_Y_ORIGIN"/>
+		<item value="492" key="DIALOG_X_ORIGIN"/>
 	</section>
 </section>

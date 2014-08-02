@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,17 +36,66 @@ import com.parse.ParseQuery;
 public class BusinessClientListFragment  extends OnClickListenerFragment {
 	private static final String TAG = "BusinessClientListFragment";
 	
-	private List<Client> _filteredClients;
-	private ArrayAdapter<Client> _listViewAdapter;
+	private List<Client> _allClients, _filteredClients;
+	private ClientsArrayAdapter _listViewAdapter;
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = super.onCreateView(inflater, container, savedInstanceState);
+	public void onCreate(Bundle savedInstanceState) {
+		Log.i(TAG, "onCreate");
+		super.onCreate(savedInstanceState);
 		
+		_allClients = new ArrayList<Client>();
 		_filteredClients = new ArrayList<Client>();
 		_listViewAdapter = new ClientsArrayAdapter();
 		
+		final String businessId = "UwnJrO4XIq";
+		final ParseQuery<ParseObject> innerBusinessPointerQuery = new ParseQuery<ParseObject>(BusinessesClass.CLASS_NAME).
+				whereEqualTo(BusinessesClass.Keys.ID, businessId);
+		
+		/*
+		 * Build a query that represents bookings with the following properties:
+		 * 		For this business
+		 * 		Later than the selected date
+		 * 		Before today
+		 *		Were approved
+		 */
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseHelper.BookingsClass.CLASS_NAME).
+				whereMatchesQuery(BookingsClass.Keys.BUSINESS_POINTER, innerBusinessPointerQuery).
+				whereLessThan(BookingsClass.Keys.DATE, new Date()).
+				whereEqualTo(BookingsClass.Keys.IS_APPROVED, true);
+		query.include(BookingsClass.Keys.CLIENT_POINTER);
+		
+		final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
+		query.findInBackground(new FindCallback<ParseObject>() {
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				progressDialog.dismiss();
+				if (e != null) {
+					Log.e(TAG, "Exception: " + e.getMessage());
+					return;
+				}
+				
+				for (ParseObject bookingParseObject : objects) {
+					Client currentClient = new Client(bookingParseObject);
+					int index = _allClients.indexOf(currentClient);
+					if (index == -1) {
+						_allClients.add(currentClient);
+					} else {
+						_allClients.get(index).notifyBooking(bookingParseObject);
+					}
+				}
+				
+				_filteredClients.addAll(_allClients);
+				_listViewAdapter.notifyDataSetChanged();
+			}
+		});
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		Log.i(TAG, "onCreateView");
+
+		View view = super.onCreateView(inflater, container, savedInstanceState);
 		ListView listView = (ListView)view.findViewById(R.id.business_client_list_listViewClients);
 		listView.setAdapter(_listViewAdapter);
 		
@@ -69,16 +119,15 @@ public class BusinessClientListFragment  extends OnClickListenerFragment {
 			Log.i(TAG, "btnFilterByLastVisit clicked");
 			handleLastVisitFilter();
 			break;
+		case R.id.business_client_list_btnSendMessage:
+		case R.id.business_client_list_btnSendOffer:
+			Toast.makeText(getActivity(), "Not implemeted", Toast.LENGTH_SHORT).show();
+			break;
 		}
 	}
 	
 	private void handleLastVisitFilter() {
 		Log.i(TAG, "handleSpendingFilter");
-		
-		//TODO: The businessId should be saved in the shared preferences during the profile creation. 
-		final String businessId = "UwnJrO4XIq";
-		final ParseQuery<ParseObject> innerBusinessPointerQuery = new ParseQuery<ParseObject>(BusinessesClass.CLASS_NAME).
-				whereEqualTo(BusinessesClass.Keys.ID, businessId);
 		
 		Calendar today = Calendar.getInstance();
 		// TODO: We should implement our own DatePickerDialog because this implementation is always localized (According to the localization device's preferences)
@@ -91,21 +140,7 @@ public class BusinessClientListFragment  extends OnClickListenerFragment {
 				GregorianCalendar selectedDateCalendar = new GregorianCalendar(year, monthOfYear, dayOfMonth);
 				Date selectedDate = selectedDateCalendar.getTime();
 				
-				/*
-				 * Build a query that represents bookings with the following properties:
-				 * 		For this business
-				 * 		Later than the selected date
-				 * 		Before today
-				 *		Were approved
-				 */
-				ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseHelper.BookingsClass.CLASS_NAME).
-						whereMatchesQuery(BookingsClass.Keys.BUSINESS_POINTER, innerBusinessPointerQuery).
-						whereGreaterThanOrEqualTo(BookingsClass.Keys.DATE, selectedDate).
-						whereLessThan(BookingsClass.Keys.DATE, new Date()).
-						whereEqualTo(BookingsClass.Keys.IS_APPROVED, true);
-				query.include(BookingsClass.Keys.CLIENT_POINTER);
-				
-				executeBookingsQuery(query);
+				_listViewAdapter._clientFilter.filterByLastVisit(selectedDate);
 			}
 		}, today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DATE));
 		datePickerDialog.show();
@@ -117,38 +152,40 @@ public class BusinessClientListFragment  extends OnClickListenerFragment {
 		Toast.makeText(getActivity(), "Not implemented", Toast.LENGTH_SHORT).show();
 	}
 	
-	private void executeBookingsQuery(ParseQuery<ParseObject> query) {
-		final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
-		query.findInBackground(new FindCallback<ParseObject>() {
-			@Override
-			public void done(List<ParseObject> objects, ParseException e) {
-				progressDialog.dismiss();
-				if (e != null) {
-					Log.e(TAG, "Exception: " + e.getMessage());
-					return;
-				}
-				
-				Log.i(TAG, "Query is done! #objects = " + objects.size());
-				_filteredClients.clear();
-				for (ParseObject parseObject : objects) {
-					Client client = new Client(parseObject);
-					if (!_filteredClients.contains(client)) {
-						_filteredClients.add(new Client(parseObject));
-					}
-				}
-				
-				_listViewAdapter.notifyDataSetChanged();
-			}
-		});
-	}
-	
 	private static class Client {
 		public final String _id, _clientName;
+		public Date _lastVisit;
+		public int _totalSpendings;
 
+		/*
+		 * Creates a Client instance out of a Bookings record.
+		 */
 		public Client(ParseObject bookingParseObject) {
 			ParseObject clientParseObject = bookingParseObject.getParseObject(BookingsClass.Keys.CLIENT_POINTER);
 			_id = clientParseObject.getObjectId();
 			_clientName = clientParseObject.getString(ClientsClass.Keys.NAME);
+			_lastVisit = bookingParseObject.getDate(BookingsClass.Keys.DATE);
+			_totalSpendings = 0; // TODO: Calculate spendings in booking according to services and prices
+		}
+		
+		/*
+		 * Notifies the Client instance about another booking.
+		 * This function will summarize the total spending of the client, set the date of his last visit etc.
+		 */
+		public void notifyBooking(ParseObject bookingParseObject) {
+			ParseObject clientParseObject = bookingParseObject.getParseObject(BookingsClass.Keys.CLIENT_POINTER);
+			if (!_id.equals(clientParseObject.getObjectId())) {
+				// TODO: Handle error
+				return;
+			}
+			
+			Date bookingDate = bookingParseObject.getDate(BookingsClass.Keys.DATE);
+			if (bookingDate.after(_lastVisit)) {
+				_lastVisit = bookingDate;
+			}
+			
+			// TODO: Calculate spendings in booking according to services and prices
+			_totalSpendings += 0;
 		}
 
 		@Override
@@ -163,8 +200,12 @@ public class BusinessClientListFragment  extends OnClickListenerFragment {
 	}
 	
 	private class ClientsArrayAdapter extends ArrayAdapter<Client> {
+		
+		private ClientsFilter _clientFilter;
+		
 		public ClientsArrayAdapter() {
 			super(getActivity(), R.layout.client_list_item, _filteredClients);
+			_clientFilter = new ClientsFilter();
 		}
 		
 		@Override
@@ -177,10 +218,62 @@ public class BusinessClientListFragment  extends OnClickListenerFragment {
 			Client client = _filteredClients.get(position);
 			
 			TextView clientNameTextView = (TextView) convertView.findViewById(R.id.client_list_item_txtClientName);
+			TextView totalSepndingsTextView = (TextView) convertView.findViewById(R.id.client_list_item_txtTotalSpent);
 			
 			clientNameTextView.setText(client._clientName);
+			totalSepndingsTextView.setText(client._totalSpendings + " NIS");
 			
 			return convertView;
+		}
+		
+		@Override
+		public Filter getFilter() {
+			Log.i(TAG, "getFilter");
+			return _clientFilter;
+		}
+	}
+	
+	private class ClientsFilter extends Filter {
+		/*
+		 *  Optional
+		 *  Should be null if the user doesn't want to filter by the date of the last visit.
+		 */
+		private Date _dateOfLastVisit;
+		
+		@Override
+		protected FilterResults performFiltering(CharSequence constraint) {
+			Log.i(TAG, "performFiltering(" + constraint + ")");
+			
+			FilterResults results = new FilterResults();
+			
+			_filteredClients.clear();
+			for (Client client : _allClients) {
+				if (_dateOfLastVisit != null) {
+					if (client._lastVisit.after(_dateOfLastVisit)) {
+						_filteredClients.add(client);
+					}
+				}
+			}
+			
+			results.values = _filteredClients;
+			results.count = _filteredClients.size();
+			
+			return results;
+		}
+
+		@Override
+		protected void publishResults(CharSequence constraint, FilterResults results) {
+			Log.i(TAG, "publicResults");
+			_listViewAdapter.notifyDataSetChanged();
+		}
+		
+		private void filterByLastVisit(Date date) {
+			_dateOfLastVisit = date;
+			filter(null);
+		}
+		
+		private void unfilterByLastVisit() {
+			_dateOfLastVisit = null;
 		}
 	}
 }
