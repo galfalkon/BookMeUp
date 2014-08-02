@@ -6,8 +6,9 @@ import android.util.Log;
 import android.util.SparseArray;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.business.BusinessImageCaptureFragment;
+import com.gling.bookmeup.business.BusinessProfileCreationFragment;
 import com.gling.bookmeup.fragments.BusinessMainScreen;
-import com.gling.bookmeup.fragments.BusinessProfileCreationFragment;
 import com.gling.bookmeup.fragments.CustomerMainScreen;
 import com.gling.bookmeup.fragments.EMailLoginFragment;
 import com.gling.bookmeup.fragments.EMailSignUpFragment;
@@ -43,6 +44,9 @@ public class FragmentsFlowManager {
 		
 		// Business profile creation
 		_buttonIdsToFragmentName.put(R.id.business_profile_creation_btnCreate, BusinessMainScreen.class.getName());
+		
+		// Business image upload
+		_buttonIdsToFragmentName.put(R.id.business_profile_creation_btnImageUpload, BusinessImageCaptureFragment.class.getName());
 	}
 	
 	public static void goToNextFragment(FragmentActivity fragmentActivity, int buttonClickedId) {

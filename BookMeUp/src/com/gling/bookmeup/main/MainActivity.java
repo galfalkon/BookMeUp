@@ -6,9 +6,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessActivity;
 import com.gling.bookmeup.fragments.LoginFragment;
 import com.parse.ParseAnalytics;
@@ -18,16 +18,37 @@ public class MainActivity extends ActionBarActivity {
 	public final static String EXTRA_MESSAGE = "com.gling.bookmeup.MESSAGE";
 	private static final String TAG = "MainActivity";
 	
+	// i really think we should split the app into three activities:
+	// 1. login, 2. business, 3. client.
+	// the login will instantialize the others, while passing the user in an intent or something,
+	// then, the business activity for example will hold a private business member which it would share through all fragments 
+	private Business business;
+	
+	public Business getCurrentBusiness() {
+        return business;
+    }
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.i(TAG, "onCreate");
 
 		super.onCreate(savedInstanceState);
+		
+		business = new Business();
+		
 		setContentView(R.layout.activity_main);
 
 		if (savedInstanceState == null) {
+			
+			// Create a new Fragment to be placed in the activity layout
+			LoginFragment firstFragment = new LoginFragment();
+            
+			// In case this activity was started with special instructions from an
+            // Intent, pass the Intent's extras to the fragment as arguments
+            firstFragment.setArguments(getIntent().getExtras());
+            
 			getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, new LoginFragment()).commit();
+					.add(R.id.container, firstFragment).commit();
 		}
 		
 		// Track application opens

@@ -44,41 +44,42 @@ public class EMailSignUpFragment extends OnClickListenerFragment {
 	public void onClick(View v) {
 		final int viewClickedId = v.getId();
 		
-		switch (viewClickedId) {
-		case R.id.email_signup_btnContinue:
-			if (!validateInput())
-			{
-				return;
-			}
-			break;
-		default:
-			return;
-		}
-		
-		final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), "Signing up...", "Please wait");
-		
-		ParseUser user = new ParseUser();
-		user.setUsername(edtUserName.getText().toString());
-		user.setEmail(edtEmail.getText().toString());
-		user.setPassword(edtPassword.getText().toString());
-		
-		user.signUpInBackground(new SignUpCallback() {
-			@Override
-			public void done(ParseException e) {
-				progressDialog.dismiss();
-				
-				if (e != null) {
-					Log.e(TAG, "signup failed: " + e.toString());
-					Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_SHORT).show();
-					return;
-				}
-				
-				Log.i(TAG, "signup is done");
-				
-				Toast.makeText(getActivity(), "Please verify your Email address", Toast.LENGTH_SHORT).show();
-				FragmentsFlowManager.goToNextFragment(getActivity(), viewClickedId);
-			}
-		});
+//		switch (viewClickedId) {
+//		case R.id.email_signup_btnContinue:
+//			if (!validateInput())
+//			{
+//				return;
+//			}
+//			break;
+//		default:
+//			return;
+//		}
+//		
+//		final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), "Signing up...", "Please wait");
+//		
+//		ParseUser user = new ParseUser();
+//		user.setUsername(edtUserName.getText().toString());
+//		user.setEmail(edtEmail.getText().toString());
+//		user.setPassword(edtPassword.getText().toString());
+//		
+//		user.signUpInBackground(new SignUpCallback() {
+//			@Override
+//			public void done(ParseException e) {
+//				progressDialog.dismiss();
+//				
+//				if (e != null) {
+//					Log.e(TAG, "signup failed: " + e.toString());
+//					Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_SHORT).show();
+//					return;
+//				}
+//				
+//				Log.i(TAG, "signup is done");
+//				
+//				Toast.makeText(getActivity(), "Please verify your Email address", Toast.LENGTH_SHORT).show();
+//				FragmentsFlowManager.goToNextFragment(getActivity(), viewClickedId);
+//			}
+//		});
+		FragmentsFlowManager.goToNextFragment(getActivity(), viewClickedId);
 	}
 	
 	private boolean validateInput() {

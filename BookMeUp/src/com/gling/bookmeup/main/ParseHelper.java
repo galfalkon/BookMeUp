@@ -12,12 +12,12 @@ public class ParseHelper {
 		}
 	}
 	
-	public static class BusinessesClass {
-		public final static String CLASS_NAME = "Businesses";
+	public static class BusinessClass {
+		public final static String CLASS_NAME = "Business";
 		
 		public static class Keys {
 			public static final String ID = "objectId";
-			public static final String USERNAME = "username";
+			public static final String USER = "user";
 			public static final String NAME = "name";
 			public static final String DESCRIPTION = "description";
 			public static final String CATEGORY = "category";

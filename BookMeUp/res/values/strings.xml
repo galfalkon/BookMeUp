@@ -41,12 +41,15 @@
     <string name="title_section_client_list">Client List</string>
     
     <!-- Business profile creation -->
-    <string name="business_profile_creation_edtBusinessNameHint">Business name</string>
-    <string name="business_profile_creation_edtBusinessDescriptionHint">Business description</string>
-    <string name="business_profile_creation_edtBusinessOpeningHoursHint">Opening Hours</string>
+    <string name="business_profile_creation_edtBusinessName">Business name</string>
+    <string name="business_profile_creation_edtDescriptionHint">Business description</string>
+    <string name="business_profile_creation_edtOpeningHoursHint">Opening Hours</string>
     <string name="business_profile_creation_imgProfilePicutureDescription">Profile Picture</string>
-    <string name="business_profile_creation_lstBusinessServicesDescription">Services</string>
+    <string name="business_profile_creation_lstServices">Services</string>
     <string name="business_profile_creation_btnCreateProfile">Create Profile</string>
     <string name="action_business_profile_edit">Business</string>
+    <string name="business_profile_creation_btnUploadImage">Upload</string>
+    <string name="business_profile_creation_txtPreviewImage">Business Image</string>
+    <string name="business_profile_creation_txtServices">Services</string>
 
 </resources>

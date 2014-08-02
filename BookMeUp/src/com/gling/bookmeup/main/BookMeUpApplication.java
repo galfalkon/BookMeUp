@@ -3,8 +3,10 @@ package com.gling.bookmeup.main;
 import android.app.Application;
 import android.util.Log;
 
+import com.gling.bookmeup.business.Business;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
+import com.parse.ParseObject;
 import com.parse.PushService;
 
 public class BookMeUpApplication extends Application {
@@ -21,6 +23,9 @@ public class BookMeUpApplication extends Application {
 
 		// Initialize parse
 		Log.i(TAG, "Initializing Parse");
+		
+		ParseObject.registerSubclass(Business.class);
+		
 		Parse.initialize(this, PARSE_APPLICATION_ID, PARSE_CLIENT_KEY);
 
 		// Configure parse push service
