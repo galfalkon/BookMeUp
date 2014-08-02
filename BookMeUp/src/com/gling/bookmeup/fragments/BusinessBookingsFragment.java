@@ -36,6 +36,9 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 	
 	Map<String, String> _approvedBookingsGroupHeaderData;
 	private List<Map<String, String>> _approvedBookingsData;
+	
+	// TODO: Temporary! The businessId should be saved in the shared preferences during the profile creation. 
+	private static final String BUSINESS_ID = "UwnJrO4XIq";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -99,10 +102,8 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 	}
 
 	private void inflateListsWithFutureBookings() {
-		// TODO: The businessId should be saved in the shared preferences during the profile creation. 
-		final String businessId = "UwnJrO4XIq";
 		final ParseQuery<ParseObject> innerBusinessPointerQuery = new ParseQuery<ParseObject>(BusinessesClass.CLASS_NAME).
-				whereEqualTo(BusinessesClass.Keys.ID, businessId);
+				whereEqualTo(BusinessesClass.Keys.ID, BUSINESS_ID);
 		
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(BookingsClass.CLASS_NAME).
 				whereMatchesQuery(BookingsClass.Keys.BUSINESS_POINTER, innerBusinessPointerQuery).

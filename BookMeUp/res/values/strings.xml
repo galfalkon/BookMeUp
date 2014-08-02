@@ -54,5 +54,8 @@
     <string name="business_client_list_btnFilterByLastVisit">Last visit</string>
     <string name="business_client_list_btnSendMessage">Send message</string>
     <string name="business_client_list_btnSendOffer">Send offer</string>
+    <string name="business_client_list_send_message_dialog_btnSend">Send</string>
+    <string name="business_client_list_send_message_dialog_btnCancel">Cancel</string>
+    <string name="business_client_list_send_message_dialog_edtMessageHint">Type in your message...\\n(Up to 60 characters)</string>
 
 </resources>
