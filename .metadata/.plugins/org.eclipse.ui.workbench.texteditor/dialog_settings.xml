@@ -3,26 +3,26 @@
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="265" key="DIALOG_WIDTH"/>
 		<item value="151" key="DIALOG_Y_ORIGIN"/>
-		<item value="932" key="DIALOG_X_ORIGIN"/>
 		<item value="373" key="DIALOG_HEIGHT"/>
+		<item value="932" key="DIALOG_X_ORIGIN"/>
 		<item value="1|Tahoma|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Tahoma" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="true" key="wrap"/>
-		<item value="false" key="casesensitive"/>
 		<item value="false" key="isRegEx"/>
+		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="business_client_list_btnSendOffer" key="selection"/>
+		<item value="&quot;U" key="selection"/>
 		<list key="findhistory">
-			<item value="business_client_list_btnSendOffer"/>
-			<item value="OnClick"/>
-			<item value="onClick"/>
-			<item value="TextView"/>
+			<item value="&quot;U"/>
+			<item value="&quot;u"/>
+			<item value="Temp"/>
+			<item value="Tem"/>
+			<item value="Tempo"/>
+			<item value="switch"/>
 			<item value="getView"/>
-			<item value="where"/>
-			<item value="_filteredClients"/>
-			<item value="filterByLastVisit"/>
+			<item value="business_client_list_btnSendOffer"/>
 		</list>
 		<list key="replacehistory">
 			<item value="login"/>
