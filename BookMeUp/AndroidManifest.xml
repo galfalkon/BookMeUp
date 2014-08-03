@@ -64,14 +64,6 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name="com.gling.bookmeup.business.BusinessActivity"
-            android:label="@string/title_activity_business"
-            android:parentActivityName="com.gling.bookmeup.main.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.gling.bookmeup.main.MainActivity" />
-        </activity>
     </application>
 
 </manifest>

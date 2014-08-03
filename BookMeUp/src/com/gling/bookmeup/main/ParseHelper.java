@@ -15,12 +15,12 @@ public class ParseHelper {
 		public static class Keys {
 			public static final String ID = "objectId";
 			public static final String BUSINESS_POINTER = "businessPointer";
-			public static final String CLIENT_POINTER = "clientPointer";
+			public static final String CUSTOMER_POINTER = "customerPointer";
 		}
 	}
 	
-	public static class ClientsClass {
-		public static final String CLASS_NAME = "Clients";
+	public static class CusetomerClass {
+		public static final String CLASS_NAME = "Customer";
 
 		public static class Keys {
 			public static final String ID = "objectId";
@@ -45,12 +45,12 @@ public class ParseHelper {
 		}
 	}
 
-	public static class BookingsClass {
-		public static final String CLASS_NAME = "Bookings";
+	public static class BookingClass {
+		public static final String CLASS_NAME = "Booking";
 
 		public static class Keys {
 			public static final String ID = "objectId";
-			public static final String CLIENT_POINTER = "clientPointer";
+			public static final String CUSTOMER_POINTER = "customerPointer";
 			public static final String BUSINESS_POINTER = "businessPointer";
 			public static final String DATE = "date";
 			public static final String SERVICES = "services";
@@ -65,15 +65,15 @@ public class ParseHelper {
 			
 			private static class Parameters {
 				public static final String BUSINESS_ID = "businessId";
-				public static final String CLIENTS_IDS = "clientsIds";
+				public static final String CUSTOMER_IDS = "clientsIds";
 				public static final String MESSAGE = "message";
 			}
 			
-			public static void callInBackground(String businessId, List<String> clientsIds, String message, FunctionCallback<String> callback) {
+			public static void callInBackground(String businessId, List<String> customerIds, String message, FunctionCallback<String> callback) {
 				// Build a parameters object for the back end function
 				final Map<String, Object> params = new HashMap<String, Object>();
 				params.put(Parameters.BUSINESS_ID, businessId);
-				params.put(Parameters.CLIENTS_IDS, clientsIds);
+				params.put(Parameters.CUSTOMER_IDS, customerIds);
 				params.put(Parameters.MESSAGE, message);
 				
 				ParseCloud.callFunctionInBackground(FUNCTION_NAME, params, callback);

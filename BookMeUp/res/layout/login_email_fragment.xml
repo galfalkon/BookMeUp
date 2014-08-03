@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.gling.bookmeup.main.MainActivity$LoginWithEmail" >
+
+    <EditText
+        android:id="@+id/email_login_edtUserName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/email_login_edtUserNameHint"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/email_login_edtPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/email_login_edtPasswordHint"
+        android:inputType="textPassword"/>
+
+    <TextView
+        android:id="@+id/email_login_txtForgotPassword"
+        style="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:gravity="center_horizontal"
+        android:text="@string/email_login_txtForgotPasswordText"/>
+
+    <Button
+        android:id="@+id/email_login_btnContinue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/email_login_btnContinueText"/>
+
+</LinearLayout>
