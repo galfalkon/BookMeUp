@@ -61,11 +61,11 @@ public class ParseHelper {
 	public static class BackEndFunctions {
 		
 		public static class SendMessageToClients {
-			private static final String FUNCTION_NAME = "sendMessageToClients";
+			private static final String FUNCTION_NAME = "sendMessageToCustomers";
 			
 			private static class Parameters {
 				public static final String BUSINESS_ID = "businessId";
-				public static final String CUSTOMER_IDS = "clientsIds";
+				public static final String CUSTOMER_IDS = "customerIds";
 				public static final String MESSAGE = "message";
 			}
 			
