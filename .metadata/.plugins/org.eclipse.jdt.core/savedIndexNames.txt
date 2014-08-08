@@ -1,7 +1,3 @@
 INDEX VERSION 1.126+C:\Users\Gal Falkon\Documents\GitHub\BookMeUp\.metadata\.plugins\org.eclipse.jdt.core
-2517245715.index
-3284333957.index
-579712921.index
-289008125.index
 1284074322.index
 2994635246.index
