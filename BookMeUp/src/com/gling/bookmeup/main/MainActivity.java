@@ -1,7 +1,7 @@
 package com.gling.bookmeup.main;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -40,7 +40,7 @@ public class MainActivity extends ActionBarActivity {
 		if (savedInstanceState == null) {
 			
 			// Create a new Fragment to be placed in the activity layout
-			LoginFragment firstFragment = new LoginFragment();
+			Fragment firstFragment = new LoginFragment();
             
 			// In case this activity was started with special instructions from an
             // Intent, pass the Intent's extras to the fragment as arguments
