@@ -21,10 +21,10 @@ public class MainActivity extends ActionBarActivity {
 	// 1. login, 2. business, 3. client.
 	// the login will instantialize the others, while passing the user in an intent or something,
 	// then, the business activity for example will hold a private business member which it would share through all fragments 
-	private Business business;
+	private Business _business;
 	
 	public Business getCurrentBusiness() {
-        return business;
+        return _business;
     }
 	
 	@Override
@@ -33,7 +33,7 @@ public class MainActivity extends ActionBarActivity {
 
 		super.onCreate(savedInstanceState);
 		
-		business = new Business();
+		_business = new Business();
 		
 		setContentView(R.layout.activity_main);
 
