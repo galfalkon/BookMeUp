@@ -61,4 +61,9 @@
     <string name="business_client_list_send_message_dialog_btnCancel">Cancel</string>
     <string name="business_client_list_send_message_dialog_edtMessageHint">Type in your message...\n(Up to 60 characters)</string>
 
+    <!-- Business bookings list -->
+    <string name="business_bookings_list_pending_header">Pending</string>
+    <string name="business_bookings_list_approved_header">Approved</string>
+    <string name="business_bookings_list_pending_click_dialog">Approve booking?</string>
+    <string name="business_bookings_list_approved_click_dialog">Cancel booking?</string>
 </resources>

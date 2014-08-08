@@ -8,14 +8,14 @@
     <TextView
         android:id="@+id/expandable_bookings_list_header_txtTitle"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="?android:attr/listPreferredItemHeight"
         android:gravity="center_vertical"
         android:textAppearance="?android:attr/textAppearanceListItem" />
 
     <TextView
         android:id="@+id/expandable_bookings_list_header_txtNumOfItems"
         android:layout_width="fill_parent"
-        android:layout_height="match_parent"
+        android:layout_height="?android:attr/listPreferredItemHeight"
         android:gravity="right|center_vertical"
         android:textAppearance="?android:attr/textAppearanceListItemSmall" />
 

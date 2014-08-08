@@ -1,14 +1,41 @@
 package com.gling.bookmeup.main;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.gling.bookmeup.business.fragments.Business;
 import com.parse.FunctionCallback;
+import com.parse.Parse;
+import com.parse.ParseClassName;
 import com.parse.ParseCloud;
+import com.parse.ParseInstallation;
+import com.parse.ParseObject;
+import com.parse.PushService;
 
 public class ParseHelper {
+	private static final String TAG = "ParseHelper";
+	private static final String PARSE_APPLICATION_ID = "0Uye8FHMnsklraYbqnMDxtg0rbQRKEqZSVO6BHPa";
+	private static final String PARSE_CLIENT_KEY = "5dB8I0UZWFaTtYpE3OUn7CWwPzxYxe2yBqE7uhS3";
+	
+	public static void initialize(Context context) {
+		Log.i(TAG, "Initializing Parse");
+		
+		ParseObject.registerSubclass(Business.class);
+		ParseObject.registerSubclass(Booking.class);
+		
+		Parse.initialize(context, PARSE_APPLICATION_ID, PARSE_CLIENT_KEY);
 
+		// Configure parse push service
+		Log.i(TAG, "Configuring parse push service");
+		PushService.setDefaultPushCallback(context, MainActivity.class);
+		ParseInstallation.getCurrentInstallation().saveInBackground();
+	}
+	
 	public static class Installation {
 		public static final String CLASS_NAME = "Installation";
 
@@ -44,10 +71,12 @@ public class ParseHelper {
 			public static final String OFFERS = "offers";
 		}
 	}
-
-	public static class BookingClass {
+	
+	@ParseClassName(Booking.CLASS_NAME)
+	public static class Booking extends ParseObject {
+		
 		public static final String CLASS_NAME = "Booking";
-
+		
 		public static class Keys {
 			public static final String ID = "objectId";
 			public static final String CUSTOMER_POINTER = "customerPointer";
@@ -55,6 +84,30 @@ public class ParseHelper {
 			public static final String DATE = "date";
 			public static final String SERVICES = "services";
 			public static final String IS_APPROVED = "isApproved";
+		}
+		
+		public Booking() {
+			// Do not modify the ParseObject
+		}
+		
+		public String getBusinessName() {
+			return getParseObject(Keys.BUSINESS_POINTER).getString(BusinessClass.Keys.NAME);			
+		}
+		
+		public String getClientName() {
+			return getParseObject(Keys.CUSTOMER_POINTER).getString(CustomerClass.Keys.NAME);
+		}
+		
+		public String getServiceName() {
+			return getString(Keys.SERVICES);
+		}
+		
+		public Date getDate() {
+			return getDate(Keys.DATE);
+		}
+		
+		public boolean getIsApproved() {
+			return getBoolean(Keys.IS_APPROVED);
 		}
 	}
 

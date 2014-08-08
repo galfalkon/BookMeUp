@@ -2,87 +2,72 @@ package com.gling.bookmeup.business.fragments;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.SimpleExpandableListAdapter;
+import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.OnClickListenerFragment;
-import com.gling.bookmeup.main.ParseHelper.BookingClass;
+import com.gling.bookmeup.main.ParseHelper.Booking;
 import com.gling.bookmeup.main.ParseHelper.BusinessClass;
-import com.gling.bookmeup.main.ParseHelper.CustomerClass;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-public class BusinessBookingsFragment extends OnClickListenerFragment {
+public class BusinessBookingsFragment extends OnClickListenerFragment implements OnChildClickListener {
 
 	private static final String TAG = "BusinessBookingsFragment";
 
-	private SimpleExpandableListAdapter _expandableListAdapter;
+	private BaseExpandableListAdapter _expandableListAdapter;
 	
-	Map<String, String> _pendingBookingsGroupHeaderData;
-	private List<Map<String, String>> _pendingBookingsData;
+	private List<List<Booking>> _bookings;
 	
-	Map<String, String> _approvedBookingsGroupHeaderData;
-	private List<Map<String, String>> _approvedBookingsData;
+	private static enum ExpandableListGroupIds {
+		PENDING_GROUP_ID,
+		APPROVED_GROUP_ID
+	}
 	
 	// TODO: Temporary! The businessId should be saved in the shared preferences during the profile creation. 
 	private static final String BUSINESS_ID = "mUhs7IdMT7";
 
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		_bookings = new ArrayList<List<Booking>>();
+		
+		for (int i = 0; i < ExpandableListGroupIds.values().length; i++) {
+			_bookings.add(new ArrayList<Booking>());
+		}
+	}
+	
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = super.onCreateView(inflater, container, savedInstanceState);
 
-		// Initialize the group header data
-		List<Map<String, String>> groupHeadersData = new ArrayList<Map<String, String>>();
+		_expandableListAdapter = new BookingsExpandableListAdapter();
 		
-		_pendingBookingsGroupHeaderData = new HashMap<String, String>();
-		_pendingBookingsGroupHeaderData.put(ExpandableListKeys.GroupHeader.HEADER_TITLE, "Pending");
-		_pendingBookingsGroupHeaderData.put(ExpandableListKeys.GroupHeader.NUM_OF_ITEMS, "(0)");
-		groupHeadersData.add(_pendingBookingsGroupHeaderData);
-		
-		_approvedBookingsGroupHeaderData = new HashMap<String, String>();
-		_approvedBookingsGroupHeaderData.put(ExpandableListKeys.GroupHeader.HEADER_TITLE, "Approved");
-		_approvedBookingsGroupHeaderData.put(ExpandableListKeys.GroupHeader.NUM_OF_ITEMS, "(0)");
-		groupHeadersData.add(_approvedBookingsGroupHeaderData);
-		
-		// Initialize the group items lists
-		List<List<Map<String, String>>> listOfChildGroups = new ArrayList<List<Map<String, String>>>();
-
-		_pendingBookingsData = new ArrayList<Map<String, String>>();
-		listOfChildGroups.add(_pendingBookingsData);
-		
-		_approvedBookingsData = new ArrayList<Map<String,String>>();
-		listOfChildGroups.add(_approvedBookingsData);
-		
-		_expandableListAdapter = new SimpleExpandableListAdapter(
-				getActivity(),
-				
-				groupHeadersData,
-				R.layout.business_booking_list_header,
-				new String[] { ExpandableListKeys.GroupHeader.HEADER_TITLE, ExpandableListKeys.GroupHeader.NUM_OF_ITEMS},
-				new int[] {R.id.expandable_bookings_list_header_txtTitle, R.id.expandable_bookings_list_header_txtNumOfItems},
-				
-				listOfChildGroups,
-				R.layout.business_booking_list_item, 
-				new String[] { ExpandableListKeys.GroupItem.CLIENT_NAME, ExpandableListKeys.GroupItem.SERVICES, ExpandableListKeys.GroupItem.DATE }, 
-				new int[] { R.id.expandable_bookings_list_item_txtClientName, R.id.expandable_bookings_list_item_txtServices, R.id.expandable_bookings_list_item_txtDate });
-
 		ExpandableListView expandableListView = (ExpandableListView) view.findViewById(R.id.business_bookings_explistViewBookings);
 		expandableListView.setAdapter(_expandableListAdapter);
+		
+		expandableListView.setOnChildClickListener(this);
 
+		inflateListWithFutureBookings();
+		
 		return view;
 	}
 
@@ -91,7 +76,7 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 		switch (v.getId()) {
 		case R.id.business_bookings_btnUpdate:
 			Log.i(TAG, "btnUpdate clicked");
-			inflateListsWithFutureBookings(); 
+			inflateListWithFutureBookings(); 
 			break; 
 		}
 	}
@@ -100,23 +85,59 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 	protected int getFragmentLayoutId() {
 		return R.layout.business_bookings_fragment;
 	}
+	
+	@Override
+	public boolean onChildClick(final ExpandableListView parent, View v, final int groupPosition, final int childPosition, final long id) {
+		Log.i(TAG, "onChildClick!");
+		
+		// Build dialog
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		
+		switch (ExpandableListGroupIds.values()[groupPosition]) {
+		case PENDING_GROUP_ID:
+			Log.i(TAG, "Pending booking clicked");
+			builder.setMessage(R.string.business_bookings_list_pending_click_dialog)
+	        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int id) {
+	            	Log.i(TAG, "Approving pending booking");
+	            	Toast.makeText(getActivity(), "Not implemented", Toast.LENGTH_SHORT).show();
+	            }
+	        })
+	        .setNegativeButton("Cancel", null);
+			break;
+		case APPROVED_GROUP_ID:
+			Log.i(TAG, "Approved booking clicked");
+			builder.setMessage(R.string.business_bookings_list_approved_click_dialog)
+	        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int id) {
+	            	Log.i(TAG, "Canceling approved booking");
+	            	Toast.makeText(getActivity(), "Not implemented", Toast.LENGTH_SHORT).show();
+	            }
+	        })
+	        .setNegativeButton("Cancel", null);
+			break;
+		}
+        builder.show();
+        
+		return false;
+	}
 
-	private void inflateListsWithFutureBookings() {
+	private void inflateListWithFutureBookings() {
 		// TODO: The businessId should be saved in the shared preferences during the profile creation. 
 		final ParseQuery<ParseObject> innerBusinessPointerQuery = new ParseQuery<ParseObject>(BusinessClass.CLASS_NAME).
 				whereEqualTo(BusinessClass.Keys.ID, BUSINESS_ID);
 		
-		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(BookingClass.CLASS_NAME).
-				whereMatchesQuery(BookingClass.Keys.BUSINESS_POINTER, innerBusinessPointerQuery).
-				whereGreaterThan(BookingClass.Keys.DATE, new Date());
-		query.include(BookingClass.Keys.BUSINESS_POINTER);
-		query.include(BookingClass.Keys.CUSTOMER_POINTER);
+		ParseQuery<Booking> query = new ParseQuery<Booking>(Booking.CLASS_NAME).
+				whereMatchesQuery(Booking.Keys.BUSINESS_POINTER, innerBusinessPointerQuery).
+				whereGreaterThan(Booking.Keys.DATE, new Date());
+		query.include(Booking.Keys.BUSINESS_POINTER);
+		query.include(Booking.Keys.CUSTOMER_POINTER);
 
 		final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
 		
-		query.findInBackground(new FindCallback<ParseObject>() {
+		query.findInBackground(new FindCallback<Booking>() {
 			@Override
-			public void done(List<ParseObject> objects, ParseException e) {
+			public void done(List<Booking> objects, ParseException e) {
 				progressDialog.dismiss();
 				Log.i(TAG, "Done querying future bookings");
 				if (e != null) {
@@ -124,59 +145,103 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 					return;
 				}
 
-				_approvedBookingsData.clear();
-				_pendingBookingsData.clear();
-				
-				for (ParseObject parseObject : objects) {
-					final Booking booking = new Booking(parseObject);
-					if (booking._isApproved) {
-						_approvedBookingsData.add(booking.toMap());
+				for (int i = 0; i < _bookings.size(); i++) {
+					_bookings.get(i).clear();
+				}
+				for (Booking parseObject : objects) {
+					if (parseObject.getIsApproved()) {
+						_bookings.get(ExpandableListGroupIds.APPROVED_GROUP_ID.ordinal()).add(parseObject);
 					} else {
-						_pendingBookingsData.add(booking.toMap());
+						_bookings.get(ExpandableListGroupIds.PENDING_GROUP_ID.ordinal()).add(parseObject);
 					}
 				}
 
-				_pendingBookingsGroupHeaderData.put(ExpandableListKeys.GroupHeader.NUM_OF_ITEMS, "(" + String.valueOf(_pendingBookingsData.size()) + ")");
-				_approvedBookingsGroupHeaderData.put(ExpandableListKeys.GroupHeader.NUM_OF_ITEMS, "(" + String.valueOf(_approvedBookingsData.size()) + ")");
 				_expandableListAdapter.notifyDataSetChanged();
 				
-				Log.i(TAG, "#Pending bookings = " + _pendingBookingsData.size() + ", #Approved bookings = " + _approvedBookingsData.size());
+				Log.i(TAG, "#Pending bookings = " + _bookings.get(0).size() + ", #Approved bookings = " + _bookings.get(1).size());
 			}
 		});
 	}
 
-	private static class ExpandableListKeys {
-		public static class GroupHeader {
-			public final static String HEADER_TITLE = "TITLE";
-			public final static String NUM_OF_ITEMS = "NUM_OF_ITEMS";
-		}
-		
-		public static class GroupItem {
-			public final static String CLIENT_NAME = "CLIENT_NAME";
-			public final static String SERVICES = "SERVICES";
-			public final static String DATE = "DATE";
-		}
-	}
-	
-	private static class Booking {
-		public final String _businessName, _clientName, _serviceName;
-		public final Date _date;
-		public final boolean _isApproved;
-
-		public Booking(ParseObject parseObject) {
-			_businessName = parseObject.getParseObject(BookingClass.Keys.BUSINESS_POINTER).getString(BusinessClass.Keys.NAME);
-			_clientName = parseObject.getParseObject(BookingClass.Keys.CUSTOMER_POINTER).getString(CustomerClass.Keys.NAME);
-			_serviceName = parseObject.getString(BookingClass.Keys.SERVICES);
-			_date = parseObject.getDate(BookingClass.Keys.DATE);
-			_isApproved = parseObject.getBoolean(BookingClass.Keys.IS_APPROVED);
+	private class BookingsExpandableListAdapter extends BaseExpandableListAdapter {
+		@Override
+		public Object getChild(int groupPosition, int childPosition) {
+			return _bookings.get(groupPosition).get(childPosition);
 		}
 
-		public Map<String, String> toMap() {
-			Map<String, String> map = new HashMap<String, String>();
-			map.put(ExpandableListKeys.GroupItem.CLIENT_NAME, _clientName);
-			map.put(ExpandableListKeys.GroupItem.SERVICES, _serviceName);
-			map.put(ExpandableListKeys.GroupItem.DATE, _date.toString());
-			return map;
+		@Override
+		public long getChildId(int groupPosition, int childPosition) {
+			return _bookings.get(groupPosition).get(childPosition).getObjectId().hashCode();
+		}
+
+		@Override
+		public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+			LayoutInflater inflator = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			if (convertView == null) {
+				convertView = inflator.inflate(R.layout.business_booking_list_item, null);
+			}
+			
+			TextView clientNameTxtView = (TextView)convertView.findViewById(R.id.expandable_bookings_list_item_txtClientName);
+			TextView servicesTxtView = (TextView)convertView.findViewById(R.id.expandable_bookings_list_item_txtServices);
+			TextView dateTxtView = (TextView)convertView.findViewById(R.id.expandable_bookings_list_item_txtDate);
+			
+			clientNameTxtView.setText(_bookings.get(groupPosition).get(childPosition).getClientName());
+			servicesTxtView.setText(_bookings.get(groupPosition).get(childPosition).getServiceName());
+			dateTxtView.setText(_bookings.get(groupPosition).get(childPosition).getDate().toString());
+			
+			return convertView;
+		}
+
+		@Override
+		public int getChildrenCount(int groupPosition) {
+			return _bookings.get(groupPosition).size();
+		}
+
+		@Override
+		public Object getGroup(int groupPosition) {
+			return _bookings.get(groupPosition);
+		}
+
+		@Override
+		public int getGroupCount() {
+			return _bookings.size();
+		}
+
+		@Override
+		public long getGroupId(int groupPosition) {
+			return groupPosition;
+		}
+
+		@Override
+		public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+			LayoutInflater inflator = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			if (convertView == null) {
+				convertView = inflator.inflate(R.layout.business_booking_list_header, null);
+			}
+			
+			TextView titleTextView = (TextView)convertView.findViewById(R.id.expandable_bookings_list_header_txtTitle);
+			TextView numOfItemsTextView = (TextView)convertView.findViewById(R.id.expandable_bookings_list_header_txtNumOfItems);
+			
+			switch (groupPosition) {
+			case 0:
+				titleTextView.setText("Pending");
+				break;
+			case 1:
+				titleTextView.setText("Approved");
+			}
+			numOfItemsTextView.setText("(" + _bookings.get(groupPosition).size() + ")");
+			
+			return convertView;
+		}
+
+		@Override
+		public boolean hasStableIds() {
+			return false;
+		}
+
+		@Override
+		public boolean isChildSelectable(int groupPosition, int childPosition) {
+			return true;
 		}
 	}
 }

@@ -30,7 +30,7 @@ import android.widget.Toast;
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
-import com.gling.bookmeup.main.ParseHelper.BookingClass;
+import com.gling.bookmeup.main.ParseHelper.Booking;
 import com.gling.bookmeup.main.ParseHelper.BusinessClass;
 import com.gling.bookmeup.main.ParseHelper.CustomerClass;
 import com.parse.FindCallback;
@@ -68,11 +68,11 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment {
 		 * 		Before today
 		 *		Were approved
 		 */
-		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(BookingClass.CLASS_NAME).
-				whereMatchesQuery(BookingClass.Keys.BUSINESS_POINTER, innerBusinessPointerQuery).
-				whereLessThan(BookingClass.Keys.DATE, new Date()).
-				whereEqualTo(BookingClass.Keys.IS_APPROVED, true);
-		query.include(BookingClass.Keys.CUSTOMER_POINTER);
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(Booking.CLASS_NAME).
+				whereMatchesQuery(Booking.Keys.BUSINESS_POINTER, innerBusinessPointerQuery).
+				whereLessThan(Booking.Keys.DATE, new Date()).
+				whereEqualTo(Booking.Keys.IS_APPROVED, true);
+		query.include(Booking.Keys.CUSTOMER_POINTER);
 		
 		final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
 		query.findInBackground(new FindCallback<ParseObject>() {
@@ -220,10 +220,10 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment {
 		 * Creates a Client instance out of a Bookings record.
 		 */
 		public Client(ParseObject bookingParseObject) {
-			ParseObject clientParseObject = bookingParseObject.getParseObject(BookingClass.Keys.CUSTOMER_POINTER);
+			ParseObject clientParseObject = bookingParseObject.getParseObject(Booking.Keys.CUSTOMER_POINTER);
 			_id = clientParseObject.getObjectId();
 			_clientName = clientParseObject.getString(CustomerClass.Keys.NAME);
-			_lastVisit = bookingParseObject.getDate(BookingClass.Keys.DATE);
+			_lastVisit = bookingParseObject.getDate(Booking.Keys.DATE);
 			_totalSpendings = 0; // TODO: Calculate spendings in booking according to services and prices
 			_isSelected = false;
 		}
@@ -233,13 +233,13 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment {
 		 * This function will summarize the total spending of the client, set the date of his last visit etc.
 		 */
 		public void notifyBooking(ParseObject bookingParseObject) {
-			ParseObject clientParseObject = bookingParseObject.getParseObject(BookingClass.Keys.CUSTOMER_POINTER);
+			ParseObject clientParseObject = bookingParseObject.getParseObject(Booking.Keys.CUSTOMER_POINTER);
 			if (!_id.equals(clientParseObject.getObjectId())) {
 				// TODO: Handle error
 				return;
 			}
 			
-			Date bookingDate = bookingParseObject.getDate(BookingClass.Keys.DATE);
+			Date bookingDate = bookingParseObject.getDate(Booking.Keys.DATE);
 			if (bookingDate.after(_lastVisit)) {
 				_lastVisit = bookingDate;
 			}
