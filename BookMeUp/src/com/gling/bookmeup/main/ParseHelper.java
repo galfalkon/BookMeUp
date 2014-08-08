@@ -19,7 +19,7 @@ public class ParseHelper {
 		}
 	}
 	
-	public static class CusetomerClass {
+	public static class CustomerClass {
 		public static final String CLASS_NAME = "Customer";
 
 		public static class Keys {

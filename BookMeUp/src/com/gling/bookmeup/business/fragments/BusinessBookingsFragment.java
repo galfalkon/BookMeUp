@@ -19,7 +19,7 @@ import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper.BookingClass;
 import com.gling.bookmeup.main.ParseHelper.BusinessClass;
-import com.gling.bookmeup.main.ParseHelper.CusetomerClass;
+import com.gling.bookmeup.main.ParseHelper.CustomerClass;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -166,7 +166,7 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 
 		public Booking(ParseObject parseObject) {
 			_businessName = parseObject.getParseObject(BookingClass.Keys.BUSINESS_POINTER).getString(BusinessClass.Keys.NAME);
-			_clientName = parseObject.getParseObject(BookingClass.Keys.CUSTOMER_POINTER).getString(CusetomerClass.Keys.NAME);
+			_clientName = parseObject.getParseObject(BookingClass.Keys.CUSTOMER_POINTER).getString(CustomerClass.Keys.NAME);
 			_serviceName = parseObject.getString(BookingClass.Keys.SERVICES);
 			_date = parseObject.getDate(BookingClass.Keys.DATE);
 			_isApproved = parseObject.getBoolean(BookingClass.Keys.IS_APPROVED);
