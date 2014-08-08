@@ -109,6 +109,10 @@ public class ParseHelper {
 		public boolean getIsApproved() {
 			return getBoolean(Keys.IS_APPROVED);
 		}
+		
+		public void setIsApproved(boolean value) {
+			put(Keys.IS_APPROVED, value);
+		}
 	}
 
 	public static class BackEndFunctions {

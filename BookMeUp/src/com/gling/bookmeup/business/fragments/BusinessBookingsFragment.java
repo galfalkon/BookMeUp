@@ -92,29 +92,38 @@ public class BusinessBookingsFragment extends OnClickListenerFragment implements
 		
 		// Build dialog
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		
+
+		final Booking booking = _bookings.get(groupPosition).get(childPosition);
 		switch (ExpandableListGroupIds.values()[groupPosition]) {
 		case PENDING_GROUP_ID:
 			Log.i(TAG, "Pending booking clicked");
 			builder.setMessage(R.string.business_bookings_list_pending_click_dialog)
-	        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+	        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 	            public void onClick(DialogInterface dialog, int id) {
 	            	Log.i(TAG, "Approving pending booking");
-	            	Toast.makeText(getActivity(), "Not implemented", Toast.LENGTH_SHORT).show();
+	            	booking.setIsApproved(true);
+	            	booking.saveInBackground();
+	            	_bookings.get(groupPosition).remove(childPosition);
+	            	_bookings.get(ExpandableListGroupIds.APPROVED_GROUP_ID.ordinal()).add(booking);
+	            	_expandableListAdapter.notifyDataSetChanged();
+	            	// TODO: Notify customer using push notification
 	            }
 	        })
-	        .setNegativeButton("Cancel", null);
+	        .setNegativeButton(R.string.cancel, null);
 			break;
 		case APPROVED_GROUP_ID:
 			Log.i(TAG, "Approved booking clicked");
 			builder.setMessage(R.string.business_bookings_list_approved_click_dialog)
-	        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+	        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 	            public void onClick(DialogInterface dialog, int id) {
-	            	Log.i(TAG, "Canceling approved booking");
-	            	Toast.makeText(getActivity(), "Not implemented", Toast.LENGTH_SHORT).show();
+	            	Log.i(TAG, "Deleting approved booking");
+	            	booking.deleteInBackground();
+	            	_bookings.get(groupPosition).remove(childPosition);
+	            	_expandableListAdapter.notifyDataSetChanged();
+	            	// TODO: Notify customer using push notification
 	            }
 	        })
-	        .setNegativeButton("Cancel", null);
+	        .setNegativeButton(R.string.cancel, null);
 			break;
 		}
         builder.show();
@@ -158,7 +167,8 @@ public class BusinessBookingsFragment extends OnClickListenerFragment implements
 
 				_expandableListAdapter.notifyDataSetChanged();
 				
-				Log.i(TAG, "#Pending bookings = " + _bookings.get(0).size() + ", #Approved bookings = " + _bookings.get(1).size());
+				Log.i(TAG, "#Pending bookings = " + _bookings.get(ExpandableListGroupIds.PENDING_GROUP_ID.ordinal()).size() +
+						", #Approved bookings = " + _bookings.get(ExpandableListGroupIds.APPROVED_GROUP_ID.ordinal()).size());
 			}
 		});
 	}
