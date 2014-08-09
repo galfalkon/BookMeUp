@@ -54,14 +54,15 @@
     <string name="business_profile_creation_txtPreviewImage">Business Image</string>
     <string name="business_profile_creation_txtServices">Services</string>
     
-    <!-- Business client list -->
-    <string name="business_client_list_btnFilterBySpendings">Spendings</string>
-    <string name="business_client_list_btnFilterByLastVisit">Last visit</string>
-    <string name="business_client_list_btnSendMessage">Send message</string>
-    <string name="business_client_list_btnSendOffer">Send offer</string>
-    <string name="business_client_list_send_message_dialog_btnSend">Send</string>
-    <string name="business_client_list_send_message_dialog_btnCancel">Cancel</string>
-    <string name="business_client_list_send_message_dialog_edtMessageHint">Type in your message...\n(Up to 60 characters)</string>
+    <!-- Business customer list -->
+    <string name="business_customer_list_edtSearchHint">Search customer</string>
+    <string name="business_customer_list_btnFilterBySpendings">Spendings</string>
+    <string name="business_customer_list_btnFilterByLastVisit">Last visit</string>
+    <string name="business_customer_list_btnSendMessage">Send message</string>
+    <string name="business_customer_list_btnSendOffer">Send offer</string>
+    <string name="business_customer_list_send_message_dialog_btnSend">Send</string>
+    <string name="business_customer_list_send_message_dialog_btnCancel">Cancel</string>
+    <string name="business_customer_list_send_message_dialog_edtMessageHint">Type in your message...\n(Up to 60 characters)</string>
 
     <!-- Business bookings list -->
     <string name="business_bookings_list_pending_header">Pending</string>

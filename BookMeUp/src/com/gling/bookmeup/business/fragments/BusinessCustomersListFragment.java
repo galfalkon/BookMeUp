@@ -13,6 +13,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -39,12 +42,11 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-public class BusinessCustomersListFragment  extends OnClickListenerFragment {
-	private static final String TAG = "BusinessClientListFragment";
+public class BusinessCustomersListFragment  extends OnClickListenerFragment implements TextWatcher {
+	private static final String TAG = "BusinessCustomersListFragment";
 	
-	private List<Client> _allClients, _filteredClients;
-	private ClientsArrayAdapter _listViewAdapter;
-	
+	private List<Customer> _allCustomers, _filteredCustomers;
+	private CustomersArrayAdapter _listViewAdapter;
 	
 	// TODO: Temporary! The businessId should be saved in the shared preferences during the profile creation. 
 	private static final String BUSINESS_ID = "mUhs7IdMT7"; 
@@ -54,9 +56,9 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment {
 		Log.i(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		
-		_allClients = new ArrayList<Client>();
-		_filteredClients = new ArrayList<Client>();
-		_listViewAdapter = new ClientsArrayAdapter();
+		_allCustomers = new ArrayList<Customer>();
+		_filteredCustomers = new ArrayList<Customer>();
+		_listViewAdapter = new CustomersArrayAdapter();
 		
 		final ParseQuery<ParseObject> innerBusinessPointerQuery = new ParseQuery<ParseObject>(BusinessClass.CLASS_NAME).
 				whereEqualTo(BusinessClass.Keys.ID, BUSINESS_ID);
@@ -85,16 +87,16 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment {
 				}
 				
 				for (ParseObject bookingParseObject : objects) {
-					Client currentClient = new Client(bookingParseObject);
-					int index = _allClients.indexOf(currentClient);
+					Customer currentCustomer = new Customer(bookingParseObject);
+					int index = _allCustomers.indexOf(currentCustomer);
 					if (index == -1) {
-						_allClients.add(currentClient);
+						_allCustomers.add(currentCustomer);
 					} else {
-						_allClients.get(index).notifyBooking(bookingParseObject);
+						_allCustomers.get(index).notifyBooking(bookingParseObject);
 					}
 				}
 				
-				_filteredClients.addAll(_allClients);
+				_filteredCustomers.addAll(_allCustomers);
 				_listViewAdapter.notifyDataSetChanged();
 			}
 		});
@@ -105,8 +107,11 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment {
 		Log.i(TAG, "onCreateView");
 
 		View view = super.onCreateView(inflater, container, savedInstanceState);
-		ListView listView = (ListView)view.findViewById(R.id.business_client_list_listViewClients);
+		ListView listView = (ListView)view.findViewById(R.id.business_customer_list_listViewClients);
 		listView.setAdapter(_listViewAdapter);
+		
+		EditText edtSearch = (EditText)view.findViewById(R.id.business_customer_list_edtSearch);
+		edtSearch.addTextChangedListener(this);
 		
 		return view;
 	}
@@ -120,21 +125,38 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment {
 	public void onClick(View v) {
 		switch (v.getId())
 		{
-		case R.id.business_client_list_btnFilterBySpendings:
+		case R.id.business_customer_list_btnFilterBySpendings:
 			Log.i(TAG, "btnFilterBySpending clicked");
 			handleSpendingsFilter();
 			break;
-		case R.id.business_client_list_btnFilterByLastVisit:
+		case R.id.business_customer_list_btnFilterByLastVisit:
 			Log.i(TAG, "btnFilterByLastVisit clicked");
 			handleLastVisitFilter();
 			break;
-		case R.id.business_client_list_btnSendMessage:
+		case R.id.business_customer_list_btnSendMessage:
 			handleSendMessageToSelectedClients();
 			break;
-		case R.id.business_client_list_btnSendOffer:
+		case R.id.business_customer_list_btnSendOffer:
 			Toast.makeText(getActivity(), "Not implemeted", Toast.LENGTH_SHORT).show();
 			break;
 		}
+	}
+	
+
+	@Override
+	public void afterTextChanged(Editable s) {
+		Log.i(TAG, "afterTextChanged");
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+		Log.i(TAG, "beforeTextChanged");		
+	}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before	, int count) {
+		Log.i(TAG, "onTextChanged");
+		_listViewAdapter.getFilter().filter(s);
 	}
 	
 	private void handleLastVisitFilter() {
@@ -173,7 +195,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment {
 		builder.setView(view);
 		
 		// Set up the buttons
-		builder.setPositiveButton(R.string.business_client_list_send_message_dialog_btnSend, new DialogInterface.OnClickListener() { 
+		builder.setPositiveButton(R.string.business_customer_list_send_message_dialog_btnSend, new DialogInterface.OnClickListener() { 
 		    @Override
 		    public void onClick(DialogInterface dialog, int which) {
 		    	Log.i(TAG, "Sending message to selected clients");
@@ -181,7 +203,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment {
 		    	
 		    	// Build a list of the ids of all selected clients
 		    	List<String> clientsIds = new ArrayList<String>();
-				for (Client client : _filteredClients) {
+				for (Customer client : _filteredCustomers) {
 					if (client._isSelected) {
 						clientsIds.add(client._id);
 					}
@@ -201,7 +223,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment {
 				});
 		    }
 		});
-		builder.setNegativeButton(R.string.business_client_list_send_message_dialog_btnCancel, new DialogInterface.OnClickListener() {
+		builder.setNegativeButton(R.string.business_customer_list_send_message_dialog_btnCancel, new DialogInterface.OnClickListener() {
 		    @Override
 		    public void onClick(DialogInterface dialog, int which) {
 		        dialog.cancel();
@@ -210,8 +232,8 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment {
 		builder.show();
 	}
 
-	private static class Client {
-		public final String _id, _clientName;
+	private static class Customer {
+		public final String _id, _customerName;
 		public Date _lastVisit;
 		public int _totalSpendings;
 		public boolean _isSelected;
@@ -219,10 +241,10 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment {
 		/*
 		 * Creates a Client instance out of a Bookings record.
 		 */
-		public Client(ParseObject bookingParseObject) {
+		public Customer(ParseObject bookingParseObject) {
 			ParseObject clientParseObject = bookingParseObject.getParseObject(Booking.Keys.CUSTOMER_POINTER);
 			_id = clientParseObject.getObjectId();
-			_clientName = clientParseObject.getString(CustomerClass.Keys.NAME);
+			_customerName = clientParseObject.getString(CustomerClass.Keys.NAME);
 			_lastVisit = bookingParseObject.getDate(Booking.Keys.DATE);
 			_totalSpendings = 0; // TODO: Calculate spendings in booking according to services and prices
 			_isSelected = false;
@@ -250,22 +272,22 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment {
 
 		@Override
 		public String toString() {
-			return _clientName;
+			return _customerName;
 		}
 		
 		@Override
 		public boolean equals(Object other) {
-			return !(other instanceof Client) || (_id.equals(((Client)other)._id)); 
+			return !(other instanceof Customer) || (_id.equals(((Customer)other)._id)); 
 		}
 	}
 	
-	private class ClientsArrayAdapter extends ArrayAdapter<Client> {
+	private class CustomersArrayAdapter extends ArrayAdapter<Customer> {
 		
-		private ClientsFilter _clientFilter;
+		private CustomersFilter _clientFilter;
 		
-		public ClientsArrayAdapter() {
-			super(getActivity(), R.layout.business_customer_list_item, _filteredClients);
-			_clientFilter = new ClientsFilter();
+		public CustomersArrayAdapter() {
+			super(getActivity(), R.layout.business_customer_list_item, _filteredCustomers);
+			_clientFilter = new CustomersFilter();
 		}
 		
 		@Override
@@ -275,7 +297,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment {
 				convertView = inflator.inflate(R.layout.business_customer_list_item, null);
 			}
 			
-			final Client client = _filteredClients.get(position);
+			final Customer client = _filteredCustomers.get(position);
 			
 			TextView clientNameTextView = (TextView) convertView.findViewById(R.id.client_list_item_txtClientName);
 			TextView totalSepndingsTextView = (TextView) convertView.findViewById(R.id.client_list_item_txtTotalSpent);
@@ -287,7 +309,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment {
 				}
 			});
 			
-			clientNameTextView.setText(client._clientName);
+			clientNameTextView.setText(client._customerName);
 			totalSepndingsTextView.setText(client._totalSpendings + " NIS");
 			
 			return convertView;
@@ -300,7 +322,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment {
 		}
 	}
 	
-	private class ClientsFilter extends Filter {
+	private class CustomersFilter extends Filter {
 		/*
 		 *  Optional
 		 *  Should be null if the user doesn't want to filter by the date of the last visit.
@@ -313,17 +335,15 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment {
 			
 			FilterResults results = new FilterResults();
 			
-			_filteredClients.clear();
-			for (Client client : _allClients) {
-				if (_dateOfLastVisit != null) {
-					if (client._lastVisit.after(_dateOfLastVisit)) {
-						_filteredClients.add(client);
-					}
+			_filteredCustomers.clear();
+			for (Customer customer : _allCustomers) {
+				if (doesSetisfyLastVisitFilter(customer) && doesSetisfyConstraint(customer, constraint)) {
+					_filteredCustomers.add(customer);
 				}
 			}
 			
-			results.values = _filteredClients;
-			results.count = _filteredClients.size();
+			results.values = _filteredCustomers;
+			results.count = _filteredCustomers.size();
 			
 			return results;
 		}
@@ -341,6 +361,14 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment {
 		
 		private void unfilterByLastVisit() {
 			_dateOfLastVisit = null;
+		}
+		
+		private boolean doesSetisfyLastVisitFilter(Customer customer) {
+			return _dateOfLastVisit == null || customer._lastVisit.after(_dateOfLastVisit);
+		}
+		
+		private boolean doesSetisfyConstraint(Customer customer, CharSequence constraint) {
+			return customer == null || customer._customerName.toLowerCase().contains(constraint.toString().toLowerCase());
 		}
 	}
 }
