@@ -48,7 +48,7 @@
     <string name="business_profile_creation_edtOpeningHoursHint">Opening Hours</string>
     <string name="business_profile_creation_imgProfilePicutureDescription">Profile Picture</string>
     <string name="business_profile_creation_lstServices">Services</string>
-    <string name="business_profile_creation_btnCreateProfile">Create Profile</string>
+    <string name="business_profile_creation_btnSaveProfile">Save Profile</string>
     <string name="action_business_profile_edit">Business</string>
     <string name="business_profile_creation_btnUploadImage">Upload</string>
     <string name="business_profile_creation_txtPreviewImage">Image</string>

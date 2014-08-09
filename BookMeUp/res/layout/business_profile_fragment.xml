@@ -118,6 +118,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="bottom"
-        android:text="@string/business_profile_creation_btnCreateProfile" />
+        android:text="@string/business_profile_creation_btnSaveProfile" />
 
 </LinearLayout>
