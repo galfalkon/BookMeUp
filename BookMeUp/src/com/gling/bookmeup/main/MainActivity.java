@@ -1,5 +1,7 @@
 package com.gling.bookmeup.main;
 
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -10,7 +12,10 @@ import android.view.MenuItem;
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.fragments.Business;
 import com.gling.bookmeup.login.fragments.LoginFragment;
+import com.parse.FindCallback;
 import com.parse.ParseAnalytics;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 
 public class MainActivity extends ActionBarActivity {
 	
@@ -33,7 +38,16 @@ public class MainActivity extends ActionBarActivity {
 
 		super.onCreate(savedInstanceState);
 		
-		_business = new Business();
+		// TODO move this to after login
+		final String businessId = "Jb1Hv359Rs";
+        final ParseQuery<Business> query = ParseQuery.getQuery(Business.class).whereEqualTo(
+                Business.Keys.ID, businessId);
+        try {
+            _business = query.find().get(0);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 		
 		setContentView(R.layout.activity_main);
 

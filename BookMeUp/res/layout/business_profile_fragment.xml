@@ -4,15 +4,28 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <EditText
-        android:id="@+id/business_profile_creation_edtBusinessName"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/business_profile_creation_edtBusinessName"
-        android:inputType="text" >
+        android:orientation="horizontal" >
 
-        <requestFocus />
-    </EditText>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:text="Name"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <EditText
+            android:id="@+id/business_profile_creation_edtBusinessName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/business_profile_creation_edtBusinessName"
+            android:inputType="text" >
+
+            <requestFocus />
+        </EditText>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,9 +36,9 @@
             android:id="@+id/business_profile_creation_txtPreviewImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="@string/business_profile_creation_txtPreviewImage"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:gravity="center" />
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <com.parse.ParseImageView
             android:id="@+id/business_profile_creation_imgPreviewImage"
@@ -39,6 +52,51 @@
             android:src="@drawable/ic_action_photo" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:text="Opening Hours"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+        
+        <Button
+            android:id="@+id/opening_hours_edit_btnEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit" />
+        </LinearLayout>
+        
+        <TextView
+            android:id="@+id/business_profile_creation_txtOpeningHours"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content" 
+            />
+
+        
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:text="Description"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+        
     <EditText
         android:id="@+id/business_profile_creation_edtDescription"
         android:layout_width="match_parent"
@@ -46,25 +104,20 @@
         android:ems="10"
         android:hint="@string/business_profile_creation_edtDescriptionHint"
         android:inputType="textMultiLine" />
-
-    <EditText
-        android:id="@+id/business_profile_creation_edtOpeningHours"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/business_profile_creation_edtOpeningHoursHint"
-        android:inputType="text" />
     
-    <ExpandableListView
+    </LinearLayout>
+
+    <ListView
         android:id="@+id/business_profile_creation_lstServices"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/business_profile_creation_lstServices" >
-    </ExpandableListView>
+        android:layout_height="wrap_content" >
+    </ListView>
 
     <Button
         android:id="@+id/business_profile_creation_btnCreate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="bottom"
         android:text="@string/business_profile_creation_btnCreateProfile" />
 
 </LinearLayout>

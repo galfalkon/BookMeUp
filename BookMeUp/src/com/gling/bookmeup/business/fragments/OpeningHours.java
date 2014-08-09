@@ -14,16 +14,19 @@ public class OpeningHours extends JSONObject {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void setDay(Day day, boolean isOpen, int fromHour, int fromMinute,
-			int toHour, int toMinute) throws JSONException {
+	public void setDay(Day day, String isOpen, String from,
+	        String to) {
 		JSONArray details = new JSONArray();
 		details.put(isOpen);
-		details.put(fromHour);
-		details.put(fromMinute);
-		details.put(toHour);
-		details.put(toMinute);
+		details.put(from);
+		details.put(to);
 
-		this.put(day.name(), details);
+		try {
+            this.put(day.name(), details);
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 	}
 
 	public JSONArray getDay(Day day) throws JSONException {

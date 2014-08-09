@@ -25,7 +25,6 @@ import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.ParseHelper.BookingClass;
-import com.gling.bookmeup.main.ParseHelper.BusinessClass;
 import com.gling.bookmeup.main.ParseHelper.CusetomerClass;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -77,8 +76,8 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment {
 		
 		//TODO: The businessId should be saved in the shared preferences during the profile creation. 
 		final String businessId = "UwnJrO4XIq";
-		final ParseQuery<ParseObject> innerBusinessPointerQuery = new ParseQuery<ParseObject>(BusinessClass.CLASS_NAME).
-				whereEqualTo(BusinessClass.Keys.ID, businessId);
+		final ParseQuery<ParseObject> innerBusinessPointerQuery = new ParseQuery<ParseObject>(Business.CLASS_NAME).
+				whereEqualTo(Business.Keys.ID, businessId);
 		
 		Calendar today = Calendar.getInstance();
 		// TODO: We should implement our own DatePickerDialog because this implementation is always localized (According to the localization device's preferences)

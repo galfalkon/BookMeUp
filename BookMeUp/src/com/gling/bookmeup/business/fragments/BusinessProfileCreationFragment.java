@@ -1,30 +1,27 @@
 package com.gling.bookmeup.business.fragments;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Path.Op;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,15 +30,14 @@ import com.gling.bookmeup.login.fragments.LoginFragment;
 import com.gling.bookmeup.main.FragmentsFlowManager;
 import com.gling.bookmeup.main.MainActivity;
 import com.gling.bookmeup.main.OnClickListenerFragment;
-import com.gling.bookmeup.main.ParseHelper.BookingClass;
-import com.gling.bookmeup.main.ParseHelper.BusinessClass;
-import com.parse.FindCallback;
+
+import com.parse.DeleteCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseImageView;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseQueryAdapter;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -49,28 +45,15 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
 
     private static final String TAG = "BusinessProfileCreationFragment";
 
-    private SimpleExpandableListAdapter _expandableListAdapter;
-    Map<String, String> _servicesGroupHeaderData;
-    private List<Map<String, String>> _servicesData;
-
-    private EditText edtBusinessName, edtBusinessDescription, edtBusinessOpeningHours;
+    private EditText edtBusinessName, edtBusinessDescription;
     private TextView txtPreviewImage;
     private ParseImageView imgBusinessPreviewImage;
-    private ExpandableListView lstBusinessServices;
+    private TextView txtBusinessOpeningHours;
+    private Button btnOpeningHoursEdit;
+    private ListView lstBusinessServices;
 
-    private static class ExpandableListKeys {
-        public static class GroupHeader {
-            public final static String HEADER_TITLE = "TITLE";
-            public final static String NUM_OF_ITEMS = "NUM_OF_ITEMS";
-        }
-
-        public static class GroupItem {
-            public final static String NAME = "NAME";
-            public final static String PRICE = "PRICE";
-            public final static String DURATION = "DURATION";
-        }
-    }
-
+    private CustomServicesAdapter _servicesAdapter;
+    
     @Override
     protected int getFragmentLayoutId() {
         return R.layout.business_profile_fragment;
@@ -80,130 +63,258 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        edtBusinessName = (EditText) view
-                .findViewById(R.id.business_profile_creation_edtBusinessName);
-        imgBusinessPreviewImage = (ParseImageView) view
-                .findViewById(R.id.business_profile_creation_imgPreviewImage);
-        txtPreviewImage = (TextView) view
-                .findViewById(R.id.business_profile_creation_txtPreviewImage);
-        edtBusinessDescription = (EditText) view
-                .findViewById(R.id.business_profile_creation_edtDescription);
-        edtBusinessOpeningHours = (EditText) view
-                .findViewById(R.id.business_profile_creation_edtOpeningHours);
-        lstBusinessServices = (ExpandableListView) view
-                .findViewById(R.id.business_profile_creation_lstServices);
+        edtBusinessName = (EditText) view.findViewById(R.id.business_profile_creation_edtBusinessName);
+        imgBusinessPreviewImage = (ParseImageView) view.findViewById(R.id.business_profile_creation_imgPreviewImage);
+        txtPreviewImage = (TextView) view.findViewById(R.id.business_profile_creation_txtPreviewImage);
+        edtBusinessDescription = (EditText) view.findViewById(R.id.business_profile_creation_edtDescription);
+        txtBusinessOpeningHours = (TextView) view.findViewById(R.id.business_profile_creation_txtOpeningHours);
+        btnOpeningHoursEdit = (Button) view.findViewById(R.id.opening_hours_edit_btnEdit);
+        lstBusinessServices = (ListView) view.findViewById(R.id.business_profile_creation_lstServices);
 
         // Until the user has taken a photo, hide the preview
         imgBusinessPreviewImage.setVisibility(View.INVISIBLE);
 
-        // Initialize the group header data
-        List<Map<String, String>> groupHeadersData = new ArrayList<Map<String, String>>();
-
-        _servicesGroupHeaderData = new HashMap<String, String>();
-        _servicesGroupHeaderData.put(ExpandableListKeys.GroupHeader.HEADER_TITLE, "Services");
-        _servicesGroupHeaderData.put(ExpandableListKeys.GroupHeader.NUM_OF_ITEMS, "(0)");
-        groupHeadersData.add(_servicesGroupHeaderData);
-
-        // Initialize the group items lists
-        List<List<Map<String, String>>> listOfChildGroups = new ArrayList<List<Map<String, String>>>();
-
-        _servicesData = new ArrayList<Map<String, String>>();
-        listOfChildGroups.add(_servicesData);
-
-        _expandableListAdapter = new SimpleExpandableListAdapter(getActivity(),
-
-        groupHeadersData, R.layout.business_service_list_header, new String[] {
-                ExpandableListKeys.GroupHeader.HEADER_TITLE,
-                ExpandableListKeys.GroupHeader.NUM_OF_ITEMS }, new int[] {
-                R.id.expandable_services_list_header_txtTitle,
-                R.id.expandable_services_list_header_txtNumOfItems },
-
-        listOfChildGroups, R.layout.business_service_list_item, new String[] {
-                ExpandableListKeys.GroupItem.NAME, ExpandableListKeys.GroupItem.PRICE,
-                ExpandableListKeys.GroupItem.DURATION }, new int[] {
-                R.id.expandable_services_list_item_txtServiceName,
-                R.id.expandable_services_list_item_txtPrice,
-                R.id.expandable_services_list_item_txtDuration });
-
-        lstBusinessServices.setAdapter(_expandableListAdapter);
-
-        inflateListsWithDetails();
+        initProfileDetails();
 
         return view;
     }
 
-    private void inflateListsWithDetails() {
-        // Business business = ((MainActivity)
-        // getActivity()).getCurrentBusiness();
+    private void initProfileDetails() {
+        Business business = ((MainActivity) getActivity()).getCurrentBusiness();
 
-        // TODO: The businessId should be saved in the shared preferences during
-        // the profile creation.
-        final String businessId = "btoFQT9CMQ";
-        final ParseQuery<Business> query = ParseQuery.getQuery(Business.class).whereEqualTo(
-                BusinessClass.Keys.ID, businessId);
+        edtBusinessName.setText(business.getName());
+        // image is loaded onResume
+        edtBusinessDescription.setText(business.getDescription());
+        initOpeningHours(business);
+        initServiceList(business);
+    }
 
-        query.findInBackground(new FindCallback<Business>() {
+    private void initOpeningHours(final Business business) {
+        final LayoutInflater inflater = getActivity().getLayoutInflater();
+        
+        txtBusinessOpeningHours.setText(business.getOpeningHours());
+        btnOpeningHoursEdit.setOnClickListener(new OnClickListener() {
+
             @Override
-            public void done(List<Business> businesses, ParseException e) {
-                Log.i(TAG, "Done querying business");
-                if (e != null) {
-                    Log.e(TAG, "Exception occurred: " + e.getMessage());
-                    return;
-                }
-
-                _servicesData.clear();
-
-                Services services = businesses.get(0).getServices();
-                if (services == null) {
-                    Log.i(TAG, "No services");
-                    // return;
-                    try {
-                        services = new Services().putService("Hair Cut", "50", "30 min")
-                                .putService("Blow Job", "200", "depends");
-                    } catch (JSONException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
-                    }
-
-                }
-
-                Iterator<String> keys = services.keys();
-                try {
-                    while (keys.hasNext()) {
-                        Map<String, String> map = new HashMap<String, String>();
-                        String name = keys.next();
-                        JSONArray details;
-
-                        details = services.getService(name);
-                        map.put(ExpandableListKeys.GroupItem.NAME, name);
-                        map.put(ExpandableListKeys.GroupItem.PRICE, details.getString(0));
-                        map.put(ExpandableListKeys.GroupItem.DURATION, details.getString(1));
-
-                        _servicesData.add(map);
-                    }
-                } catch (JSONException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-
-                _servicesGroupHeaderData.put(ExpandableListKeys.GroupHeader.NUM_OF_ITEMS, "("
-                        + String.valueOf(_servicesData.size()) + ")");
-
-                _expandableListAdapter.notifyDataSetChanged();
-                lstBusinessServices.expandGroup(0);
-
-                Log.i(TAG, "#Services = " + _servicesData.size());
+            public void onClick(View paramView) {
+                AlertDialog dialog = createEditOpeningHoursDialog(inflater, business);
+                dialog.show();
             }
         });
+    }
+    
+    private AlertDialog createEditOpeningHoursDialog(LayoutInflater inflater, final Business business) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final View dialogView = inflater.inflate(R.layout.business_edit_opening_hours_dialog, null);
+        
+        AlertDialog dialog = 
+        builder
+            .setTitle("Edit Opening Hours")
+            .setView(dialogView)
+            .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    OpeningHours oh = new OpeningHours();
+                    oh.setDay(
+                            OpeningHours.Day.SUNDAY, 
+                            ((EditText) dialogView.findViewById(R.id.opening_hours_sunday_isOpen)).getText().toString(), 
+                            ((EditText) dialogView.findViewById(R.id.opening_hours_sunday_from)).getText().toString(),
+                            ((EditText) dialogView.findViewById(R.id.opening_hours_sunday_to)).getText().toString()
+                            );
+                    
+                    oh.setDay(
+                            OpeningHours.Day.MONDAY, 
+                            ((EditText) dialogView.findViewById(R.id.opening_hours_monday_isOpen)).getText().toString(), 
+                            ((EditText) dialogView.findViewById(R.id.opening_hours_monday_from)).getText().toString(),
+                            ((EditText) dialogView.findViewById(R.id.opening_hours_monday_to)).getText().toString()
+                            );
+                    
+                    oh.setDay(
+                            OpeningHours.Day.TUESDAY, 
+                            ((EditText) dialogView.findViewById(R.id.opening_hours_tuesday_isOpen)).getText().toString(), 
+                            ((EditText) dialogView.findViewById(R.id.opening_hours_tuesday_from)).getText().toString(),
+                            ((EditText) dialogView.findViewById(R.id.opening_hours_tuesday_to)).getText().toString()
+                            );
+                    
+                    oh.setDay(
+                            OpeningHours.Day.WEDNESDAY, 
+                            ((EditText) dialogView.findViewById(R.id.opening_hours_wednesday_isOpen)).getText().toString(), 
+                            ((EditText) dialogView.findViewById(R.id.opening_hours_wednesday_from)).getText().toString(),
+                            ((EditText) dialogView.findViewById(R.id.opening_hours_wednesday_to)).getText().toString()
+                            );
+                    
+                    oh.setDay(
+                            OpeningHours.Day.THURSDAY, 
+                            ((EditText) dialogView.findViewById(R.id.opening_hours_thursday_isOpen)).getText().toString(), 
+                            ((EditText) dialogView.findViewById(R.id.opening_hours_thursday_from)).getText().toString(),
+                            ((EditText) dialogView.findViewById(R.id.opening_hours_thursday_to)).getText().toString()
+                            );
+                    
+                    oh.setDay(
+                            OpeningHours.Day.FRIDAY, 
+                            ((EditText) dialogView.findViewById(R.id.opening_hours_friday_isOpen)).getText().toString(), 
+                            ((EditText) dialogView.findViewById(R.id.opening_hours_friday_from)).getText().toString(),
+                            ((EditText) dialogView.findViewById(R.id.opening_hours_friday_to)).getText().toString()
+                            );
+                    
+                    oh.setDay(
+                            OpeningHours.Day.SATURDAY, 
+                            ((EditText) dialogView.findViewById(R.id.opening_hours_saturday_isOpen)).getText().toString(), 
+                            ((EditText) dialogView.findViewById(R.id.opening_hours_saturday_from)).getText().toString(),
+                            ((EditText) dialogView.findViewById(R.id.opening_hours_saturday_to)).getText().toString()
+                            );
+                    
+                    business.setOpeningHours(oh);
+                    Log.i(TAG, business.getOpeningHours());
+                    txtBusinessOpeningHours.setText(business.getOpeningHours());
+                }
+            })
+            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+    
+                }
+            })
+            .create();
+        
+        return dialog;
+    }
 
+    private void initServiceList(Business business) {
+        
+        _servicesAdapter = new CustomServicesAdapter(getActivity(), business);
+        
+        final LayoutInflater inflater = getActivity().getLayoutInflater();
+        
+        // add a header with 'add' button for the services list
+        LinearLayout servicesHeader = (LinearLayout) inflater.inflate(R.layout.business_service_list_header, null);
+        Button btnAddService = (Button) servicesHeader.findViewById(R.id.services_list_header_btnAdd);
+        btnAddService.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View paramView) {
+                AlertDialog dialog = createServiceAddDialog(inflater);
+                dialog.show();
+            }
+        });
+        lstBusinessServices.addHeaderView(servicesHeader);
+        
+        lstBusinessServices.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> paramAdapterView, View paramView, int position, long id) {
+                AlertDialog dialog = createServiceDeleteDialog(position);
+                dialog.show();
+                return true;
+            }
+        });
+        
+        lstBusinessServices.setAdapter(_servicesAdapter);
+        _servicesAdapter.loadObjects();
+    }
+
+    private AlertDialog createServiceAddDialog(LayoutInflater inflater) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        View dialogView = inflater.inflate(R.layout.business_add_service_dialog, null);
+        final EditText edtServiceName = (EditText) dialogView.findViewById(R.id.services_add_item_edtName);
+        final EditText edtServicePrice = (EditText) dialogView.findViewById(R.id.services_add_item_edtPrice);
+        final EditText edtServiceDuration = (EditText) dialogView.findViewById(R.id.services_add_item_edtDuration);
+        
+        AlertDialog dialog = 
+        builder
+            .setTitle("Add Service")
+            .setView(dialogView)
+            .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    Service service = new Service();
+                    service.setName(edtServiceName.getText().toString());
+                    service.setPrice(edtServicePrice.getText().toString());
+                    service.setDuration(edtServiceDuration.getText().toString());
+                    service.setBusiness(((MainActivity) getActivity()).getCurrentBusiness());
+                    
+                    service.saveInBackground(new SaveCallback() {
+                        
+                        @Override
+                        public void done(ParseException e) {
+                            _servicesAdapter.loadObjects();
+                        }
+                    });
+                }
+            })
+            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+    
+                }
+            })
+            .create();
+        
+        return dialog;
+    }
+    
+    private AlertDialog createServiceDeleteDialog(final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog dialog = 
+        builder
+            .setTitle("Delete Service?")
+            .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // TODO add service to temp list of modified services, delete on pause or somthing
+                    // TODO feature: parse - call 'eventually' methods
+                    _servicesAdapter.getItem(position-1).deleteInBackground(new DeleteCallback() {
+    
+                        @Override
+                        public void done(ParseException paramParseException) {
+                            _servicesAdapter.loadObjects();
+                        }
+                    });
+                }
+            })
+            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+    
+                }
+            })
+            .create();
+        
+        return dialog;
+    }
+    
+    private void saveBusiness() {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        Log.i(TAG, "current user is: " + currentUser.getUsername());
+
+        Business business = ((MainActivity) getActivity()).getCurrentBusiness();
+
+        business.setUser(currentUser.getUsername());
+        business.setName(edtBusinessName.getText().toString());
+        business.setDescription(edtBusinessDescription.getText().toString());
+
+        // If the user added a photo, that data will be added in the BusinessImageCaptureFragment
+        // services are edited via list vie
+        // opening hours are edited via dialog
+
+        final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
+        business.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                progressDialog.dismiss();
+                if (e == null) {
+                    Log.i(TAG, "Done creating new business");
+                    getActivity().setResult(Activity.RESULT_OK);
+                } else {
+                    Log.e(TAG, "Exception occurred: " + e.getMessage());
+                    Toast.makeText(getActivity().getApplicationContext(), "Error saving: " + e.getMessage(),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
         case R.id.business_profile_creation_btnImageUpload:
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
-                    Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(edtBusinessName.getWindowToken(), 0);
             break;
         case R.id.business_profile_creation_btnCreate:
@@ -214,29 +325,19 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
             }
             if (!userInCache()) {
                 Log.i(TAG, "user not found in cache, redirecting to login...");
-                Toast.makeText(getActivity(), "Please sign up or log in first...",
-                        Toast.LENGTH_SHORT).show();
-                getActivity()
-                        .getSupportFragmentManager()
-                        .beginTransaction()
-                        .addToBackStack(null)
-                        .replace(R.id.container,
-                                Fragment.instantiate(getActivity(), LoginFragment.class.getName()))
+                Toast.makeText(getActivity(), "Please sign up or log in first...", Toast.LENGTH_SHORT).show();
+                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null)
+                        .replace(R.id.container, Fragment.instantiate(getActivity(), LoginFragment.class.getName()))
                         .commit();
                 return;
             }
-            try {
-                createBusiness();
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            saveBusiness();
             break;
         }
         FragmentsFlowManager.goToNextFragment(getActivity(), v.getId());
     }
 
-    private boolean userInCache() {
+    private boolean userInCache() { // TODO move to common
         ParseUser currentUser = ParseUser.getCurrentUser();
         return (currentUser != null);
     }
@@ -244,56 +345,7 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
     private boolean validateInput() {
         return true;
     }
-
-    private void createBusiness() throws JSONException {
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        Log.i(TAG, "current user is: " + currentUser.getUsername());
-
-        Business business = ((MainActivity) getActivity()).getCurrentBusiness();
-
-        business.setUser(currentUser);
-        business.setName(edtBusinessName.getText().toString());
-        business.setDescription(edtBusinessDescription.getText().toString());
-
-        Services services = new Services();
-        for (Map<String, String> service : _servicesData) {
-            services.putService(
-                    service.get(ExpandableListKeys.GroupItem.NAME),
-                    service.get(ExpandableListKeys.GroupItem.PRICE),
-                    service.get(ExpandableListKeys.GroupItem.DURATION));
-        }
-
-        business.setServices(services);
-
-        // If the user added a photo, that data will be
-        // added in the BusinessImageCaptureFragment
-
-        final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null,
-                "Please wait...");
-        business.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                progressDialog.dismiss();
-                if (e == null) {
-                    Log.i(TAG, "Done creating new business");
-                    getActivity().setResult(Activity.RESULT_OK);
-                    getActivity().finish();
-                } else {
-                    Log.e(TAG, "Exception occurred: " + e.getMessage());
-                    Toast.makeText(getActivity().getApplicationContext(),
-                            "Error saving: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-    // private static byte[] getByteArrayFromImageView(ImageView imgView) {
-    // Bitmap bitmap = ((BitmapDrawable)imgView.getDrawable()).getBitmap();
-    // ByteArrayOutputStream stream = new ByteArrayOutputStream();
-    // bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-    // return stream.toByteArray();
-    // }
-
+    
     /*
      * On resume, check and see if a business image has been set from the
      * BusinessImageCaptureFragment. If it has, load the image in this fragment
@@ -302,9 +354,14 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
     @Override
     public void onResume() {
         super.onResume();
-        ParseFile imageFile = ((MainActivity) getActivity()).getCurrentBusiness().getImageFile();
+        
+        Log.i(TAG, "On Resume");
+        
+        Business business = ((MainActivity) getActivity()).getCurrentBusiness();
+        
+        ParseFile imageFile = business.getImageFile();
         if (imageFile != null) {
-            txtPreviewImage.setText("My business image:");
+            txtPreviewImage.setText("Image");
             imgBusinessPreviewImage.setParseFile(imageFile);
             imgBusinessPreviewImage.loadInBackground(new GetDataCallback() {
                 @Override
@@ -317,4 +374,47 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
             txtPreviewImage.setText("Please upload an image");
         }
     }
+    
+    
+    private class CustomServicesAdapter extends ParseQueryAdapter<Service> {
+
+        public CustomServicesAdapter(Context context, final Business business) {
+            super(context, new ParseQueryAdapter.QueryFactory<Service>() {
+                public ParseQuery<Service> create() {
+                    return business.getServicesQuery();
+                }
+            });
+        }
+
+        @Override
+        public View getItemView(Service service, View v, ViewGroup parent) {
+            if (v == null) {
+                v = View.inflate(getContext(), R.layout.business_service_list_item, null);
+            }
+
+            super.getItemView(service, v, parent);
+
+            TextView txtServiceName = (TextView) v.findViewById(R.id.services_list_item_txtServiceName);
+            txtServiceName.setText(service.getName());
+
+            TextView txtServicePrice = (TextView) v.findViewById(R.id.services_list_item_txtPrice);
+            txtServicePrice.setText(service.getPrice());
+
+            TextView txtServiceDuration = (TextView) v.findViewById(R.id.services_list_item_txtDuration);
+            txtServiceDuration.setText(service.getDuration());
+
+            return v;
+        }
+
+    }
 }
+
+
+
+
+// private static byte[] getByteArrayFromImageView(ImageView imgView) {
+// Bitmap bitmap = ((BitmapDrawable)imgView.getDrawable()).getBitmap();
+// ByteArrayOutputStream stream = new ByteArrayOutputStream();
+// bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+// return stream.toByteArray();
+// }

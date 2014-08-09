@@ -18,7 +18,6 @@ import android.widget.SimpleExpandableListAdapter;
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper.BookingClass;
-import com.gling.bookmeup.main.ParseHelper.BusinessClass;
 import com.gling.bookmeup.main.ParseHelper.CusetomerClass;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -104,8 +103,8 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 	private void inflateListsWithFutureBookings() {
 		// TODO: The businessId should be saved in the shared preferences during the profile creation. 
 		final String businessId = "UwnJrO4XIq";
-		final ParseQuery<ParseObject> innerBusinessPointerQuery = new ParseQuery<ParseObject>(BusinessClass.CLASS_NAME).
-				whereEqualTo(BusinessClass.Keys.ID, businessId);
+		final ParseQuery<ParseObject> innerBusinessPointerQuery = new ParseQuery<ParseObject>(Business.CLASS_NAME).
+				whereEqualTo(Business.Keys.ID, businessId);
 		
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(BookingClass.CLASS_NAME).
 				whereMatchesQuery(BookingClass.Keys.BUSINESS_POINTER, innerBusinessPointerQuery).
@@ -165,7 +164,7 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 		public final boolean _isApproved;
 
 		public Booking(ParseObject parseObject) {
-			_businessName = parseObject.getParseObject(BookingClass.Keys.BUSINESS_POINTER).getString(BusinessClass.Keys.NAME);
+			_businessName = parseObject.getParseObject(BookingClass.Keys.BUSINESS_POINTER).getString(Business.Keys.NAME);
 			_clientName = parseObject.getParseObject(BookingClass.Keys.CUSTOMER_POINTER).getString(CusetomerClass.Keys.NAME);
 			_serviceName = parseObject.getString(BookingClass.Keys.SERVICES);
 			_date = parseObject.getDate(BookingClass.Keys.DATE);

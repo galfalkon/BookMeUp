@@ -49,7 +49,7 @@
     <string name="business_profile_creation_btnCreateProfile">Create Profile</string>
     <string name="action_business_profile_edit">Business</string>
     <string name="business_profile_creation_btnUploadImage">Upload</string>
-    <string name="business_profile_creation_txtPreviewImage">Business Image</string>
+    <string name="business_profile_creation_txtPreviewImage">Image</string>
     <string name="business_profile_creation_txtServices">Services</string>
     
     <!-- Business client list -->
@@ -60,5 +60,6 @@
     <string name="business_client_list_send_message_dialog_btnSend">Send</string>
     <string name="business_client_list_send_message_dialog_btnCancel">Cancel</string>
     <string name="business_client_list_send_message_dialog_edtMessageHint">Type in your message...\n(Up to 60 characters)</string>
+    <string name="services_list_header_btnAdd">Add</string>
 
 </resources>

@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.gling.bookmeup.business.fragments.Business;
+import com.gling.bookmeup.business.fragments.Service;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
@@ -25,6 +26,7 @@ public class BookMeUpApplication extends Application {
 		Log.i(TAG, "Initializing Parse");
 		
 		ParseObject.registerSubclass(Business.class);
+		ParseObject.registerSubclass(Service.class);
 		
 		Parse.initialize(this, PARSE_APPLICATION_ID, PARSE_CLIENT_KEY);
 

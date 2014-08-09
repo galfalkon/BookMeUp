@@ -28,22 +28,6 @@ public class ParseHelper {
 			public static final String FAVOURITES = "favourites";
 		}
 	}
-	
-	public static class BusinessClass {
-		public final static String CLASS_NAME = "Business";
-
-		public static class Keys {
-			public static final String ID = "objectId";
-			public static final String USER = "user";
-			public static final String NAME = "name";
-			public static final String DESCRIPTION = "description";
-			public static final String CATEGORY = "category";
-			public static final String OPENING_HOURS = "openingHours";
-			public static final String IMAGE = "image";
-			public static final String SERVICES = "services";
-			public static final String OFFERS = "offers";
-		}
-	}
 
 	public static class BookingClass {
 		public static final String CLASS_NAME = "Booking";
