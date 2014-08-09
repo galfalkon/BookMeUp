@@ -1,18 +1,16 @@
 package com.gling.bookmeup.main;
 
-import java.util.List;
-
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.fragments.Business;
 import com.gling.bookmeup.login.fragments.LoginFragment;
-import com.parse.FindCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -54,7 +52,7 @@ public class MainActivity extends ActionBarActivity {
 		if (savedInstanceState == null) {
 			
 			// Create a new Fragment to be placed in the activity layout
-			LoginFragment firstFragment = new LoginFragment();
+			Fragment firstFragment = new LoginFragment();
             
 			// In case this activity was started with special instructions from an
             // Intent, pass the Intent's extras to the fragment as arguments
@@ -63,7 +61,10 @@ public class MainActivity extends ActionBarActivity {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, firstFragment).commit();
 		}
-		
+
+		// For not showing the keyboard when an editText gets focus on fragment creation
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+				
 		// Track application opens
 		ParseAnalytics.trackAppOpened(getIntent());
 	}

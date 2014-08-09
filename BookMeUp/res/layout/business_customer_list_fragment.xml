@@ -3,42 +3,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <LinearLayout
-        android:id="@+id/business_client_list_filtersBar"
+    <EditText 
+        android:id="@+id/business_customer_list_edtSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:maxLines="1"
+        android:cursorVisible="false"
+        android:hint="@string/business_customer_list_edtSearchHint" />
+    
+    <LinearLayout
+        android:id="@+id/business_customer_list_filtersBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+		android:layout_below="@id/business_customer_list_edtSearch"        
         style="?android:attr/buttonBarStyle"
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/business_client_list_btnFilterBySpendings"
+            android:id="@+id/business_customer_list_btnFilterBySpendings"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             style="?android:attr/buttonBarButtonStyle"
-            android:text="@string/business_client_list_btnFilterBySpendings" />
+            android:text="@string/business_customer_list_btnFilterBySpendings" />
 
         <Button
-            android:id="@+id/business_client_list_btnFilterByLastVisit"
+            android:id="@+id/business_customer_list_btnFilterByLastVisit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             style="?android:attr/buttonBarButtonStyle"
-            android:text="@string/business_client_list_btnFilterByLastVisit" />
+            android:text="@string/business_customer_list_btnFilterByLastVisit" />
     </LinearLayout>
 
     <ListView
-        android:id="@+id/business_client_list_listViewClients"
+        android:id="@+id/business_customer_list_listViewClients"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/business_client_list_filtersBar"
-        android:layout_above="@+id/business_client_list_actionBar" >
+        android:layout_below="@id/business_customer_list_filtersBar"
+        android:layout_above="@+id/business_customer_list_actionBar" >
 
     </ListView>
     
     <LinearLayout
-        android:id="@+id/business_client_list_actionBar"
+        android:id="@+id/business_customer_list_actionBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -46,20 +55,20 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/business_client_list_btnSendMessage"
+            android:id="@+id/business_customer_list_btnSendMessage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             style="?android:attr/buttonBarButtonStyle"
-            android:text="@string/business_client_list_btnSendMessage" />
+            android:text="@string/business_customer_list_btnSendMessage" />
 
         <Button
-            android:id="@+id/business_client_list_btnSendOffer"
+            android:id="@+id/business_customer_list_btnSendOffer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             style="?android:attr/buttonBarButtonStyle"
-            android:text="@string/business_client_list_btnSendOffer" />
+            android:text="@string/business_customer_list_btnSendOffer" />
     </LinearLayout>
 
 </RelativeLayout>

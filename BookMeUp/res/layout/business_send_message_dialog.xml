@@ -11,6 +11,6 @@
         android:inputType="textMultiLine"
         android:lines="3"
         android:maxLength="60"
-        android:hint="@string/business_client_list_send_message_dialog_edtMessageHint"/>
+        android:hint="@string/business_customer_list_send_message_dialog_edtMessageHint"/>
 
 </LinearLayout>

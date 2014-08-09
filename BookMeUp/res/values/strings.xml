@@ -3,6 +3,8 @@
 
     <string name="app_name">BookMeUp!</string>
     <string name="action_settings">Settings</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 
     <!-- Login screen -->
     <string name="login_btnLoginWithGoogleText">Login with Google</string>
@@ -51,15 +53,21 @@
     <string name="business_profile_creation_btnUploadImage">Upload</string>
     <string name="business_profile_creation_txtPreviewImage">Image</string>
     <string name="business_profile_creation_txtServices">Services</string>
-    
-    <!-- Business client list -->
-    <string name="business_client_list_btnFilterBySpendings">Spendings</string>
-    <string name="business_client_list_btnFilterByLastVisit">Last visit</string>
-    <string name="business_client_list_btnSendMessage">Send message</string>
-    <string name="business_client_list_btnSendOffer">Send offer</string>
-    <string name="business_client_list_send_message_dialog_btnSend">Send</string>
-    <string name="business_client_list_send_message_dialog_btnCancel">Cancel</string>
-    <string name="business_client_list_send_message_dialog_edtMessageHint">Type in your message...\n(Up to 60 characters)</string>
-    <string name="services_list_header_btnAdd">Add</string>
+	<string name="services_list_header_btnAdd">Add</string>
 
+    <!-- Business customer list -->
+    <string name="business_customer_list_edtSearchHint">Search customer</string>
+    <string name="business_customer_list_btnFilterBySpendings">Spendings</string>
+    <string name="business_customer_list_btnFilterByLastVisit">Last visit</string>
+    <string name="business_customer_list_btnSendMessage">Send message</string>
+    <string name="business_customer_list_btnSendOffer">Send offer</string>
+    <string name="business_customer_list_send_message_dialog_btnSend">Send</string>
+    <string name="business_customer_list_send_message_dialog_btnCancel">Cancel</string>
+    <string name="business_customer_list_send_message_dialog_edtMessageHint">Type in your message...\n(Up to 60 characters)</string>
+
+    <!-- Business bookings list -->
+    <string name="business_bookings_list_pending_header">Pending</string>
+    <string name="business_bookings_list_approved_header">Approved</string>
+    <string name="business_bookings_list_pending_click_dialog">Approve booking?</string>
+    <string name="business_bookings_list_approved_click_dialog">Cancel booking?</string>
 </resources>
