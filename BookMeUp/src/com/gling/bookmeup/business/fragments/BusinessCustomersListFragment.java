@@ -141,7 +141,6 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 			break;
 		}
 	}
-	
 
 	@Override
 	public void afterTextChanged(Editable s) {

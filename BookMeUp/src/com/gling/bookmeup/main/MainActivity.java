@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.fragments.Business;
@@ -49,7 +50,10 @@ public class MainActivity extends ActionBarActivity {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, firstFragment).commit();
 		}
-		
+
+		// For not showing the keyboard when an editText gets focus on fragment creation
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+				
 		// Track application opens
 		ParseAnalytics.trackAppOpened(getIntent());
 	}
