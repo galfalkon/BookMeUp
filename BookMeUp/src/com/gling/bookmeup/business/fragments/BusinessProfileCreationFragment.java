@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -121,7 +122,7 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
             .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
-                    OpeningHours oh = new OpeningHours();
+                    OpeningHours oh = new OpeningHours(new JSONObject());
                     oh.setDay(
                             OpeningHours.Day.SUNDAY, 
                             ((EditText) dialogView.findViewById(R.id.opening_hours_sunday_isOpen)).getText().toString(), 

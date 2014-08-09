@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.util.Log;
 
@@ -70,7 +71,7 @@ public class Business extends ParseObject {
     
     public String getOpeningHours() {
         // TODO refactor
-        OpeningHours oh = (OpeningHours) getJSONObject(Keys.OPENING_HOURS);
+        JSONObject oh = getJSONObject(Keys.OPENING_HOURS);
         if (oh == null) {
             return "";
         }
@@ -79,7 +80,7 @@ public class Business extends ParseObject {
     }
  
     public void setOpeningHours(OpeningHours openingHours) {
-        put(Keys.OPENING_HOURS, openingHours);
+        put(Keys.OPENING_HOURS, openingHours.getJson());
     }
  
     public ParseFile getImageFile() {
