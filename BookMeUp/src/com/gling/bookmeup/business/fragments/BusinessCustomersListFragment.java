@@ -181,7 +181,35 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 	private void handleSpendingsFilter() {
 		Log.i(TAG, "handleSpendingsFilter");
 
-		Toast.makeText(getActivity(), "Not implemented", Toast.LENGTH_SHORT).show();
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+		LayoutInflater inflater = getActivity().getLayoutInflater();
+		final View view = inflater.inflate(R.layout.business_customer_list_spendings_filter_dialog, null);
+		builder.setView(view);
+		
+		builder.setTitle(R.string.business_customer_list_spendings_filter_dialog_title);
+		
+		// Set up the buttons
+		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() { 
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		    	Log.i(TAG, "Filtering by total spendings");
+		    	String spendingLimitInput = ((TextView)view.findViewById(R.id.business_customer_list_spendings_filter_dialog_edtSpendings)).getText().toString();
+		    	if (spendingLimitInput.isEmpty()) {
+		    		Toast.makeText(getActivity(), "Invalid spendings limit", Toast.LENGTH_SHORT).show();
+		    		return;
+		    	}
+		    	int spendingsLimit = Integer.parseInt(spendingLimitInput);
+		    	_listViewAdapter._clientFilter.filterBySpendings(spendingsLimit);
+		    }
+		});
+		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		        dialog.cancel();
+		    }
+		});
+		builder.show();
 	}
 	
 	private void handleSendMessageToSelectedClients() {
@@ -190,7 +218,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
 		LayoutInflater inflater = getActivity().getLayoutInflater();
-		final View view = inflater.inflate(R.layout.business_send_message_dialog, null);
+		final View view = inflater.inflate(R.layout.business_customer_list_send_message_dialog, null);
 		builder.setView(view);
 		
 		// Set up the buttons
@@ -222,7 +250,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 				});
 		    }
 		});
-		builder.setNegativeButton(R.string.business_customer_list_send_message_dialog_btnCancel, new DialogInterface.OnClickListener() {
+		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 		    @Override
 		    public void onClick(DialogInterface dialog, int which) {
 		        dialog.cancel();
@@ -329,6 +357,12 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		 */
 		private Date _dateOfLastVisit;
 		
+		/*
+		 *  Optional
+		 *  Should be null if the user doesn't want to filter by total spendings.
+		 */
+		private Integer _spendingsLimit;
+		
 		@Override
 		protected FilterResults performFiltering(CharSequence constraint) {
 			Log.i(TAG, "performFiltering(" + constraint + ")");
@@ -337,7 +371,9 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 			
 			_filteredCustomers.clear();
 			for (Customer customer : _allCustomers) {
-				if (doesSetisfyLastVisitFilter(customer) && doesSetisfyConstraint(customer, constraint)) {
+				if (doesSetisfyLastVisitFilter(customer) &&
+						doestSetisfySpendingsFilter(customer) &&
+						doesSetisfyConstraint(customer, constraint)) {
 					_filteredCustomers.add(customer);
 				}
 			}
@@ -359,16 +395,28 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 			filter(null);
 		}
 		
+		private void filterBySpendings(int spendingsLimit) {
+			Log.i(TAG, "filterBySpendings. Limit = " + spendingsLimit);
+			
+			_spendingsLimit = spendingsLimit;
+			filter(null);
+		}
+		
 		private void unfilterByLastVisit() {
 			_dateOfLastVisit = null;
 		}
 		
 		private boolean doesSetisfyLastVisitFilter(Customer customer) {
-			return _dateOfLastVisit == null || customer._lastVisit.after(_dateOfLastVisit);
+			return (_dateOfLastVisit == null) || customer._lastVisit.after(_dateOfLastVisit);
+		}
+		
+		private boolean doestSetisfySpendingsFilter(Customer customer) {
+			Log.i(TAG, "doestSetisfySpendingsFilter. customer spendings = " + customer._totalSpendings + ", limit = " + _spendingsLimit);
+			return (_spendingsLimit == null) || (customer._totalSpendings >= _spendingsLimit);
 		}
 		
 		private boolean doesSetisfyConstraint(Customer customer, CharSequence constraint) {
-			return customer == null || customer._customerName.toLowerCase().contains(constraint.toString().toLowerCase());
+			return (constraint == null) || customer._customerName.toLowerCase().contains(constraint.toString().toLowerCase());
 		}
 	}
 }
