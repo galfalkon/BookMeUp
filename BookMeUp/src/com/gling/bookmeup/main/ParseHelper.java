@@ -82,6 +82,18 @@ public class ParseHelper {
 			// Do not modify the ParseObject
 		}
 		
+		public Date getDate() {
+			return getDate(Keys.DATE);
+		}
+		
+		public int getStatus() {
+			return getInt(Keys.STATUS);
+		}
+		
+		public void setStatus(int status) {
+			put(Keys.STATUS, status);
+		}
+		
 		public String getBusinessName() {
 			return getParseObject(Keys.BUSINESS_POINTER).getString(Business.Keys.NAME);			
 		}
@@ -94,16 +106,8 @@ public class ParseHelper {
 			return getParseObject(Keys.SERVICE_POINTER).getString(Service.Keys.NAME);
 		}
 		
-		public Date getDate() {
-			return getDate(Keys.DATE);
-		}
-		
-		public int getStatus() {
-			return getInt(Keys.STATUS);
-		}
-		
-		public void setStatus(int status) {
-			put(Keys.STATUS, status);
+		public int getServicePrice() {
+			return getParseObject(Keys.SERVICE_POINTER).getInt(Service.Keys.PRICE);
 		}
 	}
 	

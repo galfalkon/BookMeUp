@@ -34,14 +34,12 @@ import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.ParseHelper.Booking;
-import com.gling.bookmeup.main.ParseHelper.Booking.Status;
 import com.gling.bookmeup.main.ParseHelper.CustomerClass;
 import com.parse.FindCallback;
 import com.parse.FunctionCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.SaveCallback;
 
 public class BusinessCustomersListFragment  extends OnClickListenerFragment implements TextWatcher {
 	private static final String TAG = "BusinessCustomersListFragment";
@@ -71,23 +69,24 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		 * 		Before today
 		 *		Were approved
 		 */
-		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(Booking.CLASS_NAME).
+		ParseQuery<Booking> query = new ParseQuery<Booking>(Booking.CLASS_NAME).
 				whereMatchesQuery(Booking.Keys.BUSINESS_POINTER, innerBusinessPointerQuery).
 				whereLessThan(Booking.Keys.DATE, new Date()).
 				whereEqualTo(Booking.Keys.STATUS, Booking.Status.APPROVED);
 		query.include(Booking.Keys.CUSTOMER_POINTER);
+		query.include(Booking.Keys.SERVICE_POINTER);
 		
 		final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
-		query.findInBackground(new FindCallback<ParseObject>() {
+		query.findInBackground(new FindCallback<Booking>() {
 			@Override
-			public void done(List<ParseObject> objects, ParseException e) {
+			public void done(List<Booking> objects, ParseException e) {
 				progressDialog.dismiss();
 				if (e != null) {
 					Log.e(TAG, "Exception: " + e.getMessage());
 					return;
 				}
 				
-				for (ParseObject bookingParseObject : objects) {
+				for (Booking bookingParseObject : objects) {
 					Customer currentCustomer = new Customer(bookingParseObject);
 					int index = _allCustomers.indexOf(currentCustomer);
 					if (index == -1) {
@@ -241,12 +240,12 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		/*
 		 * Creates a Client instance out of a Bookings record.
 		 */
-		public Customer(ParseObject bookingParseObject) {
-			ParseObject clientParseObject = bookingParseObject.getParseObject(Booking.Keys.CUSTOMER_POINTER);
-			_id = clientParseObject.getObjectId();
-			_customerName = clientParseObject.getString(CustomerClass.Keys.NAME);
-			_lastVisit = bookingParseObject.getDate(Booking.Keys.DATE);
-			_totalSpendings = 0; // TODO: Calculate spendings in booking according to services and prices
+		public Customer(Booking booking) {
+			ParseObject customerParseObject = booking.getParseObject(Booking.Keys.CUSTOMER_POINTER);
+			_id = customerParseObject.getObjectId();
+			_customerName = customerParseObject.getString(CustomerClass.Keys.NAME);
+			_lastVisit = booking.getDate(Booking.Keys.DATE);
+			_totalSpendings = booking.getServicePrice();
 			_isSelected = false;
 		}
 		
@@ -254,20 +253,21 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		 * Notifies the Client instance about another booking.
 		 * This function will summarize the total spending of the client, set the date of his last visit etc.
 		 */
-		public void notifyBooking(ParseObject bookingParseObject) {
-			ParseObject clientParseObject = bookingParseObject.getParseObject(Booking.Keys.CUSTOMER_POINTER);
-			if (!_id.equals(clientParseObject.getObjectId())) {
+		public void notifyBooking(Booking booking) {
+			Log.i(TAG, "notifyBooking");
+			
+			ParseObject customerParseObject = booking.getParseObject(Booking.Keys.CUSTOMER_POINTER);
+			if (!_id.equals(customerParseObject.getObjectId())) {
 				// TODO: Handle error
 				return;
 			}
 			
-			Date bookingDate = bookingParseObject.getDate(Booking.Keys.DATE);
+			Date bookingDate = booking.getDate(Booking.Keys.DATE);
 			if (bookingDate.after(_lastVisit)) {
 				_lastVisit = bookingDate;
 			}
 			
-			// TODO: Calculate spendings in booking according to services and prices
-			_totalSpendings += 0;
+			_totalSpendings += booking.getServicePrice();
 		}
 
 		@Override
