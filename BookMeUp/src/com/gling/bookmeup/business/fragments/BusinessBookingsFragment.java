@@ -141,6 +141,7 @@ public class BusinessBookingsFragment extends OnClickListenerFragment implements
                 whereGreaterThan(Booking.Keys.DATE, new Date());
         query.include(Booking.Keys.BUSINESS_POINTER);
         query.include(Booking.Keys.CUSTOMER_POINTER);
+        query.include(Booking.Keys.SERVICE_POINTER);
 
         final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
         

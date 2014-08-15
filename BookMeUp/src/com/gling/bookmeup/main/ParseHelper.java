@@ -67,8 +67,8 @@ public class ParseHelper {
 			public static final String ID = "objectId";
 			public static final String CUSTOMER_POINTER = "customerPointer";
 			public static final String BUSINESS_POINTER = "businessPointer";
+			public static final String SERVICE_POINTER = "servicePointer";
 			public static final String DATE = "date";
-			public static final String SERVICES = "services";
 			public static final String STATUS = "status";
 		}
 		
@@ -91,7 +91,7 @@ public class ParseHelper {
 		}
 		
 		public String getServiceName() {
-			return getString(Keys.SERVICES);
+			return getParseObject(Keys.SERVICE_POINTER).getString(Service.Keys.NAME);
 		}
 		
 		public Date getDate() {
@@ -104,6 +104,18 @@ public class ParseHelper {
 		
 		public void setStatus(int status) {
 			put(Keys.STATUS, status);
+		}
+	}
+	
+	public static class Service {
+		public static final String CLASS_NAME = "Service";
+		
+		public static class Keys {
+			public static final String ID = "objectId";
+			public static final String BUSINESS_POINTER = "businessPointer";
+			public static final String NAME = "name";
+			public static final String PRICE = "price";
+			public static final String DURATION = "duration";
 		}
 	}
 
