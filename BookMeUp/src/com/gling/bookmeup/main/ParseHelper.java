@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.net.ssl.SSLEngineResult.Status;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -67,7 +69,13 @@ public class ParseHelper {
 			public static final String BUSINESS_POINTER = "businessPointer";
 			public static final String DATE = "date";
 			public static final String SERVICES = "services";
-			public static final String IS_APPROVED = "isApproved";
+			public static final String STATUS = "status";
+		}
+		
+		public static class Status {
+			public static final int PENDING = 0;
+			public static final int APPROVED = 1;
+			public static final int CANCELED = 2;
 		}
 		
 		public Booking() {
@@ -90,12 +98,12 @@ public class ParseHelper {
 			return getDate(Keys.DATE);
 		}
 		
-		public boolean getIsApproved() {
-			return getBoolean(Keys.IS_APPROVED);
+		public int getStatus() {
+			return getInt(Keys.STATUS);
 		}
 		
-		public void setIsApproved(boolean value) {
-			put(Keys.IS_APPROVED, value);
+		public void setStatus(int status) {
+			put(Keys.STATUS, status);
 		}
 	}
 

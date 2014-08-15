@@ -17,11 +17,11 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper.Booking;
+import com.gling.bookmeup.main.ParseHelper.Booking.Status;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -100,7 +100,7 @@ public class BusinessBookingsFragment extends OnClickListenerFragment implements
             .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     Log.i(TAG, "Approving pending booking");
-                    booking.setIsApproved(true);
+                    booking.setStatus(Status.APPROVED);
                     booking.saveInBackground();
                     _bookings.get(groupPosition).remove(childPosition);
                     _bookings.get(ExpandableListGroupIds.APPROVED_GROUP_ID.ordinal()).add(booking);
@@ -116,7 +116,8 @@ public class BusinessBookingsFragment extends OnClickListenerFragment implements
             .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     Log.i(TAG, "Deleting approved booking");
-                    booking.deleteInBackground();
+                    booking.setStatus(Status.CANCELED);
+                    booking.saveInBackground();
                     _bookings.get(groupPosition).remove(childPosition);
                     _expandableListAdapter.notifyDataSetChanged();
                     // TODO: Notify customer using push notification
@@ -157,11 +158,17 @@ public class BusinessBookingsFragment extends OnClickListenerFragment implements
                     _bookings.get(i).clear();
                 }
                 for (Booking parseObject : objects) {
-                    if (parseObject.getIsApproved()) {
-                        _bookings.get(ExpandableListGroupIds.APPROVED_GROUP_ID.ordinal()).add(parseObject);
-                    } else {
-                        _bookings.get(ExpandableListGroupIds.PENDING_GROUP_ID.ordinal()).add(parseObject);
-                    }
+                	switch (parseObject.getStatus())
+                	{
+                	case Status.PENDING:
+                		_bookings.get(ExpandableListGroupIds.PENDING_GROUP_ID.ordinal()).add(parseObject);
+                		break;
+                	case Status.APPROVED:
+                		_bookings.get(ExpandableListGroupIds.APPROVED_GROUP_ID.ordinal()).add(parseObject);
+                		break;
+            		default:
+                		break;
+                	}
                 }
 
                 _expandableListAdapter.notifyDataSetChanged();

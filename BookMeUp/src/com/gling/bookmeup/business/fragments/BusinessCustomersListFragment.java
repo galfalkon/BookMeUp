@@ -34,12 +34,14 @@ import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.ParseHelper.Booking;
+import com.gling.bookmeup.main.ParseHelper.Booking.Status;
 import com.gling.bookmeup.main.ParseHelper.CustomerClass;
 import com.parse.FindCallback;
 import com.parse.FunctionCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 public class BusinessCustomersListFragment  extends OnClickListenerFragment implements TextWatcher {
 	private static final String TAG = "BusinessCustomersListFragment";
@@ -72,7 +74,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(Booking.CLASS_NAME).
 				whereMatchesQuery(Booking.Keys.BUSINESS_POINTER, innerBusinessPointerQuery).
 				whereLessThan(Booking.Keys.DATE, new Date()).
-				whereEqualTo(Booking.Keys.IS_APPROVED, true);
+				whereEqualTo(Booking.Keys.STATUS, Booking.Status.APPROVED);
 		query.include(Booking.Keys.CUSTOMER_POINTER);
 		
 		final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
