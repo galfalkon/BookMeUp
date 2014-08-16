@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
+import com.gling.bookmeup.main.ParseHelper.Category;
 import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
@@ -62,8 +63,8 @@ public class Business extends ParseObject implements Serializable{
         put(Keys.DESCRIPTION, description);
     }
     
-    public String getCategory() {
-        return getString(Keys.CATEGORY);
+    public ParseObject getCategory() {
+        return getParseObject(Keys.CATEGORY);
     }
  
     public void setCategory(ParseObject category) {

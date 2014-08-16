@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.login.fragments.LoginFragment;
+import com.gling.bookmeup.main.ParseHelper.Category;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -41,6 +42,7 @@ public class LoginActivity extends ActionBarActivity {
         final ParseQuery<Business> query = ParseQuery.getQuery(Business.class).whereEqualTo(
                 Business.Keys.ID, businessId);
         try {
+            query.include(Business.Keys.CATEGORY);
             _business = query.find().get(0);
         } catch (ParseException e) {
             // TODO Auto-generated catch block

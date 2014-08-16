@@ -1,5 +1,7 @@
 package com.gling.bookmeup.business;
 
+import java.util.List;
+
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -32,6 +34,7 @@ import com.gling.bookmeup.main.FragmentsFlowManager;
 import com.gling.bookmeup.main.LoginActivity;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
+import com.gling.bookmeup.main.ParseHelper.Category;
 import com.parse.DeleteCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
@@ -40,6 +43,7 @@ import com.parse.ParseImageView;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
+import com.parse.ParseQueryAdapter.OnQueryLoadListener;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -57,7 +61,7 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
     private Spinner spnCategory;
 
     private CustomServicesAdapter _servicesAdapter;
-    
+
     @Override
     protected int getFragmentLayoutId() {
         return R.layout.business_profile_fragment;
@@ -75,7 +79,7 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
         btnOpeningHoursEdit = (Button) view.findViewById(R.id.opening_hours_edit_btnEdit);
         lstBusinessServices = (ListView) view.findViewById(R.id.business_profile_creation_lstServices);
         spnCategory = (Spinner) view.findViewById(R.id.business_profile_creation_spnCategory);
-        
+
         // Until the user has taken a photo, hide the preview
         imgBusinessPreviewImage.setVisibility(View.INVISIBLE);
 
@@ -92,19 +96,38 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
         edtBusinessDescription.setText(business.getDescription());
         initOpeningHours(business);
         initServiceList(business);
-        initCategorySpinner();
+        initCategorySpinner(business);
     }
 
-    private void initCategorySpinner() {
-        final ParseQueryAdapter<ParseObject> adapter = new ParseQueryAdapter<ParseObject>(getActivity(), ParseHelper.Category.CLASS_NAME);
+    private void initCategorySpinner(final Business business) {
+        final ParseQueryAdapter<ParseObject> adapter = new ParseQueryAdapter<ParseObject>(getActivity(),
+                ParseHelper.Category.CLASS_NAME);
         adapter.setTextKey(ParseHelper.Category.Keys.NAME);
-        
+        adapter.addOnQueryLoadListener(new OnQueryLoadListener<ParseObject>() {
+            public void onLoading() {
+              // Trigger any "loading" UI
+            }
+          
+            public void onLoaded(List<ParseObject> categories, Exception paramException) {
+                String categoryName = business.getCategory().getString(Category.Keys.NAME);
+                int position = 0;
+                for (int i = 0; i < categories.size(); i++) {
+                    if (categories.get(i).getString(Category.Keys.NAME).equalsIgnoreCase(categoryName)) {
+                        position = i;
+                        break;
+                    }
+                }
+
+                spnCategory.setSelection(position);
+            }
+          });
+
         spnCategory.setAdapter(adapter);
     }
 
     private void initOpeningHours(final Business business) {
         final LayoutInflater inflater = getActivity().getLayoutInflater();
-        
+
         txtBusinessOpeningHours.setText(business.getOpeningHours());
         btnOpeningHoursEdit.setOnClickListener(new OnClickListener() {
 
@@ -115,89 +138,78 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
             }
         });
     }
-    
+
     private AlertDialog createEditOpeningHoursDialog(LayoutInflater inflater, final Business business) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final View dialogView = inflater.inflate(R.layout.business_edit_opening_hours_dialog, null);
-        
-        AlertDialog dialog = 
-        builder
-            .setTitle("Edit Opening Hours")
-            .setView(dialogView)
-            .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int id) {
-                    OpeningHours oh = new OpeningHours(new JSONObject());
-                    oh.setDay(
-                            OpeningHours.Day.SUNDAY, 
-                            ((EditText) dialogView.findViewById(R.id.opening_hours_sunday_isOpen)).getText().toString(), 
-                            ((EditText) dialogView.findViewById(R.id.opening_hours_sunday_from)).getText().toString(),
-                            ((EditText) dialogView.findViewById(R.id.opening_hours_sunday_to)).getText().toString()
-                            );
-                    
-                    oh.setDay(
-                            OpeningHours.Day.MONDAY, 
-                            ((EditText) dialogView.findViewById(R.id.opening_hours_monday_isOpen)).getText().toString(), 
-                            ((EditText) dialogView.findViewById(R.id.opening_hours_monday_from)).getText().toString(),
-                            ((EditText) dialogView.findViewById(R.id.opening_hours_monday_to)).getText().toString()
-                            );
-                    
-                    oh.setDay(
-                            OpeningHours.Day.TUESDAY, 
-                            ((EditText) dialogView.findViewById(R.id.opening_hours_tuesday_isOpen)).getText().toString(), 
-                            ((EditText) dialogView.findViewById(R.id.opening_hours_tuesday_from)).getText().toString(),
-                            ((EditText) dialogView.findViewById(R.id.opening_hours_tuesday_to)).getText().toString()
-                            );
-                    
-                    oh.setDay(
-                            OpeningHours.Day.WEDNESDAY, 
-                            ((EditText) dialogView.findViewById(R.id.opening_hours_wednesday_isOpen)).getText().toString(), 
-                            ((EditText) dialogView.findViewById(R.id.opening_hours_wednesday_from)).getText().toString(),
-                            ((EditText) dialogView.findViewById(R.id.opening_hours_wednesday_to)).getText().toString()
-                            );
-                    
-                    oh.setDay(
-                            OpeningHours.Day.THURSDAY, 
-                            ((EditText) dialogView.findViewById(R.id.opening_hours_thursday_isOpen)).getText().toString(), 
-                            ((EditText) dialogView.findViewById(R.id.opening_hours_thursday_from)).getText().toString(),
-                            ((EditText) dialogView.findViewById(R.id.opening_hours_thursday_to)).getText().toString()
-                            );
-                    
-                    oh.setDay(
-                            OpeningHours.Day.FRIDAY, 
-                            ((EditText) dialogView.findViewById(R.id.opening_hours_friday_isOpen)).getText().toString(), 
-                            ((EditText) dialogView.findViewById(R.id.opening_hours_friday_from)).getText().toString(),
-                            ((EditText) dialogView.findViewById(R.id.opening_hours_friday_to)).getText().toString()
-                            );
-                    
-                    oh.setDay(
-                            OpeningHours.Day.SATURDAY, 
-                            ((EditText) dialogView.findViewById(R.id.opening_hours_saturday_isOpen)).getText().toString(), 
-                            ((EditText) dialogView.findViewById(R.id.opening_hours_saturday_from)).getText().toString(),
-                            ((EditText) dialogView.findViewById(R.id.opening_hours_saturday_to)).getText().toString()
-                            );
-                    
-                    business.setOpeningHours(oh);
-                    Log.i(TAG, business.getOpeningHours());
-                    txtBusinessOpeningHours.setText(business.getOpeningHours());
-                }
-            })
-            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-    
-                }
-            })
-            .create();
-        
+
+        AlertDialog dialog = builder.setTitle("Edit Opening Hours").setView(dialogView)
+                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        OpeningHours oh = new OpeningHours(new JSONObject());
+                        oh.setDay(OpeningHours.Day.SUNDAY, ((EditText) dialogView
+                                .findViewById(R.id.opening_hours_sunday_isOpen)).getText().toString(),
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_sunday_from)).getText()
+                                        .toString(), ((EditText) dialogView.findViewById(R.id.opening_hours_sunday_to))
+                                        .getText().toString());
+
+                        oh.setDay(OpeningHours.Day.MONDAY, ((EditText) dialogView
+                                .findViewById(R.id.opening_hours_monday_isOpen)).getText().toString(),
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_monday_from)).getText()
+                                        .toString(), ((EditText) dialogView.findViewById(R.id.opening_hours_monday_to))
+                                        .getText().toString());
+
+                        oh.setDay(OpeningHours.Day.TUESDAY, ((EditText) dialogView
+                                .findViewById(R.id.opening_hours_tuesday_isOpen)).getText().toString(),
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_tuesday_from)).getText()
+                                        .toString(),
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_tuesday_to)).getText()
+                                        .toString());
+
+                        oh.setDay(OpeningHours.Day.WEDNESDAY, ((EditText) dialogView
+                                .findViewById(R.id.opening_hours_wednesday_isOpen)).getText().toString(),
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_wednesday_from)).getText()
+                                        .toString(), ((EditText) dialogView
+                                        .findViewById(R.id.opening_hours_wednesday_to)).getText().toString());
+
+                        oh.setDay(OpeningHours.Day.THURSDAY, ((EditText) dialogView
+                                .findViewById(R.id.opening_hours_thursday_isOpen)).getText().toString(),
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_thursday_from)).getText()
+                                        .toString(), ((EditText) dialogView
+                                        .findViewById(R.id.opening_hours_thursday_to)).getText().toString());
+
+                        oh.setDay(OpeningHours.Day.FRIDAY, ((EditText) dialogView
+                                .findViewById(R.id.opening_hours_friday_isOpen)).getText().toString(),
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_friday_from)).getText()
+                                        .toString(), ((EditText) dialogView.findViewById(R.id.opening_hours_friday_to))
+                                        .getText().toString());
+
+                        oh.setDay(OpeningHours.Day.SATURDAY, ((EditText) dialogView
+                                .findViewById(R.id.opening_hours_saturday_isOpen)).getText().toString(),
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_saturday_from)).getText()
+                                        .toString(), ((EditText) dialogView
+                                        .findViewById(R.id.opening_hours_saturday_to)).getText().toString());
+
+                        business.setOpeningHours(oh);
+                        Log.i(TAG, business.getOpeningHours());
+                        txtBusinessOpeningHours.setText(business.getOpeningHours());
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                }).create();
+
         return dialog;
     }
 
     private void initServiceList(Business business) {
-        
+
         _servicesAdapter = new CustomServicesAdapter(getActivity(), business);
-        
+
         final LayoutInflater inflater = getActivity().getLayoutInflater();
-        
+
         // add a header with 'add' button for the services list
         LinearLayout servicesHeader = (LinearLayout) inflater.inflate(R.layout.business_service_list_header, null);
         Button btnAddService = (Button) servicesHeader.findViewById(R.id.services_list_header_btnAdd);
@@ -210,7 +222,7 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
             }
         });
         lstBusinessServices.addHeaderView(servicesHeader);
-        
+
         lstBusinessServices.setOnItemLongClickListener(new OnItemLongClickListener() {
 
             @Override
@@ -220,7 +232,7 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
                 return true;
             }
         });
-        
+
         lstBusinessServices.setAdapter(_servicesAdapter);
         _servicesAdapter.loadObjects();
     }
@@ -231,67 +243,59 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
         final EditText edtServiceName = (EditText) dialogView.findViewById(R.id.services_add_item_edtName);
         final EditText edtServicePrice = (EditText) dialogView.findViewById(R.id.services_add_item_edtPrice);
         final EditText edtServiceDuration = (EditText) dialogView.findViewById(R.id.services_add_item_edtDuration);
-        
-        AlertDialog dialog = 
-        builder
-            .setTitle("Add Service")
-            .setView(dialogView)
-            .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int id) {
-                    Service service = new Service();
-                    service.setName(edtServiceName.getText().toString());
-                    service.setPrice(edtServicePrice.getText().toString());
-                    service.setDuration(edtServiceDuration.getText().toString());
-                    service.setBusiness(((LoginActivity) getActivity()).getCurrentBusiness());
-                    
-                    service.saveInBackground(new SaveCallback() {
-                        
-                        @Override
-                        public void done(ParseException e) {
-                            _servicesAdapter.loadObjects();
-                        }
-                    });
-                }
-            })
-            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-    
-                }
-            })
-            .create();
-        
+
+        AlertDialog dialog = builder.setTitle("Add Service").setView(dialogView)
+                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        Service service = new Service();
+                        service.setName(edtServiceName.getText().toString());
+                        service.setPrice(edtServicePrice.getText().toString());
+                        service.setDuration(edtServiceDuration.getText().toString());
+                        service.setBusiness(((LoginActivity) getActivity()).getCurrentBusiness());
+
+                        service.saveInBackground(new SaveCallback() {
+
+                            @Override
+                            public void done(ParseException e) {
+                                _servicesAdapter.loadObjects();
+                            }
+                        });
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                }).create();
+
         return dialog;
     }
-    
+
     private AlertDialog createServiceDeleteDialog(final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        AlertDialog dialog = 
-        builder
-            .setTitle("Delete Service?")
-            .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    // TODO add service to temp list of modified services, delete on pause or somthing
-                    // TODO feature: parse - call 'eventually' methods
-                    _servicesAdapter.getItem(position-1).deleteInBackground(new DeleteCallback() {
-    
-                        @Override
-                        public void done(ParseException paramParseException) {
-                            _servicesAdapter.loadObjects();
-                        }
-                    });
-                }
-            })
-            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-    
-                }
-            })
-            .create();
-        
+        AlertDialog dialog = builder.setTitle("Delete Service?")
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // TODO add service to temp list of modified services,
+                        // delete on pause or somthing
+                        // TODO feature: parse - call 'eventually' methods
+                        _servicesAdapter.getItem(position - 1).deleteInBackground(new DeleteCallback() {
+
+                            @Override
+                            public void done(ParseException paramParseException) {
+                                _servicesAdapter.loadObjects();
+                            }
+                        });
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                }).create();
+
         return dialog;
     }
-    
+
     private void saveBusiness() {
         ParseUser currentUser = ParseUser.getCurrentUser();
         Log.i(TAG, "current user is: " + currentUser.getUsername());
@@ -303,7 +307,8 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
         business.setDescription(edtBusinessDescription.getText().toString());
         business.setCategory((ParseObject) spnCategory.getSelectedItem());
 
-        // If the user added a photo, that data will be added in the BusinessImageCaptureFragment
+        // If the user added a photo, that data will be added in the
+        // BusinessImageCaptureFragment
         // services are edited via list vie
         // opening hours are edited via dialog
 
@@ -346,11 +351,11 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
                 return;
             }
             saveBusiness();
-            
+
             Intent intent = new Intent(getActivity(), BusinessMainActivity.class);
             intent.putExtra(EXTRA_BUSINESS, ((LoginActivity) getActivity()).getCurrentBusiness());
             startActivity(intent);
-            
+
             return;
         }
         FragmentsFlowManager.goToNextFragment(getActivity(), v.getId());
@@ -364,7 +369,7 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
     private boolean validateInput() {
         return true;
     }
-    
+
     /*
      * On resume, check and see if a business image has been set from the
      * BusinessImageCaptureFragment. If it has, load the image in this fragment
@@ -373,11 +378,11 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
     @Override
     public void onResume() {
         super.onResume();
-        
+
         Log.i(TAG, "On Resume");
-        
+
         Business business = ((LoginActivity) getActivity()).getCurrentBusiness();
-        
+
         ParseFile imageFile = business.getImageFile();
         if (imageFile != null) {
             txtPreviewImage.setText("Image");
@@ -393,8 +398,7 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
             txtPreviewImage.setText("Please upload an image");
         }
     }
-    
-    
+
     private class CustomServicesAdapter extends ParseQueryAdapter<Service> {
 
         public CustomServicesAdapter(Context context, final Business business) {
@@ -426,11 +430,8 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
         }
 
     }
-    
+
 }
-
-
-
 
 // private static byte[] getByteArrayFromImageView(ImageView imgView) {
 // Bitmap bitmap = ((BitmapDrawable)imgView.getDrawable()).getBitmap();
