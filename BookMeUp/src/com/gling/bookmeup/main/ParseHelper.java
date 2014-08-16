@@ -54,6 +54,15 @@ public class ParseHelper {
 			public static final String FAVOURITES = "favourites";
 		}
 	}
+	
+	public static class Category {
+        public static final String CLASS_NAME = "Category";
+
+        public static class Keys {
+            public static final String ID = "objectId";
+            public static final String NAME = "Name";
+        }
+    }
 
 	
 	@ParseClassName(Booking.CLASS_NAME)

@@ -1,12 +1,5 @@
 package com.gling.bookmeup.business.fragments;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -14,7 +7,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Path.Op;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -29,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,13 +30,13 @@ import com.gling.bookmeup.login.fragments.LoginFragment;
 import com.gling.bookmeup.main.FragmentsFlowManager;
 import com.gling.bookmeup.main.MainActivity;
 import com.gling.bookmeup.main.OnClickListenerFragment;
-
+import com.gling.bookmeup.main.ParseHelper;
 import com.parse.DeleteCallback;
-import com.parse.FindCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseImageView;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 import com.parse.ParseUser;
@@ -59,6 +52,7 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
     private TextView txtBusinessOpeningHours;
     private Button btnOpeningHoursEdit;
     private ListView lstBusinessServices;
+    private Spinner spnCategory;
 
     private CustomServicesAdapter _servicesAdapter;
     
@@ -78,7 +72,8 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
         txtBusinessOpeningHours = (TextView) view.findViewById(R.id.business_profile_creation_txtOpeningHours);
         btnOpeningHoursEdit = (Button) view.findViewById(R.id.opening_hours_edit_btnEdit);
         lstBusinessServices = (ListView) view.findViewById(R.id.business_profile_creation_lstServices);
-
+        spnCategory = (Spinner) view.findViewById(R.id.business_profile_creation_spnCategory);
+        
         // Until the user has taken a photo, hide the preview
         imgBusinessPreviewImage.setVisibility(View.INVISIBLE);
 
@@ -95,6 +90,14 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
         edtBusinessDescription.setText(business.getDescription());
         initOpeningHours(business);
         initServiceList(business);
+        initCategorySpinner();
+    }
+
+    private void initCategorySpinner() {
+        final ParseQueryAdapter<ParseObject> adapter = new ParseQueryAdapter<ParseObject>(getActivity(), ParseHelper.Category.CLASS_NAME);
+        adapter.setTextKey(ParseHelper.Category.Keys.NAME);
+        
+        spnCategory.setAdapter(adapter);
     }
 
     private void initOpeningHours(final Business business) {
@@ -296,6 +299,7 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
         business.setUser(currentUser.getUsername());
         business.setName(edtBusinessName.getText().toString());
         business.setDescription(edtBusinessDescription.getText().toString());
+        business.setCategory((ParseObject) spnCategory.getSelectedItem());
 
         // If the user added a photo, that data will be added in the BusinessImageCaptureFragment
         // services are edited via list vie
@@ -415,6 +419,7 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
         }
 
     }
+    
 }
 
 

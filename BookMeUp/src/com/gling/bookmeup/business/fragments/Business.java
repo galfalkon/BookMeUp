@@ -65,7 +65,7 @@ public class Business extends ParseObject {
         return getString(Keys.CATEGORY);
     }
  
-    public void setCategory(String category) {
+    public void setCategory(ParseObject category) {
         put(Keys.CATEGORY, category);
     }
     

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 /**
  * Represent a fragment that contains buttons that trigger a fragment shift.
@@ -25,7 +26,13 @@ public abstract class OnClickListenerFragment extends Fragment implements OnClic
 
 		for (View v : rootView.getTouchables()) {
 			if (v.isClickable()) {
-				v.setOnClickListener(this);
+			    // we get: java.lang.RuntimeException: Don't call setOnClickListener for an AdapterView. You probably want setOnItemClickListener instead
+			    // maybe apply this only to buttons?
+			    try {
+			        AdapterView av = (AdapterView) v;
+			    } catch (ClassCastException e) {
+			        v.setOnClickListener(this);
+			    }
 			}
 		}
 		
