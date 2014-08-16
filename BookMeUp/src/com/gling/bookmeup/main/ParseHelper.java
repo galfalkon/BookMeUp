@@ -8,7 +8,7 @@ import java.util.Map;
 import android.content.Context;
 import android.util.Log;
 
-import com.gling.bookmeup.business.fragments.Business;
+import com.gling.bookmeup.business.Business;
 import com.parse.FunctionCallback;
 import com.parse.Parse;
 import com.parse.ParseClassName;

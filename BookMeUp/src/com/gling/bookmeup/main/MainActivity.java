@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.business.fragments.Business;
+import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.login.fragments.LoginFragment;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;

@@ -1,4 +1,4 @@
-package com.gling.bookmeup.business.fragments;
+package com.gling.bookmeup.business;
 
 import java.util.ArrayList;
 import java.util.Calendar;

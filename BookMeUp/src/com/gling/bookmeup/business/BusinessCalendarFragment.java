@@ -1,4 +1,4 @@
-package com.gling.bookmeup.business.fragments;
+package com.gling.bookmeup.business;
 
 import android.view.View;
 import android.view.View.OnClickListener;

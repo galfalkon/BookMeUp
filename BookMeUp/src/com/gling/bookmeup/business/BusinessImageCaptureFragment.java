@@ -1,4 +1,4 @@
-package com.gling.bookmeup.business.fragments;
+package com.gling.bookmeup.business;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

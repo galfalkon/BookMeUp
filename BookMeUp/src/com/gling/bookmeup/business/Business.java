@@ -1,4 +1,4 @@
-package com.gling.bookmeup.business.fragments;
+package com.gling.bookmeup.business;
 
 import java.util.HashMap;
 import java.util.List;
