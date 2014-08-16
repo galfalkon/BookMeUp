@@ -1,5 +1,6 @@
 package com.gling.bookmeup.business;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,7 @@ import com.parse.ParseQuery;
 
 
 @ParseClassName(Business.CLASS_NAME)
-public class Business extends ParseObject {
+public class Business extends ParseObject implements Serializable{
 
     public static final String CLASS_NAME = "Business";
     

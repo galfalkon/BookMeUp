@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -45,6 +46,7 @@ import com.parse.SaveCallback;
 public class BusinessProfileCreationFragment extends OnClickListenerFragment {
 
     private static final String TAG = "BusinessProfileCreationFragment";
+    public final static String EXTRA_BUSINESS = "com.gling.bookmeup.EXTRA_BUSINESS";
 
     private EditText edtBusinessName, edtBusinessDescription;
     private TextView txtPreviewImage;
@@ -344,7 +346,12 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
                 return;
             }
             saveBusiness();
-            break;
+            
+            Intent intent = new Intent(getActivity(), BusinessMainActivity.class);
+            intent.putExtra(EXTRA_BUSINESS, ((LoginActivity) getActivity()).getCurrentBusiness());
+            startActivity(intent);
+            
+            return;
         }
         FragmentsFlowManager.goToNextFragment(getActivity(), v.getId());
     }

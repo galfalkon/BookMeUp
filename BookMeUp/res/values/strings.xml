@@ -36,12 +36,18 @@
     <string name="email_login_edtPasswordHint">Password</string>
     <string name="email_login_txtForgotPasswordText">Forgot Your Password?</string>
 
-    <!-- Business screen -->
-    <string name="title_activity_business">BookMeUp! - For Business</string>
-    <string name="title_section_calendar">Calendar</string>
-    <string name="title_section_bookings">Bookings</string>
-    <string name="title_section_client_list">Client List</string>
+    <!-- Business main screen -->
+    <string name="business_activity_title">BookMeUp! - For Business</string>
+    <string name="business_activity_title_section_calendar">Calendar</string>
+    <string name="business_activity_title_section_bookings">Bookings</string>
+    <string name="business_activity_title_section_client_list">Client List</string>
     
+    <!-- Customer main screen -->
+    <string name="customer_activity_title">BookMeUp! - For Customers</string>
+    <string name="customer_activity_title_section_popular">Popular</string>
+    <string name="customer_activity_title_section_history">History</string>
+    <string name="customer_activity_title_section_favoirites">Favourites</string>
+
     <!-- Business profile creation -->
     <string name="business_profile_creation_edtBusinessName">Business name</string>
     <string name="business_profile_creation_edtDescriptionHint">Business description</string>
@@ -53,7 +59,7 @@
     <string name="business_profile_creation_btnUploadImage">Upload</string>
     <string name="business_profile_creation_txtPreviewImage">Image</string>
     <string name="business_profile_creation_txtServices">Services</string>
-	<string name="services_list_header_btnAdd">Add</string>
+    <string name="services_list_header_btnAdd">Add</string>
 
     <!-- Business customer list -->
     <string name="business_customer_list_edtSearchHint">Search customer</string>
@@ -74,4 +80,5 @@
     <string name="business_customer_list_send_offer_dialog_title">Offer specification</string>
     <string name="business_customer_list_send_offer_dialog_txtDiscount">Discount (%)</string>
     <string name="business_customer_list_send_offer_dialog_txtDuration">Duration (Weeks)</string>
+
 </resources>
