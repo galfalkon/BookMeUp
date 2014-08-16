@@ -11,7 +11,7 @@ import android.widget.TabHost.TabSpec;
 import android.widget.Toast;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.main.MainActivity;
+import com.gling.bookmeup.main.LoginActivity;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 
 public class BusinessMainScreen extends OnClickListenerFragment implements OnClickListener {

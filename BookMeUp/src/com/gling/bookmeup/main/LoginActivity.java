@@ -15,7 +15,7 @@ import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
-public class MainActivity extends ActionBarActivity {
+public class LoginActivity extends ActionBarActivity {
 	
 	public final static String EXTRA_MESSAGE = "com.gling.bookmeup.MESSAGE";
 	private static final String TAG = "MainActivity";
@@ -47,7 +47,7 @@ public class MainActivity extends ActionBarActivity {
             e.printStackTrace();
         }
 		
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.login_activity);
 
 		if (savedInstanceState == null) {
 			

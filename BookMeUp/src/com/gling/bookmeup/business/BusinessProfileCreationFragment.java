@@ -28,7 +28,7 @@ import android.widget.Toast;
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.login.fragments.LoginFragment;
 import com.gling.bookmeup.main.FragmentsFlowManager;
-import com.gling.bookmeup.main.MainActivity;
+import com.gling.bookmeup.main.LoginActivity;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
 import com.parse.DeleteCallback;
@@ -83,7 +83,7 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
     }
 
     private void initProfileDetails() {
-        Business business = ((MainActivity) getActivity()).getCurrentBusiness();
+        Business business = ((LoginActivity) getActivity()).getCurrentBusiness();
 
         edtBusinessName.setText(business.getName());
         // image is loaded onResume
@@ -241,7 +241,7 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
                     service.setName(edtServiceName.getText().toString());
                     service.setPrice(edtServicePrice.getText().toString());
                     service.setDuration(edtServiceDuration.getText().toString());
-                    service.setBusiness(((MainActivity) getActivity()).getCurrentBusiness());
+                    service.setBusiness(((LoginActivity) getActivity()).getCurrentBusiness());
                     
                     service.saveInBackground(new SaveCallback() {
                         
@@ -294,7 +294,7 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
         ParseUser currentUser = ParseUser.getCurrentUser();
         Log.i(TAG, "current user is: " + currentUser.getUsername());
 
-        Business business = ((MainActivity) getActivity()).getCurrentBusiness();
+        Business business = ((LoginActivity) getActivity()).getCurrentBusiness();
 
         business.setUser(currentUser.getUsername());
         business.setName(edtBusinessName.getText().toString());
@@ -369,7 +369,7 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
         
         Log.i(TAG, "On Resume");
         
-        Business business = ((MainActivity) getActivity()).getCurrentBusiness();
+        Business business = ((LoginActivity) getActivity()).getCurrentBusiness();
         
         ParseFile imageFile = business.getImageFile();
         if (imageFile != null) {

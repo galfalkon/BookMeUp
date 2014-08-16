@@ -31,7 +31,7 @@ public class ParseHelper {
 
 		// Configure parse push service
 		Log.i(TAG, "Configuring parse push service");
-		PushService.setDefaultPushCallback(context, MainActivity.class);
+		PushService.setDefaultPushCallback(context, LoginActivity.class);
 		ParseInstallation.getCurrentInstallation().saveInBackground();
 	}
 	
