@@ -1,19 +1,17 @@
 package com.gling.bookmeup.business;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
 
-import com.gling.bookmeup.main.ParseHelper.Category;
 import com.parse.FindCallback;
 import com.parse.ParseClassName;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -21,6 +19,7 @@ import com.parse.ParseQuery;
 
 @ParseClassName(Business.CLASS_NAME)
 public class Business extends ParseObject implements Serializable{
+	private static final String TAG = "Business";
 
     public static final String CLASS_NAME = "Business";
     
@@ -106,9 +105,66 @@ public class Business extends ParseObject implements Serializable{
 
         return query;
     }
-        
-    // TODO add offers
     
+    public void addOffer(Offer offer) {
+    	Log.i(TAG, "publishOffer");
+    	
+    	try {
+    		JSONArray jsonOffers = getJSONArray(Keys.OFFERS);
+			jsonOffers.put(jsonOffers.length(), offer.toJSONObject());
+			saveInBackground();
+		} catch (JSONException e) {
+			Log.e(TAG, "Exception: " + e.getMessage());
+		}
+    }
+    
+    public List<Offer> getOffers()  {
+    	List<Offer> offers = new ArrayList<Offer>();
+	    	JSONArray jsonOffers = getJSONArray(Keys.OFFERS);
+	    	for (int i = 0; i < jsonOffers.length(); i++) {
+	    		try {
+					offers.add(new Offer(jsonOffers.getJSONObject(i)));
+	    		} catch (JSONException e) {
+	    			Log.e(TAG, "Exeception occurred while trying to create a JSON object. " + e.getMessage());
+	    		}
+	    	} 
+    	
+    	return offers;
+    }
+    
+    public static class Offer {
+    	private static class Keys {
+    		public static final String DISCOUNT = "discount";
+    		public static final String DURATION = "duration";
+    	}
+    	
+    	private final int _discount, _duration;
+    	
+    	public Offer(int discount, int duration) {
+    		_discount = discount;
+    		_duration = duration;
+    	}
+    	
+    	public Offer(JSONObject json) throws JSONException {
+			_discount = json.getInt(Keys.DISCOUNT);
+			_duration = json.getInt(Keys.DURATION);
+		}
+    	
+    	private JSONObject toJSONObject() throws JSONException {
+    		JSONObject json = new JSONObject();
+    		json.put(Keys.DISCOUNT, _discount);
+    		json.put(Keys.DURATION, _duration);
+    		return json;
+    	}
+    	
+    	public int getDiscount() {
+    		return _discount;
+    	}
+    	
+    	public int getDuration() {
+    		return _duration;
+    	}
+    }
     
 //        business.getServices(new FindCallback<Service>() {
 //            public void done(List<Service> services, ParseException e) {

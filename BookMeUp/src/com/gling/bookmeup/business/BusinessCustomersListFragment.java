@@ -33,6 +33,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.business.Business.Offer;
+import com.gling.bookmeup.main.LoginActivity;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.ParseHelper.BackEndFunctions;
@@ -50,20 +52,17 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 	private List<Customer> _allCustomers, _filteredCustomers;
 	private CustomersArrayAdapter _listViewAdapter;
 	
-	// TODO: Temporary! The businessId should be saved in the shared preferences during the profile creation. 
-	private static final String BUSINESS_ID = "mUhs7IdMT7"; 
+	private Business _business;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		Log.i(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		
+		_business = ((LoginActivity)getActivity()).getCurrentBusiness();
 		_allCustomers = new ArrayList<Customer>();
 		_filteredCustomers = new ArrayList<Customer>();
 		_listViewAdapter = new CustomersArrayAdapter();
-		
-		final ParseQuery<ParseObject> innerBusinessPointerQuery = new ParseQuery<ParseObject>(Business.CLASS_NAME).
-				whereEqualTo(Business.Keys.ID, BUSINESS_ID);
 		
 		/*
 		 * Build a query that represents bookings with the following properties:
@@ -73,7 +72,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		 *		Were approved
 		 */
 		ParseQuery<Booking> query = new ParseQuery<Booking>(Booking.CLASS_NAME).
-				whereMatchesQuery(Booking.Keys.BUSINESS_POINTER, innerBusinessPointerQuery).
+				whereEqualTo(Booking.Keys.BUSINESS_POINTER, _business).
 				whereLessThan(Booking.Keys.DATE, new Date()).
 				whereEqualTo(Booking.Keys.STATUS, Booking.Status.APPROVED);
 		query.include(Booking.Keys.CUSTOMER_POINTER);
@@ -238,7 +237,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		    	String message = ((TextView)view.findViewById(R.id.business_client_list_send_message_dialog_edtMessage)).getText().toString();
 		    	
 				// Call the back end function
-				ParseHelper.BackEndFunctions.SendMessageToClients.callInBackground(BUSINESS_ID, selectedCustomersIds, message, new FunctionCallback<String>() {
+				ParseHelper.BackEndFunctions.SendMessageToClients.callInBackground(_business.getObjectId(), selectedCustomersIds, message, new FunctionCallback<String>() {
 					@Override
 					public void done(String object, ParseException e) {
 						Log.i(TAG, "callFunctionInBackground done");
@@ -292,9 +291,9 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		    public void onClick(DialogInterface dialog, int which) {
 		    	Log.i(TAG, "Sending offer to selected clients");
 
-		    	int discount = (Integer) discountSpinner.getSelectedItem();
-		    	int duration = (Integer) durationSpinner.getSelectedItem();
-		    	BackEndFunctions.SendOfferToClients.callInBackground(BUSINESS_ID, selectedCustomersIds, discount, duration, new FunctionCallback<String>() {
+		    	final int discount = (Integer) discountSpinner.getSelectedItem();
+		    	final int duration = (Integer) durationSpinner.getSelectedItem();
+		    	BackEndFunctions.SendOfferToClients.callInBackground(_business.getObjectId(), selectedCustomersIds, discount, duration, new FunctionCallback<String>() {
 					@Override
 					public void done(String object, ParseException e) {
 						Log.i(TAG, "callFunctionInBackground done");
@@ -303,6 +302,8 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 							Log.e(TAG, "Exception: " + e.getMessage());
 							return;
 						}
+						
+						_business.addOffer(new Offer(discount, duration));
 					}
 				});
 		    }
