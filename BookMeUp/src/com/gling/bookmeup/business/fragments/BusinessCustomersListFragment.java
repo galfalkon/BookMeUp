@@ -27,12 +27,15 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
+import com.gling.bookmeup.main.ParseHelper.BackEndFunctions;
 import com.gling.bookmeup.main.ParseHelper.Booking;
 import com.gling.bookmeup.main.ParseHelper.CustomerClass;
 import com.parse.FindCallback;
@@ -137,7 +140,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 			handleSendMessageToSelectedClients();
 			break;
 		case R.id.business_customer_list_btnSendOffer:
-			Toast.makeText(getActivity(), "Not implemeted", Toast.LENGTH_SHORT).show();
+			handleSendOfferToSelectedClients();
 			break;
 		}
 	}
@@ -215,6 +218,12 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 	private void handleSendMessageToSelectedClients() {
 		Log.i(TAG, "handleSendMessageToSelectedClients");
 		
+		final List<String> selectedCustomersIds = getSelectedCustomersIds();
+		if (selectedCustomersIds.isEmpty()) {
+			Toast.makeText(getActivity(), "Please select customers from the list", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
 		LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -228,16 +237,8 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		    	Log.i(TAG, "Sending message to selected clients");
 		    	String message = ((TextView)view.findViewById(R.id.business_client_list_send_message_dialog_edtMessage)).getText().toString();
 		    	
-		    	// Build a list of the ids of all selected clients
-		    	List<String> clientsIds = new ArrayList<String>();
-				for (Customer client : _filteredCustomers) {
-					if (client._isSelected) {
-						clientsIds.add(client._id);
-					}
-				}
-				
 				// Call the back end function
-				ParseHelper.BackEndFunctions.SendMessageToClients.callInBackground(BUSINESS_ID, clientsIds, message, new FunctionCallback<String>() {
+				ParseHelper.BackEndFunctions.SendMessageToClients.callInBackground(BUSINESS_ID, selectedCustomersIds, message, new FunctionCallback<String>() {
 					@Override
 					public void done(String object, ParseException e) {
 						Log.i(TAG, "callFunctionInBackground done");
@@ -257,6 +258,73 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		    }
 		});
 		builder.show();
+	}
+	
+	private void handleSendOfferToSelectedClients() {
+		Log.i(TAG, "handleSendOfferToSelectedClients");
+		
+		final List<String> selectedCustomersIds = getSelectedCustomersIds();
+		if (selectedCustomersIds.isEmpty()) {
+			Toast.makeText(getActivity(), "Please select customers from the list", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
+		LayoutInflater inflater = getActivity().getLayoutInflater();
+		final View view = inflater.inflate(R.layout.business_customer_list_send_offer_dialog , null);
+		
+		// TODO: Put the possible discount in an int array resource.
+		Integer[] validDiscounts = {5, 10, 15, 20};
+    	SpinnerAdapter discountSpinnerAdapter = new ArrayAdapter<Integer>(getActivity(), android.R.layout.simple_spinner_item, validDiscounts);
+    	final Spinner discountSpinner = (Spinner)view.findViewById(R.id.business_customer_list_send_offer_dialog_spinnerDiscount);
+    	discountSpinner.setAdapter(discountSpinnerAdapter);
+    	
+    	Integer[] validDurations = {1, 2, 3, 4};
+    	SpinnerAdapter durationSpinnerAdapter = new ArrayAdapter<Integer>(getActivity(), android.R.layout.simple_spinner_item, validDurations);
+    	final Spinner durationSpinner = (Spinner)view.findViewById(R.id.business_customer_list_send_offer_dialog_spinnerDuration);
+    	durationSpinner.setAdapter(durationSpinnerAdapter);
+    	
+    	// Build an alert dialog
+    	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setView(view);
+		builder.setTitle(R.string.business_customer_list_send_offer_dialog_title);
+		builder.setPositiveButton(R.string.business_customer_list_send_message_dialog_btnSend, new DialogInterface.OnClickListener() { 
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		    	Log.i(TAG, "Sending offer to selected clients");
+
+		    	int discount = (Integer) discountSpinner.getSelectedItem();
+		    	int duration = (Integer) durationSpinner.getSelectedItem();
+		    	BackEndFunctions.SendOfferToClients.callInBackground(BUSINESS_ID, selectedCustomersIds, discount, duration, new FunctionCallback<String>() {
+					@Override
+					public void done(String object, ParseException e) {
+						Log.i(TAG, "callFunctionInBackground done");
+
+						if (e != null) {
+							Log.e(TAG, "Exception: " + e.getMessage());
+							return;
+						}
+					}
+				});
+		    }
+		});
+		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		        dialog.cancel();
+		    }
+		});
+		builder.show();
+	}
+	
+	private List<String> getSelectedCustomersIds() {
+		List<String> customerIds = new ArrayList<String>();
+		for (Customer client : _filteredCustomers) {
+			if (client._isSelected) {
+				customerIds.add(client._id);
+			}
+		}
+		
+		return customerIds;
 	}
 
 	private static class Customer {

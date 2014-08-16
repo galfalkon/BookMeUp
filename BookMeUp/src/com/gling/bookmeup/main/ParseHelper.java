@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.net.ssl.SSLEngineResult.Status;
-
 import android.content.Context;
 import android.util.Log;
 
@@ -140,6 +138,28 @@ public class ParseHelper {
 				params.put(Parameters.BUSINESS_ID, businessId);
 				params.put(Parameters.CUSTOMER_IDS, customerIds);
 				params.put(Parameters.MESSAGE, message);
+				
+				ParseCloud.callFunctionInBackground(FUNCTION_NAME, params, callback);
+			}
+		}
+		
+		public static class SendOfferToClients {
+			private static final String FUNCTION_NAME = "sendOfferToCustomers";
+			
+			private static class Parameters {
+				public static final String BUSINESS_ID = "businessId";
+				public static final String CUSTOMER_IDS = "customerIds";
+				public static final String DISCOUNT = "discount";
+				public static final String DURATION = "duration";
+			}
+			
+			public static void callInBackground(String businessId, List<String> customerIds, int discount, int duration, FunctionCallback<String> callback) {
+				// Build a parameters object for the back end function
+				final Map<String, Object> params = new HashMap<String, Object>();
+				params.put(Parameters.BUSINESS_ID, businessId);
+				params.put(Parameters.CUSTOMER_IDS, customerIds);
+				params.put(Parameters.DISCOUNT, discount);
+				params.put(Parameters.DURATION, duration);
 				
 				ParseCloud.callFunctionInBackground(FUNCTION_NAME, params, callback);
 			}
