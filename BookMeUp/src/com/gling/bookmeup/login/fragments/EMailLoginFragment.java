@@ -10,10 +10,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.FragmentsFlowManager;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 public class EMailLoginFragment extends OnClickListenerFragment {
@@ -70,11 +72,22 @@ public class EMailLoginFragment extends OnClickListenerFragment {
 				if (!user.getBoolean("emailVerified")) {
 					Log.i(TAG, "User hasn't verified Email address");
 					Toast.makeText(getActivity(), "Please verifiy your Email address", Toast.LENGTH_SHORT).show();
-					// return;
+					return;
 				}
 
 				Log.i(TAG, "Login succeeded");
-
+				
+				final ParseQuery<Business> query = ParseQuery.getQuery(Business.class).whereEqualTo(
+		                Business.Keys.USER_POINTER, user);
+		        query.include(Business.Keys.CATEGORY);
+		        try {
+                    List<Business> business = query.find();  // TODO get(0)
+                    if 
+                } catch (ParseException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+		        
 				FragmentsFlowManager.goToNextFragment(getActivity(), R.id.email_login_btnContinue);
 			}
 		});

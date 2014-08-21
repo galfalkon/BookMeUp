@@ -60,7 +60,7 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
     private ListView lstBusinessServices;
     private Spinner spnCategory;
 
-    private CustomServicesAdapter _servicesAdapter;
+    private ServicesAdapter _servicesAdapter;
 
     @Override
     protected int getFragmentLayoutId() {
@@ -206,7 +206,7 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
 
     private void initServiceList(Business business) {
 
-        _servicesAdapter = new CustomServicesAdapter(getActivity(), business);
+        _servicesAdapter = new ServicesAdapter(getActivity(), business);
 
         final LayoutInflater inflater = getActivity().getLayoutInflater();
 
@@ -300,9 +300,9 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
         ParseUser currentUser = ParseUser.getCurrentUser();
         Log.i(TAG, "current user is: " + currentUser.getUsername());
 
-        Business business = ((LoginActivity) getActivity()).getCurrentBusiness();
+        final Business business = ((LoginActivity) getActivity()).getCurrentBusiness();
 
-        business.setUser(currentUser.getUsername());
+        business.setUser(currentUser);
         business.setName(edtBusinessName.getText().toString());
         business.setDescription(edtBusinessDescription.getText().toString());
         business.setCategory((ParseObject) spnCategory.getSelectedItem());
@@ -316,15 +316,20 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
         business.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                progressDialog.dismiss();
                 if (e == null) {
                     Log.i(TAG, "Done creating new business");
                     getActivity().setResult(Activity.RESULT_OK);
+                    
+                    // jump to business main activity
+                    Intent intent = new Intent(getActivity(), BusinessMainActivity.class);
+                    intent.putExtra(EXTRA_BUSINESS, business);
+                    startActivity(intent);
                 } else {
                     Log.e(TAG, "Exception occurred: " + e.getMessage());
                     Toast.makeText(getActivity().getApplicationContext(), "Error saving: " + e.getMessage(),
                             Toast.LENGTH_SHORT).show();
                 }
+                progressDialog.dismiss();
             }
         });
     }
@@ -351,11 +356,6 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
                 return;
             }
             saveBusiness();
-
-            Intent intent = new Intent(getActivity(), BusinessMainActivity.class);
-            intent.putExtra(EXTRA_BUSINESS, ((LoginActivity) getActivity()).getCurrentBusiness());
-            startActivity(intent);
-
             return;
         }
         FragmentsFlowManager.goToNextFragment(getActivity(), v.getId());
@@ -399,9 +399,9 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
         }
     }
 
-    private class CustomServicesAdapter extends ParseQueryAdapter<Service> {
+    private class ServicesAdapter extends ParseQueryAdapter<Service> {
 
-        public CustomServicesAdapter(Context context, final Business business) {
+        public ServicesAdapter(Context context, final Business business) {
             super(context, new ParseQueryAdapter.QueryFactory<Service>() {
                 public ParseQuery<Service> create() {
                     return business.getServicesQuery();

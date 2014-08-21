@@ -1,6 +1,5 @@
 package com.gling.bookmeup.login.fragments;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,11 +9,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.FragmentsFlowManager;
-import com.parse.ParseException;
-import com.parse.ParseUser;
-import com.parse.SignUpCallback;
+import com.gling.bookmeup.main.OnClickListenerFragment;
 
 public class EMailSignUpFragment extends OnClickListenerFragment {
 

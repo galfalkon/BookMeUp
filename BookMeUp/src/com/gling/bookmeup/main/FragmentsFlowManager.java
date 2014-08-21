@@ -6,12 +6,15 @@ import android.util.Log;
 import android.util.SparseArray;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessImageCaptureFragment;
 import com.gling.bookmeup.business.BusinessProfileCreationFragment;
 import com.gling.bookmeup.customer.fragments.CustomerMainScreen;
 import com.gling.bookmeup.login.fragments.EMailLoginFragment;
 import com.gling.bookmeup.login.fragments.EMailSignUpFragment;
 import com.gling.bookmeup.login.fragments.UserTypeSelectionFragment;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 
 /**
  * This class wraps all transitions from the different fragments in the application.
@@ -36,10 +39,10 @@ public class FragmentsFlowManager {
 		_buttonIdsToFragmentName.put(R.id.login_btnSignUp, EMailSignUpFragment.class.getName());
 		
 		// E-Mail sign up
-		_buttonIdsToFragmentName.put(R.id.email_signup_btnContinue, UserTypeSelectionFragment.class.getName());		
-		
+		_buttonIdsToFragmentName.put(R.id.email_signup_btnContinue, EMailLoginFragment.class.getName());		
+
 		// E-Mail login
-		_buttonIdsToFragmentName.put(R.id.email_login_btnContinue, CustomerMainScreen.class.getName());
+		_buttonIdsToFragmentName.put(R.id.email_login_btnContinue, UserTypeSelectionFragment.class.getName());
 		
 		// Business image upload
 		_buttonIdsToFragmentName.put(R.id.business_profile_creation_btnImageUpload, BusinessImageCaptureFragment.class.getName());

@@ -80,5 +80,6 @@
     <string name="business_customer_list_send_offer_dialog_title">Offer specification</string>
     <string name="business_customer_list_send_offer_dialog_txtDiscount">Discount (%)</string>
     <string name="business_customer_list_send_offer_dialog_txtDuration">Duration (Weeks)</string>
+    <string name="preference_file_key">com.gling.bookmeup</string>
 
 </resources>
