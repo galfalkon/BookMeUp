@@ -1,4 +1,4 @@
-package com.gling.bookmeup.customer.fragments;
+package com.gling.bookmeup.customer;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.OnClickListenerFragment;
@@ -19,7 +19,7 @@ public class CustomerMainScreen extends OnClickListenerFragment implements OnCli
 
 	@Override
 	protected int getFragmentLayoutId() {
-		return R.layout.customer_main_fragment;
+		return R.layout.customer_main_screen_fragment;
 	}
 	
 //	@Override

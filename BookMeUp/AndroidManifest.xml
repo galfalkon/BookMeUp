@@ -66,8 +66,16 @@
         </receiver>
 
         <activity
-            android:name="com.gling.bookmeup.business.BusinessMainActivity"
+            android:name=".business.BusinessMainActivity"
             android:label="@string/business_activity_title"
+            android:parentActivityName=".main.LoginActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gling.bookmeup.main.LoginActivity" />
+        </activity>
+        <activity
+            android:name="com.gling.bookmeup.customer.CustomerMainActivity"
+            android:label="@string/customer_activity_title"
             android:parentActivityName=".main.LoginActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

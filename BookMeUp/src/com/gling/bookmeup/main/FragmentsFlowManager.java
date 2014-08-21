@@ -9,7 +9,7 @@ import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessImageCaptureFragment;
 import com.gling.bookmeup.business.BusinessProfileCreationFragment;
-import com.gling.bookmeup.customer.fragments.CustomerMainScreen;
+import com.gling.bookmeup.customer.CustomerMainScreen;
 import com.gling.bookmeup.login.fragments.EMailLoginFragment;
 import com.gling.bookmeup.login.fragments.EMailSignUpFragment;
 import com.gling.bookmeup.login.fragments.UserTypeSelectionFragment;

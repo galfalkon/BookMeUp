@@ -12,12 +12,6 @@
     <string name="login_btnLoginWithEMailText">Login with Email</string>
     <string name="login_btnSignUpText">Sign up!</string>
 
-    <!-- Main screen -->
-    <string name="customer_main_screen_btnBarbersText">Barbers</string>
-    <string name="customer_main_screen_btnCosmeticsText">Cosmetics</string>
-    <string name="customer_main_screen_btnDentistsText">Dentists</string>
-    <string name="customer_main_screen_btnGaragesText">Garages</string>
-
     <!-- User type selection -->
     <string name="user_type_selection_btnCustomerText">I\'m a Customer</string>
     <string name="user_type_selection_btnBusinessText">I\'m a Business</string>
@@ -36,17 +30,23 @@
     <string name="email_login_edtPasswordHint">Password</string>
     <string name="email_login_txtForgotPasswordText">Forgot Your Password?</string>
 
-    <!-- Business main screen -->
+    <!-- Business Activity -->
     <string name="business_activity_title">BookMeUp! - For Business</string>
     <string name="business_activity_title_section_calendar">Calendar</string>
     <string name="business_activity_title_section_bookings">Bookings</string>
     <string name="business_activity_title_section_client_list">Client List</string>
-    
-    <!-- Customer main screen -->
+
+    <!-- Customer Activity -->
     <string name="customer_activity_title">BookMeUp! - For Customers</string>
     <string name="customer_activity_title_section_popular">Popular</string>
     <string name="customer_activity_title_section_history">History</string>
     <string name="customer_activity_title_section_favoirites">Favourites</string>
+    
+    <!-- Customer main screen -->
+    <string name="customer_main_screen_btnBarbersText">Barbers</string>
+    <string name="customer_main_screen_btnCosmeticsText">Cosmetics</string>
+    <string name="customer_main_screen_btnDentistsText">Dentists</string>
+    <string name="customer_main_screen_btnGaragesText">Garages</string>
 
     <!-- Business profile creation -->
     <string name="business_profile_creation_edtBusinessName">Business name</string>
@@ -80,6 +80,7 @@
     <string name="business_customer_list_send_offer_dialog_title">Offer specification</string>
     <string name="business_customer_list_send_offer_dialog_txtDiscount">Discount (%)</string>
     <string name="business_customer_list_send_offer_dialog_txtDuration">Duration (Weeks)</string>
+    
     <string name="preference_file_key">com.gling.bookmeup</string>
 
 </resources>

@@ -381,7 +381,14 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
 
         Log.i(TAG, "On Resume");
 
-        Business business = ((LoginActivity) getActivity()).getCurrentBusiness();
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        int defaultValue = getResources().getInteger(R.string.saved_high_score_default);
+        long highScore = sharedPref.getInt(getString(R.string.saved_high_score), defaultValue)
+                
+        final ParseQuery<Business> query = ParseQuery.getQuery(Business.class).whereEqualTo(
+                Business.Keys.USER_POINTER, ParseUser.getCurrentUser());
+        query.include(Business.Keys.CATEGORY);
+        Business business = query.find().get(1); // TODO get(0)
 
         ParseFile imageFile = business.getImageFile();
         if (imageFile != null) {

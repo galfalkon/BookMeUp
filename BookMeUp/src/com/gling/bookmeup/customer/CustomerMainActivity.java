@@ -1,4 +1,4 @@
-package com.gling.bookmeup.business;
+package com.gling.bookmeup.customer;
 
 import java.util.Locale;
 
@@ -18,9 +18,9 @@ import android.view.ViewGroup;
 
 import com.gling.bookmeup.R;
 
-public class BusinessMainActivity extends FragmentActivity implements ActionBar.TabListener {
+public class CustomerMainActivity extends FragmentActivity implements ActionBar.TabListener {
 
-    private static final String TAG = "BusinessMainActivity";
+    private static final String TAG = "CustomerMainActivity";
     
     private static final int NUM_OF_SECTIONS = 3;
     
@@ -41,7 +41,7 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.business_main_activity);
+        setContentView(R.layout.customer_main_activity);
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -52,7 +52,7 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.business_main_activity_pager);
+        mViewPager = (ViewPager) findViewById(R.id.customer_main_activity_pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         // When swiping between different sections, select the corresponding
@@ -78,7 +78,7 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.business, menu);
+        getMenuInflater().inflate(R.menu.customer, menu);
         return true;
     }
 
@@ -123,11 +123,7 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
         public Fragment getItem(int position) {
             switch (position) {
             case 0:
-                return new BusinessCalendarFragment();
-            case 1:
-                return new BusinessBookingsFragment();
-            case 2:
-                return new BusinessCustomersListFragment();
+                return new CustomerMainScreen();
             default:
                 return PlaceholderFragment.newInstance(position + 1);
             }
@@ -144,11 +140,11 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
             Locale l = Locale.getDefault();
             switch (position) {
             case 0:
-                return getString(R.string.business_activity_title_section_bookings).toUpperCase(l);
+                return getString(R.string.customer_activity_title_section_popular).toUpperCase(l);
             case 1:
-                return getString(R.string.business_activity_title_section_calendar).toUpperCase(l);
+                return getString(R.string.customer_activity_title_section_history).toUpperCase(l);
             case 2:
-                return getString(R.string.business_activity_title_section_client_list).toUpperCase(l);
+                return getString(R.string.customer_activity_title_section_favoirites).toUpperCase(l);
             }
             return null;
         }
@@ -180,7 +176,7 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.business_placeholder_fragment, container, false);
+            View rootView = inflater.inflate(R.layout.customer_placeholder_fragment, container, false);
             return rootView;
         }
     }
