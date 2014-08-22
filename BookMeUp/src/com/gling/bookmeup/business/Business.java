@@ -135,6 +135,7 @@ public class Business extends ParseObject implements Serializable {
     
     public static class Offer {
     	private static class Keys {
+    		// TODO: Consider supporting offers for a certain service
     		public static final String DISCOUNT = "discount";
     		public static final String DURATION = "duration";
     	}
