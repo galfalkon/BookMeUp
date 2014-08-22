@@ -1,7 +1,11 @@
 package com.gling.bookmeup.business;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -118,44 +122,62 @@ public class Business extends ParseObject implements Serializable {
 			Log.e(TAG, "Exception: " + e.getMessage());
 		}
     }
-    
-    public List<Offer> getOffers()  {
+
+    /*
+     * Returns a list of offers that are currently active (i.e. haven't been expired yet)
+     */
+    public List<Offer> getActiveOffers()  {
     	List<Offer> offers = new ArrayList<Offer>();
-	    	JSONArray jsonOffers = getJSONArray(Keys.OFFERS);
-	    	for (int i = 0; i < jsonOffers.length(); i++) {
-	    		try {
-					offers.add(new Offer(jsonOffers.getJSONObject(i)));
-	    		} catch (JSONException e) {
-	    			Log.e(TAG, "Exeception occurred while trying to create a JSON object. " + e.getMessage());
-	    		}
-	    	} 
+    	JSONArray jsonOffers = getJSONArray(Keys.OFFERS);
+    	Date today = new Date(); 
+    	for (int i = 0; i < jsonOffers.length(); i++) {
+    		try {
+    			Offer offer = new Offer(jsonOffers.getJSONObject(i));
+    			if (offer.getExpiration().after(today)) {
+    				offers.add(offer);
+    			}
+    		} catch (Exception e) {
+    			Log.e(TAG, "Exeception occurred while trying to create a JSON object. " + e.getMessage());
+    		}
+    	} 
     	
     	return offers;
     }
     
     public static class Offer {
+    	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yy");
+    	
     	private static class Keys {
     		// TODO: Consider supporting offers for a certain service
     		public static final String DISCOUNT = "discount";
     		public static final String DURATION = "duration";
     	}
     	
-    	private final int _discount, _duration;
+    	private final int _discount;
+    	private final Date _expiration;
     	
-    	public Offer(int discount, int duration) {
+    	// TODO: Remove
+    	public Offer(int discount, int durationInWeeks) {
     		_discount = discount;
-    		_duration = duration;
+    		Calendar calendar = Calendar.getInstance();
+    		calendar.add(Calendar.WEEK_OF_YEAR, durationInWeeks);
+    		_expiration = calendar.getTime();
+		}
+    	
+    	public Offer(int discount, Date expiration) {
+    		_discount = discount;
+    		_expiration = expiration;
     	}
     	
-    	public Offer(JSONObject json) throws JSONException {
+    	public Offer(JSONObject json) throws JSONException, ParseException {
 			_discount = json.getInt(Keys.DISCOUNT);
-			_duration = json.getInt(Keys.DURATION);
+			_expiration = DATE_FORMAT.parse(json.getString(Keys.DURATION));
 		}
     	
     	private JSONObject toJSONObject() throws JSONException {
     		JSONObject json = new JSONObject();
     		json.put(Keys.DISCOUNT, _discount);
-    		json.put(Keys.DURATION, _duration);
+    		json.put(Keys.DURATION, DATE_FORMAT.format(_expiration));
     		return json;
     	}
     	
@@ -163,8 +185,12 @@ public class Business extends ParseObject implements Serializable {
     		return _discount;
     	}
     	
-    	public int getDuration() {
-    		return _duration;
+    	public Date getExpiration() {
+    		return _expiration;
+    	}
+    	
+    	public String getFormattedExpirationDate() {
+    		return DATE_FORMAT.format(_expiration);
     	}
     }
     

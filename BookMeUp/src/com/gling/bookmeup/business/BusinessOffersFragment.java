@@ -52,7 +52,7 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 				}
 				
 				Business currentBusiness = objects.get(0);
-				_offers = currentBusiness.getOffers();
+				_offers = currentBusiness.getActiveOffers();
 				_offersAdapter = new OffersListAdapter();
 				ListView offersListView = (ListView) view.findViewById(R.id.business_offers_listViewOffers);
 				offersListView.setAdapter(_offersAdapter);
@@ -89,7 +89,7 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 			
 			Offer offer = _offers.get(position);
 			
-			txtExpiration.setText(offer.getDuration() + "");
+			txtExpiration.setText(offer.getFormattedExpirationDate());
 			txtDisount.setText(offer.getDiscount() + "%");
 			
 			return convertView;

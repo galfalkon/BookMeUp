@@ -1,5 +1,3 @@
-breadcrumb.org.eclipse.jdt.ui.JavaPerspective=true
-content_assist_lru_history=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><history maxLHS\="100" maxRHS\="10"><lhs name\="android.widget.Adapter"><rhs name\="android.widget.ArrayAdapter"/></lhs><lhs name\="android.widget.ListAdapter"><rhs name\="android.widget.ArrayAdapter"/></lhs><lhs name\="android.content.ComponentCallbacks"><rhs name\="com.gling.bookmeup.business.BusinessOffersFragment"/><rhs name\="com.gling.bookmeup.business.BusinessCustomersListFragment"/></lhs><lhs name\="android.view.View$OnCreateContextMenuListener"><rhs name\="com.gling.bookmeup.business.BusinessOffersFragment"/><rhs name\="com.gling.bookmeup.business.BusinessCustomersListFragment"/></lhs><lhs name\="android.support.v4.app.Fragment"><rhs name\="com.gling.bookmeup.business.BusinessOffersFragment"/><rhs name\="com.gling.bookmeup.business.BusinessCustomersListFragment"/></lhs></history>
 content_assist_number_of_computers=12
 content_assist_proposals_background=255,255,255
 content_assist_proposals_foreground=0,0,0
