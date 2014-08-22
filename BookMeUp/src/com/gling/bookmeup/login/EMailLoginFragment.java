@@ -25,76 +25,77 @@ import com.parse.ParseUser;
 
 public class EMailLoginFragment extends OnClickListenerFragment {
 
-	private static final String TAG = "EMailLoginFragment";
+    private static final String TAG = "EMailLoginFragment";
 
-	private EditText edtUserName, edtPassword;
+    private EditText edtUserName, edtPassword;
 
-	public int getFragmentLayoutId() {
-		return R.layout.login_email_fragment;
-	}
+    public int getFragmentLayoutId() {
+        return R.layout.login_email_fragment;
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = super.onCreateView(inflater, container, savedInstanceState);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
 
-		edtPassword = (EditText)view.findViewById(R.id.email_login_edtPassword);
-		edtUserName = (EditText)view.findViewById(R.id.email_login_edtUserName);
+        edtPassword = (EditText) view.findViewById(R.id.email_login_edtPassword);
+        edtUserName = (EditText) view.findViewById(R.id.email_login_edtUserName);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public void onClick(View v) {
-		final int viewClickedId = v.getId();
+    @Override
+    public void onClick(View v) {
+        final int viewClickedId = v.getId();
 
-		switch (viewClickedId) {
-		case R.id.email_login_btnContinue:
-			handleLoginReuest();
-			break;
-		}
-	}
+        switch (viewClickedId) {
+        case R.id.email_login_btnContinue:
+            handleLoginReuest();
+            break;
+        }
+    }
 
-	private void handleLoginReuest() {
-		Log.i(TAG, "handleLoginReuest");
+    private void handleLoginReuest() {
+        Log.i(TAG, "handleLoginReuest");
 
-		String userName = edtUserName.getText().toString();
-		String password = edtPassword.getText().toString();
+        String userName = edtUserName.getText().toString();
+        String password = edtPassword.getText().toString();
 
-		Log.i(TAG, "Showing a progress dialog");
-		final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Loging in...");
+        Log.i(TAG, "Showing a progress dialog");
+        final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Loging in...");
 
-		ParseUser.logInInBackground(userName, password, new LogInCallback() {
-			@Override
-			public void done(ParseUser user, ParseException e) {
-				progressDialog.dismiss();
-				if (e != null) {
-					Log.i(TAG, "Login failed: " + e.getMessage());
-					Toast.makeText(getActivity(), "Login failed: " + e.toString(), Toast.LENGTH_SHORT).show();
-					return;
-				}
+        ParseUser.logInInBackground(userName, password, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                if (e != null) {
+                    progressDialog.dismiss();
+                    Log.i(TAG, "Login failed: " + e.getMessage());
+                    Toast.makeText(getActivity(), "Login failed: " + e.toString(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-				if (!user.getBoolean("emailVerified")) {
-					Log.i(TAG, "User hasn't verified Email address");
-					Toast.makeText(getActivity(), "Please verifiy your Email address", Toast.LENGTH_SHORT).show();
-					return;
-				}
+                if (!user.getBoolean("emailVerified")) {
+                    progressDialog.dismiss();
+                    Log.i(TAG, "User hasn't verified Email address");
+                    Toast.makeText(getActivity(), "Please verifiy your Email address", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-				Log.i(TAG, "Login succeeded");
-				
-				LoginMainActivity loginActivity = (LoginMainActivity) getActivity();
-				Intent intent = loginActivity.generateIntent();
-		        if (intent != null) {
-		            // Clear fragment stack
-		            // loginActivity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-		            
-		            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		            startActivity(intent);
-		            loginActivity.finish();
-		        } else {
-		            FragmentsFlowManager.goToNextFragment(getActivity(), R.id.email_login_btnContinue);
-		        }
-			}
-		});
-	}
+                Log.i(TAG, "Login succeeded");
+
+                LoginMainActivity loginActivity = (LoginMainActivity) getActivity();
+                Intent intent = loginActivity.generateIntent();
+                if (intent != null) {
+                    // Clear fragment stack
+                    // loginActivity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    loginActivity.finish();
+                } else {
+                    FragmentsFlowManager.goToNextFragment(getActivity(), R.id.email_login_btnContinue);
+                }
+                progressDialog.dismiss();
+            }
+        });
+    }
 }

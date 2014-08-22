@@ -43,13 +43,13 @@ public class LoginMainActivity extends ActionBarActivity {
 
         // TODO splash screen
         // TODO separate 'session manager' class
-        Intent intent = generateIntent();
-        if (intent != null) {
-            // Clear out task stack
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
-        } else {
+//        Intent intent = generateIntent();
+//        if (intent != null) {
+//            // Clear out task stack
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            startActivity(intent);
+//            finish();
+//        } else {
             // user == null || user is not associated with a business or customer objects
             Fragment firstFragment = new LoginFragment();
             getSupportFragmentManager().beginTransaction().add(R.id.container, firstFragment).commit();
@@ -57,7 +57,7 @@ public class LoginMainActivity extends ActionBarActivity {
             // For not showing the keyboard when an editText gets focus on fragment
             // creation
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        }
+//        }
     }
 
     public Intent generateIntent() {
