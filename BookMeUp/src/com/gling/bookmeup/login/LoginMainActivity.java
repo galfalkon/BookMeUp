@@ -1,11 +1,10 @@
 package com.gling.bookmeup.login;
 
-import android.content.Context;
+import java.util.List;
+
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -16,7 +15,6 @@ import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessMainActivity;
 import com.gling.bookmeup.customer.Customer;
-import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -33,88 +31,66 @@ public class LoginMainActivity extends ActionBarActivity {
         Log.i(TAG, "onCreate");
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_activity);
+        setContentView(R.layout.login_main_activity);
 
         // Track application opens
         ParseAnalytics.trackAppOpened(getIntent());
-        
+
         if (savedInstanceState != null) {
             return;
         }
 
         // TODO splash screen
-        ParseUser user = ParseUser.getCurrentUser();
-
-        if (user != null) {
-            Intent intent = generateIntent(user);
-            if (intent != null) {
-                startActivity(intent);
-            }
+        Intent intent = generateIntent();
+        if (intent != null) {
+            startActivity(intent);
+            finish();
         }
-        
-        // user == null || no businessId or customerId in shared prefs
-   
+
+        // user == null || user is not associated with a business or customer objects
+
         Fragment firstFragment = new LoginFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.container, firstFragment).commit();
 
-        // For not showing the keyboard when an editText gets focus on fragment creation
+        // For not showing the keyboard when an editText gets focus on fragment
+        // creation
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
-    private Intent generateIntent(ParseUser user) {
+    private Intent generateIntent() {
 
-        Business business = null;
-        Customer customer = null;
-
-        // Get saved prefs
-        SharedPreferences sharedPrefs = getSharedPreferences(getString(R.string.preference_file_key),
-                Context.MODE_PRIVATE);
-        String businessId = sharedPrefs.getString(getString(R.string.shared_businessid), null);
-        String customerId = sharedPrefs.getString(getString(R.string.shared_customerid), null);
-
-        if (businessId == null && customerId == null) {
+        ParseUser user = ParseUser.getCurrentUser();
+        if (user == null) {
             return null;
         }
 
         Intent intent = null;
         Bundle bundle = new Bundle();
 
-        if (businessId != null) {
+        final ParseQuery<Business> queryBusiness = ParseQuery.getQuery(Business.class).whereEqualTo(Business.Keys.USER, user);
+        queryBusiness.include(Business.Keys.CATEGORY);
 
-            final ParseQuery<Business> query = ParseQuery.getQuery(Business.class).whereEqualTo(Business.Keys.USER,
-                    user);
-            query.include(Business.Keys.CATEGORY);
-
-            try {
-                business = query.find().get(0);
-            } catch (ParseException e) {
-                e.printStackTrace();
-                return null;
-            }
-
-            bundle.putSerializable(Business.CLASS_NAME, business);
-            intent = new Intent(getApplicationContext(), BusinessMainActivity.class);
-            intent.putExtras(bundle);
-            
-        } else { // customerId != null
-
-            final ParseQuery<Customer> query = 
-                    ParseQuery
-                    .getQuery(Customer.class)
-                    .whereEqualTo(Customer.Keys.USER, user);
-
-            try {
-                customer = query.find().get(0);
-            } catch (ParseException e) {
-                e.printStackTrace();
-                return null;
-            }
-
-            bundle.putSerializable(Customer.CLASS_NAME, customer);
-            intent = new Intent(getApplicationContext(), CustomerMainActivity.class);
-            intent.putExtras(bundle);
-        }
+        final ParseQuery<Customer> queryCustomer = ParseQuery.getQuery(Customer.class).whereEqualTo(Customer.Keys.USER, user);
         
+        try {
+            List<Business> resultBusiness = queryBusiness.find();
+            if (!resultBusiness.isEmpty()) {
+                bundle.putSerializable(Business.CLASS_NAME, resultBusiness.get(0));
+                intent = new Intent(getApplicationContext(), BusinessMainActivity.class);
+                intent.putExtras(bundle);
+                return intent;
+            }
+            List<Customer> resultCustomer = queryCustomer.find();
+            if (!resultCustomer.isEmpty()) {
+                bundle.putSerializable(Customer.CLASS_NAME, resultCustomer.get(0));
+                intent = new Intent(getApplicationContext(), BusinessMainActivity.class);
+                intent.putExtras(bundle);
+                return intent;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         return intent;
     }
 
