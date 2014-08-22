@@ -9,6 +9,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.gling.bookmeup.business.Business;
+import com.gling.bookmeup.business.Service;
+import com.gling.bookmeup.customer.Customer;
 import com.gling.bookmeup.login.LoginMainActivity;
 import com.parse.FunctionCallback;
 import com.parse.Parse;
@@ -26,7 +28,13 @@ public class ParseHelper {
 	public static void initialize(Context context) {
 		Log.i(TAG, "Initializing Parse");
 		
-		ParseObject.registerSubclass(Booking.class);
+	    // Business
+        ParseObject.registerSubclass(Business.class);
+        ParseObject.registerSubclass(com.gling.bookmeup.business.Service.class);
+        ParseObject.registerSubclass(Booking.class);
+        
+        // Customer
+        ParseObject.registerSubclass(Customer.class);
 		
 		Parse.initialize(context, PARSE_APPLICATION_ID, PARSE_CLIENT_KEY);
 

@@ -15,6 +15,7 @@ import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessMainActivity;
 import com.gling.bookmeup.customer.Customer;
+import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -41,29 +42,33 @@ public class LoginMainActivity extends ActionBarActivity {
         }
 
         // TODO splash screen
+        // TODO separate 'session manager' class
         Intent intent = generateIntent();
         if (intent != null) {
+            // Clear out task stack
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
+        } else {
+            // user == null || user is not associated with a business or customer objects
+            Fragment firstFragment = new LoginFragment();
+            getSupportFragmentManager().beginTransaction().add(R.id.container, firstFragment).commit();
+    
+            // For not showing the keyboard when an editText gets focus on fragment
+            // creation
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         }
-
-        // user == null || user is not associated with a business or customer objects
-
-        Fragment firstFragment = new LoginFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.container, firstFragment).commit();
-
-        // For not showing the keyboard when an editText gets focus on fragment
-        // creation
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
-    private Intent generateIntent() {
+    public Intent generateIntent() {
 
         ParseUser user = ParseUser.getCurrentUser();
         if (user == null) {
             return null;
         }
 
+        Log.i(TAG, "User '" + user.getUsername() +  "' has been found in the system");
+        
         Intent intent = null;
         Bundle bundle = new Bundle();
 
@@ -75,6 +80,7 @@ public class LoginMainActivity extends ActionBarActivity {
         try {
             List<Business> resultBusiness = queryBusiness.find();
             if (!resultBusiness.isEmpty()) {
+                Log.i(TAG, "User '" + user.getUsername() +  "' is associated with business '" + resultBusiness.get(0).getName() + "'");
                 bundle.putSerializable(Business.CLASS_NAME, resultBusiness.get(0));
                 intent = new Intent(getApplicationContext(), BusinessMainActivity.class);
                 intent.putExtras(bundle);
@@ -82,15 +88,18 @@ public class LoginMainActivity extends ActionBarActivity {
             }
             List<Customer> resultCustomer = queryCustomer.find();
             if (!resultCustomer.isEmpty()) {
+                Log.i(TAG, "User '" + user.getUsername() +  "' is associated with customer '" + resultCustomer.get(0).getName() + "'");
                 bundle.putSerializable(Customer.CLASS_NAME, resultCustomer.get(0));
-                intent = new Intent(getApplicationContext(), BusinessMainActivity.class);
+                intent = new Intent(getApplicationContext(), CustomerMainActivity.class);
                 intent.putExtras(bundle);
                 return intent;
             }
         } catch (ParseException e) {
+            Log.i(TAG, "Query failed: " + e.getMessage());
             e.printStackTrace();
         }
-
+        
+        Log.i(TAG, "User '" + user.getUsername() +  "' is not associated with a business or customer");
         return intent;
     }
 

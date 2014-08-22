@@ -3,7 +3,10 @@ package com.gling.bookmeup.login;
 import java.util.List;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,17 +82,18 @@ public class EMailLoginFragment extends OnClickListenerFragment {
 
 				Log.i(TAG, "Login succeeded");
 				
-				final ParseQuery<Business> query = ParseQuery.getQuery(Business.class).whereEqualTo(
-		                Business.Keys.USER, user);
-		        query.include(Business.Keys.CATEGORY);
-		        try {
-                    List<Business> business = query.find();  // TODO get(0)
-                } catch (ParseException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-		        
-				FragmentsFlowManager.goToNextFragment(getActivity(), R.id.email_login_btnContinue);
+				LoginMainActivity loginActivity = (LoginMainActivity) getActivity();
+				Intent intent = loginActivity.generateIntent();
+		        if (intent != null) {
+		            // Clear fragment stack
+		            // loginActivity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		            
+		            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		            startActivity(intent);
+		            loginActivity.finish();
+		        } else {
+		            FragmentsFlowManager.goToNextFragment(getActivity(), R.id.email_login_btnContinue);
+		        }
 			}
 		});
 	}

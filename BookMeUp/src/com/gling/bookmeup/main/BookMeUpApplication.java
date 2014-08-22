@@ -20,16 +20,6 @@ public class BookMeUpApplication extends Application {
 		Log.i(TAG, "onCreate");
 		
 		super.onCreate();
-
-		// Initialize parse
-		Log.i(TAG, "Initializing Parse");
-		
-		// Business
-		ParseObject.registerSubclass(Business.class);
-		ParseObject.registerSubclass(Service.class);
-		
-		// Customer
-		ParseObject.registerSubclass(Customer.class);
 		
 		ParseHelper.initialize(this);
 	}
