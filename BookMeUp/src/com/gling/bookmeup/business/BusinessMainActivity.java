@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -17,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.login.LoginMainActivity;
+import com.parse.ParseUser;
 
 public class BusinessMainActivity extends FragmentActivity implements ActionBar.TabListener {
 
@@ -87,11 +90,20 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        switch (item.getItemId()) {
+        case R.id.business_action_settings:
             return true;
+        case R.id.business_action_logout:
+            // TODO extract to session manager class
+            ParseUser.logOut();
+            Intent intent = new Intent(this, LoginMainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

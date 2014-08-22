@@ -77,7 +77,7 @@ public class UserTypeSelectionFragment extends OnClickListenerFragment implement
                 startActivity(intent);
                 getActivity().finish();
             } catch (ParseException e) {
-                Log.i(TAG, "Business creation failed: " + e.getMessage());
+                Log.i(TAG, "Customer creation failed: " + e.getMessage());
                 e.printStackTrace();
             }
             break;
