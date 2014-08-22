@@ -30,10 +30,6 @@ public class FragmentsFlowManager {
 	private static void initializeFlowTable() {
 		_buttonIdsToFragmentName = new SparseArray<String>();
 		
-		// user_type_selection
-		_buttonIdsToFragmentName.put(R.id.user_type_selection_btnBusiness, BusinessProfileCreationFragment.class.getName());
-		_buttonIdsToFragmentName.put(R.id.user_type_selection_btnCustomer, CustomerMainScreen.class.getName());
-		
 		// login
 		_buttonIdsToFragmentName.put(R.id.login_btnLoginWithEMail, EMailLoginFragment.class.getName());
 		_buttonIdsToFragmentName.put(R.id.login_btnSignUp, EMailSignUpFragment.class.getName());

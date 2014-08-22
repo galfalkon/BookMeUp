@@ -1,22 +1,19 @@
 package com.gling.bookmeup.login;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business;
+import com.gling.bookmeup.business.BusinessMainActivity;
+import com.gling.bookmeup.customer.Customer;
+import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.gling.bookmeup.main.OnClickListenerFragment;
-import com.gling.bookmeup.main.FragmentsFlowManager;
 import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
 
 public class UserTypeSelectionFragment extends OnClickListenerFragment implements OnClickListener {
 	private static final String TAG = "UserTypeSelectionFragment";
@@ -44,33 +41,46 @@ public class UserTypeSelectionFragment extends OnClickListenerFragment implement
 
 	@Override
 	public void onClick(View v) {
-		// Currently, all buttons triggers a fragment switch.
 		
 		switch (v.getId()) {
 		case R.id.user_type_selection_btnBusiness:
 			Log.i(TAG, "btnBusiness clicked");
-	        // TODO async
 	        try {
-	            // TODO check current user != null
-	            final ParseQuery<Business> query = ParseQuery.getQuery(Business.class).whereEqualTo(
-	                    Business.Keys.USER, ParseUser.getCurrentUser());
-	            query.include(Business.Keys.CATEGORY);
-	            Business business = query.find().get(1); // TODO get(0)
-	            SharedPreferences sharedPref = getActivity().getSharedPreferences(
-	                    getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-	            SharedPreferences.Editor editor = sharedPref.edit();
-	            editor.putString(getString(R.string.shared_businessid), business.getObjectId());
-	            editor.commit();
+	            Business business = new Business();
+	            business.setUser(ParseUser.getCurrentUser());
+	            business.save();
+	            
+	            Bundle bundle = new Bundle();
+	            bundle.putSerializable(Business.CLASS_NAME, business);
+                Intent intent = new Intent(getActivity(), BusinessMainActivity.class);
+                intent.putExtras(bundle);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                getActivity().finish();
 	        } catch (ParseException e) {
-	            // TODO Auto-generated catch block
+	            Log.i(TAG, "Business creation failed: " + e.getMessage());
 	            e.printStackTrace();
 	        }
 			break;
 		case R.id.user_type_selection_btnCustomer:
 			Log.i(TAG, "btnCustomer clicked");
-			break;
+			try {
+                Customer customer = new Customer();
+                customer.setUser(ParseUser.getCurrentUser());
+                customer.save();
+                
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Customer.CLASS_NAME, customer);
+                Intent intent = new Intent(getActivity(), CustomerMainActivity.class);
+                intent.putExtras(bundle);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                getActivity().finish();
+            } catch (ParseException e) {
+                Log.i(TAG, "Business creation failed: " + e.getMessage());
+                e.printStackTrace();
+            }
+            break;
 		}
-		
-		FragmentsFlowManager.goToNextFragment(getActivity(), v.getId());
 	}
 }
