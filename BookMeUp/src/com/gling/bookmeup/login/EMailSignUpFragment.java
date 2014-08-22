@@ -1,4 +1,4 @@
-package com.gling.bookmeup.login.fragments;
+package com.gling.bookmeup.login;
 
 import android.os.Bundle;
 import android.util.Log;

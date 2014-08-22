@@ -29,9 +29,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.login.fragments.LoginFragment;
+import com.gling.bookmeup.login.LoginFragment;
+import com.gling.bookmeup.login.LoginMainActivity;
 import com.gling.bookmeup.main.FragmentsFlowManager;
-import com.gling.bookmeup.main.LoginActivity;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.ParseHelper.Category;
@@ -89,7 +89,8 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
     }
 
     private void initProfileDetails() {
-        Business business = ((LoginActivity) getActivity()).getCurrentBusiness();
+        //Business business = ((LoginActivity) getActivity()).getCurrentBusiness();
+        Business business = new Business();
 
         edtBusinessName.setText(business.getName());
         // image is loaded onResume
@@ -252,7 +253,7 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
                         service.setName(edtServiceName.getText().toString());
                         service.setPrice(edtServicePrice.getText().toString());
                         service.setDuration(edtServiceDuration.getText().toString());
-                        service.setBusiness(((LoginActivity) getActivity()).getCurrentBusiness());
+                        //service.setBusiness(((LoginActivity) getActivity()).getCurrentBusiness());
 
                         service.saveInBackground(new SaveCallback() {
 
@@ -300,7 +301,8 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
         ParseUser currentUser = ParseUser.getCurrentUser();
         Log.i(TAG, "current user is: " + currentUser.getUsername());
 
-        final Business business = ((LoginActivity) getActivity()).getCurrentBusiness();
+        //final Business business = ((LoginActivity) getActivity()).getCurrentBusiness();
+        final Business business = new Business();
 
         business.setUser(currentUser);
         business.setName(edtBusinessName.getText().toString());
@@ -381,14 +383,20 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
 
         Log.i(TAG, "On Resume");
 
-        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        int defaultValue = getResources().getInteger(R.string.saved_high_score_default);
-        long highScore = sharedPref.getInt(getString(R.string.saved_high_score), defaultValue)
+//        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+//        int defaultValue = getResources().getInteger(R.string.saved_high_score_default);
+//        long highScore = sharedPref.getInt(getString(R.string.saved_high_score), defaultValue)
                 
         final ParseQuery<Business> query = ParseQuery.getQuery(Business.class).whereEqualTo(
-                Business.Keys.USER_POINTER, ParseUser.getCurrentUser());
+                Business.Keys.USER, ParseUser.getCurrentUser());
         query.include(Business.Keys.CATEGORY);
-        Business business = query.find().get(1); // TODO get(0)
+        Business business = new Business();
+        try {
+            business = query.find().get(1);
+        } catch (ParseException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        } // TODO get(0)
 
         ParseFile imageFile = business.getImageFile();
         if (imageFile != null) {

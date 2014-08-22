@@ -10,9 +10,9 @@ import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessImageCaptureFragment;
 import com.gling.bookmeup.business.BusinessProfileCreationFragment;
 import com.gling.bookmeup.customer.CustomerMainScreen;
-import com.gling.bookmeup.login.fragments.EMailLoginFragment;
-import com.gling.bookmeup.login.fragments.EMailSignUpFragment;
-import com.gling.bookmeup.login.fragments.UserTypeSelectionFragment;
+import com.gling.bookmeup.login.EMailLoginFragment;
+import com.gling.bookmeup.login.EMailSignUpFragment;
+import com.gling.bookmeup.login.UserTypeSelectionFragment;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 

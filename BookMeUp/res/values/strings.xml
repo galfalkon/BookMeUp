@@ -81,6 +81,9 @@
     <string name="business_customer_list_send_offer_dialog_txtDiscount">Discount (%)</string>
     <string name="business_customer_list_send_offer_dialog_txtDuration">Duration (Weeks)</string>
     
+    <!-- Shared prefs -->
     <string name="preference_file_key">com.gling.bookmeup</string>
+    <string name="shared_businessid">saved_businessId</string>
+    <string name="shared_customerid">shared_customerId</string>
 
 </resources>

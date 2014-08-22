@@ -9,6 +9,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.gling.bookmeup.business.Business;
+import com.gling.bookmeup.login.LoginMainActivity;
 import com.parse.FunctionCallback;
 import com.parse.Parse;
 import com.parse.ParseClassName;
@@ -31,7 +32,7 @@ public class ParseHelper {
 
 		// Configure parse push service
 		Log.i(TAG, "Configuring parse push service");
-		PushService.setDefaultPushCallback(context, LoginActivity.class);
+		PushService.setDefaultPushCallback(context, LoginMainActivity.class);
 		ParseInstallation.getCurrentInstallation().saveInBackground();
 	}
 	

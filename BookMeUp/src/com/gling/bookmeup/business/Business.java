@@ -19,14 +19,14 @@ import com.parse.ParseUser;
 
 
 @ParseClassName(Business.CLASS_NAME)
-public class Business extends ParseObject implements Serializable{
+public class Business extends ParseObject implements Serializable {
 	private static final String TAG = "Business";
 
     public static final String CLASS_NAME = "Business";
     
     public static class Keys {
         public static final String ID = "objectId";
-        public static final String USER_POINTER = "user";
+        public static final String USER = "user";
         public static final String NAME = "name";
         public static final String DESCRIPTION = "description";
         public static final String CATEGORY = "category";
@@ -48,11 +48,11 @@ public class Business extends ParseObject implements Serializable{
     }
  
     public ParseUser getUser() {
-        return getParseUser(Keys.USER_POINTER);
+        return getParseUser(Keys.USER);
     }
  
     public void setUser(ParseUser user) {
-        put(Keys.USER_POINTER, user);
+        put(Keys.USER, user);
     }
  
     public String getDescription() {

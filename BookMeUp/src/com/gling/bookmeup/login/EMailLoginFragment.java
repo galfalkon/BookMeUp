@@ -1,4 +1,6 @@
-package com.gling.bookmeup.login.fragments;
+package com.gling.bookmeup.login;
+
+import java.util.List;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -78,11 +80,10 @@ public class EMailLoginFragment extends OnClickListenerFragment {
 				Log.i(TAG, "Login succeeded");
 				
 				final ParseQuery<Business> query = ParseQuery.getQuery(Business.class).whereEqualTo(
-		                Business.Keys.USER_POINTER, user);
+		                Business.Keys.USER, user);
 		        query.include(Business.Keys.CATEGORY);
 		        try {
                     List<Business> business = query.find();  // TODO get(0)
-                    if 
                 } catch (ParseException e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();

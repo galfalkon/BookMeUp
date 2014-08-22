@@ -36,7 +36,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".main.LoginActivity"
+            android:name="com.gling.bookmeup.login.LoginMainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -68,7 +68,7 @@
         <activity
             android:name=".business.BusinessMainActivity"
             android:label="@string/business_activity_title"
-            android:parentActivityName=".main.LoginActivity" >
+            android:parentActivityName="com.gling.bookmeup.login.LoginMainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.gling.bookmeup.main.LoginActivity" />
@@ -76,7 +76,7 @@
         <activity
             android:name="com.gling.bookmeup.customer.CustomerMainActivity"
             android:label="@string/customer_activity_title"
-            android:parentActivityName=".main.LoginActivity" >
+            android:parentActivityName="com.gling.bookmeup.login.LoginMainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.gling.bookmeup.main.LoginActivity" />

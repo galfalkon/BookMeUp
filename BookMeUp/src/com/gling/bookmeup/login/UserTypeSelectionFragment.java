@@ -1,4 +1,4 @@
-package com.gling.bookmeup.login.fragments;
+package com.gling.bookmeup.login;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business;
@@ -53,13 +53,13 @@ public class UserTypeSelectionFragment extends OnClickListenerFragment implement
 	        try {
 	            // TODO check current user != null
 	            final ParseQuery<Business> query = ParseQuery.getQuery(Business.class).whereEqualTo(
-	                    Business.Keys.USER_POINTER, ParseUser.getCurrentUser());
+	                    Business.Keys.USER, ParseUser.getCurrentUser());
 	            query.include(Business.Keys.CATEGORY);
 	            Business business = query.find().get(1); // TODO get(0)
 	            SharedPreferences sharedPref = getActivity().getSharedPreferences(
 	                    getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 	            SharedPreferences.Editor editor = sharedPref.edit();
-	            editor.putString("saved_business", business.getObjectId());
+	            editor.putString(getString(R.string.shared_businessid), business.getObjectId());
 	            editor.commit();
 	        } catch (ParseException e) {
 	            // TODO Auto-generated catch block

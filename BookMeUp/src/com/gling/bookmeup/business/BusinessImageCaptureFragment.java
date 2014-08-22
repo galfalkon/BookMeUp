@@ -21,7 +21,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.main.LoginActivity;
+import com.gling.bookmeup.login.LoginMainActivity;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.SaveCallback;
@@ -157,7 +157,7 @@ public class BusinessImageCaptureFragment extends Fragment {
 	 * until we reach that Fragment.
 	 */
 	private void addPhotoToBusiness(ParseFile imageFile) {
-		((LoginActivity) getActivity()).getCurrentBusiness().setImageFile(imageFile);
+		//((LoginActivity) getActivity()).getCurrentBusiness().setImageFile(imageFile);
 		
 		Log.i(TAG, "popping back to profile creation fragment");
 		getActivity()
