@@ -157,9 +157,9 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
             Locale l = Locale.getDefault();
             switch (position) {
             case 0:
-                return getString(R.string.business_activity_title_section_bookings).toUpperCase(l);
+            	return getString(R.string.business_activity_title_section_calendar).toUpperCase(l);
             case 1:
-                return getString(R.string.business_activity_title_section_calendar).toUpperCase(l);
+            	return getString(R.string.business_activity_title_section_bookings).toUpperCase(l);
             case 2:
                 return getString(R.string.business_activity_title_section_client_list).toUpperCase(l);
             case 3:
