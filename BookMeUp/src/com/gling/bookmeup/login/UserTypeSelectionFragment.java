@@ -54,9 +54,7 @@ public class UserTypeSelectionFragment extends OnClickListenerFragment implement
 	            bundle.putSerializable(Business.CLASS_NAME, business);
                 Intent intent = new Intent(getActivity(), BusinessMainActivity.class);
                 intent.putExtras(bundle);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                getActivity().finish();
 	        } catch (ParseException e) {
 	            Log.i(TAG, "Business creation failed: " + e.getMessage());
 	            e.printStackTrace();
@@ -73,9 +71,7 @@ public class UserTypeSelectionFragment extends OnClickListenerFragment implement
                 bundle.putSerializable(Customer.CLASS_NAME, customer);
                 Intent intent = new Intent(getActivity(), CustomerMainActivity.class);
                 intent.putExtras(bundle);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                getActivity().finish();
             } catch (ParseException e) {
                 Log.i(TAG, "Customer creation failed: " + e.getMessage());
                 e.printStackTrace();

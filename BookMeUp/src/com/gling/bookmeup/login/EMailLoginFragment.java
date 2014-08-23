@@ -87,10 +87,7 @@ public class EMailLoginFragment extends OnClickListenerFragment {
                 if (intent != null) {
                     // Clear fragment stack
                     // loginActivity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
-                    loginActivity.finish();
                 } else {
                     FragmentsFlowManager.goToNextFragment(getActivity(), R.id.email_login_btnContinue);
                 }

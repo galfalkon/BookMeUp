@@ -97,9 +97,7 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
             // TODO extract to session manager class
             ParseUser.logOut();
             Intent intent = new Intent(this, LoginMainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-            finish();
             return true;
         default:
             return super.onOptionsItemSelected(item);

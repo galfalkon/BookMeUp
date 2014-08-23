@@ -45,11 +45,7 @@ public class LoginMainActivity extends ActionBarActivity {
         // TODO separate 'session manager' class
         Intent intent = generateIntent();
         if (intent != null) {
-            // Clear out task stack
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-            // TODO use the android:noHistory="true" flag in the manifest? that way we don't have to call finish()
-            finish();
         } else {
             // user == null || user is not associated with a business or customer objects
             Fragment firstFragment = new LoginFragment();
