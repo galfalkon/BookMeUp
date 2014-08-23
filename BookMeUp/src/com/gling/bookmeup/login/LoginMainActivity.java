@@ -44,7 +44,10 @@ public class LoginMainActivity extends ActionBarActivity {
 
         // TODO splash screen
         // TODO separate 'session manager' class
+        final ProgressDialog progressDialog = ProgressDialog.show(this, null, "Loading...");
         Intent intent = generateIntent();
+        progressDialog.dismiss();
+        
         if (intent != null) {
             startActivity(intent);
         } else {
@@ -59,11 +62,10 @@ public class LoginMainActivity extends ActionBarActivity {
     }
 
     public Intent generateIntent() {
-        final ProgressDialog progressDialog = ProgressDialog.show(this, null, "Loading...");
+        
         
         ParseUser user = ParseUser.getCurrentUser();
         if (user == null) {
-            progressDialog.dismiss();
             return null;
         }
 
@@ -82,7 +84,6 @@ public class LoginMainActivity extends ActionBarActivity {
                 Log.i(TAG, "User '" + user.getUsername() +  "' is associated with business '" + resultBusiness.get(0).getName() + "'");
                 intent = new Intent(getApplicationContext(), BusinessMainActivity.class);
                 intent.putExtra(Business.CLASS_NAME, resultBusiness.get(0));
-                progressDialog.dismiss();
                 return intent;
             }
             List<Customer> resultCustomer = queryCustomer.find();
@@ -90,17 +91,14 @@ public class LoginMainActivity extends ActionBarActivity {
                 Log.i(TAG, "User '" + user.getUsername() +  "' is associated with customer '" + resultCustomer.get(0).getName() + "'");
                 intent = new Intent(getApplicationContext(), CustomerMainActivity.class);
                 intent.putExtra(Customer.CLASS_NAME, resultCustomer.get(0));
-                progressDialog.dismiss();
                 return intent;
             }
         } catch (ParseException e) {
-            progressDialog.dismiss();
             Log.i(TAG, "Query failed: " + e.getMessage());
             e.printStackTrace();
         }
         
         Log.i(TAG, "User '" + user.getUsername() +  "' is not associated with a business or customer");
-        progressDialog.dismiss();
         return intent;
     }
 
