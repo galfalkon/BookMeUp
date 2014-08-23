@@ -159,7 +159,7 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
             case 3:
             	return new BusinessOffersFragment();
             case 4:
-                return new BusinessProfileCreationFragment();
+                return new BusinessProfileEditFragment();
             default:
                 return PlaceholderFragment.newInstance(position + 1);
             }

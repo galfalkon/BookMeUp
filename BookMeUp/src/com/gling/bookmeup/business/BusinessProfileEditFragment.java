@@ -47,7 +47,7 @@ import com.parse.ParseQueryAdapter.OnQueryLoadListener;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-public class BusinessProfileCreationFragment extends OnClickListenerFragment {
+public class BusinessProfileEditFragment extends OnClickListenerFragment {
 
     private static final String TAG = "BusinessProfileCreationFragment";
     public final static String EXTRA_BUSINESS = "com.gling.bookmeup.EXTRA_BUSINESS";
