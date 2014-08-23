@@ -25,7 +25,7 @@ import com.parse.ParseUser;
 public class BusinessMainActivity extends FragmentActivity implements ActionBar.TabListener {
 
     private static final String TAG = "BusinessMainActivity";
-    private static final int NUM_OF_SECTIONS = 4;
+    private static final int NUM_OF_SECTIONS = 5;
     
     // TODO make static?
     private Business _business;
@@ -43,6 +43,11 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+    
+    
+    public Business getBusiness() {
+        return _business;
+    }
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +106,9 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
+        case R.id.business_action_edit_profile:
+            getActionBar().setSelectedNavigationItem(4);
+            return true;
         case R.id.business_action_settings:
             return true;
         case R.id.business_action_logout:
@@ -150,6 +158,8 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
                 return new BusinessCustomersListFragment();
             case 3:
             	return new BusinessOffersFragment();
+            case 4:
+                return new BusinessProfileCreationFragment();
             default:
                 return PlaceholderFragment.newInstance(position + 1);
             }
@@ -172,6 +182,8 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
                 return getString(R.string.business_activity_title_section_client_list).toUpperCase(l);
             case 3:
             	return getString(R.string.business_activity_title_section_offer_list).toUpperCase(l);
+            case 4:
+                return getString(R.string.business_activity_title_section_profile_edit).toUpperCase(l);
             }
             return null;
         }

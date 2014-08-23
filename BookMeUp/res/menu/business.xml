@@ -3,6 +3,9 @@
     tools:context="com.gling.bookmeup.MainActivityActivity" >
 
     <item
+        android:id="@+id/business_action_edit_profile"
+        android:title="@string/edit_profile"/>
+    <item
         android:id="@+id/business_action_settings"
         android:orderInCategory="100"
         android:showAsAction="never"

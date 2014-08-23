@@ -89,9 +89,8 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
     }
 
     private void initProfileDetails() {
-        //Business business = ((LoginActivity) getActivity()).getCurrentBusiness();
-        Business business = new Business();
-
+        Business business = ((BusinessMainActivity) getActivity()).getBusiness();
+        
         edtBusinessName.setText(business.getName());
         // image is loaded onResume
         edtBusinessDescription.setText(business.getDescription());
@@ -110,7 +109,13 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
             }
           
             public void onLoaded(List<ParseObject> categories, Exception paramException) {
-                String categoryName = business.getCategory().getString(Category.Keys.NAME);
+                ParseObject category = business.getCategory();
+                if (category == null) {
+                    spnCategory.setSelection(0);
+                    return;
+                }
+                
+                String categoryName = category.getString(Category.Keys.NAME);
                 int position = 0;
                 for (int i = 0; i < categories.size(); i++) {
                     if (categories.get(i).getString(Category.Keys.NAME).equalsIgnoreCase(categoryName)) {
@@ -383,21 +388,8 @@ public class BusinessProfileCreationFragment extends OnClickListenerFragment {
 
         Log.i(TAG, "On Resume");
 
-//        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-//        int defaultValue = getResources().getInteger(R.string.saved_high_score_default);
-//        long highScore = sharedPref.getInt(getString(R.string.saved_high_score), defaultValue)
-                
-        final ParseQuery<Business> query = ParseQuery.getQuery(Business.class).whereEqualTo(
-                Business.Keys.USER, ParseUser.getCurrentUser());
-        query.include(Business.Keys.CATEGORY);
-        Business business = new Business();
-        try {
-            business = query.find().get(1);
-        } catch (ParseException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        } // TODO get(0)
-
+        Business business = ((BusinessMainActivity) getActivity()).getBusiness();
+        
         ParseFile imageFile = business.getImageFile();
         if (imageFile != null) {
             txtPreviewImage.setText("Image");

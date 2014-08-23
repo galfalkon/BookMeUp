@@ -91,5 +91,7 @@
     <string name="shared_businessid">saved_businessId</string>
     <string name="shared_customerid">shared_customerId</string>
     <string name="logout">Logout</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="business_activity_title_section_profile_edit">Profile Edit</string>
 
 </resources>
