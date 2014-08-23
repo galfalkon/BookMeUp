@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,8 +25,10 @@ import com.parse.ParseUser;
 public class BusinessMainActivity extends FragmentActivity implements ActionBar.TabListener {
 
     private static final String TAG = "BusinessMainActivity";
-    
     private static final int NUM_OF_SECTIONS = 4;
+    
+    // TODO make static?
+    private Business _business;
     
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -40,12 +43,19 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.business_main_activity);
 
+        if (getIntent().hasExtra(Business.CLASS_NAME)) {
+            _business = (Business) getIntent().getSerializableExtra(Business.CLASS_NAME);
+        } else {
+            Log.e(TAG, "Failed to receive a business object through the intent");
+            finish();
+        }
+        
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);

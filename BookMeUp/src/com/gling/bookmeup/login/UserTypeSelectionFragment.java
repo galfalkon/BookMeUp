@@ -1,5 +1,6 @@
 package com.gling.bookmeup.login;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -48,12 +49,13 @@ public class UserTypeSelectionFragment extends OnClickListenerFragment implement
 	        try {
 	            Business business = new Business();
 	            business.setUser(ParseUser.getCurrentUser());
-	            business.save();
 	            
-	            Bundle bundle = new Bundle();
-	            bundle.putSerializable(Business.CLASS_NAME, business);
+	            final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
+	            business.save();
+	            progressDialog.dismiss();
+	            
                 Intent intent = new Intent(getActivity(), BusinessMainActivity.class);
-                intent.putExtras(bundle);
+                intent.putExtra(Business.CLASS_NAME, business);
                 startActivity(intent);
 	        } catch (ParseException e) {
 	            Log.i(TAG, "Business creation failed: " + e.getMessage());
@@ -65,12 +67,13 @@ public class UserTypeSelectionFragment extends OnClickListenerFragment implement
 			try {
                 Customer customer = new Customer();
                 customer.setUser(ParseUser.getCurrentUser());
-                customer.save();
                 
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(Customer.CLASS_NAME, customer);
+                final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
+                customer.save();
+                progressDialog.dismiss();
+                
                 Intent intent = new Intent(getActivity(), CustomerMainActivity.class);
-                intent.putExtras(bundle);
+                intent.putExtra(Customer.CLASS_NAME, customer);
                 startActivity(intent);
             } catch (ParseException e) {
                 Log.i(TAG, "Customer creation failed: " + e.getMessage());
