@@ -150,7 +150,7 @@ public class Business extends ParseObject implements Serializable {
     	private static class Keys {
     		// TODO: Consider supporting offers for a certain service
     		public static final String DISCOUNT = "discount";
-    		public static final String DURATION = "duration";
+    		public static final String EXPIRATION = "duration";
     	}
     	
     	private final int _discount;
@@ -171,13 +171,13 @@ public class Business extends ParseObject implements Serializable {
     	
     	public Offer(JSONObject json) throws JSONException, ParseException {
 			_discount = json.getInt(Keys.DISCOUNT);
-			_expiration = DATE_FORMAT.parse(json.getString(Keys.DURATION));
+			_expiration = DATE_FORMAT.parse(json.getString(Keys.EXPIRATION));
 		}
     	
     	private JSONObject toJSONObject() throws JSONException {
     		JSONObject json = new JSONObject();
     		json.put(Keys.DISCOUNT, _discount);
-    		json.put(Keys.DURATION, DATE_FORMAT.format(_expiration));
+    		json.put(Keys.EXPIRATION, DATE_FORMAT.format(_expiration));
     		return json;
     	}
     	
