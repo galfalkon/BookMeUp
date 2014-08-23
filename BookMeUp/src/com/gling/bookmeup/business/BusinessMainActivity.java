@@ -25,7 +25,7 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
 
     private static final String TAG = "BusinessMainActivity";
     
-    private static final int NUM_OF_SECTIONS = 3;
+    private static final int NUM_OF_SECTIONS = 4;
     
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -140,6 +140,8 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
                 return new BusinessBookingsFragment();
             case 2:
                 return new BusinessCustomersListFragment();
+            case 3:
+            	return new BusinessOffersFragment();
             default:
                 return PlaceholderFragment.newInstance(position + 1);
             }
@@ -147,7 +149,6 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
             return NUM_OF_SECTIONS;
         }
 
@@ -161,6 +162,8 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
                 return getString(R.string.business_activity_title_section_calendar).toUpperCase(l);
             case 2:
                 return getString(R.string.business_activity_title_section_client_list).toUpperCase(l);
+            case 3:
+            	return getString(R.string.business_activity_title_section_offer_list).toUpperCase(l);
             }
             return null;
         }

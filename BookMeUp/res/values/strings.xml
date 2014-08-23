@@ -35,6 +35,7 @@
     <string name="business_activity_title_section_calendar">Calendar</string>
     <string name="business_activity_title_section_bookings">Bookings</string>
     <string name="business_activity_title_section_client_list">Client List</string>
+    <string name="business_activity_title_section_offer_list">Offer List</string>
 
     <!-- Customer Activity -->
     <string name="customer_activity_title">BookMeUp! - For Customers</string>
