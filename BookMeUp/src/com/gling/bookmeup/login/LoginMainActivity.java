@@ -44,9 +44,7 @@ public class LoginMainActivity extends ActionBarActivity {
 
         // TODO splash screen
         // TODO separate 'session manager' class
-        final ProgressDialog progressDialog = ProgressDialog.show(this, null, "Loading...");
         Intent intent = generateIntent();
-        progressDialog.dismiss();
         
         if (intent != null) {
             startActivity(intent);
