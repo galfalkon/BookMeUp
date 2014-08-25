@@ -23,7 +23,7 @@ import com.parse.ParseUser;
 
 
 @ParseClassName(Business.CLASS_NAME)
-public class Business extends ParseObject implements Serializable {
+public class Business extends ParseObject {
 	private static final String TAG = "Business";
 
     public static final String CLASS_NAME = "Business";

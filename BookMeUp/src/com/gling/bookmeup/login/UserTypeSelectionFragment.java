@@ -55,7 +55,6 @@ public class UserTypeSelectionFragment extends OnClickListenerFragment implement
 	            progressDialog.dismiss();
 	            
                 Intent intent = new Intent(getActivity(), BusinessMainActivity.class);
-                intent.putExtra(Business.CLASS_NAME, business);
                 startActivity(intent);
 	        } catch (ParseException e) {
 	            Log.i(TAG, "Business creation failed: " + e.getMessage());
@@ -73,7 +72,6 @@ public class UserTypeSelectionFragment extends OnClickListenerFragment implement
                 progressDialog.dismiss();
                 
                 Intent intent = new Intent(getActivity(), CustomerMainActivity.class);
-                intent.putExtra(Customer.CLASS_NAME, customer);
                 startActivity(intent);
             } catch (ParseException e) {
                 Log.i(TAG, "Customer creation failed: " + e.getMessage());

@@ -36,6 +36,7 @@ import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.ParseHelper.Category;
 import com.parse.DeleteCallback;
+import com.parse.GetCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -108,23 +109,33 @@ public class BusinessProfileEditFragment extends OnClickListenerFragment {
               // Trigger any "loading" UI
             }
           
-            public void onLoaded(List<ParseObject> categories, Exception paramException) {
+            public void onLoaded(final List<ParseObject> categories, Exception paramException) {
                 ParseObject category = business.getCategory();
                 if (category == null) {
                     spnCategory.setSelection(0);
                     return;
                 }
                 
-                String categoryName = category.getString(Category.Keys.NAME);
-                int position = 0;
-                for (int i = 0; i < categories.size(); i++) {
-                    if (categories.get(i).getString(Category.Keys.NAME).equalsIgnoreCase(categoryName)) {
-                        position = i;
-                        break;
-                    }
-                }
+                category.fetchIfNeededInBackground( new GetCallback<ParseObject>() {
 
-                spnCategory.setSelection(position);
+                    @Override
+                    public void done(ParseObject category, ParseException e) {
+                        if (e == null) {
+                            String categoryName = category.getString(Category.Keys.NAME);
+                            int position = 0;
+                            for (int i = 0; i < categories.size(); i++) {
+                                if (categories.get(i).getString(Category.Keys.NAME).equalsIgnoreCase(categoryName)) {
+                                    position = i;
+                                    break;
+                                }
+                            }
+
+                            spnCategory.setSelection(position);
+                        } else {
+                            Log.e(TAG, "Exception: " + e.getMessage());
+                        }
+                    }
+                });
             }
           });
 
@@ -329,7 +340,6 @@ public class BusinessProfileEditFragment extends OnClickListenerFragment {
                     
                     // jump to business main activity
                     Intent intent = new Intent(getActivity(), BusinessMainActivity.class);
-                    intent.putExtra(EXTRA_BUSINESS, business);
                     startActivity(intent);
                 } else {
                     Log.e(TAG, "Exception occurred: " + e.getMessage());

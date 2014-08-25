@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,8 +20,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.gling.bookmeup.login.LoginMainActivity;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.RefreshCallback;
 
 public class BusinessMainActivity extends FragmentActivity implements ActionBar.TabListener {
 
@@ -54,12 +60,25 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.business_main_activity);
 
-        if (getIntent().hasExtra(Business.CLASS_NAME)) {
-            _business = (Business) getIntent().getSerializableExtra(Business.CLASS_NAME);
-        } else {
-            Log.e(TAG, "Failed to receive a business object through the intent");
-            finish();
-        }
+        final ProgressDialog progressDialog = ProgressDialog.show(this, null, "La..."); // TODO not showing. probably because no fragment is in container
+        Business business = (Business) ParseUser.getCurrentUser().getParseObject(Business.CLASS_NAME);
+        // TODO consider query + include
+        business.fetchIfNeededInBackground( new GetCallback<Business>() {
+
+            @Override
+            public void done(Business business, ParseException e) {
+                if (e == null) {
+                    _business = business;
+                    progressDialog.dismiss();
+                } else {
+                    Log.e(TAG, "Exception: " + e.getMessage());
+                    progressDialog.dismiss();
+                    ParseUser.logOut();
+                    Intent intent = new Intent(getApplicationContext(), LoginMainActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
         
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
