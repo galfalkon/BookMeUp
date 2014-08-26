@@ -34,7 +34,6 @@ import android.widget.Toast;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business.Offer;
-import com.gling.bookmeup.login.LoginMainActivity;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.ParseHelper.BackEndFunctions;
@@ -59,8 +58,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		Log.i(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		
-		//_business = ((LoginActivity)getActivity()).getCurrentBusiness();
-		_business = new Business();
+		_business = ((BusinessMainActivity)getActivity()).getBusiness();
 		_allCustomers = new ArrayList<Customer>();
 		_filteredCustomers = new ArrayList<Customer>();
 		_listViewAdapter = new CustomersArrayAdapter();

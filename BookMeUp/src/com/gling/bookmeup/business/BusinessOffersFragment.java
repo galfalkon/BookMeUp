@@ -24,11 +24,15 @@ import com.parse.ParseQuery;
 public class BusinessOffersFragment extends OnClickListenerFragment {
 	private static final String TAG = "BusinessOffersFragment";
 	
-	// TODO: Temporary! The businessId should be saved in the shared preferences during the profile creation. 
-	private static final String BUSINESS_ID = "mUhs7IdMT7";
-
 	private List<Offer> _offers;
 	private ListAdapter _offersAdapter;
+	private Business _business;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+	    super.onCreate(savedInstanceState);
+	    _business = ((BusinessMainActivity)getActivity()).getBusiness();
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,28 +40,10 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 		Log.i(TAG, "onCreateView");
 		final View view = super.onCreateView(inflater, container, savedInstanceState);
 		
-		final ParseQuery<Business> query = new ParseQuery<Business>(Business.CLASS_NAME).
-				whereEqualTo(Business.Keys.ID, BUSINESS_ID);
-		
-		final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
-		query.findInBackground(new FindCallback<Business>() {
-
-			@Override
-			public void done(List<Business> objects, ParseException e) {
-				Log.i(TAG, "findInBackground done");
-				progressDialog.dismiss();
-				if (e != null) {
-					Log.e(TAG, "Exception: " + e.getMessage());
-					return;
-				}
-				
-				Business currentBusiness = objects.get(0);
-				_offers = currentBusiness.getActiveOffers();
-				_offersAdapter = new OffersListAdapter();
-				ListView offersListView = (ListView) view.findViewById(R.id.business_offers_listViewOffers);
-				offersListView.setAdapter(_offersAdapter);
-			}
-		});
+		_offers = _business.getActiveOffers();
+        _offersAdapter = new OffersListAdapter();
+        ListView offersListView = (ListView) view.findViewById(R.id.business_offers_listViewOffers);
+        offersListView.setAdapter(_offersAdapter);
 		
 		return view;
 	}
