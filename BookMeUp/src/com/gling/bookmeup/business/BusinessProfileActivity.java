@@ -11,10 +11,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -29,10 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.login.LoginFragment;
 import com.gling.bookmeup.login.LoginMainActivity;
-import com.gling.bookmeup.main.FragmentsFlowManager;
-import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.ParseHelper.Category;
 import com.parse.DeleteCallback;
@@ -48,11 +47,13 @@ import com.parse.ParseQueryAdapter.OnQueryLoadListener;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-public class BusinessProfileEditFragment extends OnClickListenerFragment {
+public class BusinessProfileActivity extends Activity implements OnClickListener {
 
-    private static final String TAG = "BusinessProfileCreationFragment";
-    public final static String EXTRA_BUSINESS = "com.gling.bookmeup.EXTRA_BUSINESS";
+    private static final String TAG = "BusinessProfileActivity";
 
+    private final Context _context = this;
+    private Business _business;
+    
     private EditText edtBusinessName, edtBusinessDescription;
     private TextView txtPreviewImage;
     private ParseImageView imgBusinessPreviewImage;
@@ -64,44 +65,80 @@ public class BusinessProfileEditFragment extends OnClickListenerFragment {
     private ServicesAdapter _servicesAdapter;
 
     @Override
-    protected int getFragmentLayoutId() {
-        return R.layout.business_profile_fragment;
-    }
+    protected void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, "onCreate");
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.business_profile_activity);
+        
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        
+        _business = (Business) ParseUser.getCurrentUser().getParseObject(Business.CLASS_NAME);
+        final ProgressDialog progressDialog = ProgressDialog.show(_context, null, "Please wait..."); // not showing!!!
+        // TODO consider query + include
+        _business.fetchIfNeededInBackground(new GetCallback<Business>() {
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-
-        edtBusinessName = (EditText) view.findViewById(R.id.business_profile_creation_edtBusinessName);
-        imgBusinessPreviewImage = (ParseImageView) view.findViewById(R.id.business_profile_creation_imgPreviewImage);
-        txtPreviewImage = (TextView) view.findViewById(R.id.business_profile_creation_txtPreviewImage);
-        edtBusinessDescription = (EditText) view.findViewById(R.id.business_profile_creation_edtDescription);
-        txtBusinessOpeningHours = (TextView) view.findViewById(R.id.business_profile_creation_txtOpeningHours);
-        btnOpeningHoursEdit = (Button) view.findViewById(R.id.opening_hours_edit_btnEdit);
-        lstBusinessServices = (ListView) view.findViewById(R.id.business_profile_creation_lstServices);
-        spnCategory = (Spinner) view.findViewById(R.id.business_profile_creation_spnCategory);
+            @Override
+            public void done(Business business, ParseException e) {
+                if (e == null) {
+                    Log.i(TAG, "Business " + business.getName() + " fetched");
+                    _business = business;
+                    progressDialog.dismiss();
+                } else {
+                    Log.e(TAG, "Exception: " + e.getMessage());
+                    progressDialog.dismiss();
+                    ParseUser.logOut();
+                    Intent intent = new Intent(getApplicationContext(), LoginMainActivity.class);
+                    startActivity(intent);
+                    finish(); // TODO check that everything's fine with that.
+                }
+            }
+        });
+        
+        edtBusinessName = (EditText) findViewById(R.id.business_profile_creation_edtBusinessName);
+        imgBusinessPreviewImage = (ParseImageView) findViewById(R.id.business_profile_creation_imgPreviewImage);
+        txtPreviewImage = (TextView) findViewById(R.id.business_profile_creation_txtPreviewImage);
+        edtBusinessDescription = (EditText) findViewById(R.id.business_profile_creation_edtDescription);
+        txtBusinessOpeningHours = (TextView) findViewById(R.id.business_profile_creation_txtOpeningHours);
+        btnOpeningHoursEdit = (Button) findViewById(R.id.opening_hours_edit_btnEdit);
+        lstBusinessServices = (ListView) findViewById(R.id.business_profile_creation_lstServices);
+        spnCategory = (Spinner) findViewById(R.id.business_profile_creation_spnCategory);
 
         // Until the user has taken a photo, hide the preview
         imgBusinessPreviewImage.setVisibility(View.INVISIBLE);
 
         initProfileDetails();
-
-        return view;
     }
 
-    private void initProfileDetails() {
-        Business business = ((BusinessMainActivity) getActivity()).getBusiness();
-        
-        edtBusinessName.setText(business.getName());
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.business_profile, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    
+    private void initProfileDetails() {        
+        edtBusinessName.setText(_business.getName());
         // image is loaded onResume
-        edtBusinessDescription.setText(business.getDescription());
-        initOpeningHours(business);
-        initServiceList(business);
-        initCategorySpinner(business);
+        edtBusinessDescription.setText(_business.getDescription());
+        initOpeningHours();
+        initServiceList();
+        initCategorySpinner();
     }
 
-    private void initCategorySpinner(final Business business) {
-        final ParseQueryAdapter<ParseObject> adapter = new ParseQueryAdapter<ParseObject>(getActivity(),
+    private void initCategorySpinner() {
+        final ParseQueryAdapter<ParseObject> adapter = new ParseQueryAdapter<ParseObject>(_context,
                 ParseHelper.Category.CLASS_NAME);
         adapter.setTextKey(ParseHelper.Category.Keys.NAME);
         adapter.addOnQueryLoadListener(new OnQueryLoadListener<ParseObject>() {
@@ -110,7 +147,7 @@ public class BusinessProfileEditFragment extends OnClickListenerFragment {
             }
           
             public void onLoaded(final List<ParseObject> categories, Exception paramException) {
-                ParseObject category = business.getCategory();
+                ParseObject category = _business.getCategory();
                 if (category == null) {
                     spnCategory.setSelection(0);
                     return;
@@ -142,23 +179,21 @@ public class BusinessProfileEditFragment extends OnClickListenerFragment {
         spnCategory.setAdapter(adapter);
     }
 
-    private void initOpeningHours(final Business business) {
-        final LayoutInflater inflater = getActivity().getLayoutInflater();
-
-        txtBusinessOpeningHours.setText(business.getOpeningHours());
+    private void initOpeningHours() {
+        txtBusinessOpeningHours.setText(_business.getOpeningHours());
         btnOpeningHoursEdit.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View paramView) {
-                AlertDialog dialog = createEditOpeningHoursDialog(inflater, business);
+                AlertDialog dialog = createEditOpeningHoursDialog();
                 dialog.show();
             }
         });
     }
 
-    private AlertDialog createEditOpeningHoursDialog(LayoutInflater inflater, final Business business) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        final View dialogView = inflater.inflate(R.layout.business_edit_opening_hours_dialog, null);
+    private AlertDialog createEditOpeningHoursDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+        final View dialogView = getLayoutInflater().inflate(R.layout.business_edit_opening_hours_dialog, null);
 
         AlertDialog dialog = builder.setTitle("Edit Opening Hours").setView(dialogView)
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
@@ -208,9 +243,9 @@ public class BusinessProfileEditFragment extends OnClickListenerFragment {
                                         .toString(), ((EditText) dialogView
                                         .findViewById(R.id.opening_hours_saturday_to)).getText().toString());
 
-                        business.setOpeningHours(oh);
-                        Log.i(TAG, business.getOpeningHours());
-                        txtBusinessOpeningHours.setText(business.getOpeningHours());
+                        _business.setOpeningHours(oh);
+                        Log.i(TAG, _business.getOpeningHours());
+                        txtBusinessOpeningHours.setText(_business.getOpeningHours());
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -221,20 +256,18 @@ public class BusinessProfileEditFragment extends OnClickListenerFragment {
         return dialog;
     }
 
-    private void initServiceList(Business business) {
+    private void initServiceList() {
 
-        _servicesAdapter = new ServicesAdapter(getActivity(), business);
-
-        final LayoutInflater inflater = getActivity().getLayoutInflater();
+        _servicesAdapter = new ServicesAdapter();
 
         // add a header with 'add' button for the services list
-        LinearLayout servicesHeader = (LinearLayout) inflater.inflate(R.layout.business_service_list_header, null);
+        LinearLayout servicesHeader = (LinearLayout) getLayoutInflater().inflate(R.layout.business_service_list_header, null);
         Button btnAddService = (Button) servicesHeader.findViewById(R.id.services_list_header_btnAdd);
         btnAddService.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View paramView) {
-                AlertDialog dialog = createServiceAddDialog(inflater);
+                AlertDialog dialog = createServiceAddDialog(getLayoutInflater());
                 dialog.show();
             }
         });
@@ -255,7 +288,7 @@ public class BusinessProfileEditFragment extends OnClickListenerFragment {
     }
 
     private AlertDialog createServiceAddDialog(LayoutInflater inflater) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(_context);
         View dialogView = inflater.inflate(R.layout.business_add_service_dialog, null);
         final EditText edtServiceName = (EditText) dialogView.findViewById(R.id.services_add_item_edtName);
         final EditText edtServicePrice = (EditText) dialogView.findViewById(R.id.services_add_item_edtPrice);
@@ -289,7 +322,7 @@ public class BusinessProfileEditFragment extends OnClickListenerFragment {
     }
 
     private AlertDialog createServiceDeleteDialog(final int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(_context);
         AlertDialog dialog = builder.setTitle("Delete Service?")
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -314,36 +347,30 @@ public class BusinessProfileEditFragment extends OnClickListenerFragment {
     }
 
     private void saveBusiness() {
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        Log.i(TAG, "current user is: " + currentUser.getUsername());
 
-        //final Business business = ((LoginActivity) getActivity()).getCurrentBusiness();
-        final Business business = new Business();
-
-        business.setUser(currentUser);
-        business.setName(edtBusinessName.getText().toString());
-        business.setDescription(edtBusinessDescription.getText().toString());
-        business.setCategory((ParseObject) spnCategory.getSelectedItem());
+        _business.setName(edtBusinessName.getText().toString());
+        _business.setDescription(edtBusinessDescription.getText().toString());
+        _business.setCategory((ParseObject) spnCategory.getSelectedItem());
 
         // If the user added a photo, that data will be added in the
         // BusinessImageCaptureFragment
         // services are edited via list vie
         // opening hours are edited via dialog
 
-        final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
-        business.saveInBackground(new SaveCallback() {
+        final ProgressDialog progressDialog = ProgressDialog.show(_context, null, "Please wait...");
+        _business.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
                     Log.i(TAG, "Done creating new business");
-                    getActivity().setResult(Activity.RESULT_OK);
+                    setResult(Activity.RESULT_OK);
                     
                     // jump to business main activity
-                    Intent intent = new Intent(getActivity(), BusinessMainActivity.class);
+                    Intent intent = new Intent(_context, BusinessMainActivity.class);
                     startActivity(intent);
                 } else {
                     Log.e(TAG, "Exception occurred: " + e.getMessage());
-                    Toast.makeText(getActivity().getApplicationContext(), "Error saving: " + e.getMessage(),
+                    Toast.makeText(_context, "Error saving: " + e.getMessage(),
                             Toast.LENGTH_SHORT).show();
                 }
                 progressDialog.dismiss();
@@ -355,7 +382,7 @@ public class BusinessProfileEditFragment extends OnClickListenerFragment {
     public void onClick(View v) {
         switch (v.getId()) {
         case R.id.business_profile_creation_btnImageUpload:
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(edtBusinessName.getWindowToken(), 0);
             break;
         case R.id.business_profile_creation_btnCreate:
@@ -364,18 +391,9 @@ public class BusinessProfileEditFragment extends OnClickListenerFragment {
                 Log.i(TAG, "invalid input");
                 return;
             }
-            if (!userInCache()) {
-                Log.i(TAG, "user not found in cache, redirecting to login...");
-                Toast.makeText(getActivity(), "Please sign up or log in first...", Toast.LENGTH_SHORT).show();
-                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null)
-                        .replace(R.id.container, Fragment.instantiate(getActivity(), LoginFragment.class.getName()))
-                        .commit();
-                return;
-            }
             saveBusiness();
             return;
         }
-        FragmentsFlowManager.goToNextFragment(getActivity(), v.getId());
     }
 
     private boolean userInCache() { // TODO move to common
@@ -397,10 +415,8 @@ public class BusinessProfileEditFragment extends OnClickListenerFragment {
         super.onResume();
 
         Log.i(TAG, "On Resume");
-
-        Business business = ((BusinessMainActivity) getActivity()).getBusiness();
         
-        ParseFile imageFile = business.getImageFile();
+        ParseFile imageFile = _business.getImageFile();
         if (imageFile != null) {
             txtPreviewImage.setText("Image");
             imgBusinessPreviewImage.setParseFile(imageFile);
@@ -418,10 +434,10 @@ public class BusinessProfileEditFragment extends OnClickListenerFragment {
 
     private class ServicesAdapter extends ParseQueryAdapter<Service> {
 
-        public ServicesAdapter(Context context, final Business business) {
-            super(context, new ParseQueryAdapter.QueryFactory<Service>() {
+        public ServicesAdapter() {
+            super(_context, new ParseQueryAdapter.QueryFactory<Service>() {
                 public ParseQuery<Service> create() {
-                    return business.getServicesQuery();
+                    return _business.getServicesQuery();
                 }
             });
         }

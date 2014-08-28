@@ -6,15 +6,10 @@ import android.util.Log;
 import android.util.SparseArray;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessImageCaptureFragment;
-import com.gling.bookmeup.business.BusinessProfileEditFragment;
-import com.gling.bookmeup.customer.CustomerMainScreen;
 import com.gling.bookmeup.login.EMailLoginFragment;
 import com.gling.bookmeup.login.EMailSignUpFragment;
 import com.gling.bookmeup.login.UserTypeSelectionFragment;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
 
 /**
  * This class wraps all transitions from the different fragments in the application.

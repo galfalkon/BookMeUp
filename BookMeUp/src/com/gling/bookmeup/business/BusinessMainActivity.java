@@ -20,18 +20,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.gling.bookmeup.login.LoginMainActivity;
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
-import com.parse.RefreshCallback;
 
 public class BusinessMainActivity extends FragmentActivity implements ActionBar.TabListener {
 
     private static final String TAG = "BusinessMainActivity";
-    private static final int NUM_OF_SECTIONS = 5;
+    private static final int NUM_OF_SECTIONS = 4;
     
     // TODO make static?
     private Business _business;
@@ -121,19 +118,21 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
         case R.id.business_action_edit_profile:
-            getActionBar().setSelectedNavigationItem(4);
+            intent = new Intent(this, BusinessProfileActivity.class);
+            startActivity(intent);
             return true;
         case R.id.business_action_settings:
             return true;
         case R.id.business_action_logout:
             // TODO extract to session manager class
             ParseUser.logOut();
-            Intent intent = new Intent(this, LoginMainActivity.class);
+            intent = new Intent(this, LoginMainActivity.class);
             startActivity(intent);
             return true;
         default:
@@ -177,10 +176,9 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
                 return new BusinessCustomersListFragment();
             case 3:
             	return new BusinessOffersFragment();
-            case 4:
-                return new BusinessProfileEditFragment();
             default:
-                return PlaceholderFragment.newInstance(position + 1);
+                Log.e(TAG, "trying to instantiate an unknown fragment");
+                return null;
             }
         }
 
@@ -205,37 +203,6 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
                 return getString(R.string.business_activity_title_section_profile_edit).toUpperCase(l);
             }
             return null;
-        }
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        /**
-         * Returns a new instance of this fragment for the given section number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.business_placeholder_fragment, container, false);
-            return rootView;
         }
     }
 

@@ -129,6 +129,10 @@ public class Business extends ParseObject {
     public List<Offer> getActiveOffers()  {
     	List<Offer> offers = new ArrayList<Offer>();
     	JSONArray jsonOffers = getJSONArray(Keys.OFFERS);
+    	if (jsonOffers == null) {
+    	    return offers; 
+    	}
+    	
     	Date today = new Date(); 
     	for (int i = 0; i < jsonOffers.length(); i++) {
     		try {

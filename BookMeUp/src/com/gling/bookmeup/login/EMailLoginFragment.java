@@ -66,7 +66,7 @@ public class EMailLoginFragment extends OnClickListenerFragment {
         String password = edtPassword.getText().toString();
 
         Log.i(TAG, "Showing a progress dialog");
-        final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Loging in...");
+        final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Logging in...");
 
         ParseUser.logInInBackground(userName, password, new LogInCallback() {
             @Override
@@ -87,12 +87,14 @@ public class EMailLoginFragment extends OnClickListenerFragment {
 
                 Log.i(TAG, "User '" + user.getUsername() +  "' logged in");
                 if (user.getParseObject(Business.CLASS_NAME) != null) {
+                    progressDialog.dismiss();
                     Intent intent = new Intent(getActivity(), BusinessMainActivity.class);
                     startActivity(intent);
                     return;
                 }
                 
                 if (user.getParseObject(Customer.CLASS_NAME) != null) {
+                    progressDialog.dismiss();
                     Intent intent = new Intent(getActivity(), CustomerMainActivity.class);
                     startActivity(intent);
                     return;

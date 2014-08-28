@@ -2,11 +2,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.gling.bookmeup.main.MainActivity" >
-
-    <item
-        android:id="@+id/action_business_profile_edit"
-        android:showAsAction="never"
-        android:title="@string/action_business_profile_edit"/>
     
     <item
         android:id="@+id/customer_action_settings"
