@@ -3,8 +3,10 @@ package com.gling.bookmeup.business;
 import java.util.Locale;
 
 import android.app.ActionBar;
+import android.app.ActionBar.TabListener;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -58,16 +60,51 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
         
         Log.i(TAG, "onCreate");
         
+        final TabListener tabListener = this;
+        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.business_main_activity);
 
         final ProgressDialog progressDialog = ProgressDialog.show(this, null, "Loading Business..."); // TODO not showing. probably because no fragment is in container
+        
         ParseHelper.fetchBusiness( new GetCallback<Business>() {
 
             @Override
             public void done(Business business, ParseException e) {
                 if (e == null) {
                     _business = business;
+                    
+                    // Set up the action bar.
+                    final ActionBar actionBar = getActionBar();
+                    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+                    // Create the adapter that will return a fragment for each of the three
+                    // primary sections of the activity.
+                    mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+                    // Set up the ViewPager with the sections adapter.
+                    mViewPager = (ViewPager) findViewById(R.id.business_main_activity_pager);
+                    mViewPager.setAdapter(mSectionsPagerAdapter);
+
+                    // When swiping between different sections, select the corresponding
+                    // tab. We can also use ActionBar.Tab#select() to do this if we have
+                    // a reference to the Tab.
+                    mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+                        @Override
+                        public void onPageSelected(int position) {
+                            actionBar.setSelectedNavigationItem(position);
+                        }
+                    });
+
+                    // For each of the sections in the app, add a tab to the action bar.
+                    for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+                        // Create a tab with text corresponding to the page title defined by
+                        // the adapter. Also specify this Activity object, which implements
+                        // the TabListener interface, as the callback (listener) for when
+                        // this tab is selected.
+                        actionBar.addTab(actionBar.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)).setTabListener(tabListener));
+                    }
+                    
                     progressDialog.dismiss();
                 } else {
                     Log.e(TAG, "Exception: " + e.getMessage());
@@ -78,37 +115,6 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
                 }
             }
         });
-        
-        // Set up the action bar.
-        final ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.business_main_activity_pager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-
-        // When swiping between different sections, select the corresponding
-        // tab. We can also use ActionBar.Tab#select() to do this if we have
-        // a reference to the Tab.
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                actionBar.setSelectedNavigationItem(position);
-            }
-        });
-
-        // For each of the sections in the app, add a tab to the action bar.
-        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-            // Create a tab with text corresponding to the page title defined by
-            // the adapter. Also specify this Activity object, which implements
-            // the TabListener interface, as the callback (listener) for when
-            // this tab is selected.
-            actionBar.addTab(actionBar.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
-        }
     }
 
     @Override
