@@ -17,10 +17,10 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <EditText
-            android:id="@+id/business_profile_creation_edtBusinessName"
+            android:id="@+id/business_profile_creation_edtName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/business_profile_creation_edtBusinessName"
+            android:hint="@string/business_profile_creation_edtName"
             android:inputType="text" >
 
             <requestFocus />
@@ -101,6 +101,26 @@
             android:ems="10"
             android:hint="@string/business_profile_creation_edtDescriptionHint"
             android:inputType="textMultiLine" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:text="Phone Number"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <EditText
+            android:id="@+id/business_profile_creation_edtPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10" 
+            android:inputType="phone"/>
     </LinearLayout>
 
     <LinearLayout

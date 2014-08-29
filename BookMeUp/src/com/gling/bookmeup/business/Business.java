@@ -1,6 +1,5 @@
 package com.gling.bookmeup.business;
 
-import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,6 +32,7 @@ public class Business extends ParseObject {
         public static final String USER = "user";
         public static final String NAME = "name";
         public static final String DESCRIPTION = "description";
+        public static final String PHONE_NUMBER = "phone_number";
         public static final String CATEGORY = "category";
         public static final String OPENING_HOURS = "openingHours";
         public static final String IMAGE = "image";
@@ -65,6 +65,14 @@ public class Business extends ParseObject {
  
     public void setDescription(String description) {
         put(Keys.DESCRIPTION, description);
+    }
+    
+    public String getPhoneNumber() {
+        return getString(Keys.PHONE_NUMBER);
+    }
+ 
+    public void setPhoneNumber(String phoneNumber) {
+        put(Keys.PHONE_NUMBER, phoneNumber);
     }
     
     public ParseObject getCategory() {

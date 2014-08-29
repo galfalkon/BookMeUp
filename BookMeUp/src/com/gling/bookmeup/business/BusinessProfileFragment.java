@@ -52,12 +52,12 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
 
     private static final String TAG = "BusinessProfileFragment";
 
-    private EditText edtBusinessName, edtBusinessDescription;
+    private EditText edtName, edtDescription, edtPhoneNumber;
     private TextView txtPreviewImage;
-    private ParseImageView imgBusinessPreviewImage;
-    private TextView txtBusinessOpeningHours;
-    private Button btnOpeningHoursEdit;
-    private ListView lstBusinessServices;
+    private ParseImageView imgPreviewImage;
+    private TextView txtOpeningHours;
+    private Button btnOpeningHours;
+    private ListView lstServices;
     private Spinner spnCategory;
 
     private ServicesAdapter _servicesAdapter;
@@ -73,17 +73,18 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        edtBusinessName = (EditText) view.findViewById(R.id.business_profile_creation_edtBusinessName);
-        imgBusinessPreviewImage = (ParseImageView) view.findViewById(R.id.business_profile_creation_imgPreviewImage);
+        edtName = (EditText) view.findViewById(R.id.business_profile_creation_edtName);
+        imgPreviewImage = (ParseImageView) view.findViewById(R.id.business_profile_creation_imgPreviewImage);
         txtPreviewImage = (TextView) view.findViewById(R.id.business_profile_creation_txtPreviewImage);
-        edtBusinessDescription = (EditText) view.findViewById(R.id.business_profile_creation_edtDescription);
-        txtBusinessOpeningHours = (TextView) view.findViewById(R.id.business_profile_creation_txtOpeningHours);
-        btnOpeningHoursEdit = (Button) view.findViewById(R.id.opening_hours_edit_btnEdit);
-        lstBusinessServices = (ListView) view.findViewById(R.id.business_profile_creation_lstServices);
+        edtDescription = (EditText) view.findViewById(R.id.business_profile_creation_edtDescription);
+        edtPhoneNumber = (EditText) view.findViewById(R.id.business_profile_creation_edtPhoneNumber);
+        txtOpeningHours = (TextView) view.findViewById(R.id.business_profile_creation_txtOpeningHours);
+        btnOpeningHours = (Button) view.findViewById(R.id.opening_hours_edit_btnEdit);
+        lstServices = (ListView) view.findViewById(R.id.business_profile_creation_lstServices);
         spnCategory = (Spinner) view.findViewById(R.id.business_profile_creation_spnCategory);
 
         // Until the user has taken a photo, hide the preview
-        imgBusinessPreviewImage.setVisibility(View.INVISIBLE);
+        imgPreviewImage.setVisibility(View.INVISIBLE);
 
         _business = BusinessProfileActivity.currentBusiness;
 
@@ -96,8 +97,9 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
     }
 
     private void initProfileDetails() {
-        edtBusinessName.setText(_business.getName());
-        edtBusinessDescription.setText(_business.getDescription());
+        edtName.setText(_business.getName());
+        edtDescription.setText(_business.getDescription());
+        edtPhoneNumber.setText(_business.getPhoneNumber());
         initOpeningHours();
         initServiceList();
         initCategorySpinner();
@@ -149,8 +151,8 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
     private void initOpeningHours() {
         final LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        txtBusinessOpeningHours.setText(_business.getOpeningHours());
-        btnOpeningHoursEdit.setOnClickListener(new OnClickListener() {
+        txtOpeningHours.setText(_business.getOpeningHours());
+        btnOpeningHours.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View paramView) {
@@ -213,7 +215,7 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
 
                         _business.setOpeningHours(oh);
                         Log.i(TAG, _business.getOpeningHours());
-                        txtBusinessOpeningHours.setText(_business.getOpeningHours());
+                        txtOpeningHours.setText(_business.getOpeningHours());
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -241,9 +243,9 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
                 dialog.show();
             }
         });
-        lstBusinessServices.addHeaderView(servicesHeader);
+        lstServices.addHeaderView(servicesHeader);
 
-        lstBusinessServices.setOnItemLongClickListener(new OnItemLongClickListener() {
+        lstServices.setOnItemLongClickListener(new OnItemLongClickListener() {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> paramAdapterView, View paramView, int position, long id) {
@@ -253,7 +255,7 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
             }
         });
 
-        lstBusinessServices.setAdapter(_servicesAdapter);
+        lstServices.setAdapter(_servicesAdapter);
         _servicesAdapter.loadObjects();
     }
 
@@ -321,8 +323,9 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
         Log.i(TAG, "current user is: " + currentUser.getUsername());
 
         _business.setUser(currentUser);
-        _business.setName(edtBusinessName.getText().toString());
-        _business.setDescription(edtBusinessDescription.getText().toString());
+        _business.setName(edtName.getText().toString());
+        _business.setDescription(edtDescription.getText().toString());
+        _business.setPhoneNumber(edtPhoneNumber.getText().toString());
         _business.setCategory((ParseObject) spnCategory.getSelectedItem());
 
         // If the user added a photo, that data will be added in the
@@ -356,7 +359,7 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
         switch (v.getId()) {
         case R.id.business_profile_creation_btnImageUpload:
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(edtBusinessName.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(edtName.getWindowToken(), 0);
             break;
         case R.id.business_profile_creation_btnCreate:
             Log.i(TAG, "business_profile_creation_btnCreate clicked");
@@ -391,15 +394,15 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
         ParseFile imageFile = _business.getImageFile();
         if (imageFile != null) {
             txtPreviewImage.setText("Image");
-            imgBusinessPreviewImage.setParseFile(imageFile);
-            imgBusinessPreviewImage.loadInBackground(new GetDataCallback() {
+            imgPreviewImage.setParseFile(imageFile);
+            imgPreviewImage.loadInBackground(new GetDataCallback() {
                 @Override
                 public void done(byte[] data, ParseException e) {
-                    imgBusinessPreviewImage.setVisibility(View.VISIBLE);
+                    imgPreviewImage.setVisibility(View.VISIBLE);
                 }
             });
         } else {
-            imgBusinessPreviewImage.setVisibility(View.INVISIBLE);
+            imgPreviewImage.setVisibility(View.INVISIBLE);
             txtPreviewImage.setText("Please upload an image");
         }
     }
