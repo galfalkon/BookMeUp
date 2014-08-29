@@ -101,7 +101,7 @@ public class EMailLoginFragment extends OnClickListenerFragment {
                 }
                 // loginActivity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
-                FragmentsFlowManager.goToNextFragment(getActivity(), R.id.email_login_btnContinue);
+                FragmentsFlowManager.goToNextFragment(getActivity(), R.id.login_container, R.id.email_login_btnContinue);
                 progressDialog.dismiss();
             }
         });

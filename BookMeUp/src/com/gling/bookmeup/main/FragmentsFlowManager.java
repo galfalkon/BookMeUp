@@ -39,7 +39,7 @@ public class FragmentsFlowManager {
 		_buttonIdsToFragmentName.put(R.id.business_profile_creation_btnImageUpload, BusinessImageCaptureFragment.class.getName());
 	}
 	
-	public static void goToNextFragment(FragmentActivity fragmentActivity, int buttonClickedId) {
+	public static void goToNextFragment(FragmentActivity fragmentActivity, int container, int buttonClickedId) {
 		Log.i(TAG, "goToNextFragment");
 		
 		if (_buttonIdsToFragmentName == null)
@@ -56,7 +56,7 @@ public class FragmentsFlowManager {
 		fragmentActivity.getSupportFragmentManager().
 		beginTransaction().
 		addToBackStack(null).
-		replace(R.id.container, Fragment.instantiate(fragmentActivity, _buttonIdsToFragmentName.get(buttonClickedId))).
+		replace(container, Fragment.instantiate(fragmentActivity, _buttonIdsToFragmentName.get(buttonClickedId))).
 		commit();
 	}
 }

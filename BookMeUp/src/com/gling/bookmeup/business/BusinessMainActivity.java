@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.login.LoginMainActivity;
+import com.gling.bookmeup.main.ParseHelper;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -54,13 +55,14 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        
+        Log.i(TAG, "onCreate");
+        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.business_main_activity);
 
-        final ProgressDialog progressDialog = ProgressDialog.show(this, null, "La..."); // TODO not showing. probably because no fragment is in container
-        Business business = (Business) ParseUser.getCurrentUser().getParseObject(Business.CLASS_NAME);
-        // TODO consider query + include
-        business.fetchIfNeededInBackground( new GetCallback<Business>() {
+        final ProgressDialog progressDialog = ProgressDialog.show(this, null, "Loading Business..."); // TODO not showing. probably because no fragment is in container
+        ParseHelper.fetchBusiness( new GetCallback<Business>() {
 
             @Override
             public void done(Business business, ParseException e) {

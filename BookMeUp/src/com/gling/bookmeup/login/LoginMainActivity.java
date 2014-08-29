@@ -25,7 +25,6 @@ import com.parse.ParseUser;
 
 public class LoginMainActivity extends ActionBarActivity {
 
-    public final static String EXTRA_MESSAGE = "com.gling.bookmeup.MESSAGE";
     private static final String TAG = "LoginActivity";
 
     @Override
@@ -48,7 +47,7 @@ public class LoginMainActivity extends ActionBarActivity {
         //final ProgressDialog progressDialog = ProgressDialog.show(this, null, "Loading..."); // TODO not showing. probably because no fragment is in container
         if (!restoreSession()) {
             Fragment firstFragment = new LoginFragment();
-            getSupportFragmentManager().beginTransaction().add(R.id.container, firstFragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.login_container, firstFragment).commit();
         }
         //progressDialog.dismiss();
         
@@ -121,7 +120,7 @@ public class LoginMainActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-        case R.id.customer_action_settings:
+        case R.id.login_action_settings:
             // openSettings();
             return true;
         default:
