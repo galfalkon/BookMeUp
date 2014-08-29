@@ -168,15 +168,17 @@ public class ParseHelper {
 
             private static class Parameters {
                 public static final String BUSINESS_ID = "businessId";
+                public static final String BUSINESS_NAME = "businessName";
                 public static final String CUSTOMER_IDS = "customerIds";
                 public static final String MESSAGE = "message";
             }
 
-            public static void callInBackground(String businessId, List<String> customerIds, String message,
+            public static void callInBackground(String businessId, String businessName, List<String> customerIds, String message,
                     FunctionCallback<String> callback) {
                 // Build a parameters object for the back end function
                 final Map<String, Object> params = new HashMap<String, Object>();
                 params.put(Parameters.BUSINESS_ID, businessId);
+                params.put(Parameters.BUSINESS_NAME, businessName);
                 params.put(Parameters.CUSTOMER_IDS, customerIds);
                 params.put(Parameters.MESSAGE, message);
 
@@ -189,16 +191,18 @@ public class ParseHelper {
 
             private static class Parameters {
                 public static final String BUSINESS_ID = "businessId";
+                public static final String BUSINESS_NAME = "businessName";
                 public static final String CUSTOMER_IDS = "customerIds";
                 public static final String DISCOUNT = "discount";
                 public static final String DURATION = "duration";
             }
 
-            public static void callInBackground(String businessId, List<String> customerIds, int discount,
+            public static void callInBackground(String businessId, String businessName, List<String> customerIds, int discount,
                     int duration, FunctionCallback<String> callback) {
                 // Build a parameters object for the back end function
                 final Map<String, Object> params = new HashMap<String, Object>();
                 params.put(Parameters.BUSINESS_ID, businessId);
+                params.put(Parameters.BUSINESS_NAME, businessName);
                 params.put(Parameters.CUSTOMER_IDS, customerIds);
                 params.put(Parameters.DISCOUNT, discount);
                 params.put(Parameters.DURATION, duration);

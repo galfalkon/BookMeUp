@@ -236,7 +236,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		    	String message = ((TextView)view.findViewById(R.id.business_client_list_send_message_dialog_edtMessage)).getText().toString();
 		    	
 				// Call the back end function
-				ParseHelper.BackEndFunctions.SendMessageToClients.callInBackground(_business.getObjectId(), selectedCustomersIds, message, new FunctionCallback<String>() {
+				ParseHelper.BackEndFunctions.SendMessageToClients.callInBackground(_business.getObjectId(), _business.getName(), selectedCustomersIds, message, new FunctionCallback<String>() {
 					@Override
 					public void done(String object, ParseException e) {
 						Log.i(TAG, "callFunctionInBackground done");
@@ -292,7 +292,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 
 		    	final int discount = (Integer) discountSpinner.getSelectedItem();
 		    	final int duration = (Integer) durationSpinner.getSelectedItem();
-		    	BackEndFunctions.SendOfferToClients.callInBackground(_business.getObjectId(), selectedCustomersIds, discount, duration, new FunctionCallback<String>() {
+		    	BackEndFunctions.SendOfferToClients.callInBackground(_business.getObjectId(), _business.getName(), selectedCustomersIds, discount, duration, new FunctionCallback<String>() {
 					@Override
 					public void done(String object, ParseException e) {
 						Log.i(TAG, "callFunctionInBackground done");
