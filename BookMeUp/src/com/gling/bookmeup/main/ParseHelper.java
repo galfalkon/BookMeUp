@@ -51,8 +51,7 @@ public class ParseHelper {
 
         // Configure parse push service
         Log.i(TAG, "Configuring parse push service");
-        // TODO setting it to LoginMain prevent's application startup!
-        PushService.setDefaultPushCallback(context, BusinessMainActivity.class);
+        PushService.setDefaultPushCallback(context, LoginMainActivity.class);
 
         ParseInstallation installation = ParseInstallation.getCurrentInstallation();
         String androidId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);

@@ -160,7 +160,7 @@ public class BusinessImageCaptureFragment extends Fragment {
 	 * until we reach that Fragment.
 	 */
 	private void addPhotoToBusiness(ParseFile imageFile) {
-		//((LoginActivity) getActivity()).getCurrentBusiness().setImageFile(imageFile);
+		BusinessProfileActivity.currentBusiness.setImageFile(imageFile);
 		
 		Log.i(TAG, "popping back to profile creation fragment");
 		getActivity()

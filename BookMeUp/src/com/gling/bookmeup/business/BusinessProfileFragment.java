@@ -61,7 +61,7 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
     private Spinner spnCategory;
 
     private ServicesAdapter _servicesAdapter;
-    
+
     private Business _business;
 
     @Override
@@ -84,7 +84,14 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
 
         // Until the user has taken a photo, hide the preview
         imgBusinessPreviewImage.setVisibility(View.INVISIBLE);
-        
+
+        _business = BusinessProfileActivity.currentBusiness;
+
+        if (savedInstanceState == null) {
+            Log.i(TAG, "initProfileDetails");
+            initProfileDetails();
+        }
+
         return view;
     }
 
@@ -103,17 +110,17 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
         adapter.setTextKey(ParseHelper.Category.Keys.NAME);
         adapter.addOnQueryLoadListener(new OnQueryLoadListener<ParseObject>() {
             public void onLoading() {
-              // Trigger any "loading" UI
+                // Trigger any "loading" UI
             }
-          
+
             public void onLoaded(final List<ParseObject> categories, Exception paramException) {
                 ParseObject category = _business.getCategory();
                 if (category == null) {
                     spnCategory.setSelection(0);
                     return;
                 }
-                
-                category.fetchIfNeededInBackground( new GetCallback<ParseObject>() {
+
+                category.fetchIfNeededInBackground(new GetCallback<ParseObject>() {
 
                     @Override
                     public void done(ParseObject category, ParseException e) {
@@ -134,7 +141,7 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
                     }
                 });
             }
-          });
+        });
 
         spnCategory.setAdapter(adapter);
     }
@@ -157,63 +164,62 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final View dialogView = inflater.inflate(R.layout.business_edit_opening_hours_dialog, null);
 
-        AlertDialog dialog = builder.setTitle("Edit Opening Hours").setView(dialogView)
-                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+        AlertDialog dialog = builder.setTitle("Edit Opening Hours").setView(dialogView).setPositiveButton("Save",
+                new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         OpeningHours oh = new OpeningHours(new JSONObject());
-                        oh.setDay(OpeningHours.Day.SUNDAY, ((EditText) dialogView
-                                .findViewById(R.id.opening_hours_sunday_isOpen)).getText().toString(),
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_sunday_from)).getText()
-                                        .toString(), ((EditText) dialogView.findViewById(R.id.opening_hours_sunday_to))
-                                        .getText().toString());
+                        oh.setDay(
+                                OpeningHours.Day.SUNDAY,
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_sunday_isOpen)).getText().toString(),
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_sunday_from)).getText().toString(),
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_sunday_to)).getText().toString());
 
-                        oh.setDay(OpeningHours.Day.MONDAY, ((EditText) dialogView
-                                .findViewById(R.id.opening_hours_monday_isOpen)).getText().toString(),
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_monday_from)).getText()
-                                        .toString(), ((EditText) dialogView.findViewById(R.id.opening_hours_monday_to))
-                                        .getText().toString());
+                        oh.setDay(
+                                OpeningHours.Day.MONDAY,
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_monday_isOpen)).getText().toString(),
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_monday_from)).getText().toString(),
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_monday_to)).getText().toString());
 
-                        oh.setDay(OpeningHours.Day.TUESDAY, ((EditText) dialogView
-                                .findViewById(R.id.opening_hours_tuesday_isOpen)).getText().toString(),
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_tuesday_from)).getText()
-                                        .toString(),
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_tuesday_to)).getText()
-                                        .toString());
+                        oh.setDay(
+                                OpeningHours.Day.TUESDAY,
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_tuesday_isOpen)).getText().toString(),
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_tuesday_from)).getText().toString(),
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_tuesday_to)).getText().toString());
 
-                        oh.setDay(OpeningHours.Day.WEDNESDAY, ((EditText) dialogView
-                                .findViewById(R.id.opening_hours_wednesday_isOpen)).getText().toString(),
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_wednesday_from)).getText()
-                                        .toString(), ((EditText) dialogView
-                                        .findViewById(R.id.opening_hours_wednesday_to)).getText().toString());
+                        oh.setDay(
+                                OpeningHours.Day.WEDNESDAY,
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_wednesday_isOpen)).getText().toString(),
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_wednesday_from)).getText().toString(),
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_wednesday_to)).getText().toString());
 
-                        oh.setDay(OpeningHours.Day.THURSDAY, ((EditText) dialogView
-                                .findViewById(R.id.opening_hours_thursday_isOpen)).getText().toString(),
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_thursday_from)).getText()
-                                        .toString(), ((EditText) dialogView
-                                        .findViewById(R.id.opening_hours_thursday_to)).getText().toString());
+                        oh.setDay(
+                                OpeningHours.Day.THURSDAY,
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_thursday_isOpen)).getText().toString(),
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_thursday_from)).getText().toString(),
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_thursday_to)).getText().toString());
 
-                        oh.setDay(OpeningHours.Day.FRIDAY, ((EditText) dialogView
-                                .findViewById(R.id.opening_hours_friday_isOpen)).getText().toString(),
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_friday_from)).getText()
-                                        .toString(), ((EditText) dialogView.findViewById(R.id.opening_hours_friday_to))
-                                        .getText().toString());
+                        oh.setDay(
+                                OpeningHours.Day.FRIDAY,
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_friday_isOpen)).getText().toString(),
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_friday_from)).getText().toString(),
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_friday_to)).getText().toString());
 
-                        oh.setDay(OpeningHours.Day.SATURDAY, ((EditText) dialogView
-                                .findViewById(R.id.opening_hours_saturday_isOpen)).getText().toString(),
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_saturday_from)).getText()
-                                        .toString(), ((EditText) dialogView
-                                        .findViewById(R.id.opening_hours_saturday_to)).getText().toString());
+                        oh.setDay(
+                                OpeningHours.Day.SATURDAY,
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_saturday_isOpen)).getText().toString(),
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_saturday_from)).getText().toString(),
+                                ((EditText) dialogView.findViewById(R.id.opening_hours_saturday_to)).getText().toString());
 
                         _business.setOpeningHours(oh);
                         Log.i(TAG, _business.getOpeningHours());
                         txtBusinessOpeningHours.setText(_business.getOpeningHours());
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+            public void onClick(DialogInterface dialog, int id) {
 
-                    }
-                }).create();
+            }
+        }).create();
 
         return dialog;
     }
@@ -258,8 +264,8 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
         final EditText edtServicePrice = (EditText) dialogView.findViewById(R.id.services_add_item_edtPrice);
         final EditText edtServiceDuration = (EditText) dialogView.findViewById(R.id.services_add_item_edtDuration);
 
-        AlertDialog dialog = builder.setTitle("Add Service").setView(dialogView)
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+        AlertDialog dialog = builder.setTitle("Add Service").setView(dialogView).setPositiveButton("Add",
+                new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         Service service = new Service();
@@ -277,18 +283,18 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
                         });
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+            public void onClick(DialogInterface dialog, int id) {
 
-                    }
-                }).create();
+            }
+        }).create();
 
         return dialog;
     }
 
     private AlertDialog createServiceDeleteDialog(final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        AlertDialog dialog = builder.setTitle("Delete Service?")
-                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+        AlertDialog dialog = builder.setTitle("Delete Service?").setPositiveButton("Delete",
+                new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // TODO add service to temp list of modified services,
                         // delete on pause or somthing
@@ -302,10 +308,10 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
                         });
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+            public void onClick(DialogInterface dialog, int id) {
 
-                    }
-                }).create();
+            }
+        }).create();
 
         return dialog;
     }
@@ -329,9 +335,9 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    Log.i(TAG, "Done creating new business");
+                    Log.i(TAG, "Done saving business");
                     getActivity().setResult(Activity.RESULT_OK);
-                    
+
                     // jump to business main activity
                     Intent intent = new Intent(getActivity(), BusinessMainActivity.class);
                     startActivity(intent);
@@ -361,9 +367,9 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
             if (!userInCache()) {
                 Log.i(TAG, "user not found in cache, redirecting to login...");
                 Toast.makeText(getActivity(), "Please sign up or log in first...", Toast.LENGTH_SHORT).show();
-                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null)
-                        .replace(R.id.business_profile_container, Fragment.instantiate(getActivity(), LoginFragment.class.getName()))
-                        .commit();
+                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(
+                        R.id.business_profile_container,
+                        Fragment.instantiate(getActivity(), LoginFragment.class.getName())).commit();
                 return;
             }
             saveBusiness();
@@ -379,39 +385,6 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
 
     private boolean validateInput() {
         return true;
-    }
-
-    /*
-     * On resume, check and see if a business image has been set from the
-     * BusinessImageCaptureFragment. If it has, load the image in this fragment
-     * and make the preview image visible.
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        Log.i(TAG, "On Resume");
-        
-        final ProgressDialog progressDialog1 = ProgressDialog.show(getActivity(), null, "Loading business...");
-        ParseHelper.fetchBusiness(new GetCallback<Business>() {
-
-            @Override
-            public void done(Business business, ParseException e) {
-                if (e == null) {
-                    Log.i(TAG, "Business " + business.getName() + " fetched");
-                    _business = business;
-                    initProfileDetails();
-                    progressDialog1.dismiss();
-                } else {
-                    Log.e(TAG, "Exception: " + e.getMessage());
-                    progressDialog1.dismiss();
-                    ParseUser.logOut();
-                    Intent intent = new Intent(getActivity(), LoginMainActivity.class);
-                    startActivity(intent);
-                    //finish(); // TODO check that everything's fine with that.
-                }
-            }
-        });
     }
 
     private void initImage() {

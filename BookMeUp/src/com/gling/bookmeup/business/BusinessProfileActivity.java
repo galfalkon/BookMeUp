@@ -21,20 +21,42 @@ public class BusinessProfileActivity extends ActionBarActivity {
 
     private static final String TAG = "BusinessProfileActivity";
     
+    public static Business currentBusiness;
+    
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
 
         Log.i(TAG, "onCreate");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.business_profile_activity);
        
-        if (savedInstanceState != null) {
-            return;
-        }
+        final ProgressDialog progressDialog = ProgressDialog.show(this, null, "Loading business...");
+        ParseHelper.fetchBusiness(new GetCallback<Business>() {
 
-        Fragment firstFragment = new BusinessProfileFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.business_profile_container, firstFragment).commit();
+            @Override
+            public void done(Business business, ParseException e) {
+                if (e == null) {
+                    Log.i(TAG, "Business " + business.getName() + " fetched");
+                    currentBusiness = business;
+                    progressDialog.dismiss();
+                    
+                    if (savedInstanceState != null) {
+                        return;
+                    }
+                    
+                    Fragment firstFragment = new BusinessProfileFragment();
+                    getSupportFragmentManager().beginTransaction().add(R.id.business_profile_container, firstFragment).commit();
+                } else {
+                    Log.e(TAG, "Exception: " + e.getMessage());
+                    progressDialog.dismiss();
+                    ParseUser.logOut();
+                    Intent intent = new Intent(getApplicationContext(), LoginMainActivity.class);
+                    startActivity(intent);
+                    //finish(); // TODO check that everything's fine with that.
+                }
+            }
+        });
         
         // For not showing the keyboard when an editText gets focus on fragment creation
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
