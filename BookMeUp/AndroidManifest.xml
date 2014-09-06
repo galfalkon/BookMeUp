@@ -66,9 +66,7 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".business.BusinessMainActivity"
-            android:label="@string/business_activity_title" >
+        <activity android:name=".business.BusinessMainActivity" >
         </activity>
         <activity
             android:name=".customer.CustomerMainActivity"
@@ -76,8 +74,16 @@
             android:noHistory="true" >
         </activity>
         <activity
-            android:name="com.gling.bookmeup.business.BusinessProfileActivity"
+            android:name=".business.BusinessProfileActivity"
             android:label="@string/title_activity_profile_edit" >
+        </activity>
+        <activity
+            android:name="com.gling.bookmeup.business.BusinessCalendarActivity"
+            android:label="@string/title_activity_business_calendar"
+            android:parentActivityName=".business.BusinessMainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gling.bookmeup.business.BusinessMainActivity" />
         </activity>
     </application>
 

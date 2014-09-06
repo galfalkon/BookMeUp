@@ -31,7 +31,7 @@ import com.parse.ParseUser;
 public class BusinessMainActivity extends FragmentActivity implements ActionBar.TabListener {
 
     private static final String TAG = "BusinessMainActivity";
-    private static final int NUM_OF_SECTIONS = 4;
+    private static final int NUM_OF_SECTIONS = 3;
     
     // TODO make static?
     private Business _business;
@@ -77,6 +77,7 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
                     // Set up the action bar.
                     final ActionBar actionBar = getActionBar();
                     actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+                    actionBar.setTitle(_business.getName());
 
                     // Create the adapter that will return a fragment for each of the three
                     // primary sections of the activity.
@@ -131,6 +132,10 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
+        case R.id.business_action_calendar:
+            intent = new Intent(this, BusinessCalendarActivity.class);
+            startActivity(intent);
+            return true;
         case R.id.business_action_edit_profile:
             intent = new Intent(this, BusinessProfileActivity.class);
             startActivity(intent);
@@ -177,12 +182,10 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
         public Fragment getItem(int position) {
             switch (position) {
             case 0:
-                return new BusinessCalendarFragment();
-            case 1:
                 return new BusinessBookingsFragment();
-            case 2:
+            case 1:
                 return new BusinessCustomersListFragment();
-            case 3:
+            case 2:
             	return new BusinessOffersFragment();
             default:
                 Log.e(TAG, "trying to instantiate an unknown fragment");
@@ -200,15 +203,11 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
             Locale l = Locale.getDefault();
             switch (position) {
             case 0:
-            	return getString(R.string.business_activity_title_section_calendar).toUpperCase(l);
-            case 1:
             	return getString(R.string.business_activity_title_section_bookings).toUpperCase(l);
-            case 2:
+            case 1:
                 return getString(R.string.business_activity_title_section_client_list).toUpperCase(l);
-            case 3:
+            case 2:
             	return getString(R.string.business_activity_title_section_offer_list).toUpperCase(l);
-            case 4:
-                return getString(R.string.business_activity_title_section_profile_edit).toUpperCase(l);
             }
             return null;
         }

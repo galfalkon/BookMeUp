@@ -42,6 +42,7 @@
     <string name="customer_activity_title_section_popular">Popular</string>
     <string name="customer_activity_title_section_history">History</string>
     <string name="customer_activity_title_section_favoirites">Favourites</string>
+    <string name="logout">Logout</string>
 
     <!-- Customer main screen -->
     <string name="customer_main_screen_btnBarbersText">Barbers</string>
@@ -90,10 +91,11 @@
     <string name="preference_file_key">com.gling.bookmeup</string>
     <string name="shared_businessid">saved_businessId</string>
     <string name="shared_customerid">shared_customerId</string>
-    <string name="logout">Logout</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="business_activity_title_section_profile_edit">Profile Edit</string>
     <string name="title_activity_profile_edit">ProfileEditActivity</string>
-    <string name="hello_world">Hello world!</string>
+
+    <!-- Business calendar -->
+    <string name="title_activity_business_calendar">Calendar</string>
 
 </resources>
