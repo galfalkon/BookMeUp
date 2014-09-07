@@ -135,7 +135,11 @@ public class CustomerMainActivity extends FragmentActivity implements ActionBar.
         public Fragment getItem(int position) {
             switch (position) {
             case 0:
-                return new CustomerMainScreen();
+                return new CustomerPopularFragment();
+            case 1:
+            	return new CustomerHistoryFragment();
+            case 2:
+            	return new CustomerFavouriteFragment();
             default:
                 return PlaceholderFragment.newInstance(position + 1);
             }

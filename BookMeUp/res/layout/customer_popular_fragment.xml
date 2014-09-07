@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.gling.bookmeup.main.MainActivity$CustomerMainScreen" >
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" > 
+    
+    <!-- android:layout_alignParentTop="true" -->
+    <!-- 
+    <EditText 
+        android:id="@+id/customer_business_list_edtSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:cursorVisible="false"
+        android:hint="@string/customer_business_list_search_edtSearchHint" />
+	-->
+	<!-- 
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/customer_main_screen_btnBabrbers"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/customer_main_screen_btnBarbersText" />
+
+            <Button
+                android:id="@+id/customer_main_screen_btnCosmetics"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/customer_main_screen_btnCosmeticsText" />
+        </TableRow>
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/customer_main_screen_btnDentists"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/customer_main_screen_btnDentistsText" />
+
+            <Button
+                android:id="@+id/customer_main_screen_btnGarages"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/customer_main_screen_btnGaragesText" />
+        </TableRow>
+    </TableLayout>
+     -->
+     
+    <ListView
+        android:id="@+id/customer_business_list_listViewBusinessesCategories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        
+        >
+    
+    
+    </ListView>    
+    
+    <ListView
+        android:id="@+id/customer_business_list_listViewBusinesses"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/customer_business_list_edtSearch"
+        >
+        <!-- 
+        android:layout_below="@id/business_customer_list_filtersBar"
+        android:layout_above="@+id/business_customer_list_actionBar" 
+ 			-->
+    </ListView>
+    
+    <EditText 
+        android:id="@+id/customer_business_list_edtSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:cursorVisible="false"
+        android:hint="@string/customer_business_list_search_edtSearchHint"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

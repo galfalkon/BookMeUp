@@ -35,6 +35,9 @@ public class ParseHelper {
         
         // Customer
         ParseObject.registerSubclass(Customer.class);
+        
+        //Category
+        ParseObject.registerSubclass(Category.class);
 		
 		Parse.initialize(context, PARSE_APPLICATION_ID, PARSE_CLIENT_KEY);
 
@@ -64,12 +67,17 @@ public class ParseHelper {
 		}
 	}
 	
-	public static class Category {
+	@ParseClassName(Category.CLASS_NAME)
+	public static class Category extends ParseObject {
         public static final String CLASS_NAME = "Category";
 
         public static class Keys {
             public static final String ID = "objectId";
             public static final String NAME = "Name";
+        }
+        
+        public String getName() {
+        	return getString(Keys.NAME);
         }
     }
 

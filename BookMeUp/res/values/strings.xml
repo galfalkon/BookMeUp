@@ -42,11 +42,22 @@
     <string name="customer_activity_title_section_history">History</string>
     <string name="customer_activity_title_section_favoirites">Favourites</string>
     
-    <!-- Customer main screen -->
+    <!-- Customer popular -->
+    <string name="customer_business_list_search_edtSearchHint">Search for...</string>
     <string name="customer_main_screen_btnBarbersText">Barbers</string>
     <string name="customer_main_screen_btnCosmeticsText">Cosmetics</string>
     <string name="customer_main_screen_btnDentistsText">Dentists</string>
     <string name="customer_main_screen_btnGaragesText">Garages</string>
+    
+    <!-- Customer History -->
+    
+    <!-- Customer Favourite -->
+    
+    <!-- Customer Business Profile -->
+    <string name="customer_business_profile_btnNextTxt">Next</string>
+	<string name="customer_business_profile_btnCancelTxt">Cancel</string>
+    <string name="customer_business_profile_opening_hours">Opening Hours:</string>
+    <string name="customer_business_profile_description">"Description: "</string>
 
     <!-- Business profile creation -->
     <string name="business_profile_creation_edtBusinessName">Business name</string>
