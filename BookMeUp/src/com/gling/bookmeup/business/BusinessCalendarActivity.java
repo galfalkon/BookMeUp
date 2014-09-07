@@ -1,22 +1,23 @@
 package com.gling.bookmeup.business;
 
-import java.util.Locale;
+import org.joda.time.DateTime;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.R.id;
 import com.gling.bookmeup.R.layout;
 import com.gling.bookmeup.R.menu;
 import com.gling.bookmeup.R.string;
+import com.google.gson.Gson;
 import com.parse.ParseInstallation;
 
 import android.app.Activity;
 import android.app.ActionBar;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.support.v13.app.FragmentPagerAdapter;
-import android.support.v13.app.FragmentStatePagerAdapter;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Gravity;
@@ -27,11 +28,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class BusinessCalendarActivity extends Activity {
+public class BusinessCalendarActivity extends FragmentActivity {
 
     private static final String TAG = "BusinessCalendarActivity";
     
-    private static final int DAYS_BEFORE = 30;
+    private static final int DAYS_MARGIN = 30;
     
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
@@ -46,13 +47,13 @@ public class BusinessCalendarActivity extends Activity {
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.business_calendar_activity_pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        mViewPager.setCurrentItem(DAYS_BEFORE);
+        mViewPager.setCurrentItem(DAYS_MARGIN);
     }
 
     @Override
@@ -69,18 +70,16 @@ public class BusinessCalendarActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.business_calendar_action_today) {
-            mViewPager.setCurrentItem(DAYS_BEFORE);
+            mViewPager.setCurrentItem(DAYS_MARGIN);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
     public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
+        private DateTime dt = new DateTime();
+        
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -92,7 +91,7 @@ public class BusinessCalendarActivity extends Activity {
 
         @Override
         public int getCount() {
-            return Integer.MAX_VALUE;
+            return DAYS_MARGIN*2;
         }
     }
 
