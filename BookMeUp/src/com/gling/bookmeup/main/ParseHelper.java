@@ -27,198 +27,208 @@ import com.parse.PushService;
 import com.parse.SaveCallback;
 
 public class ParseHelper {
-    private static final String TAG = "ParseHelper";
-    private static final String PARSE_APPLICATION_ID = "0Uye8FHMnsklraYbqnMDxtg0rbQRKEqZSVO6BHPa";
-    private static final String PARSE_CLIENT_KEY = "5dB8I0UZWFaTtYpE3OUn7CWwPzxYxe2yBqE7uhS3";
+	private static final String TAG = "ParseHelper";
+	private static final String PARSE_APPLICATION_ID = "0Uye8FHMnsklraYbqnMDxtg0rbQRKEqZSVO6BHPa";
+	private static final String PARSE_CLIENT_KEY = "5dB8I0UZWFaTtYpE3OUn7CWwPzxYxe2yBqE7uhS3";
 
-    public static void fetchBusiness(GetCallback<Business> callback) {
-        // TODO null checks on getCurrentUser()
-        ParseUser.getCurrentUser().getParseObject(Business.CLASS_NAME).fetchIfNeededInBackground(callback);
-    }
-    
-    public static void initialize(Context context) {
-        Log.i(TAG, "Initializing Parse");
-
-        // Business
-        ParseObject.registerSubclass(Business.class);
-        ParseObject.registerSubclass(com.gling.bookmeup.business.Service.class);
-        ParseObject.registerSubclass(Booking.class);
-
-        // Customer
-        ParseObject.registerSubclass(Customer.class);
-        
-        //Category
-        ParseObject.registerSubclass(Category.class);
-		
+	public static void fetchBusiness(GetCallback<Business> callback) {
+		// TODO null checks on getCurrentUser()
+		ParseUser.getCurrentUser().getParseObject(Business.CLASS_NAME)
+				.fetchIfNeededInBackground(callback);
 	}
-	
-	Parse.initialize(context, PARSE_APPLICATION_ID, PARSE_CLIENT_KEY);
 
-	// Configure parse push service
-	Log.i(TAG, "Configuring parse push service");
-	PushService.setDefaultPushCallback(context, LoginMainActivity.class);
+	public static void initialize(Context context) {
+		Log.i(TAG, "Initializing Parse");
 
-	ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-	String androidId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
-	// http://stackoverflow.com/questions/23815445/at-least-one-id-field-installationid-devicetoken-must-be-specified-in-this-op
-	installation.put("UniqueId", androidId);
-	installation.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, e.getMessage());
-                }
-            }
-        });
-    }
+		// Business
+		ParseObject.registerSubclass(Business.class);
+		ParseObject.registerSubclass(com.gling.bookmeup.business.Service.class);
+		ParseObject.registerSubclass(Booking.class);
 
-    public static class Installation {
-        public static final String CLASS_NAME = "Installation";
+		// Customer
+		ParseObject.registerSubclass(Customer.class);
 
-        public static class Keys {
-            public static final String ID = "objectId";
-            public static final String BUSINESS_POINTER = "businessPointer";
-            public static final String CUSTOMER_POINTER = "customerPointer";
-        }
-    }
+		// Category
+		ParseObject.registerSubclass(Category.class);
 
-    public static class CustomerClass {
-        public static final String CLASS_NAME = "Customer";
+		Parse.initialize(context, PARSE_APPLICATION_ID, PARSE_CLIENT_KEY);
 
-        public static class Keys {
-            public static final String ID = "objectId";
-            public static final String NAME = "name";
-            public static final String FAVOURITES = "favourites";
-        }
-    }
+		// Configure parse push service
+		Log.i(TAG, "Configuring parse push service");
+		PushService.setDefaultPushCallback(context, LoginMainActivity.class);
+
+		ParseInstallation installation = ParseInstallation
+				.getCurrentInstallation();
+		String androidId = Secure.getString(context.getContentResolver(),
+				Secure.ANDROID_ID);
+		// http://stackoverflow.com/questions/23815445/at-least-one-id-field-installationid-devicetoken-must-be-specified-in-this-op
+		installation.put("UniqueId", androidId);
+		installation.saveInBackground(new SaveCallback() {
+			@Override
+			public void done(ParseException e) {
+				if (e != null) {
+					Log.e(TAG, e.getMessage());
+				}
+			}
+		});
+	}
+
+	public static class Installation {
+		public static final String CLASS_NAME = "Installation";
+
+		public static class Keys {
+			public static final String ID = "objectId";
+			public static final String BUSINESS_POINTER = "businessPointer";
+			public static final String CUSTOMER_POINTER = "customerPointer";
+		}
+	}
+
+	public static class CustomerClass {
+		public static final String CLASS_NAME = "Customer";
+
+		public static class Keys {
+			public static final String ID = "objectId";
+			public static final String NAME = "name";
+			public static final String FAVOURITES = "favourites";
+		}
+	}
 
 	@ParseClassName(Category.CLASS_NAME)
 	public static class Category extends ParseObject {
-        public static final String CLASS_NAME = "Category";
+		public static final String CLASS_NAME = "Category";
 
-        public static class Keys {
-            public static final String ID = "objectId";
-            public static final String NAME = "Name"; // TODO lowercase
-        }
-        
-        public String getName() {
-        	return getString(Keys.NAME);
-        }
-    }
+		public static class Keys {
+			public static final String ID = "objectId";
+			public static final String NAME = "Name"; // TODO lowercase
+		}
 
-    @ParseClassName(Booking.CLASS_NAME)
-    public static class Booking extends ParseObject {
+		public String getName() {
+			return getString(Keys.NAME);
+		}
+	}
 
-        public static final String CLASS_NAME = "Booking";
+	@ParseClassName(Booking.CLASS_NAME)
+	public static class Booking extends ParseObject {
 
-        public static class Keys {
-            public static final String ID = "objectId";
-            public static final String CUSTOMER_POINTER = "customerPointer";
-            public static final String BUSINESS_POINTER = "businessPointer";
-            public static final String SERVICE_POINTER = "servicePointer";
-            public static final String DATE = "date";
-            public static final String STATUS = "status";
-        }
+		public static final String CLASS_NAME = "Booking";
 
-        public static class Status {
-            public static final int PENDING = 0;
-            public static final int APPROVED = 1;
-            public static final int CANCELED = 2;
-        }
+		public static class Keys {
+			public static final String ID = "objectId";
+			public static final String CUSTOMER_POINTER = "customerPointer";
+			public static final String BUSINESS_POINTER = "businessPointer";
+			public static final String SERVICE_POINTER = "servicePointer";
+			public static final String DATE = "date";
+			public static final String STATUS = "status";
+		}
 
-        public Booking() {
-            // Do not modify the ParseObject
-        }
+		public static class Status {
+			public static final int PENDING = 0;
+			public static final int APPROVED = 1;
+			public static final int CANCELED = 2;
+		}
 
-        public Date getDate() {
-            return getDate(Keys.DATE);
-        }
+		public Booking() {
+			// Do not modify the ParseObject
+		}
 
-        public int getStatus() {
-            return getInt(Keys.STATUS);
-        }
+		public Date getDate() {
+			return getDate(Keys.DATE);
+		}
 
-        public void setStatus(int status) {
-            put(Keys.STATUS, status);
-        }
+		public int getStatus() {
+			return getInt(Keys.STATUS);
+		}
 
-        public String getBusinessName() {
-            return getParseObject(Keys.BUSINESS_POINTER).getString(Business.Keys.NAME);
-        }
+		public void setStatus(int status) {
+			put(Keys.STATUS, status);
+		}
 
-        public String getClientName() {
-            return getParseObject(Keys.CUSTOMER_POINTER).getString(CustomerClass.Keys.NAME);
-        }
+		public String getBusinessName() {
+			return getParseObject(Keys.BUSINESS_POINTER).getString(
+					Business.Keys.NAME);
+		}
 
-        public String getServiceName() {
-            return getParseObject(Keys.SERVICE_POINTER).getString(Service.Keys.NAME);
-        }
+		public String getClientName() {
+			return getParseObject(Keys.CUSTOMER_POINTER).getString(
+					CustomerClass.Keys.NAME);
+		}
 
-        public int getServicePrice() {
-            return getParseObject(Keys.SERVICE_POINTER).getInt(Service.Keys.PRICE);
-        }
-    }
+		public String getServiceName() {
+			return getParseObject(Keys.SERVICE_POINTER).getString(
+					Service.Keys.NAME);
+		}
 
-    public static class Service {
-        public static final String CLASS_NAME = "Service";
+		public int getServicePrice() {
+			return getParseObject(Keys.SERVICE_POINTER).getInt(
+					Service.Keys.PRICE);
+		}
+	}
 
-        public static class Keys {
-            public static final String ID = "objectId";
-            public static final String BUSINESS_POINTER = "businessPointer";
-            public static final String NAME = "name";
-            public static final String PRICE = "price";
-            public static final String DURATION = "duration";
-        }
-    }
+	public static class Service {
+		public static final String CLASS_NAME = "Service";
 
-    public static class BackEndFunctions {
+		public static class Keys {
+			public static final String ID = "objectId";
+			public static final String BUSINESS_POINTER = "businessPointer";
+			public static final String NAME = "name";
+			public static final String PRICE = "price";
+			public static final String DURATION = "duration";
+		}
+	}
 
-        public static class SendMessageToClients {
-            private static final String FUNCTION_NAME = "sendMessageToCustomers";
+	public static class BackEndFunctions {
 
-            private static class Parameters {
-                public static final String BUSINESS_ID = "businessId";
-                public static final String BUSINESS_NAME = "businessName";
-                public static final String CUSTOMER_IDS = "customerIds";
-                public static final String MESSAGE = "message";
-            }
+		public static class SendMessageToClients {
+			private static final String FUNCTION_NAME = "sendMessageToCustomers";
 
-            public static void callInBackground(String businessId, String businessName, List<String> customerIds, String message,
-                    FunctionCallback<String> callback) {
-                // Build a parameters object for the back end function
-                final Map<String, Object> params = new HashMap<String, Object>();
-                params.put(Parameters.BUSINESS_ID, businessId);
-                params.put(Parameters.BUSINESS_NAME, businessName);
-                params.put(Parameters.CUSTOMER_IDS, customerIds);
-                params.put(Parameters.MESSAGE, message);
+			private static class Parameters {
+				public static final String BUSINESS_ID = "businessId";
+				public static final String BUSINESS_NAME = "businessName";
+				public static final String CUSTOMER_IDS = "customerIds";
+				public static final String MESSAGE = "message";
+			}
 
-                ParseCloud.callFunctionInBackground(FUNCTION_NAME, params, callback);
-            }
-        }
+			public static void callInBackground(String businessId,
+					String businessName, List<String> customerIds,
+					String message, FunctionCallback<String> callback) {
+				// Build a parameters object for the back end function
+				final Map<String, Object> params = new HashMap<String, Object>();
+				params.put(Parameters.BUSINESS_ID, businessId);
+				params.put(Parameters.BUSINESS_NAME, businessName);
+				params.put(Parameters.CUSTOMER_IDS, customerIds);
+				params.put(Parameters.MESSAGE, message);
 
-        public static class SendOfferToClients {
-            private static final String FUNCTION_NAME = "sendOfferToCustomers";
+				ParseCloud.callFunctionInBackground(FUNCTION_NAME, params,
+						callback);
+			}
+		}
 
-            private static class Parameters {
-                public static final String BUSINESS_ID = "businessId";
-                public static final String BUSINESS_NAME = "businessName";
-                public static final String CUSTOMER_IDS = "customerIds";
-                public static final String DISCOUNT = "discount";
-                public static final String DURATION = "duration";
-            }
+		public static class SendOfferToClients {
+			private static final String FUNCTION_NAME = "sendOfferToCustomers";
 
-            public static void callInBackground(String businessId, String businessName, List<String> customerIds, int discount,
-                    int duration, FunctionCallback<String> callback) {
-                // Build a parameters object for the back end function
-                final Map<String, Object> params = new HashMap<String, Object>();
-                params.put(Parameters.BUSINESS_ID, businessId);
-                params.put(Parameters.BUSINESS_NAME, businessName);
-                params.put(Parameters.CUSTOMER_IDS, customerIds);
-                params.put(Parameters.DISCOUNT, discount);
-                params.put(Parameters.DURATION, duration);
+			private static class Parameters {
+				public static final String BUSINESS_ID = "businessId";
+				public static final String BUSINESS_NAME = "businessName";
+				public static final String CUSTOMER_IDS = "customerIds";
+				public static final String DISCOUNT = "discount";
+				public static final String DURATION = "duration";
+			}
 
-                ParseCloud.callFunctionInBackground(FUNCTION_NAME, params, callback);
-            }
-        }
-    }
+			public static void callInBackground(String businessId,
+					String businessName, List<String> customerIds,
+					int discount, int duration,
+					FunctionCallback<String> callback) {
+				// Build a parameters object for the back end function
+				final Map<String, Object> params = new HashMap<String, Object>();
+				params.put(Parameters.BUSINESS_ID, businessId);
+				params.put(Parameters.BUSINESS_NAME, businessName);
+				params.put(Parameters.CUSTOMER_IDS, customerIds);
+				params.put(Parameters.DISCOUNT, discount);
+				params.put(Parameters.DURATION, duration);
+
+				ParseCloud.callFunctionInBackground(FUNCTION_NAME, params,
+						callback);
+			}
+		}
+	}
 }

@@ -116,16 +116,16 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
             }
 
             public void onLoaded(final List<ParseObject> categories, Exception paramException) {
-                ParseObject category = _business.getCategory();
+                Category category = _business.getCategory();
                 if (category == null) {
                     spnCategory.setSelection(0);
                     return;
                 }
 
-                category.fetchIfNeededInBackground(new GetCallback<ParseObject>() {
+                category.fetchIfNeededInBackground(new GetCallback<Category>() {
 
                     @Override
-                    public void done(ParseObject category, ParseException e) {
+                    public void done(Category category, ParseException e) {
                         if (e == null) {
                             String categoryName = category.getString(Category.Keys.NAME);
                             int position = 0;
@@ -326,7 +326,7 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
         _business.setName(edtName.getText().toString());
         _business.setDescription(edtDescription.getText().toString());
         _business.setPhoneNumber(edtPhoneNumber.getText().toString());
-        _business.setCategory((ParseObject) spnCategory.getSelectedItem());
+        _business.setCategory((Category) spnCategory.getSelectedItem());
 
         // If the user added a photo, that data will be added in the
         // BusinessImageCaptureFragment
