@@ -34,7 +34,6 @@ import android.widget.Toast;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business.Offer;
-import com.gling.bookmeup.login.LoginMainActivity;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.ParseHelper.BackEndFunctions;
@@ -59,8 +58,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		Log.i(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		
-		//_business = ((LoginActivity)getActivity()).getCurrentBusiness();
-		_business = new Business();
+		_business = ((BusinessMainActivity)getActivity()).getBusiness();
 		_allCustomers = new ArrayList<Customer>();
 		_filteredCustomers = new ArrayList<Customer>();
 		_listViewAdapter = new CustomersArrayAdapter();
@@ -238,7 +236,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		    	String message = ((TextView)view.findViewById(R.id.business_client_list_send_message_dialog_edtMessage)).getText().toString();
 		    	
 				// Call the back end function
-				ParseHelper.BackEndFunctions.SendMessageToClients.callInBackground(_business.getObjectId(), selectedCustomersIds, message, new FunctionCallback<String>() {
+				ParseHelper.BackEndFunctions.SendMessageToClients.callInBackground(_business.getObjectId(), _business.getName(), selectedCustomersIds, message, new FunctionCallback<String>() {
 					@Override
 					public void done(String object, ParseException e) {
 						Log.i(TAG, "callFunctionInBackground done");
@@ -294,7 +292,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 
 		    	final int discount = (Integer) discountSpinner.getSelectedItem();
 		    	final int duration = (Integer) durationSpinner.getSelectedItem();
-		    	BackEndFunctions.SendOfferToClients.callInBackground(_business.getObjectId(), selectedCustomersIds, discount, duration, new FunctionCallback<String>() {
+		    	BackEndFunctions.SendOfferToClients.callInBackground(_business.getObjectId(), _business.getName(), selectedCustomersIds, discount, duration, new FunctionCallback<String>() {
 					@Override
 					public void done(String object, ParseException e) {
 						Log.i(TAG, "callFunctionInBackground done");

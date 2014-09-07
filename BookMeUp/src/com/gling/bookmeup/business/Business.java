@@ -1,6 +1,5 @@
 package com.gling.bookmeup.business;
 
-import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ import com.parse.ParseUser;
 
 
 @ParseClassName(Business.CLASS_NAME)
-public class Business extends ParseObject implements Serializable {
+public class Business extends ParseObject {
 	private static final String TAG = "Business";
 
     public static final String CLASS_NAME = "Business";
@@ -34,6 +33,7 @@ public class Business extends ParseObject implements Serializable {
         public static final String USER = "user";
         public static final String NAME = "name";
         public static final String DESCRIPTION = "description";
+        public static final String PHONE_NUMBER = "phone_number";
         public static final String CATEGORY = "category";
         public static final String OPENING_HOURS = "openingHours";
         public static final String IMAGE = "image";
@@ -71,9 +71,17 @@ public class Business extends ParseObject implements Serializable {
     public Category getCategory() {
         return (Category) getParseObject(Keys.CATEGORY);
     }
- 
-    public void setCategory(ParseObject category) {
+	
+	public void setCategory(Category category) {
         put(Keys.CATEGORY, category);
+    }
+	
+	public String getPhoneNumber() {
+        return getString(Keys.PHONE_NUMBER);
+    }
+ 
+    public void setPhoneNumber(String phoneNumber) {
+        put(Keys.PHONE_NUMBER, phoneNumber);
     }
     
     public String getOpeningHours() {
@@ -130,6 +138,10 @@ public class Business extends ParseObject implements Serializable {
     public List<Offer> getActiveOffers()  {
     	List<Offer> offers = new ArrayList<Offer>();
     	JSONArray jsonOffers = getJSONArray(Keys.OFFERS);
+    	if (jsonOffers == null) {
+    	    return offers; 
+    	}
+    	
     	Date today = new Date(); 
     	for (int i = 0; i < jsonOffers.length(); i++) {
     		try {
@@ -151,7 +163,7 @@ public class Business extends ParseObject implements Serializable {
     	private static class Keys {
     		// TODO: Consider supporting offers for a certain service
     		public static final String DISCOUNT = "discount";
-    		public static final String DURATION = "duration";
+    		public static final String EXPIRATION = "duration";
     	}
     	
     	private final int _discount;
@@ -172,13 +184,13 @@ public class Business extends ParseObject implements Serializable {
     	
     	public Offer(JSONObject json) throws JSONException, ParseException {
 			_discount = json.getInt(Keys.DISCOUNT);
-			_expiration = DATE_FORMAT.parse(json.getString(Keys.DURATION));
+			_expiration = DATE_FORMAT.parse(json.getString(Keys.EXPIRATION));
 		}
     	
     	private JSONObject toJSONObject() throws JSONException {
     		JSONObject json = new JSONObject();
     		json.put(Keys.DISCOUNT, _discount);
-    		json.put(Keys.DURATION, DATE_FORMAT.format(_expiration));
+    		json.put(Keys.EXPIRATION, DATE_FORMAT.format(_expiration));
     		return json;
     	}
     	

@@ -35,6 +35,7 @@
     <string name="business_activity_title_section_calendar">Calendar</string>
     <string name="business_activity_title_section_bookings">Bookings</string>
     <string name="business_activity_title_section_client_list">Client List</string>
+    <string name="business_activity_title_section_offer_list">Offer List</string>
 
     <!-- Customer Activity -->
     <string name="customer_activity_title">BookMeUp! - For Customers</string>
@@ -44,6 +45,9 @@
     
     <!-- Customer popular -->
     <string name="customer_business_list_search_edtSearchHint">Search for...</string>
+    <string name="logout">Logout</string>
+
+    <!-- Customer main screen -->
     <string name="customer_main_screen_btnBarbersText">Barbers</string>
     <string name="customer_main_screen_btnCosmeticsText">Cosmetics</string>
     <string name="customer_main_screen_btnDentistsText">Dentists</string>
@@ -60,7 +64,7 @@
     <string name="customer_business_profile_description">"Description: "</string>
 
     <!-- Business profile creation -->
-    <string name="business_profile_creation_edtBusinessName">Business name</string>
+    <string name="business_profile_creation_edtName">Business name</string>
     <string name="business_profile_creation_edtDescriptionHint">Business description</string>
     <string name="business_profile_creation_edtOpeningHoursHint">Opening Hours</string>
     <string name="business_profile_creation_imgProfilePicutureDescription">Profile Picture</string>
@@ -91,15 +95,20 @@
     <string name="business_customer_list_send_offer_dialog_title">Offer specification</string>
     <string name="business_customer_list_send_offer_dialog_txtDiscount">Discount (%)</string>
     <string name="business_customer_list_send_offer_dialog_txtDuration">Duration (Weeks)</string>
-    
+
     <!-- Business offer list -->
     <string name="business_offers_txtExpiration">Expiration</string>
     <string name="business_offers_txtDiscount">Discount</string>
-    
+
     <!-- Shared prefs -->
     <string name="preference_file_key">com.gling.bookmeup</string>
     <string name="shared_businessid">saved_businessId</string>
     <string name="shared_customerid">shared_customerId</string>
-    <string name="logout">Logout</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="business_activity_title_section_profile_edit">Profile Edit</string>
+    <string name="title_activity_profile_edit">ProfileEditActivity</string>
+
+    <!-- Business calendar -->
+    <string name="title_activity_business_calendar">Calendar</string>
 
 </resources>

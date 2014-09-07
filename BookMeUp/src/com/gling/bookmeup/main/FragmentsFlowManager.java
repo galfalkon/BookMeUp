@@ -6,15 +6,12 @@ import android.util.Log;
 import android.util.SparseArray;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessImageCaptureFragment;
-import com.gling.bookmeup.business.BusinessProfileCreationFragment;
+import com.gling.bookmeup.business.BusinessProfileFragment;
 import com.gling.bookmeup.customer.CustomerPopularFragment;
 import com.gling.bookmeup.login.EMailLoginFragment;
 import com.gling.bookmeup.login.EMailSignUpFragment;
 import com.gling.bookmeup.login.UserTypeSelectionFragment;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
 
 /**
  * This class wraps all transitions from the different fragments in the application.
@@ -44,7 +41,7 @@ public class FragmentsFlowManager {
 		_buttonIdsToFragmentName.put(R.id.business_profile_creation_btnImageUpload, BusinessImageCaptureFragment.class.getName());
 	}
 	
-	public static void goToNextFragment(FragmentActivity fragmentActivity, int buttonClickedId) {
+	public static void goToNextFragment(FragmentActivity fragmentActivity, int container, int buttonClickedId) {
 		Log.i(TAG, "goToNextFragment");
 		
 		if (_buttonIdsToFragmentName == null)
@@ -61,7 +58,7 @@ public class FragmentsFlowManager {
 		fragmentActivity.getSupportFragmentManager().
 		beginTransaction().
 		addToBackStack(null).
-		replace(R.id.container, Fragment.instantiate(fragmentActivity, _buttonIdsToFragmentName.get(buttonClickedId))).
+		replace(container, Fragment.instantiate(fragmentActivity, _buttonIdsToFragmentName.get(buttonClickedId))).
 		commit();
 	}
 }

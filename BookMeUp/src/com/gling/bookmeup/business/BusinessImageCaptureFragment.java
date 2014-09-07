@@ -38,6 +38,9 @@ public class BusinessImageCaptureFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent,
 			Bundle savedInstanceState) {
+	    
+	    Log.i(TAG, "onCreateView");
+	    
 		View v = inflater.inflate(R.layout.business_image_upload_fragment, parent, false);
 
 		photoButton = (ImageButton) v.findViewById(R.id.camera_photo_button);
@@ -157,7 +160,7 @@ public class BusinessImageCaptureFragment extends Fragment {
 	 * until we reach that Fragment.
 	 */
 	private void addPhotoToBusiness(ParseFile imageFile) {
-		//((LoginActivity) getActivity()).getCurrentBusiness().setImageFile(imageFile);
+		BusinessProfileActivity.currentBusiness.setImageFile(imageFile);
 		
 		Log.i(TAG, "popping back to profile creation fragment");
 		getActivity()

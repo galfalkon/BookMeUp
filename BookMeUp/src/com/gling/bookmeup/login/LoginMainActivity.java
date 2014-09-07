@@ -2,6 +2,7 @@ package com.gling.bookmeup.login;
 
 import java.util.List;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessMainActivity;
 import com.gling.bookmeup.customer.Customer;
 import com.gling.bookmeup.customer.CustomerMainActivity;
+import com.parse.GetCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -23,7 +25,6 @@ import com.parse.ParseUser;
 
 public class LoginMainActivity extends ActionBarActivity {
 
-    public final static String EXTRA_MESSAGE = "com.gling.bookmeup.MESSAGE";
     private static final String TAG = "LoginActivity";
 
     @Override
@@ -41,67 +42,68 @@ public class LoginMainActivity extends ActionBarActivity {
             return;
         }
 
-        // TODO splash screen
+        // TODO splash screen?
         // TODO separate 'session manager' class
-        Intent intent = generateIntent();
-        if (intent != null) {
-            // Clear out task stack
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            // TODO use the android:noHistory="true" flag in the manifest? that way we don't have to call finish()
-            finish();
-        } else {
-            // user == null || user is not associated with a business or customer objects
+        //final ProgressDialog progressDialog = ProgressDialog.show(this, null, "Loading..."); // TODO not showing. probably because no fragment is in container
+        if (!restoreSession()) {
             Fragment firstFragment = new LoginFragment();
-            getSupportFragmentManager().beginTransaction().add(R.id.container, firstFragment).commit();
-    
-            // For not showing the keyboard when an editText gets focus on fragment
-            // creation
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            getSupportFragmentManager().beginTransaction().add(R.id.login_container, firstFragment).commit();
         }
+        //progressDialog.dismiss();
+        
+        // For not showing the keyboard when an editText gets focus on fragment creation
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
-    public Intent generateIntent() {
-
+    public boolean restoreSession() {
         ParseUser user = ParseUser.getCurrentUser();
         if (user == null) {
-            return null;
+            return false;
         }
 
         Log.i(TAG, "User '" + user.getUsername() +  "' has been found in the system");
         
-        Intent intent = null;
-        Bundle bundle = new Bundle();
-
-        final ParseQuery<Business> queryBusiness = ParseQuery.getQuery(Business.class).whereEqualTo(Business.Keys.USER, user);
-        queryBusiness.include(Business.Keys.CATEGORY);
-
-        final ParseQuery<Customer> queryCustomer = ParseQuery.getQuery(Customer.class).whereEqualTo(Customer.Keys.USER, user);
-        
-        try {
-            List<Business> resultBusiness = queryBusiness.find();
-            if (!resultBusiness.isEmpty()) {
-                Log.i(TAG, "User '" + user.getUsername() +  "' is associated with business '" + resultBusiness.get(0).getName() + "'");
-                bundle.putSerializable(Business.CLASS_NAME, resultBusiness.get(0));
-                intent = new Intent(getApplicationContext(), BusinessMainActivity.class);
-                intent.putExtras(bundle);
-                return intent;
-            }
-            List<Customer> resultCustomer = queryCustomer.find();
-            if (!resultCustomer.isEmpty()) {
-                Log.i(TAG, "User '" + user.getUsername() +  "' is associated with customer '" + resultCustomer.get(0).getName() + "'");
-                bundle.putSerializable(Customer.CLASS_NAME, resultCustomer.get(0));
-                intent = new Intent(getApplicationContext(), CustomerMainActivity.class);
-                intent.putExtras(bundle);
-                return intent;
-            }
-        } catch (ParseException e) {
-            Log.i(TAG, "Query failed: " + e.getMessage());
-            e.printStackTrace();
+        if (user.getParseObject(Business.CLASS_NAME) != null) {
+            Intent intent = new Intent(getApplicationContext(), BusinessMainActivity.class);
+            startActivity(intent);
+            return true;
         }
         
-        Log.i(TAG, "User '" + user.getUsername() +  "' is not associated with a business or customer");
-        return intent;
+        if (user.getParseObject(Customer.CLASS_NAME) != null) {
+            Intent intent = new Intent(getApplicationContext(), CustomerMainActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        
+        return false;
+
+//        final ParseQuery<Business> queryBusiness = ParseQuery.getQuery(Business.class).whereEqualTo(Business.Keys.USER, user);
+//        queryBusiness.include(Business.Keys.CATEGORY);
+//
+//        final ParseQuery<Customer> queryCustomer = ParseQuery.getQuery(Customer.class).whereEqualTo(Customer.Keys.USER, user);
+//        
+//        try {
+//            List<Business> resultBusiness = queryBusiness.find();
+//            if (!resultBusiness.isEmpty()) {
+//                Log.i(TAG, "User '" + user.getUsername() +  "' is associated with business '" + resultBusiness.get(0).getName() + "'");
+//                intent = new Intent(getApplicationContext(), BusinessMainActivity.class);
+//                intent.putExtra(Business.CLASS_NAME, resultBusiness.get(0));
+//                return intent;
+//            }
+//            List<Customer> resultCustomer = queryCustomer.find();
+//            if (!resultCustomer.isEmpty()) {
+//                Log.i(TAG, "User '" + user.getUsername() +  "' is associated with customer '" + resultCustomer.get(0).getName() + "'");
+//                intent = new Intent(getApplicationContext(), CustomerMainActivity.class);
+//                intent.putExtra(Customer.CLASS_NAME, resultCustomer.get(0));
+//                return intent;
+//            }
+//        } catch (ParseException e) {
+//            Log.i(TAG, "Query failed: " + e.getMessage());
+//            e.printStackTrace();
+//        }
+//        
+//        Log.i(TAG, "User '" + user.getUsername() +  "' is not associated with a business or customer");
+//        return intent;
     }
 
     @Override
@@ -118,7 +120,7 @@ public class LoginMainActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-        case R.id.customer_action_settings:
+        case R.id.login_action_settings:
             // openSettings();
             return true;
         default:

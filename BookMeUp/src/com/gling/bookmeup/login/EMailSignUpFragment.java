@@ -76,7 +76,7 @@ public class EMailSignUpFragment extends OnClickListenerFragment {
 				Log.i(TAG, "signup is done");
 				
 				Toast.makeText(getActivity(), "Please verify your Email address", Toast.LENGTH_SHORT).show();
-				FragmentsFlowManager.goToNextFragment(getActivity(), viewClickedId);
+				FragmentsFlowManager.goToNextFragment(getActivity(), R.id.login_container, viewClickedId);
 			}
 		});
 	}

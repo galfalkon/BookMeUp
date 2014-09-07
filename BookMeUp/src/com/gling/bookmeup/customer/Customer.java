@@ -8,7 +8,7 @@ import com.parse.ParseUser;
 
 
 @ParseClassName(Customer.CLASS_NAME)
-public class Customer extends ParseObject implements Serializable {
+public class Customer extends ParseObject {
 	private static final String TAG = "Customer";
 
     public static final String CLASS_NAME = "Customer";

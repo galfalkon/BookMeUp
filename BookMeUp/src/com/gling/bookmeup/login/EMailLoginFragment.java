@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -16,8 +17,12 @@ import android.widget.Toast;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business;
+import com.gling.bookmeup.business.BusinessMainActivity;
+import com.gling.bookmeup.customer.Customer;
+import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.FragmentsFlowManager;
+import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -61,7 +66,7 @@ public class EMailLoginFragment extends OnClickListenerFragment {
         String password = edtPassword.getText().toString();
 
         Log.i(TAG, "Showing a progress dialog");
-        final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Loging in...");
+        final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Logging in...");
 
         ParseUser.logInInBackground(userName, password, new LogInCallback() {
             @Override
@@ -80,20 +85,23 @@ public class EMailLoginFragment extends OnClickListenerFragment {
                     return;
                 }
 
-                Log.i(TAG, "Login succeeded");
-
-                LoginMainActivity loginActivity = (LoginMainActivity) getActivity();
-                Intent intent = loginActivity.generateIntent();
-                if (intent != null) {
-                    // Clear fragment stack
-                    // loginActivity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Log.i(TAG, "User '" + user.getUsername() +  "' logged in");
+                if (user.getParseObject(Business.CLASS_NAME) != null) {
+                    progressDialog.dismiss();
+                    Intent intent = new Intent(getActivity(), BusinessMainActivity.class);
                     startActivity(intent);
-                    loginActivity.finish();
-                } else {
-                    FragmentsFlowManager.goToNextFragment(getActivity(), R.id.email_login_btnContinue);
+                    return;
                 }
+                
+                if (user.getParseObject(Customer.CLASS_NAME) != null) {
+                    progressDialog.dismiss();
+                    Intent intent = new Intent(getActivity(), CustomerMainActivity.class);
+                    startActivity(intent);
+                    return;
+                }
+                // loginActivity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                FragmentsFlowManager.goToNextFragment(getActivity(), R.id.login_container, R.id.email_login_btnContinue);
                 progressDialog.dismiss();
             }
         });

@@ -31,11 +31,11 @@ public class LoginFragment extends OnClickListenerFragment {
 		case R.id.login_btnLoginWithEMail:
 			Log.i(TAG, "btnLoginWithEMail clicked");
 			// TODO popup if someone is already logged in
-			FragmentsFlowManager.goToNextFragment(getActivity(), v.getId());
+			FragmentsFlowManager.goToNextFragment(getActivity(), R.id.login_container, v.getId());
 			break;
 		case R.id.login_btnSignUp:
 			Log.i(TAG, "btnSignUp clicked");
-			FragmentsFlowManager.goToNextFragment(getActivity(), v.getId());
+			FragmentsFlowManager.goToNextFragment(getActivity(), R.id.login_container, v.getId());
 			break;
 		}
 	}
