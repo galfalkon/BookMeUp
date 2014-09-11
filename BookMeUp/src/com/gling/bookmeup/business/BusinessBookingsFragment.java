@@ -202,7 +202,7 @@ public class BusinessBookingsFragment extends OnClickListenerFragment implements
             TextView servicesTxtView = (TextView)convertView.findViewById(R.id.expandable_bookings_list_item_txtServices);
             TextView dateTxtView = (TextView)convertView.findViewById(R.id.expandable_bookings_list_item_txtDate);
             
-            clientNameTxtView.setText(_bookings.get(groupPosition).get(childPosition).getClientName());
+            clientNameTxtView.setText(_bookings.get(groupPosition).get(childPosition).getCustomerName());
             servicesTxtView.setText(_bookings.get(groupPosition).get(childPosition).getServiceName());
             dateTxtView.setText(_bookings.get(groupPosition).get(childPosition).getDate().toString());
             

@@ -148,7 +148,7 @@ public class ParseHelper {
 					Business.Keys.NAME);
 		}
 
-		public String getClientName() {
+		public String getCustomerName() {
 			return getParseObject(Keys.CUSTOMER_POINTER).getString(
 					CustomerClass.Keys.NAME);
 		}

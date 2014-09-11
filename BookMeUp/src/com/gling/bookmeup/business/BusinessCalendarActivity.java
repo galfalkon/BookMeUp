@@ -1,6 +1,7 @@
 package com.gling.bookmeup.business;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeField;
 
 import com.gling.bookmeup.R;
 import android.os.Bundle;
@@ -23,7 +24,7 @@ public class BusinessCalendarActivity extends FragmentActivity {
     
     private static final int DAYS_MARGIN = 30;
     
-    DayViewPagerAdapter mSectionsPagerAdapter;
+    CalendarPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
 
     @Override
@@ -37,7 +38,7 @@ public class BusinessCalendarActivity extends FragmentActivity {
         // this adapter will generate a new BusinessCalendarDayViewFragment for each day.
         // it will allow scrolling for up to DAYS_MARGIN days before current time,
         // and up to DAYS_MARGIN days after current time
-        mSectionsPagerAdapter = new DayViewPagerAdapter(getSupportFragmentManager());
+        mSectionsPagerAdapter = new CalendarPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.business_calendar_activity_pager);
@@ -63,50 +64,22 @@ public class BusinessCalendarActivity extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class DayViewPagerAdapter extends FragmentStatePagerAdapter {
+    public class CalendarPagerAdapter extends FragmentStatePagerAdapter {
 
-        public DayViewPagerAdapter(FragmentManager fm) {
+        public CalendarPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
         public Fragment getItem(int position) {
-            return BusinessCalendarDayViewFragment.newInstance(DateTime.now().minusDays(DAYS_MARGIN).plusDays(position));
+            DateTime now = DateTime.now();
+            DateTime today = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 0, 0);
+            return BusinessCalendarFragment.newInstance(today.minusDays(DAYS_MARGIN).plusDays(position));
         }
 
         @Override
         public int getCount() {
             return DAYS_MARGIN*2;
-        }
-    }
-
-    public static class BusinessCalendarDayViewFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_DATE = "section_date";
-
-        /**
-         * Returns a new instance of this fragment for the given section date.
-         */
-        public static BusinessCalendarDayViewFragment newInstance(DateTime dateTime) {
-            BusinessCalendarDayViewFragment fragment = new BusinessCalendarDayViewFragment();
-            Bundle args = new Bundle();
-            args.putSerializable(ARG_DATE, dateTime);
-            fragment.setArguments(args);
-            return fragment;
-        }
-        
-        public BusinessCalendarDayViewFragment() {
-            
-        }
-        
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.business_calendar_fragment, container, false);
-            ((TextView)rootView.findViewById(R.id.section_label)).setText(getArguments().getSerializable(ARG_DATE).toString());
-            return rootView;
         }
     }
 
