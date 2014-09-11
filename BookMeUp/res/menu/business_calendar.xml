@@ -13,7 +13,7 @@
         android:showAsAction="always"
         android:icon="@android:drawable/ic_menu_rotate"/>
     <item
-        android:id="@+id/bbusiness_calendar_action_pick"
+        android:id="@+id/business_calendar_action_pick"
         android:title="Pick a date"
         android:showAsAction="always"
         android:icon="@android:drawable/ic_menu_today"/>
