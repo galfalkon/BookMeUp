@@ -36,6 +36,11 @@ public class ParseHelper {
 		ParseUser.getCurrentUser().getParseObject(Business.CLASS_NAME)
 				.fetchIfNeededInBackground(callback);
 	}
+	
+	public static void fetchCustomer(GetCallback<Customer> callback) {
+		// TODO null checks on getCurrentUser()
+		ParseUser.getCurrentUser().getParseObject(Customer.CLASS_NAME).fetchIfNeededInBackground(callback);
+	}
 
 	public static void initialize(Context context) {
 		Log.i(TAG, "Initializing Parse");
