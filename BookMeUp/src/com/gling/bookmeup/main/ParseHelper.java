@@ -5,15 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.provider.Settings.Secure;
 import android.util.Log;
 
 import com.gling.bookmeup.business.Business;
-import com.gling.bookmeup.business.BusinessMainActivity;
 import com.gling.bookmeup.customer.Customer;
-import com.gling.bookmeup.login.LoginMainActivity;
 import com.parse.FunctionCallback;
 import com.parse.GetCallback;
 import com.parse.Parse;
@@ -30,7 +27,7 @@ public class ParseHelper {
 	private static final String TAG = "ParseHelper";
 	private static final String PARSE_APPLICATION_ID = "0Uye8FHMnsklraYbqnMDxtg0rbQRKEqZSVO6BHPa";
 	private static final String PARSE_CLIENT_KEY = "5dB8I0UZWFaTtYpE3OUn7CWwPzxYxe2yBqE7uhS3";
-
+	
 	public static void fetchBusiness(GetCallback<Business> callback) {
 		// TODO null checks on getCurrentUser()
 		ParseUser.getCurrentUser().getParseObject(Business.CLASS_NAME)
@@ -60,7 +57,7 @@ public class ParseHelper {
 
 		// Configure parse push service
 		Log.i(TAG, "Configuring parse push service");
-		PushService.setDefaultPushCallback(context, LoginMainActivity.class);
+		PushService.setDefaultPushCallback(context, PushHandlerActivity.class);
 
 		ParseInstallation installation = ParseInstallation
 				.getCurrentInstallation();
@@ -180,7 +177,7 @@ public class ParseHelper {
 			public static final String DURATION = "duration";
 		}
 	}
-
+	
 	public static class BackEndFunctions {
 
 		public static class SendMessageToClients {

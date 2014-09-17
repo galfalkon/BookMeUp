@@ -2,6 +2,9 @@ package com.gling.bookmeup.customer;
 
 import java.util.Locale;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.ActionBar;
 import android.app.ActionBar.TabListener;
 import android.app.FragmentTransaction;
@@ -18,10 +21,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.login.LoginMainActivity;
 import com.gling.bookmeup.main.ParseHelper;
+import com.gling.bookmeup.main.PushHandlerActivity;
+import com.google.gson.JsonObject;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -57,7 +63,7 @@ public class CustomerMainActivity extends FragmentActivity implements ActionBar.
     	Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.customer_main_activity);
-
+        
         final TabListener tabListener = this;
         ParseHelper.fetchCustomer(new GetCallback<Customer>() {
 			@Override
@@ -101,6 +107,23 @@ public class CustomerMainActivity extends FragmentActivity implements ActionBar.
 		            // this tab is selected.
 		            actionBar.addTab(actionBar.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)).setTabListener(tabListener));
 		        }
+		        
+        		PushHandlerActivity.PushNotificationType pushType = PushHandlerActivity.PushNotificationType.getFromIntent(getIntent());
+        		if (pushType != null)
+        		{
+	        		Log.i(TAG, pushType.toString());
+	        		switch (pushType)
+	        		{
+	        		case MESSAGE_FROM_BUSINESS:
+	        			Toast.makeText(getApplicationContext(), "Not implemented", Toast.LENGTH_SHORT).show();
+	        			break;
+	        		case OFFER_FROM_BUSINESS:
+	        			Toast.makeText(getApplicationContext(), "Not implemented", Toast.LENGTH_SHORT).show();
+	        			break;
+	    			default:
+	    				Log.e(TAG, "Invalid push type");
+	        		}
+        		}
 			}
 		});
     }

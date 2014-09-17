@@ -21,18 +21,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business;
-import com.gling.bookmeup.business.Business.Offer;
 import com.gling.bookmeup.main.OnClickListenerFragment;
-import com.gling.bookmeup.main.ParseHelper.BackEndFunctions;
 import com.gling.bookmeup.main.ParseHelper.Category;
 import com.parse.FindCallback;
-import com.parse.FunctionCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;

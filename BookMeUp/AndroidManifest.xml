@@ -45,7 +45,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        
         <service android:name="com.parse.PushService" />
 
         <!-- For Parse push services -->
@@ -85,6 +85,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.gling.bookmeup.business.BusinessMainActivity" />
         </activity>
+        <activity android:name=".main.PushHandlerActivity"></activity>
     </application>
 
 </manifest>

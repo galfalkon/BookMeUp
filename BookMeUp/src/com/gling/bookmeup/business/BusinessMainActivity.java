@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.login.LoginMainActivity;
 import com.gling.bookmeup.main.ParseHelper;
+import com.gling.bookmeup.main.PushHandlerActivity;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -57,7 +58,6 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        
         Log.i(TAG, "onCreate");
         
         final TabListener tabListener = this;
@@ -107,6 +107,20 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
                     }
                     
                     progressDialog.dismiss();
+                    
+            		PushHandlerActivity.PushNotificationType pushType = PushHandlerActivity.PushNotificationType.getFromIntent(getIntent());
+            		if (pushType != null)
+            		{
+            			Log.i(TAG, pushType.toString());
+            			switch (pushType)
+            			{
+            			case NEW_BOOKING_REQUEST:
+            				mViewPager.setCurrentItem(1);
+            				break;
+            			default:
+            				Log.e(TAG, "Invalid push type");
+            			}
+            		}
                 } else {
                     Log.e(TAG, "Exception: " + e.getMessage());
                     progressDialog.dismiss();
