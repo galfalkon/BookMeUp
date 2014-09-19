@@ -16,6 +16,7 @@ import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.parse.SendCallback;
 
 public class PushUtils {
@@ -87,8 +88,11 @@ public class PushUtils {
 		ParseQuery<Customer> customerQuery = new ParseQuery<Customer>(Customer.CLASS_NAME).
 				whereContainedIn("objectId", customerIds);
 		
+		ParseQuery<ParseUser> userQuery = ParseUser.getQuery().
+				whereMatchesQuery(ParseHelper.User.Keys.CUSTOMER_POINTER, customerQuery);
+		
 		ParseQuery<ParseInstallation> installationQuery = ParseInstallation.getQuery().
-				whereMatchesQuery(ParseHelper.Installation.Keys.CUSTOMER_POINTER, customerQuery);
+				whereMatchesQuery(ParseHelper.Installation.Keys.USER_POINTER, userQuery);
 		
 		ParsePush push = new ParsePush();
 		push.setQuery(installationQuery);
@@ -116,8 +120,11 @@ public class PushUtils {
 		ParseQuery<Customer> customerQuery = new ParseQuery<Customer>(Customer.CLASS_NAME).
 				whereContainedIn("objectId", customerIds);
 		
+		ParseQuery<ParseUser> userQuery = ParseUser.getQuery().
+				whereMatchesQuery(ParseHelper.User.Keys.CUSTOMER_POINTER, customerQuery);
+		
 		ParseQuery<ParseInstallation> installationQuery = ParseInstallation.getQuery().
-				whereMatchesQuery(ParseHelper.Installation.Keys.CUSTOMER_POINTER, customerQuery);
+				whereMatchesQuery(ParseHelper.Installation.Keys.USER_POINTER, userQuery);
 		
 		ParsePush push = new ParsePush();
 		push.setQuery(installationQuery);

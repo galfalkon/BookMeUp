@@ -17,6 +17,7 @@ import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessMainActivity;
 import com.gling.bookmeup.customer.Customer;
 import com.gling.bookmeup.customer.CustomerMainActivity;
+import com.gling.bookmeup.main.ParseHelper.User;
 import com.parse.GetCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
@@ -63,13 +64,13 @@ public class LoginMainActivity extends ActionBarActivity {
 
         Log.i(TAG, "User '" + user.getUsername() +  "' has been found in the system");
         
-        if (user.getParseObject(Business.CLASS_NAME) != null) {
+        if (user.getParseObject(User.Keys.BUSINESS_POINTER) != null) {
             Intent intent = new Intent(getApplicationContext(), BusinessMainActivity.class);
             startActivity(intent);
             return true;
         }
         
-        if (user.getParseObject(Customer.CLASS_NAME) != null) {
+        if (user.getParseObject(User.Keys.CUSTOMER_POINTER) != null) {
             Intent intent = new Intent(getApplicationContext(), CustomerMainActivity.class);
             startActivity(intent);
             return true;

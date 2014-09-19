@@ -1,9 +1,6 @@
 package com.gling.bookmeup.main;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import android.content.Context;
 import android.provider.Settings.Secure;
@@ -11,11 +8,9 @@ import android.util.Log;
 
 import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.customer.Customer;
-import com.parse.FunctionCallback;
 import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseClassName;
-import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
@@ -30,13 +25,13 @@ public class ParseHelper {
 	
 	public static void fetchBusiness(GetCallback<Business> callback) {
 		// TODO null checks on getCurrentUser()
-		ParseUser.getCurrentUser().getParseObject(Business.CLASS_NAME)
+		ParseUser.getCurrentUser().getParseObject(User.Keys.BUSINESS_POINTER)
 				.fetchIfNeededInBackground(callback);
 	}
 	
 	public static void fetchCustomer(GetCallback<Customer> callback) {
 		// TODO null checks on getCurrentUser()
-		ParseUser.getCurrentUser().getParseObject(Customer.CLASS_NAME).fetchIfNeededInBackground(callback);
+		ParseUser.getCurrentUser().getParseObject(User.Keys.CUSTOMER_POINTER).fetchIfNeededInBackground(callback);
 	}
 
 	public static void initialize(Context context) {
@@ -77,6 +72,15 @@ public class ParseHelper {
 
 	public static class Installation {
 		public static final String CLASS_NAME = "Installation";
+
+		public static class Keys {
+			public static final String ID = "objectId";
+			public static final String USER_POINTER = "userPointer";
+		}
+	}
+	
+	public static class User {
+		public static final String CLASS_NAME = "User";
 
 		public static class Keys {
 			public static final String ID = "objectId";

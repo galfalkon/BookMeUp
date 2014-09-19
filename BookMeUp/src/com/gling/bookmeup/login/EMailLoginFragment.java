@@ -22,6 +22,7 @@ import com.gling.bookmeup.customer.Customer;
 import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.FragmentsFlowManager;
+import com.gling.bookmeup.main.ParseHelper.User;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -86,14 +87,14 @@ public class EMailLoginFragment extends OnClickListenerFragment {
                 }
 
                 Log.i(TAG, "User '" + user.getUsername() +  "' logged in");
-                if (user.getParseObject(Business.CLASS_NAME) != null) {
+                if (user.getParseObject(User.Keys.BUSINESS_POINTER) != null) {
                     progressDialog.dismiss();
                     Intent intent = new Intent(getActivity(), BusinessMainActivity.class);
                     startActivity(intent);
                     return;
                 }
                 
-                if (user.getParseObject(Customer.CLASS_NAME) != null) {
+                if (user.getParseObject(User.Keys.CUSTOMER_POINTER) != null) {
                     progressDialog.dismiss();
                     Intent intent = new Intent(getActivity(), CustomerMainActivity.class);
                     startActivity(intent);
