@@ -111,7 +111,7 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
             			switch (pushType)
             			{
             			case NEW_BOOKING_REQUEST:
-            				mViewPager.setCurrentItem(1);
+            				mViewPager.setCurrentItem(0);
             				break;
             			default:
             				Log.e(TAG, "Invalid push type");

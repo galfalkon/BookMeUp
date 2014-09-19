@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessMainActivity;
 import com.gling.bookmeup.customer.Customer;
 import com.gling.bookmeup.customer.CustomerMainActivity;
@@ -79,25 +80,14 @@ public class PushUtils {
 		Log.i(TAG, "sendMessageToCustomers");
 		
 		String alert = "Message from " + businessName + ": " + message;
-		JSONObject json = generatePushData(alert, PushNotificationType.MESSAGE_FROM_BUSINESS);
-		if (json == null)
+		JSONObject data = generatePushData(alert, PushNotificationType.MESSAGE_FROM_BUSINESS);
+		if (data == null)
 		{
 			return;
 		}
 		
-		ParseQuery<Customer> customerQuery = new ParseQuery<Customer>(Customer.CLASS_NAME).
-				whereContainedIn("objectId", customerIds);
-		
-		ParseQuery<ParseUser> userQuery = ParseUser.getQuery().
-				whereMatchesQuery(ParseHelper.User.Keys.CUSTOMER_POINTER, customerQuery);
-		
-		ParseQuery<ParseInstallation> installationQuery = ParseInstallation.getQuery().
-				whereMatchesQuery(ParseHelper.Installation.Keys.USER_POINTER, userQuery);
-		
-		ParsePush push = new ParsePush();
-		push.setQuery(installationQuery);
-		push.setData(json);
-		push.sendInBackground(callback);
+		ParseQuery<ParseInstallation> installationQuery = generateInstallationQueryForCustomerIds(customerIds);
+		sendPushInBackground(installationQuery, data, callback);
 	}
 	
 	public static void sendOfferToCustomers(String businessId,  String businessName, List<String> customerIds, int discount, int duration, SendCallback callback)
@@ -111,14 +101,37 @@ public class PushUtils {
 		} else {
 			alert += duration + " weeks!";
 		}
-		JSONObject json = generatePushData(alert, PushNotificationType.OFFER_FROM_BUSINESS);
-		if (json == null)
+		JSONObject data = generatePushData(alert, PushNotificationType.OFFER_FROM_BUSINESS);
+		if (data == null)
 		{
 			return;
 		}
 		
+		ParseQuery<ParseInstallation> installationQuery = generateInstallationQueryForCustomerIds(customerIds);
+		sendPushInBackground(installationQuery, data, callback);
+	}
+	
+	public static void notifyBusinessAboutBookingRequest(String businessId, String customerName, SendCallback callback)
+	{
+		Log.i(TAG, "notifyBusinessAboutBookingRequest");
+		
+		String alert = "New booking request from " + customerName;
+		JSONObject data = generatePushData(alert, PushNotificationType.NEW_BOOKING_REQUEST);
+		if (data == null)
+		{
+			return;
+		}
+		
+		ParseQuery<ParseInstallation> installationQuery = generateInstallationQueryForBusinessId(businessId);
+		sendPushInBackground(installationQuery, data, callback);
+	}
+	
+	private static ParseQuery<ParseInstallation> generateInstallationQueryForCustomerIds(List<String> customerIds)
+	{
+		Log.i(TAG, "generateInstallationQueryForCustomerIds");
+		
 		ParseQuery<Customer> customerQuery = new ParseQuery<Customer>(Customer.CLASS_NAME).
-				whereContainedIn("objectId", customerIds);
+				whereContainedIn(Customer.Keys.ID, customerIds);
 		
 		ParseQuery<ParseUser> userQuery = ParseUser.getQuery().
 				whereMatchesQuery(ParseHelper.User.Keys.CUSTOMER_POINTER, customerQuery);
@@ -126,9 +139,32 @@ public class PushUtils {
 		ParseQuery<ParseInstallation> installationQuery = ParseInstallation.getQuery().
 				whereMatchesQuery(ParseHelper.Installation.Keys.USER_POINTER, userQuery);
 		
+		return installationQuery;
+	}
+	
+	private static ParseQuery<ParseInstallation> generateInstallationQueryForBusinessId(String businessId)
+	{
+		Log.i(TAG, "generateInstallationQueryForBusinessId");
+		
+		ParseQuery<Business> customerQuery = new ParseQuery<Business>(Business.CLASS_NAME).
+				whereEqualTo(Business.Keys.ID, businessId);
+		
+		ParseQuery<ParseUser> userQuery = ParseUser.getQuery().
+				whereMatchesQuery(ParseHelper.User.Keys.BUSINESS_POINTER, customerQuery);
+		
+		ParseQuery<ParseInstallation> installationQuery = ParseInstallation.getQuery().
+				whereMatchesQuery(ParseHelper.Installation.Keys.USER_POINTER, userQuery);
+		
+		return installationQuery;
+	}
+	
+	private static void sendPushInBackground(ParseQuery<ParseInstallation> installationQuery, JSONObject data, SendCallback callback)
+	{
+		Log.i(TAG, "sendPushInBackground");
+		
 		ParsePush push = new ParsePush();
 		push.setQuery(installationQuery);
-		push.setData(json);
+		push.setData(data);
 		push.sendInBackground(callback);
 	}
 	
