@@ -2,9 +2,6 @@ package com.gling.bookmeup.customer;
 
 import java.util.Locale;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.ActionBar;
 import android.app.ActionBar.TabListener;
 import android.app.FragmentTransaction;
@@ -26,8 +23,7 @@ import android.widget.Toast;
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.login.LoginMainActivity;
 import com.gling.bookmeup.main.ParseHelper;
-import com.gling.bookmeup.main.PushHandlerActivity;
-import com.google.gson.JsonObject;
+import com.gling.bookmeup.main.PushUtils;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -108,7 +104,7 @@ public class CustomerMainActivity extends FragmentActivity implements ActionBar.
 		            actionBar.addTab(actionBar.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)).setTabListener(tabListener));
 		        }
 		        
-        		PushHandlerActivity.PushNotificationType pushType = PushHandlerActivity.PushNotificationType.getFromIntent(getIntent());
+		        PushUtils.PushNotificationType pushType = PushUtils.PushNotificationType.getFromIntent(getIntent());
         		if (pushType != null)
         		{
 	        		Log.i(TAG, pushType.toString());

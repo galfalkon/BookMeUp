@@ -6,7 +6,6 @@ import android.app.ActionBar;
 import android.app.ActionBar.TabListener;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,16 +14,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.login.LoginMainActivity;
 import com.gling.bookmeup.main.ParseHelper;
-import com.gling.bookmeup.main.PushHandlerActivity;
+import com.gling.bookmeup.main.PushUtils;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -108,7 +104,7 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
                     
                     progressDialog.dismiss();
                     
-            		PushHandlerActivity.PushNotificationType pushType = PushHandlerActivity.PushNotificationType.getFromIntent(getIntent());
+            		PushUtils.PushNotificationType pushType = PushUtils.PushNotificationType.getFromIntent(getIntent());
             		if (pushType != null)
             		{
             			Log.i(TAG, pushType.toString());

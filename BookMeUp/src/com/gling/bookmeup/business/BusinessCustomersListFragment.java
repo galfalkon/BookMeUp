@@ -35,15 +35,14 @@ import android.widget.Toast;
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business.Offer;
 import com.gling.bookmeup.main.OnClickListenerFragment;
-import com.gling.bookmeup.main.ParseHelper;
-import com.gling.bookmeup.main.ParseHelper.BackEndFunctions;
 import com.gling.bookmeup.main.ParseHelper.Booking;
 import com.gling.bookmeup.main.ParseHelper.CustomerClass;
+import com.gling.bookmeup.main.PushUtils;
 import com.parse.FindCallback;
-import com.parse.FunctionCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SendCallback;
 
 public class BusinessCustomersListFragment  extends OnClickListenerFragment implements TextWatcher {
 	private static final String TAG = "BusinessCustomersListFragment";
@@ -235,11 +234,10 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		    	Log.i(TAG, "Sending message to selected clients");
 		    	String message = ((TextView)view.findViewById(R.id.business_client_list_send_message_dialog_edtMessage)).getText().toString();
 		    	
-				// Call the back end function
-				ParseHelper.BackEndFunctions.SendMessageToClients.callInBackground(_business.getObjectId(), _business.getName(), selectedCustomersIds, message, new FunctionCallback<String>() {
+		    	PushUtils.sendMessageToCustomers(_business.getObjectId(), _business.getName(), selectedCustomersIds, message, new SendCallback() {
 					@Override
-					public void done(String object, ParseException e) {
-						Log.i(TAG, "callFunctionInBackground done");
+					public void done(ParseException e) {
+						Log.i(TAG, "sendMessageToCustomers done");
 						
 						if (e != null) {
 							Log.e(TAG, "Exception: " + e.getMessage());
@@ -292,10 +290,11 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 
 		    	final int discount = (Integer) discountSpinner.getSelectedItem();
 		    	final int duration = (Integer) durationSpinner.getSelectedItem();
-		    	BackEndFunctions.SendOfferToClients.callInBackground(_business.getObjectId(), _business.getName(), selectedCustomersIds, discount, duration, new FunctionCallback<String>() {
+		    	PushUtils.sendOfferToCustomers(_business.getObjectId(), _business.getName(), selectedCustomersIds, discount, duration, new SendCallback() {
+					
 					@Override
-					public void done(String object, ParseException e) {
-						Log.i(TAG, "callFunctionInBackground done");
+					public void done(ParseException e) {
+						Log.i(TAG, "sendOfferToCustomers done");
 
 						if (e != null) {
 							Log.e(TAG, "Exception: " + e.getMessage());
