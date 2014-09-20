@@ -1,19 +1,9 @@
 package com.gling.bookmeup.business;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 import com.gling.bookmeup.main.ParseHelper.Category;
+import com.gling.bookmeup.main.ParseHelper.Offer;
 import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
@@ -37,7 +27,6 @@ public class Business extends ParseObject {
         public static final String CATEGORY = "category";
         public static final String OPENING_HOURS = "openingHours";
         public static final String IMAGE = "image";
-        public static final String OFFERS = "offers";
     }
     
 	public Business() {
@@ -118,93 +107,6 @@ public class Business extends ParseObject {
                 Service.Keys.BUSINESS, this).orderByAscending("updatedAt");
 
         return query;
-    }
-    
-    public void addOffer(Offer offer) {
-    	Log.i(TAG, "publishOffer");
-    	
-    	try {
-    		JSONArray jsonOffers = getJSONArray(Keys.OFFERS);
-			jsonOffers.put(jsonOffers.length(), offer.toJSONObject());
-			saveInBackground();
-		} catch (JSONException e) {
-			Log.e(TAG, "Exception: " + e.getMessage());
-		}
-    }
-
-    /*
-     * Returns a list of offers that are currently active (i.e. haven't been expired yet)
-     */
-    public List<Offer> getActiveOffers()  {
-    	List<Offer> offers = new ArrayList<Offer>();
-    	JSONArray jsonOffers = getJSONArray(Keys.OFFERS);
-    	if (jsonOffers == null) {
-    	    return offers; 
-    	}
-    	
-    	Date today = new Date(); 
-    	for (int i = 0; i < jsonOffers.length(); i++) {
-    		try {
-    			Offer offer = new Offer(jsonOffers.getJSONObject(i));
-    			if (offer.getExpiration().after(today)) {
-    				offers.add(offer);
-    			}
-    		} catch (Exception e) {
-    			Log.e(TAG, "Exeception occurred while trying to create a JSON object. " + e.getMessage());
-    		}
-    	} 
-    	
-    	return offers;
-    }
-    
-    public static class Offer {
-    	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yy");
-    	
-    	private static class Keys {
-    		// TODO: Consider supporting offers for a certain service
-    		public static final String DISCOUNT = "discount";
-    		public static final String EXPIRATION = "duration";
-    	}
-    	
-    	private final int _discount;
-    	private final Date _expiration;
-    	
-    	// TODO: Remove
-    	public Offer(int discount, int durationInWeeks) {
-    		_discount = discount;
-    		Calendar calendar = Calendar.getInstance();
-    		calendar.add(Calendar.WEEK_OF_YEAR, durationInWeeks);
-    		_expiration = calendar.getTime();
-		}
-    	
-    	public Offer(int discount, Date expiration) {
-    		_discount = discount;
-    		_expiration = expiration;
-    	}
-    	
-    	public Offer(JSONObject json) throws JSONException, ParseException {
-			_discount = json.getInt(Keys.DISCOUNT);
-			_expiration = DATE_FORMAT.parse(json.getString(Keys.EXPIRATION));
-		}
-    	
-    	private JSONObject toJSONObject() throws JSONException {
-    		JSONObject json = new JSONObject();
-    		json.put(Keys.DISCOUNT, _discount);
-    		json.put(Keys.EXPIRATION, DATE_FORMAT.format(_expiration));
-    		return json;
-    	}
-    	
-    	public int getDiscount() {
-    		return _discount;
-    	}
-    	
-    	public Date getExpiration() {
-    		return _expiration;
-    	}
-    	
-    	public String getFormattedExpirationDate() {
-    		return DATE_FORMAT.format(_expiration);
-    	}
     }
     
 //        business.getServices(new FindCallback<Service>() {

@@ -33,10 +33,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.business.Business.Offer;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper.Booking;
 import com.gling.bookmeup.main.ParseHelper.CustomerClass;
+import com.gling.bookmeup.main.ParseHelper.Offer;
 import com.gling.bookmeup.main.PushUtils;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -300,8 +300,6 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 							Log.e(TAG, "Exception: " + e.getMessage());
 							return;
 						}
-						
-						_business.addOffer(new Offer(discount, duration));
 					}
 				});
 		    }

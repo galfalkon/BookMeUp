@@ -32,7 +32,7 @@ public class CustomerMainActivity extends FragmentActivity implements ActionBar.
 
     private static final String TAG = "CustomerMainActivity";
 
-    private static final int NUM_OF_SECTIONS = 3;
+    private static final int NUM_OF_SECTIONS = 4;
 
     private Customer _customer;
     
@@ -184,6 +184,8 @@ public class CustomerMainActivity extends FragmentActivity implements ActionBar.
             	return new CustomerHistoryFragment();
             case 2:
             	return new CustomerFavouriteFragment();
+            case 3:
+            	return new CustomerOffersFragment();
             default:
                 return PlaceholderFragment.newInstance(position + 1);
             }
@@ -205,6 +207,8 @@ public class CustomerMainActivity extends FragmentActivity implements ActionBar.
                 return getString(R.string.customer_activity_title_section_history).toUpperCase(l);
             case 2:
                 return getString(R.string.customer_activity_title_section_favoirites).toUpperCase(l);
+            case 3:
+            	return getString(R.string.customer_activity_title_section_offers).toUpperCase(l);
             }
             return null;
         }

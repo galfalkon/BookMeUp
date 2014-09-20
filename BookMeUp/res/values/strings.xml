@@ -42,6 +42,7 @@
     <string name="customer_activity_title_section_popular">Popular</string>
     <string name="customer_activity_title_section_history">History</string>
     <string name="customer_activity_title_section_favoirites">Favourites</string>
+    <string name="customer_activity_title_section_offers">Offers</string>
     
     <!-- Customer popular -->
     <string name="customer_business_list_search_edtSearchHint">Search for...</string>
