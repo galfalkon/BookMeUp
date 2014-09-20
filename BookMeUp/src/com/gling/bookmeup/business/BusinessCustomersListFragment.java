@@ -133,9 +133,9 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 			Log.i(TAG, "btnFilterByLastVisit clicked");
 			handleLastVisitFilter();
 			break;
-		case R.id.business_customer_list_btnSendMessage:
-			handleSendMessageToSelectedClients();
-			break;
+//		case R.id.business_customer_list_btnSendMessage:
+//			handleSendMessageToSelectedClients();
+//			break;
 		case R.id.business_customer_list_btnSendOffer:
 			handleSendOfferToSelectedClients();
 			break;
