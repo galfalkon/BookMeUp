@@ -30,8 +30,9 @@
     <string name="email_login_edtPasswordHint">Password</string>
     <string name="email_login_txtForgotPasswordText">Forgot Your Password?</string>
     <string name="email_login_reset_password_dialog_title">Reset password</string>
-    <string name="email_login_reset_password_dialog_toast_message_on_success">You will receiver an email shortly that will allow you to reset your password</string>
+    <string name="email_login_reset_password_dialog_toast_message_on_success">You will receive an email shortly that will allow you to reset your password</string>
     <string name="email_login_reset_password_dialog_email_hint">Your email address...</string>
+    <string name="email_login_reset_password_dialog_invalid_login_toast_message">Invalid email address</string>
 
     <!-- Business Activity -->
     <string name="business_activity_title">BookMeUp! - For Business</string>

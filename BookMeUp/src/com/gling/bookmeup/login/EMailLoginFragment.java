@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -61,7 +63,7 @@ public class EMailLoginFragment extends OnClickListenerFragment {
     private void handleForgotPassword() {
     	Log.i(TAG, "handleForgotPassword");
     	
-    	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+    	final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
     	builder.setTitle(R.string.email_login_reset_password_dialog_title);
 
     	// Set up the input
@@ -70,36 +72,50 @@ public class EMailLoginFragment extends OnClickListenerFragment {
     	// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
     	emailInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
     	emailInput.setHint(R.string.email_login_reset_password_dialog_email_hint);
+    	
     	builder.setView(emailInput);
-
-    	// Set up the buttons
-    	builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() { 
-    	    @Override
-    	    public void onClick(DialogInterface dialog, int which) {
-    	        String email = emailInput.getText().toString();
+    	builder.setPositiveButton(R.string.ok, null);
+    	builder.setNegativeButton(R.string.cancel, null);
+    	
+    	final AlertDialog alertDialog = builder.show();
+    	alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Log.i(TAG, "Positive button click");
+				
+				String email = emailInput.getText().toString();
+    	        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches())
+    	        {
+    	        	Toast.makeText(getActivity(), R.string.email_login_reset_password_dialog_invalid_login_toast_message, Toast.LENGTH_SHORT).show();
+    	        	return;
+    	        }
+    	        
+    	        final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
     	        ParseUser.requestPasswordResetInBackground(email, new RequestPasswordResetCallback() {
 					@Override
 					public void done(ParseException e) {
 						Log.i(TAG, "requestPasswordResetInBackground done");
+						
+						progressDialog.dismiss();
 						if (e != null)
 						{
 							Log.e(TAG, "Exception: " + e.getMessage());
 							return;
 						}
 						
+						alertDialog.dismiss();
 						Toast.makeText(getActivity(), R.string.email_login_reset_password_dialog_toast_message_on_success, Toast.LENGTH_SHORT).show();
 					}
 				});
-    	    }
-    	});
-    	builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-    	    @Override
-    	    public void onClick(DialogInterface dialog, int which) {
-    	        dialog.cancel();
-    	    }
-    	});
-
-    	builder.show();
+			}
+		});
+    	alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Log.i(TAG, "Negative button click");
+				alertDialog.cancel();
+			}
+		});
 	}
 
 	private void handleLoginReuest() {
