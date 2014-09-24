@@ -36,7 +36,6 @@ import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper.Booking;
 import com.gling.bookmeup.main.ParseHelper.CustomerClass;
-import com.gling.bookmeup.main.ParseHelper.Offer;
 import com.gling.bookmeup.main.PushUtils;
 import com.parse.FindCallback;
 import com.parse.ParseException;
