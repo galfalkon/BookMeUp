@@ -3,7 +3,7 @@ package com.gling.bookmeup.business;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -46,7 +46,7 @@ public class BusinessProfileActivity extends ActionBarActivity {
                     }
                     
                     Fragment firstFragment = new BusinessProfileFragment();
-                    getSupportFragmentManager().beginTransaction().add(R.id.business_profile_container, firstFragment).commit();
+                    getFragmentManager().beginTransaction().add(R.id.business_profile_container, firstFragment).commit();
                 } else {
                     Log.e(TAG, "Exception: " + e.getMessage());
                     progressDialog.dismiss();

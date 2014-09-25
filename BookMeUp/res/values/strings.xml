@@ -42,16 +42,20 @@
     <!-- Business Activity -->
     <string name="business_activity_title">BookMeUp! - For Business</string>
     <string name="business_activity_title_section_calendar">Calendar</string>
-    <string name="business_activity_title_section_bookings">Bookings</string>
-    <string name="business_activity_title_section_client_list">Client List</string>
-    <string name="business_activity_title_section_offer_list">Offer List</string>
+    <string-array name="business_navigation_drawer_items">
+        <item>Bookings</item>
+        <item>Customers</item>
+        <item>Offers</item>
+    </string-array>
 
     <!-- Customer Activity -->
     <string name="customer_activity_title">BookMeUp! - For Customers</string>
-    <string name="customer_activity_title_section_popular">Popular</string>
-    <string name="customer_activity_title_section_history">History</string>
-    <string name="customer_activity_title_section_favoirites">Favourites</string>
-    <string name="customer_activity_title_section_offers">Offers</string>
+    <string-array name="customer_navigation_drawer_items">
+        <item>Popular</item>
+        <item>History</item>
+        <item>Favourites</item>
+        <item>Offers</item>
+    </string-array>
 
     <!-- Customer popular -->
     <string name="customer_business_list_search_edtSearchHint">Search for...</string>
@@ -122,8 +126,12 @@
 
     <!-- Business calendar -->
     <string name="title_activity_business_calendar">Calendar</string>
-    
+
     <!-- Errors -->
     <string name="error_required_field">This field is required</string>
+    <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
 
 </resources>

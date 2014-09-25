@@ -30,7 +30,7 @@
     <uses-permission android:name="com.gling.bookmeup.permission.C2D_MESSAGE" />
 
     <application
-        android:name=".main.BookMeUpApplication"
+        android:name="com.gling.bookmeup.main.BookMeUpApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -57,7 +57,7 @@
         </receiver>
 
         <activity
-            android:name=".login.SplashScreenActivity"
+            android:name="com.gling.bookmeup.login.SplashScreenActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.BookMeUp_SplashScreen" >
@@ -68,27 +68,31 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".login.LoginMainActivity"
+            android:name="com.gling.bookmeup.login.LoginMainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.BookMeUp_LoginScreen" >
         </activity>
         <activity
-            android:name=".business.BusinessMainActivity"
+            android:name="com.gling.bookmeup.business.BusinessMainActivity"
             android:label="@string/business_activity_title" >
         </activity>
         <activity
-            android:name=".customer.CustomerMainActivity"
+            android:name="com.gling.bookmeup.customer.CustomerMainActivity"
             android:label="@string/customer_activity_title" >
         </activity>
         <activity
-            android:name=".business.BusinessProfileActivity"
+            android:name="com.gling.bookmeup.business.BusinessProfileActivity"
             android:label="@string/title_activity_profile_edit" >
         </activity>
         <activity
             android:name="com.gling.bookmeup.business.BusinessCalendarActivity"
             android:label="@string/title_activity_business_calendar" >
         </activity>
-        <activity android:name=".main.PushHandlerActivity" >
+        <activity android:name="com.gling.bookmeup.main.PushHandlerActivity" >
+        </activity>
+        <activity
+            android:name="com.gling.bookmeup.main.NavigationDrawerActivity"
+            android:label="@string/title_activity_navigation_drawer" >
         </activity>
     </application>
 

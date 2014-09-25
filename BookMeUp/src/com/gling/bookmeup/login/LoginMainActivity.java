@@ -2,14 +2,14 @@ package com.gling.bookmeup.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import android.app.Activity;
+import android.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.gling.bookmeup.R;
 
-public class LoginMainActivity extends FragmentActivity {
+public class LoginMainActivity extends Activity {
 
     private static final String TAG = "LoginActivity";
 
@@ -43,6 +43,6 @@ public class LoginMainActivity extends FragmentActivity {
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
 
-        getSupportFragmentManager().beginTransaction().add(R.id.login_container, firstFragment).commit();
+        getFragmentManager().beginTransaction().add(R.id.login_container, firstFragment).commit();
     }
 }

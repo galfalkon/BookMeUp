@@ -11,7 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -370,7 +370,7 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
             if (!userInCache()) {
                 Log.i(TAG, "user not found in cache, redirecting to login...");
                 Toast.makeText(getActivity(), "Please sign up or log in first...", Toast.LENGTH_SHORT).show();
-                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(
+                getActivity().getFragmentManager().beginTransaction().addToBackStack(null).replace(
                         R.id.business_profile_container,
                         Fragment.instantiate(getActivity(), LoginFragment.class.getName())).commit();
                 return;
