@@ -1,7 +1,5 @@
 package com.gling.bookmeup.customer;
 
-import java.io.Serializable;
-
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;

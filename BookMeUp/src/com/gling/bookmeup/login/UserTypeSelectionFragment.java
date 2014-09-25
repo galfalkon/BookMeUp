@@ -2,7 +2,6 @@ package com.gling.bookmeup.login;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,6 +13,7 @@ import com.gling.bookmeup.business.BusinessMainActivity;
 import com.gling.bookmeup.customer.Customer;
 import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.gling.bookmeup.main.OnClickListenerFragment;
+import com.gling.bookmeup.main.ParseHelper;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -50,7 +50,7 @@ public class UserTypeSelectionFragment extends OnClickListenerFragment implement
         case R.id.user_type_selection_btnBusiness:
             Log.i(TAG, "btnBusiness clicked");
             Business business = new Business();
-            currentUser.put(Business.CLASS_NAME, business);
+            currentUser.put(ParseHelper.User.Keys.BUSINESS_POINTER, business);
             //business.setUser(ParseUser.getCurrentUser());
 
             final ProgressDialog progressDialogBusiness = ProgressDialog.show(getActivity(), null, "Creating business...");
@@ -73,7 +73,7 @@ public class UserTypeSelectionFragment extends OnClickListenerFragment implement
         case R.id.user_type_selection_btnCustomer:
             Log.i(TAG, "btnBusiness clicked");
             Customer customer = new Customer();
-            currentUser.put(Customer.CLASS_NAME, customer);
+            currentUser.put(ParseHelper.User.Keys.CUSTOMER_POINTER, customer);
             //customer.setUser(ParseUser.getCurrentUser());
 
             final ProgressDialog progressDialogCustomer = ProgressDialog.show(getActivity(), null, "Creating customer...");

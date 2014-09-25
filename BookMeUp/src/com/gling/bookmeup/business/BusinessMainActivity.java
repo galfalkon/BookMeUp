@@ -6,7 +6,6 @@ import android.app.ActionBar;
 import android.app.ActionBar.TabListener;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,15 +14,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.login.LoginMainActivity;
 import com.gling.bookmeup.main.ParseHelper;
+import com.gling.bookmeup.main.PushUtils;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -57,7 +54,6 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        
         Log.i(TAG, "onCreate");
         
         final TabListener tabListener = this;
@@ -107,6 +103,20 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
                     }
                     
                     progressDialog.dismiss();
+                    
+            		PushUtils.PushNotificationType pushType = PushUtils.PushNotificationType.getFromIntent(getIntent());
+            		if (pushType != null)
+            		{
+            			Log.i(TAG, pushType.toString());
+            			switch (pushType)
+            			{
+            			case NEW_BOOKING_REQUEST:
+            				mViewPager.setCurrentItem(0);
+            				break;
+            			default:
+            				Log.e(TAG, "Invalid push type");
+            			}
+            		}
                 } else {
                     Log.e(TAG, "Exception: " + e.getMessage());
                     progressDialog.dismiss();

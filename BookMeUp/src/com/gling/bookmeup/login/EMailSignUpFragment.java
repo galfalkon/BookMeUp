@@ -12,8 +12,11 @@ import android.widget.Toast;
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.FragmentsFlowManager;
 import com.gling.bookmeup.main.OnClickListenerFragment;
+import com.gling.bookmeup.main.ParseHelper;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 public class EMailSignUpFragment extends OnClickListenerFragment {
@@ -57,7 +60,7 @@ public class EMailSignUpFragment extends OnClickListenerFragment {
 		
 		final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), "Signing up...", "Please wait");
 		
-		ParseUser user = new ParseUser();
+		final ParseUser user = new ParseUser();
 		user.setUsername(edtUserName.getText().toString());
 		user.setEmail(edtEmail.getText().toString());
 		user.setPassword(edtPassword.getText().toString());
@@ -73,7 +76,19 @@ public class EMailSignUpFragment extends OnClickListenerFragment {
 					return;
 				}
 				
-				Log.i(TAG, "signup is done");
+				Log.i(TAG, "signup is done, associating current installation with current user");
+				ParseInstallation currentInstallation = ParseInstallation.getCurrentInstallation();
+				currentInstallation.put(ParseHelper.Installation.Keys.USER_POINTER, user);
+				currentInstallation.saveInBackground(new SaveCallback() {
+					
+					@Override
+					public void done(ParseException e) {
+						if (e != null) {
+							Log.e(TAG, "Installation saveInBackground failed: " + e.getMessage());
+							return;
+						}
+					}
+				});
 				
 				Toast.makeText(getActivity(), "Please verify your Email address", Toast.LENGTH_SHORT).show();
 				FragmentsFlowManager.goToNextFragment(getActivity(), R.id.login_container, viewClickedId);

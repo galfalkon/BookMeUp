@@ -9,23 +9,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.business.Business.Offer;
 import com.gling.bookmeup.main.OnClickListenerFragment;
-import com.parse.FindCallback;
-import com.parse.ParseException;
+import com.gling.bookmeup.main.ParseHelper;
 import com.parse.ParseQuery;
+import com.parse.ParseQueryAdapter;
 
 public class BusinessOffersFragment extends OnClickListenerFragment {
 	private static final String TAG = "BusinessOffersFragment";
 	
-	private List<Offer> _offers;
-	private ListAdapter _offersAdapter;
+	private OffersListAdapter _offersAdapter;
 	private Business _business;
 	
 	@Override
@@ -40,7 +36,6 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 		Log.i(TAG, "onCreateView");
 		final View view = super.onCreateView(inflater, container, savedInstanceState);
 		
-		_offers = _business.getActiveOffers();
         _offersAdapter = new OffersListAdapter();
         ListView offersListView = (ListView) view.findViewById(R.id.business_offers_listViewOffers);
         offersListView.setAdapter(_offersAdapter);
@@ -57,14 +52,36 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 		return R.layout.business_offers_fragment;
 	}
 	
-	private class OffersListAdapter extends ArrayAdapter<Offer>
+	private class OffersListAdapter extends ParseQueryAdapter<ParseHelper.Offer>
 	{
+		
 		public OffersListAdapter() {
-			super(getActivity(), R.id.business_offers_listViewOffers, _offers);
+			super(getActivity(), new QueryFactory<ParseHelper.Offer>() {
+				@Override
+				public ParseQuery<ParseHelper.Offer> create() {
+					return new ParseQuery<ParseHelper.Offer>(ParseHelper.Offer.class).
+							whereEqualTo(ParseHelper.Offer.Keys.BUSINESS_POINTER, _business);
+				}
+			});
+			
+			addOnQueryLoadListener(new OnQueryLoadListener<ParseHelper.Offer>() {
+
+	        	private ProgressDialog _progressDialog;
+	        	
+				@Override
+				public void onLoaded(List<com.gling.bookmeup.main.ParseHelper.Offer> objects, Exception e) {
+					_progressDialog.dismiss();
+				}
+
+				@Override
+				public void onLoading() {
+					_progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
+				}
+			});
 		}
 		
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		public View getItemView(ParseHelper.Offer offer, View convertView, ViewGroup parent) {
 			LayoutInflater inflator = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			if (convertView == null) {
 				convertView = inflator.inflate(R.layout.business_offer_list_item, null);
@@ -72,10 +89,8 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 			
 			final TextView txtExpiration = (TextView) convertView.findViewById(R.id.business_offer_list_item_txtExpiration);
 			final TextView txtDisount = (TextView) convertView.findViewById(R.id.business_offer_list_item_txtDiscount);
-			
-			Offer offer = _offers.get(position);
-			
-			txtExpiration.setText(offer.getFormattedExpirationDate());
+
+			txtExpiration.setText(ParseHelper.Offer.EXPIRATION_DATE_FORMAT.format(offer.getExpirationData()));
 			txtDisount.setText(offer.getDiscount() + "%");
 			
 			return convertView;

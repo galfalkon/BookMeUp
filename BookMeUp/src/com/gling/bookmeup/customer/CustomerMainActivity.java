@@ -18,10 +18,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.login.LoginMainActivity;
 import com.gling.bookmeup.main.ParseHelper;
+import com.gling.bookmeup.main.PushUtils;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -30,7 +32,7 @@ public class CustomerMainActivity extends FragmentActivity implements ActionBar.
 
     private static final String TAG = "CustomerMainActivity";
 
-    private static final int NUM_OF_SECTIONS = 3;
+    private static final int NUM_OF_SECTIONS = 4;
 
     private Customer _customer;
     
@@ -57,7 +59,7 @@ public class CustomerMainActivity extends FragmentActivity implements ActionBar.
     	Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.customer_main_activity);
-
+        
         final TabListener tabListener = this;
         ParseHelper.fetchCustomer(new GetCallback<Customer>() {
 			@Override
@@ -101,6 +103,23 @@ public class CustomerMainActivity extends FragmentActivity implements ActionBar.
 		            // this tab is selected.
 		            actionBar.addTab(actionBar.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)).setTabListener(tabListener));
 		        }
+		        
+		        PushUtils.PushNotificationType pushType = PushUtils.PushNotificationType.getFromIntent(getIntent());
+        		if (pushType != null)
+        		{
+	        		Log.i(TAG, pushType.toString());
+	        		switch (pushType)
+	        		{
+	        		case MESSAGE_FROM_BUSINESS:
+	        			Toast.makeText(getApplicationContext(), "Not implemented", Toast.LENGTH_SHORT).show();
+	        			break;
+	        		case OFFER_FROM_BUSINESS:
+	        			Toast.makeText(getApplicationContext(), "Not implemented", Toast.LENGTH_SHORT).show();
+	        			break;
+	    			default:
+	    				Log.e(TAG, "Invalid push type");
+	        		}
+        		}
 			}
 		});
     }
@@ -165,6 +184,8 @@ public class CustomerMainActivity extends FragmentActivity implements ActionBar.
             	return new CustomerHistoryFragment();
             case 2:
             	return new CustomerFavouriteFragment();
+            case 3:
+            	return new CustomerOffersFragment();
             default:
                 return PlaceholderFragment.newInstance(position + 1);
             }
@@ -186,6 +207,8 @@ public class CustomerMainActivity extends FragmentActivity implements ActionBar.
                 return getString(R.string.customer_activity_title_section_history).toUpperCase(l);
             case 2:
                 return getString(R.string.customer_activity_title_section_favoirites).toUpperCase(l);
+            case 3:
+            	return getString(R.string.customer_activity_title_section_offers).toUpperCase(l);
             }
             return null;
         }

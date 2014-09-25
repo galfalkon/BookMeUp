@@ -1,27 +1,26 @@
 package com.gling.bookmeup.main;
 
+import java.security.MessageDigest;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.provider.Settings.Secure;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
 import com.gling.bookmeup.business.Business;
-import com.gling.bookmeup.business.BusinessMainActivity;
 import com.gling.bookmeup.customer.Customer;
-import com.gling.bookmeup.login.LoginMainActivity;
-import com.parse.FunctionCallback;
 import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseClassName;
-import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.PushService;
 import com.parse.SaveCallback;
@@ -30,37 +29,34 @@ public class ParseHelper {
 	private static final String TAG = "ParseHelper";
 	private static final String PARSE_APPLICATION_ID = "0Uye8FHMnsklraYbqnMDxtg0rbQRKEqZSVO6BHPa";
 	private static final String PARSE_CLIENT_KEY = "5dB8I0UZWFaTtYpE3OUn7CWwPzxYxe2yBqE7uhS3";
-
+	
 	public static void fetchBusiness(GetCallback<Business> callback) {
 		// TODO null checks on getCurrentUser()
-		ParseUser.getCurrentUser().getParseObject(Business.CLASS_NAME)
+		ParseUser.getCurrentUser().getParseObject(User.Keys.BUSINESS_POINTER)
 				.fetchIfNeededInBackground(callback);
 	}
 	
 	public static void fetchCustomer(GetCallback<Customer> callback) {
 		// TODO null checks on getCurrentUser()
-		ParseUser.getCurrentUser().getParseObject(Customer.CLASS_NAME).fetchIfNeededInBackground(callback);
+		ParseUser.getCurrentUser().getParseObject(User.Keys.CUSTOMER_POINTER).fetchIfNeededInBackground(callback);
 	}
 
 	public static void initialize(Context context) {
 		Log.i(TAG, "Initializing Parse");
 
-		// Business
+		// Register ParseObject subclasses
 		ParseObject.registerSubclass(Business.class);
 		ParseObject.registerSubclass(com.gling.bookmeup.business.Service.class);
 		ParseObject.registerSubclass(Booking.class);
-
-		// Customer
 		ParseObject.registerSubclass(Customer.class);
-
-		// Category
 		ParseObject.registerSubclass(Category.class);
+		ParseObject.registerSubclass(Offer.class);
 
 		Parse.initialize(context, PARSE_APPLICATION_ID, PARSE_CLIENT_KEY);
 
 		// Configure parse push service
 		Log.i(TAG, "Configuring parse push service");
-		PushService.setDefaultPushCallback(context, LoginMainActivity.class);
+		PushService.setDefaultPushCallback(context, PushHandlerActivity.class);
 
 		ParseInstallation installation = ParseInstallation
 				.getCurrentInstallation();
@@ -80,6 +76,15 @@ public class ParseHelper {
 
 	public static class Installation {
 		public static final String CLASS_NAME = "Installation";
+
+		public static class Keys {
+			public static final String ID = "objectId";
+			public static final String USER_POINTER = "userPointer";
+		}
+	}
+	
+	public static class User {
+		public static final String CLASS_NAME = "User";
 
 		public static class Keys {
 			public static final String ID = "objectId";
@@ -131,7 +136,7 @@ public class ParseHelper {
 			public static final int APPROVED = 1;
 			public static final int CANCELED = 2;
 		}
-
+		
 		public Booking() {
 			// Do not modify the ParseObject
 		}
@@ -180,60 +185,66 @@ public class ParseHelper {
 			public static final String DURATION = "duration";
 		}
 	}
-
-	public static class BackEndFunctions {
-
-		public static class SendMessageToClients {
-			private static final String FUNCTION_NAME = "sendMessageToCustomers";
-
-			private static class Parameters {
-				public static final String BUSINESS_ID = "businessId";
-				public static final String BUSINESS_NAME = "businessName";
-				public static final String CUSTOMER_IDS = "customerIds";
-				public static final String MESSAGE = "message";
-			}
-
-			public static void callInBackground(String businessId,
-					String businessName, List<String> customerIds,
-					String message, FunctionCallback<String> callback) {
-				// Build a parameters object for the back end function
-				final Map<String, Object> params = new HashMap<String, Object>();
-				params.put(Parameters.BUSINESS_ID, businessId);
-				params.put(Parameters.BUSINESS_NAME, businessName);
-				params.put(Parameters.CUSTOMER_IDS, customerIds);
-				params.put(Parameters.MESSAGE, message);
-
-				ParseCloud.callFunctionInBackground(FUNCTION_NAME, params,
-						callback);
-			}
+	
+	@ParseClassName(Offer.CLASS_NAME)
+	public static class Offer extends ParseObject {
+		public static final String CLASS_NAME = "Offer";
+		
+		public static class Keys {
+			public static final String ID = "objectId";
+			public static final String CREATION_DATE = "createdAt";
+			public static final String BUSINESS_POINTER = "businessPointer";
+			public static final String CUSTOMER_POINTERS = "customerPointers";
+			public static final String DISCOUNT = "discount";
+			public static final String DURATION = "duration";
+			public static final String EXPIRATION_DATE = "expirationData";
 		}
-
-		public static class SendOfferToClients {
-			private static final String FUNCTION_NAME = "sendOfferToCustomers";
-
-			private static class Parameters {
-				public static final String BUSINESS_ID = "businessId";
-				public static final String BUSINESS_NAME = "businessName";
-				public static final String CUSTOMER_IDS = "customerIds";
-				public static final String DISCOUNT = "discount";
-				public static final String DURATION = "duration";
+		
+		public static final SimpleDateFormat EXPIRATION_DATE_FORMAT = new SimpleDateFormat("dd-MM-yy");
+		
+		public Offer() {
+			// Do not modify the ParseObject
+		}
+		
+		public Offer(String businessId, List<String> customerIds, int discount, int durationInWeeks) {
+			this();
+			put(Keys.BUSINESS_POINTER, ParseObject.createWithoutData(Business.class, businessId));
+			
+			ParseRelation<ParseObject> customersRelation = getRelation(Keys.CUSTOMER_POINTERS);
+			for (String customerId : customerIds)
+			{
+				customersRelation.add(Customer.createWithoutData(Customer.class, customerId));
 			}
-
-			public static void callInBackground(String businessId,
-					String businessName, List<String> customerIds,
-					int discount, int duration,
-					FunctionCallback<String> callback) {
-				// Build a parameters object for the back end function
-				final Map<String, Object> params = new HashMap<String, Object>();
-				params.put(Parameters.BUSINESS_ID, businessId);
-				params.put(Parameters.BUSINESS_NAME, businessName);
-				params.put(Parameters.CUSTOMER_IDS, customerIds);
-				params.put(Parameters.DISCOUNT, discount);
-				params.put(Parameters.DURATION, duration);
-
-				ParseCloud.callFunctionInBackground(FUNCTION_NAME, params,
-						callback);
+			
+			put(Keys.DISCOUNT, discount);
+			
+			Calendar calendar = Calendar.getInstance();
+    		calendar.add(Calendar.WEEK_OF_YEAR, durationInWeeks);
+			put(Keys.EXPIRATION_DATE, calendar.getTime());
+		}
+		
+		public int getDiscount() {
+			return getInt(Keys.DISCOUNT);
+		}
+		
+		public int getDuration() {
+			return getInt(Keys.DURATION);
+		}
+		
+		public Date getExpirationData() {
+			return getDate(Keys.EXPIRATION_DATE);
+		}
+		
+		public String getBusinessName() {
+			ParseObject business = getParseObject(Keys.BUSINESS_POINTER);
+			try {
+				business.fetchIfNeeded();
+			} catch (ParseException e) {
+				Log.e(TAG, "Exception: " + e.getMessage());
+				return null;
 			}
+			
+			return business.getString(Business.Keys.NAME);
 		}
 	}
 }

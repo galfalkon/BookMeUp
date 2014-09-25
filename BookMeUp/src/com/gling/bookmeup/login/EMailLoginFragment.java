@@ -1,32 +1,30 @@
 package com.gling.bookmeup.login;
 
-import java.util.List;
-
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
+import android.text.InputType;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessMainActivity;
-import com.gling.bookmeup.customer.Customer;
 import com.gling.bookmeup.customer.CustomerMainActivity;
-import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.FragmentsFlowManager;
-import com.parse.GetCallback;
+import com.gling.bookmeup.main.OnClickListenerFragment;
+import com.gling.bookmeup.main.ParseHelper.User;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.RequestPasswordResetCallback;
 
 public class EMailLoginFragment extends OnClickListenerFragment {
 
@@ -56,10 +54,71 @@ public class EMailLoginFragment extends OnClickListenerFragment {
         case R.id.email_login_btnContinue:
             handleLoginReuest();
             break;
+        case R.id.email_login_txtForgotPassword:
+        	handleForgotPassword();
+        	break;
         }
     }
 
-    private void handleLoginReuest() {
+    private void handleForgotPassword() {
+    	Log.i(TAG, "handleForgotPassword");
+    	
+    	final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+    	builder.setTitle(R.string.email_login_reset_password_dialog_title);
+
+    	// Set up the input
+    	final EditText emailInput = new EditText(getActivity());
+    	
+    	// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+    	emailInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+    	emailInput.setHint(R.string.email_login_reset_password_dialog_email_hint);
+    	
+    	builder.setView(emailInput);
+    	builder.setPositiveButton(R.string.ok, null);
+    	builder.setNegativeButton(R.string.cancel, null);
+    	
+    	final AlertDialog alertDialog = builder.show();
+    	alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Log.i(TAG, "Positive button click");
+				
+				String email = emailInput.getText().toString();
+    	        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches())
+    	        {
+    	        	Toast.makeText(getActivity(), R.string.email_login_reset_password_dialog_invalid_login_toast_message, Toast.LENGTH_SHORT).show();
+    	        	return;
+    	        }
+    	        
+    	        final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
+    	        ParseUser.requestPasswordResetInBackground(email, new RequestPasswordResetCallback() {
+					@Override
+					public void done(ParseException e) {
+						Log.i(TAG, "requestPasswordResetInBackground done");
+						
+						progressDialog.dismiss();
+						if (e != null)
+						{
+							Log.e(TAG, "Exception: " + e.getMessage());
+							return;
+						}
+						
+						alertDialog.dismiss();
+						Toast.makeText(getActivity(), R.string.email_login_reset_password_dialog_toast_message_on_success, Toast.LENGTH_SHORT).show();
+					}
+				});
+			}
+		});
+    	alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Log.i(TAG, "Negative button click");
+				alertDialog.cancel();
+			}
+		});
+	}
+
+	private void handleLoginReuest() {
         Log.i(TAG, "handleLoginReuest");
 
         String userName = edtUserName.getText().toString();
@@ -67,7 +126,7 @@ public class EMailLoginFragment extends OnClickListenerFragment {
 
         Log.i(TAG, "Showing a progress dialog");
         final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Logging in...");
-
+        
         ParseUser.logInInBackground(userName, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
@@ -86,14 +145,14 @@ public class EMailLoginFragment extends OnClickListenerFragment {
                 }
 
                 Log.i(TAG, "User '" + user.getUsername() +  "' logged in");
-                if (user.getParseObject(Business.CLASS_NAME) != null) {
+                if (user.getParseObject(User.Keys.BUSINESS_POINTER) != null) {
                     progressDialog.dismiss();
                     Intent intent = new Intent(getActivity(), BusinessMainActivity.class);
                     startActivity(intent);
                     return;
                 }
                 
-                if (user.getParseObject(Customer.CLASS_NAME) != null) {
+                if (user.getParseObject(User.Keys.CUSTOMER_POINTER) != null) {
                     progressDialog.dismiss();
                     Intent intent = new Intent(getActivity(), CustomerMainActivity.class);
                     startActivity(intent);

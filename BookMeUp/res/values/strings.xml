@@ -29,6 +29,10 @@
     <string name="email_login_edtUserNameHint">User name</string>
     <string name="email_login_edtPasswordHint">Password</string>
     <string name="email_login_txtForgotPasswordText">Forgot Your Password?</string>
+    <string name="email_login_reset_password_dialog_title">Reset password</string>
+    <string name="email_login_reset_password_dialog_toast_message_on_success">You will receive an email shortly that will allow you to reset your password</string>
+    <string name="email_login_reset_password_dialog_email_hint">Your email address...</string>
+    <string name="email_login_reset_password_dialog_invalid_login_toast_message">Invalid email address</string>
 
     <!-- Business Activity -->
     <string name="business_activity_title">BookMeUp! - For Business</string>
@@ -42,6 +46,7 @@
     <string name="customer_activity_title_section_popular">Popular</string>
     <string name="customer_activity_title_section_history">History</string>
     <string name="customer_activity_title_section_favoirites">Favourites</string>
+    <string name="customer_activity_title_section_offers">Offers</string>
     
     <!-- Customer popular -->
     <string name="customer_business_list_search_edtSearchHint">Search for...</string>
