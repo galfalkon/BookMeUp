@@ -20,4 +20,31 @@
         <item name="android:background">@android:color/black</item>
         -->
     </style>
+    
+    <style name="Theme.BookMeUp_SplashScreen" parent="@android:style/Theme.Holo.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:background">@drawable/splash_background</item>
+    </style>
+    
+    <style name="Theme.BookMeUp_LoginScreen" parent="@android:style/Theme.Holo.Light.NoActionBar">
+        <item name="android:editTextStyle">@style/EditTextBookMeUp_Widgets</item>
+        <item name="android:textColorHighlight">#99488fcd</item>
+        <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewBookMeUp_Widgets</item>
+        <item name="android:checkboxStyle">@style/CheckBoxBookMeUp_Widgets</item>
+        <item name="android:radioButtonStyle">@style/RadioButtonBookMeUp_Widgets</item>
+        <item name="android:buttonStyle">@style/ButtonBookMeUp_Widgets</item>
+        <item name="android:imageButtonStyle">@style/ImageButtonBookMeUp_Widgets</item>
+        <item name="android:spinnerStyle">@style/SpinnerBookMeUp_Widgets</item>
+        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemBookMeUp_Widgets</item>
+        <item name="android:progressBarStyleHorizontal">@style/ProgressBarBookMeUp_Widgets</item>
+        <item name="android:seekBarStyle">@style/SeekBarBookMeUp_Widgets</item>
+        <item name="android:ratingBarStyle">@style/RatingBarBookMeUp_Widgets</item>
+        <item name="android:ratingBarStyleIndicator">@style/RatingBarBigBookMeUp_Widgets</item>
+        <item name="android:ratingBarStyleSmall">@style/RatingBarSmallBookMeUp_Widgets</item>
+        <item name="android:buttonStyleToggle">@style/ToggleBookMeUp_Widgets</item>
+        <item name="android:listViewStyle">@style/ListViewBookMeUp_Widgets</item>
+        <item name="android:listViewWhiteStyle">@style/ListViewBookMeUp_Widgets.White</item>
+        <item name="android:spinnerItemStyle">@style/SpinnerItemBookMeUp_Widgets</item>
+    </style>
+    
 </resources>

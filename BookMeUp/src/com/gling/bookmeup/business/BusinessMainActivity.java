@@ -122,6 +122,7 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
                     progressDialog.dismiss();
                     ParseUser.logOut();
                     Intent intent = new Intent(getApplicationContext(), LoginMainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }
             }
@@ -156,6 +157,7 @@ public class BusinessMainActivity extends FragmentActivity implements ActionBar.
             // TODO extract to session manager class
             ParseUser.logOut();
             intent = new Intent(this, LoginMainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             return true;
         default:

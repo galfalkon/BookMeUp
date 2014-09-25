@@ -9,11 +9,27 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.gling.bookmeup.main.MainActivity$LoginWithEmail" >
 
-    <EditText
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="300dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_splash_launcher" />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:orientation="vertical" >
+        
+        <EditText
         android:id="@+id/email_login_edtUserName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/email_login_edtUserNameHint"
+        android:layout_marginBottom="10.0dip"
+        android:layout_marginLeft="15.0dip"
+        android:layout_marginRight="15.0dip"
+        android:imeOptions="actionNext"
         android:inputType="text"/>
 
     <EditText
@@ -21,21 +37,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/email_login_edtPasswordHint"
+        android:layout_marginBottom="10.0dip"
+        android:layout_marginLeft="15.0dip"
+        android:layout_marginRight="15.0dip"
+        android:imeOptions="actionDone"
         android:inputType="textPassword"/>
 
-    <TextView
-        android:id="@+id/email_login_txtForgotPassword"
-        style="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:gravity="center_horizontal"
-        android:text="@string/email_login_txtForgotPasswordText"/>
-
     <Button
-        android:id="@+id/email_login_btnContinue"
+        android:id="@+id/email_login_btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/email_login_btnContinueText"/>
+        android:layout_marginBottom="10.0dip"
+        android:layout_marginLeft="15.0dip"
+        android:layout_marginRight="15.0dip"
+        android:text="@string/email_login_btnLogin"/>
+    </LinearLayout>
+    
 
 </LinearLayout>

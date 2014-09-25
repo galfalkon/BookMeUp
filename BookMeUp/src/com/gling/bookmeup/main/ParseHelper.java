@@ -23,6 +23,14 @@ public class ParseHelper {
 	private static final String PARSE_APPLICATION_ID = "0Uye8FHMnsklraYbqnMDxtg0rbQRKEqZSVO6BHPa";
 	private static final String PARSE_CLIENT_KEY = "5dB8I0UZWFaTtYpE3OUn7CWwPzxYxe2yBqE7uhS3";
 	
+	public static boolean isUserLoggedIn() {
+	    return (ParseUser.getCurrentUser() != null);
+	}
+	
+	public static boolean isEmailVerified() {
+	    return ParseUser.getCurrentUser().getBoolean("emailVerified");
+	}
+	
 	public static void fetchBusiness(GetCallback<Business> callback) {
 		// TODO null checks on getCurrentUser()
 		ParseUser.getCurrentUser().getParseObject(User.Keys.BUSINESS_POINTER)
@@ -59,15 +67,15 @@ public class ParseHelper {
 		String androidId = Secure.getString(context.getContentResolver(),
 				Secure.ANDROID_ID);
 		// http://stackoverflow.com/questions/23815445/at-least-one-id-field-installationid-devicetoken-must-be-specified-in-this-op
-		installation.put("UniqueId", androidId);
-		installation.saveInBackground(new SaveCallback() {
-			@Override
-			public void done(ParseException e) {
-				if (e != null) {
-					Log.e(TAG, e.getMessage());
-				}
-			}
-		});
+//		installation.put("UniqueId", androidId);
+//		installation.saveInBackground(new SaveCallback() {
+//			@Override
+//			public void done(ParseException e) {
+//				if (e != null) {
+//					Log.e(TAG, e.getMessage());
+//				}
+//			}
+//		});
 	}
 
 	public static class Installation {
