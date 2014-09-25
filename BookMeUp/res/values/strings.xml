@@ -122,5 +122,8 @@
 
     <!-- Business calendar -->
     <string name="title_activity_business_calendar">Calendar</string>
+    
+    <!-- Errors -->
+    <string name="error_required_field">This field is required</string>
 
 </resources>

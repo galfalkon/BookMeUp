@@ -15,7 +15,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.Toast;
 
 import com.gling.bookmeup.R;
@@ -33,7 +32,7 @@ public class EMailLoginFragment extends OnClickListenerFragment {
 
     private static final String TAG = "EMailLoginFragment";
 
-    private EditText edtUserName, edtPassword;
+    private EditText _edtUserName, _edtPassword;
 
     public int getFragmentLayoutId() {
         return R.layout.login_email_fragment;
@@ -43,8 +42,8 @@ public class EMailLoginFragment extends OnClickListenerFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        edtPassword = (EditText) view.findViewById(R.id.email_login_edtPassword);
-        edtUserName = (EditText) view.findViewById(R.id.email_login_edtUserName);
+        _edtPassword = (EditText) view.findViewById(R.id.email_login_edtPassword);
+        _edtUserName = (EditText) view.findViewById(R.id.email_login_edtUserName);
 
         return view;
     }
@@ -91,7 +90,7 @@ public class EMailLoginFragment extends OnClickListenerFragment {
 
                 String email = emailInput.getText().toString();
                 if (TextUtils.isEmpty(email)) {
-                    emailInput.setError("This field is required");
+                    emailInput.setError(getActivity().getString(R.string.error_required_field));
                     return;
                 }
 
@@ -132,9 +131,15 @@ public class EMailLoginFragment extends OnClickListenerFragment {
     private void handleLoginReuest() {
         Log.i(TAG, "handleLoginReuest");
 
-        String userName = edtUserName.getText().toString();
-        String password = edtPassword.getText().toString();
-
+        clearErrors();
+        if (!validateInput())
+        {
+        	return;
+        }
+        
+        String userName = _edtUserName.getText().toString();
+        String password = _edtPassword.getText().toString();
+        
         Log.i(TAG, "Showing a progress dialog");
         final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Logging in...");
 
@@ -174,5 +179,37 @@ public class EMailLoginFragment extends OnClickListenerFragment {
                 progressDialog.dismiss();
             }
         });
+    }
+    
+    private boolean validateInput()
+    {
+    	View firstInvalidInput = null;
+    	
+    	String password = _edtPassword.getText().toString();
+    	if (TextUtils.isEmpty(password))
+    	{
+    		_edtPassword.setError(getActivity().getString(R.string.error_required_field));
+    		firstInvalidInput = _edtPassword;
+    	}
+    	
+    	String userName = _edtUserName.getText().toString();
+    	if (TextUtils.isEmpty(userName))
+    	{
+    		_edtUserName.setError(getActivity().getString(R.string.error_required_field));
+    		firstInvalidInput = _edtUserName;
+    	}
+    	
+    	if (firstInvalidInput != null)
+    	{
+    		firstInvalidInput.requestFocus();
+    	}
+    	
+    	return (firstInvalidInput == null);
+    }
+    
+    private void clearErrors()
+    {
+    	_edtUserName.setError(null);
+    	_edtPassword.setError(null);
     }
 }

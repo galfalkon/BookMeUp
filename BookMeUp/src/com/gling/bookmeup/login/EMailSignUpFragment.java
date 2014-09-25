@@ -115,7 +115,7 @@ public class EMailSignUpFragment extends OnClickListenerFragment {
         View focusView = null;
 
         if (TextUtils.isEmpty(password)) {
-            edtPassword.setError("This field is required");
+            edtPassword.setError(getString(R.string.error_required_field));
             focusView = edtPassword;
             isValid = false;
         } else if (password.length() < 4) {
@@ -129,7 +129,7 @@ public class EMailSignUpFragment extends OnClickListenerFragment {
         }
         
         if (TextUtils.isEmpty(email)) {
-            edtEmail.setError("This field is required");
+            edtEmail.setError(getString(R.string.error_required_field));
             focusView = edtEmail;
             isValid = false;
         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
@@ -139,7 +139,7 @@ public class EMailSignUpFragment extends OnClickListenerFragment {
         }
         
         if (TextUtils.isEmpty(userName)) {
-            edtUserName.setError("This field is required");
+            edtUserName.setError(getString(R.string.error_required_field));
             focusView = edtUserName;
             isValid = false;
         } else if (userName.length() < 4) {
