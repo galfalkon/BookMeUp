@@ -17,22 +17,17 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business;
-import com.gling.bookmeup.business.Business.Offer;
+import com.gling.bookmeup.business.Service;
 import com.gling.bookmeup.main.OnClickListenerFragment;
-import com.gling.bookmeup.main.ParseHelper.BackEndFunctions;
 import com.gling.bookmeup.main.ParseHelper.Category;
 import com.parse.FindCallback;
-import com.parse.FunctionCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -45,17 +40,16 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
 	private List<Business> _allBusinesses, _filteredBusinesses;
 	private BusinessesArrayAdapter _businessesListViewAdapter;
 	private ParseQueryAdapter<Category> _categoriesAdapter;
-	private List<Category> _allCategories;
-	Button b;
-
-	private Customer _customer;
+//	private ParseQueryAdapter<Service> _servicesAdapter;
+	private ServicesAdapter _servicesAdapter;
+	ListView servicesListView = null;
+//	Button b;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		Log.i(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 
-		_customer = new Customer();
 		_allBusinesses = new ArrayList<Business>();
 		_filteredBusinesses = new ArrayList<Business>();
 		_businessesListViewAdapter = new BusinessesArrayAdapter();
@@ -92,73 +86,12 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
 		_categoriesAdapter = new ParseQueryAdapter<Category>(getActivity(),
 				Category.CLASS_NAME);
 		_categoriesAdapter.setTextKey(Category.Keys.NAME);
-		/**
-		_categoriesAdapter.addOnQueryLoadListener(new OnQueryLoadListener<ParseObject>() {
-            public void onLoading() {
-              // Trigger any "loading" UI
-            }
-          
-            public void onLoaded(List<ParseObject> categories, Exception paramException) {
-//                String categoryName = business.getCategory().getString(Category.Keys.NAME);
-//                int position = 0;
-//                for (int i = 0; i < categories.size(); i++) {
-//                    if (categories.get(i).getString(Category.Keys.NAME).equalsIgnoreCase(categoryName)) {
-//                        position = i;
-//                        break;
-//                    }
-//                }
-//
-//                spnCategory.setSelection(position);
-            }
-          });*/
+		
 
-//        spnCategory.setAdapter(categoryAdapter);
-        
-//    }
-//		ParseQuery<Category> getCategoriesQuery = new ParseQuery<Category>(Category.CLASS_NAME);
-//
-//		progressDialog.show();
-//		getCategoriesQuery.findInBackground(new FindCallback<Category>() {
-//			@Override
-//			public void done(List<Category> objects, ParseException e) {
-//				progressDialog.dismiss();
-//				if (e != null) {
-//					Log.e(TAG, "Exception: " + e.getMessage());
-//					return;
-//				}
-//
-//				for (Category category : objects) {
-//					int index = _allCategories.indexOf(category);
-//					if (index == -1) {
-//						_allCategories.add(category);
-//					} else {
-//						//						_allBusinesses.get(index).notifyBooking(business);
-//					}
-//				}
-//
-//
-//				//				_filteredBusinesses.addAll(_allBusinesses);
-//				_categories.notifyDataSetChanged();
-//			}
-//		});
-
+//		_servicesAdapter = new ParseQueryAdapter<Service>(getActivity(),
+//				Service.CLASS_NAME);
+//		_servicesAdapter.setTextKey(Service.Keys.NAME);
 	}
-
-	//	@Override
-	//	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	//			Bundle savedInstanceState) {
-	//		Log.i(TAG, "onCreateView");
-	//
-	//		View rootView = inflater.inflate(R.layout.fragment_main_screen,
-	//				container, false);
-	//		
-	//		// Set event listeners
-	//		rootView.findViewById(R.id.main_screen_btnBabrbers).setOnClickListener(this);
-	//		rootView.findViewById(R.id.main_screen_btnCosmetics).setOnClickListener(this);
-	//
-	//		return rootView;
-	//	}
-	//
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -174,52 +107,7 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
                     int position, long id) {
 				Business business = (Business) businessesListView.getItemAtPosition(position);
 				Log.i(TAG, "business: " + business.getName());
-				LayoutInflater inflater = getActivity().getLayoutInflater();
-				final View dialogView = inflater.inflate(R.layout.customer_business_profile_dialog , null);
-				
-		    	final TextView nameView = (TextView)dialogView.findViewById(R.id.customer_business_profile_dialog_name);
-		    	nameView.setText(business.getName());
-		    	
-		    	final TextView categoryView = (TextView)dialogView.findViewById(R.id.customer_business_profile_dialog_category);
-		    	if (business.getCategory() != null) {
-		    		categoryView.setText(business.getCategory().getName());
-		    	}
-		    	
-		    	final TextView descriptionView = (TextView)dialogView.findViewById(R.id.customer_business_profile_dialog_description);
-		    	descriptionView.setText(business.getDescription());
-		    	
-		    	final TextView hoursView = (TextView)dialogView.findViewById(R.id.customer_business_profile_dialog_opening_hours);
-		    	hoursView.setText(business.getOpeningHours());
-		    	
-		    	
-		    	// Build an alert dialog
-		    	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-				builder.setView(dialogView);
-				builder.setTitle(business.getName());
-				
-				builder.setPositiveButton(R.string.customer_business_profile_btnNextTxt, new DialogInterface.OnClickListener() { 
-				    @Override
-				    public void onClick(DialogInterface dialog, int which) {
-				    	Log.i(TAG, "Business was chosen");
-				    	
-//				    	LayoutInflater inflater = getActivity().getLayoutInflater();
-//						final View servicesView = inflater.inflate(R.layout.customer_business_profile_dialog , null);
-//						
-//						AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
-//						builder1.setView(dialogView);
-//						builder1.setTitle("gefen");
-//						builder1.show();
-				    	
-				    }
-				});
-				builder.setNegativeButton(R.string.customer_business_profile_btnCancelTxt, new DialogInterface.OnClickListener() {
-				    @Override
-				    public void onClick(DialogInterface dialog, int which) {
-				        dialog.cancel();
-				    }
-				});
-				
-				builder.show();
+				createBusinessProfileDialog(business);
             }
 
 			
@@ -249,10 +137,71 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
 		
 		//		ArrayList<Button> buttons = new ArrayList<Button>();
 //		b = (Button) view.findViewById(R.id.customer_main_screen_btnBabrbers);
+		
+		Log.i(TAG, "list view is initialized");
+		servicesListView = (ListView)view.findViewById(R.id.customer_business_services_dialog_listview);
+//		servicesListView.setAdapter(_servicesAdapter);
 
 		return view;
 	}
+	
+	private void createBusinessProfileDialog(final Business business) {
+		LayoutInflater inflater = getActivity().getLayoutInflater();
+		final View dialogView = inflater.inflate(R.layout.customer_business_profile_dialog , null);
+		
+    	final TextView nameView = (TextView)dialogView.findViewById(R.id.customer_business_profile_dialog_name);
+    	nameView.setText(business.getName());
+    	
+    	final TextView categoryView = (TextView)dialogView.findViewById(R.id.customer_business_profile_dialog_category);
+    	if (business.getCategory() != null) {
+    		categoryView.setText(business.getCategory().getName());
+    	}
+    	
+    	final TextView descriptionView = (TextView)dialogView.findViewById(R.id.customer_business_profile_dialog_description);
+    	descriptionView.setText(business.getDescription());
+    	
+    	final TextView hoursView = (TextView)dialogView.findViewById(R.id.customer_business_profile_dialog_opening_hours);
+    	hoursView.setText(business.getOpeningHours());
+    	
+    	
+    	// Build an alert dialog
+    	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setView(dialogView);
+		builder.setTitle(business.getName());
+		
+		builder.setPositiveButton(R.string.customer_business_profile_btnNextTxt, new DialogInterface.OnClickListener() { 
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		    	Log.i(TAG, "Business was chosen");
+		    	createBusinessServicesDialog(business);
+		    }
+		});
+		builder.setNegativeButton(R.string.customer_business_profile_btnCancelTxt, new DialogInterface.OnClickListener() {
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		        dialog.cancel();
+		    }
+		});
+		builder.show();
+	}
 
+	private void createBusinessServicesDialog(Business business) {
+		LayoutInflater inflater = getActivity().getLayoutInflater();
+		final View servicesView = inflater.inflate(R.layout.customer_business_services_dialog , null);
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setView(servicesView);
+		builder.setTitle("gefen");
+		
+//		_servicesAdapter = new ParseQueryAdapter<Service>(getActivity(),
+//				Service.CLASS_NAME);
+		_servicesAdapter = new ServicesAdapter(getActivity(), business);
+		_servicesAdapter.setTextKey(Service.Keys.NAME);
+		servicesListView.setAdapter(_servicesAdapter);
+		
+		builder.show();
+	}
+	
 	@Override
 	protected int getFragmentLayoutId() {
 		return R.layout.customer_popular_fragment;
@@ -296,9 +245,9 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
 		//			_filteredBusinesses.clear();
 		//			_listViewAdapter.notifyDataSetChanged();
 		//		} else {
-		if (s == null || s.equals("")) {
-			b.setVisibility(View.GONE);
-		}
+//		if (s == null || s.equals("")) {
+//			b.setVisibility(View.GONE);
+//		}
 		_businessesListViewAdapter.getFilter().filter(s);
 		//		}
 	}
@@ -346,47 +295,9 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
 			return _businessFilter;
 		}
 	}
-	
-//	private class CategoriesArrayAdapter extends ArrayAdapter<Category> {
-//
-//
-//		public CategoriesArrayAdapter() {
-//			super(getActivity(), R.layout.customer_category_list_item, _allCategories);
-//		}
-//
-//		@Override
-//		public View getView(int position, View convertView, ViewGroup parent) {
-//			LayoutInflater inflator = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//			if (convertView == null) {
-//				convertView = inflator.inflate(R.layout.customer_business_list_item, null);
-//			}
-//
-//			final Business business = _filteredBusinesses.get(position);
-//
-//			TextView clientNameTextView = (TextView) convertView.findViewById(R.id.business_list_item_txtBusinessName);
-//			TextView totalSepndingsTextView = (TextView) convertView.findViewById(R.id.business_list_item_txtBusinessType);
-//
-//			clientNameTextView.setText(business.getName());
-//			totalSepndingsTextView.setText("Default Type");
-//
-//			return convertView;
-//		}
-//	}
 
 	private class BusinessFilter extends Filter {
-		/*
-		 *  Optional
-		 *  Should be null if the user doesn't want to filter by the date of the last visit.
-		 */
 		private Category _chosenCategory;
-
-		/*
-		 *  Optional
-		 *  Should be null if the user doesn't want to filter by total spendings.
-		 */
-		private Integer _spendingsLimit;
-
-		private String _searchBy;
 
 		@Override
 		protected FilterResults performFiltering(CharSequence constraint) {
@@ -449,4 +360,20 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
 			return false;
 		}
 	}
+	
+	public class ServicesAdapter extends ParseQueryAdapter<ParseObject> {		
+		public ServicesAdapter(Context context, final Business business) {
+			// Use the QueryFactory to construct a PQA that will only show
+			// Todos marked as high-pri
+			super(context, new ParseQueryAdapter.QueryFactory<ParseObject>() {
+				public ParseQuery create() {
+					ParseQuery<Service> query = new ParseQuery<Service>(Service.class);
+//					query.whereEqualTo("highPri", true);
+					query.whereEqualTo(Service.Keys.BUSINESS, business);
+					return query;
+				}
+			});
+		}
+	}
+	
 }
