@@ -11,6 +11,11 @@
     <string name="login_btnLoginWithFacebookText">Login with Facebook</string>
     <string name="login_btnLoginWithEMailText">Log in</string>
     <string name="login_btnSignUpText">Sign up</string>
+    <string name="login_action_feedback">Send Feedback</string>
+    <string name="email_login_btnLogin">Log in</string>
+    <string name="login_txtContact">Contact us</string>
+    <string name="email_signup_btnSignUp">Sign up</string>
+    <string name="login_forgot_password">Forgot password</string>
 
     <!-- User type selection -->
     <string name="user_type_selection_btnCustomerText">I\'m a Customer</string>
@@ -29,6 +34,10 @@
     <string name="email_login_edtUserNameHint">User name</string>
     <string name="email_login_edtPasswordHint">Password</string>
     <string name="email_login_txtForgotPasswordText">Forgot Your Password?</string>
+    <string name="email_login_reset_password_dialog_title">Reset password</string>
+    <string name="email_login_reset_password_dialog_toast_message_on_success">You will receive an email shortly that will allow you to reset your password</string>
+    <string name="email_login_reset_password_dialog_email_hint">Your email address...</string>
+    <string name="email_login_reset_password_dialog_invalid_login_toast_message">Invalid email address</string>
 
     <!-- Business Activity -->
     <string name="business_activity_title">BookMeUp! - For Business</string>
@@ -42,7 +51,8 @@
     <string name="customer_activity_title_section_popular">Popular</string>
     <string name="customer_activity_title_section_history">History</string>
     <string name="customer_activity_title_section_favoirites">Favourites</string>
-    
+    <string name="customer_activity_title_section_offers">Offers</string>
+
     <!-- Customer popular -->
     <string name="customer_business_list_search_edtSearchHint">Search for...</string>
     <string name="logout">Logout</string>
@@ -52,14 +62,16 @@
     <string name="customer_main_screen_btnCosmeticsText">Cosmetics</string>
     <string name="customer_main_screen_btnDentistsText">Dentists</string>
     <string name="customer_main_screen_btnGaragesText">Garages</string>
-    
+
     <!-- Customer History -->
-    
+
+
     <!-- Customer Favourite -->
-    
+
+
     <!-- Customer Business Profile -->
     <string name="customer_business_profile_btnNextTxt">Next</string>
-	<string name="customer_business_profile_btnCancelTxt">Cancel</string>
+    <string name="customer_business_profile_btnCancelTxt">Cancel</string>
     <string name="customer_business_profile_opening_hours">Opening Hours:</string>
     <string name="customer_business_profile_description">"Description: "</string>
 
@@ -110,9 +122,5 @@
 
     <!-- Business calendar -->
     <string name="title_activity_business_calendar">Calendar</string>
-    <string name="login_action_feedback">Send Feedback</string>
-    <string name="email_login_btnLogin">Log in</string>
-    <string name="login_txtContact">Contact us</string>
-    <string name="email_signup_btnSignUp">Sign up</string>
 
 </resources>

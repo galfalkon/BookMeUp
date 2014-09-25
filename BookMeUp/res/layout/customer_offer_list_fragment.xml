@@ -3,12 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
-    <ListView
-        android:id="@+id/customer_business_services_dialog_listview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </ListView> 
 
-    
+    <ListView
+        android:id="@+id/customer_inbox_offersListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

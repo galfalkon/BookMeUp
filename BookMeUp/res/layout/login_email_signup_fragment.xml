@@ -70,7 +70,7 @@
             android:text="You will receive an e-mail message for verification" />
 
         <Button
-            android:id="@+id/email_signup_btnContinue"
+            android:id="@+id/email_signup_btnSignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10.0dip"

@@ -1,4 +1,4 @@
-package com.gling.bookmeup.business;
+package com.gling.bookmeup.customer;
 
 import java.util.List;
 
@@ -9,8 +9,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.OnClickListenerFragment;
@@ -18,16 +21,16 @@ import com.gling.bookmeup.main.ParseHelper;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 
-public class BusinessOffersFragment extends OnClickListenerFragment {
-	private static final String TAG = "BusinessOffersFragment";
+public class CustomerOffersFragment extends OnClickListenerFragment {
+	private static final String TAG = "CustomerOffersFragment";
 	
 	private OffersListAdapter _offersAdapter;
-	private Business _business;
+	private Customer _customer;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	    _business = ((BusinessMainActivity)getActivity()).getBusiness();
+	    _customer = ((CustomerMainActivity)getActivity()).getCustomer();
 	}
 	
 	@Override
@@ -36,9 +39,16 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 		Log.i(TAG, "onCreateView");
 		final View view = super.onCreateView(inflater, container, savedInstanceState);
 		
-        _offersAdapter = new OffersListAdapter();
-        ListView offersListView = (ListView) view.findViewById(R.id.business_offers_listViewOffers);
+		_offersAdapter = new OffersListAdapter();
+        ListView offersListView = (ListView) view.findViewById(R.id.customer_inbox_offersListView);
         offersListView.setAdapter(_offersAdapter);
+        offersListView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Log.i(TAG, "onItemClick");
+				Toast.makeText(getActivity(), "Should open a booking wizard\nNot implemented", Toast.LENGTH_SHORT).show();
+			}
+		});
 		
 		return view;
 	}
@@ -49,7 +59,7 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 
 	@Override
 	protected int getFragmentLayoutId() {
-		return R.layout.business_offers_fragment;
+		return R.layout.customer_offer_list_fragment;
 	}
 	
 	private class OffersListAdapter extends ParseQueryAdapter<ParseHelper.Offer>
@@ -59,8 +69,13 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 			super(getActivity(), new QueryFactory<ParseHelper.Offer>() {
 				@Override
 				public ParseQuery<ParseHelper.Offer> create() {
-					return new ParseQuery<ParseHelper.Offer>(ParseHelper.Offer.class).
-							whereEqualTo(ParseHelper.Offer.Keys.BUSINESS_POINTER, _business);
+					ParseQuery<ParseHelper.Offer> offerQuery = new ParseQuery<ParseHelper.Offer>(ParseHelper.Offer.class).
+							whereEqualTo(ParseHelper.Offer.Keys.CUSTOMER_POINTERS, _customer).
+							addDescendingOrder(ParseHelper.Offer.Keys.CREATION_DATE);
+					
+					offerQuery.include(ParseHelper.Offer.Keys.BUSINESS_POINTER);
+					
+					return offerQuery;
 				}
 			});
 			
@@ -84,12 +99,14 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 		public View getItemView(ParseHelper.Offer offer, View convertView, ViewGroup parent) {
 			LayoutInflater inflator = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			if (convertView == null) {
-				convertView = inflator.inflate(R.layout.business_offer_list_item, null);
+				convertView = inflator.inflate(R.layout.customer_offer_list_item, null);
 			}
-			
-			final TextView txtExpiration = (TextView) convertView.findViewById(R.id.business_offer_list_item_txtExpiration);
-			final TextView txtDisount = (TextView) convertView.findViewById(R.id.business_offer_list_item_txtDiscount);
 
+			final TextView txtBusinessName = (TextView) convertView.findViewById(R.id.customer_offer_list_item_txtBusinessName);
+			final TextView txtExpiration = (TextView) convertView.findViewById(R.id.customer_offer_list_item_txtExpiration);
+			final TextView txtDisount = (TextView) convertView.findViewById(R.id.customer_offer_list_item_txtDiscount);
+
+			txtBusinessName.setText(offer.getBusinessName());
 			txtExpiration.setText(ParseHelper.Offer.EXPIRATION_DATE_FORMAT.format(offer.getExpirationData()));
 			txtDisount.setText(offer.getDiscount() + "%");
 			

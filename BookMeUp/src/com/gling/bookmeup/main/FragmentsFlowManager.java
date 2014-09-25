@@ -32,7 +32,7 @@ public class FragmentsFlowManager {
 		_buttonIdsToFragmentName.put(R.id.login_btnSignUp, EMailSignUpFragment.class.getName());
 		
 		// E-Mail sign up
-		_buttonIdsToFragmentName.put(R.id.email_signup_btnContinue, EMailLoginFragment.class.getName());		
+		_buttonIdsToFragmentName.put(R.id.email_signup_btnSignUp, EMailLoginFragment.class.getName());		
 
 		// E-Mail login
 		_buttonIdsToFragmentName.put(R.id.email_login_btnLogin, UserTypeSelectionFragment.class.getName());

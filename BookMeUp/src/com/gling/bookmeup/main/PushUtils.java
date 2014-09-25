@@ -14,10 +14,12 @@ import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessMainActivity;
 import com.gling.bookmeup.customer.Customer;
 import com.gling.bookmeup.customer.CustomerMainActivity;
+import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SendCallback;
 
 public class PushUtils {
@@ -90,9 +92,21 @@ public class PushUtils {
 		sendPushInBackground(installationQuery, data, callback);
 	}
 	
-	public static void sendOfferToCustomers(String businessId,  String businessName, List<String> customerIds, int discount, int duration, SendCallback callback)
+	public static void sendOfferToCustomers(String businessId, String businessName, List<String> customerIds, int discount, int duration, SendCallback callback)
 	{
 		Log.i(TAG, "sendOfferToCustomers");
+		
+		ParseHelper.Offer offer = new ParseHelper.Offer(businessId, customerIds, discount, duration);
+		offer.saveInBackground(new SaveCallback() {
+			
+			@Override
+			public void done(ParseException e) {
+				Log.i(TAG, "Offer saveInBackground done");
+				if (e != null) {
+					Log.e(TAG, "Exception: " + e.getMessage());
+				}
+			}
+		});
 		
 		String alert = "Offer from " + businessName + "! Discount off "
 				+ discount + "% for the next ";

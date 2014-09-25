@@ -1,10 +1,16 @@
 package com.gling.bookmeup.main;
 
+import java.security.MessageDigest;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import android.content.Context;
 import android.provider.Settings.Secure;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
 import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.customer.Customer;
@@ -14,6 +20,7 @@ import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.PushService;
 import com.parse.SaveCallback;
@@ -45,16 +52,13 @@ public class ParseHelper {
 	public static void initialize(Context context) {
 		Log.i(TAG, "Initializing Parse");
 
-		// Business
+		// Register ParseObject subclasses
 		ParseObject.registerSubclass(Business.class);
 		ParseObject.registerSubclass(com.gling.bookmeup.business.Service.class);
 		ParseObject.registerSubclass(Booking.class);
-
-		// Customer
 		ParseObject.registerSubclass(Customer.class);
-
-		// Category
 		ParseObject.registerSubclass(Category.class);
+		ParseObject.registerSubclass(Offer.class);
 
 		Parse.initialize(context, PARSE_APPLICATION_ID, PARSE_CLIENT_KEY);
 
@@ -67,6 +71,7 @@ public class ParseHelper {
 		String androidId = Secure.getString(context.getContentResolver(),
 				Secure.ANDROID_ID);
 		// http://stackoverflow.com/questions/23815445/at-least-one-id-field-installationid-devicetoken-must-be-specified-in-this-op
+		// TODO un-comment
 //		installation.put("UniqueId", androidId);
 //		installation.saveInBackground(new SaveCallback() {
 //			@Override
@@ -140,7 +145,7 @@ public class ParseHelper {
 			public static final int APPROVED = 1;
 			public static final int CANCELED = 2;
 		}
-
+		
 		public Booking() {
 			// Do not modify the ParseObject
 		}
@@ -187,6 +192,68 @@ public class ParseHelper {
 			public static final String NAME = "name";
 			public static final String PRICE = "price";
 			public static final String DURATION = "duration";
+		}
+	}
+	
+	@ParseClassName(Offer.CLASS_NAME)
+	public static class Offer extends ParseObject {
+		public static final String CLASS_NAME = "Offer";
+		
+		public static class Keys {
+			public static final String ID = "objectId";
+			public static final String CREATION_DATE = "createdAt";
+			public static final String BUSINESS_POINTER = "businessPointer";
+			public static final String CUSTOMER_POINTERS = "customerPointers";
+			public static final String DISCOUNT = "discount";
+			public static final String DURATION = "duration";
+			public static final String EXPIRATION_DATE = "expirationData";
+		}
+		
+		public static final SimpleDateFormat EXPIRATION_DATE_FORMAT = new SimpleDateFormat("dd-MM-yy");
+		
+		public Offer() {
+			// Do not modify the ParseObject
+		}
+		
+		public Offer(String businessId, List<String> customerIds, int discount, int durationInWeeks) {
+			this();
+			put(Keys.BUSINESS_POINTER, ParseObject.createWithoutData(Business.class, businessId));
+			
+			ParseRelation<ParseObject> customersRelation = getRelation(Keys.CUSTOMER_POINTERS);
+			for (String customerId : customerIds)
+			{
+				customersRelation.add(Customer.createWithoutData(Customer.class, customerId));
+			}
+			
+			put(Keys.DISCOUNT, discount);
+			
+			Calendar calendar = Calendar.getInstance();
+    		calendar.add(Calendar.WEEK_OF_YEAR, durationInWeeks);
+			put(Keys.EXPIRATION_DATE, calendar.getTime());
+		}
+		
+		public int getDiscount() {
+			return getInt(Keys.DISCOUNT);
+		}
+		
+		public int getDuration() {
+			return getInt(Keys.DURATION);
+		}
+		
+		public Date getExpirationData() {
+			return getDate(Keys.EXPIRATION_DATE);
+		}
+		
+		public String getBusinessName() {
+			ParseObject business = getParseObject(Keys.BUSINESS_POINTER);
+			try {
+				business.fetchIfNeeded();
+			} catch (ParseException e) {
+				Log.e(TAG, "Exception: " + e.getMessage());
+				return null;
+			}
+			
+			return business.getString(Business.Keys.NAME);
 		}
 	}
 }

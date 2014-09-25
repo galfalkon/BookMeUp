@@ -51,7 +51,7 @@ public class EMailSignUpFragment extends OnClickListenerFragment {
         final int viewClickedId = v.getId();
 
         switch (viewClickedId) {
-        case R.id.email_signup_btnContinue:
+        case R.id.email_signup_btnSignUp:
             if (!validateInput()) {
                 return;
             }
