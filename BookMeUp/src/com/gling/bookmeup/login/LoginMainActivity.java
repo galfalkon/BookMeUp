@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import com.gling.bookmeup.R;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+
 public class LoginMainActivity extends Activity {
 
     private static final String TAG = "LoginActivity";
@@ -44,5 +46,11 @@ public class LoginMainActivity extends Activity {
         }
 
         getFragmentManager().beginTransaction().add(R.id.login_container, firstFragment).commit();
+    }
+    
+    @Override
+    protected void onDestroy() {
+    	Crouton.cancelAllCroutons();
+    	super.onDestroy();
     }
 }
