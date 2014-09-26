@@ -1,10 +1,5 @@
 package com.gling.bookmeup.customer;
 
-import android.view.View;
-import android.view.View.OnClickListener;
-
-import com.gling.bookmeup.R;
-import com.gling.bookmeup.main.OnClickListenerFragment;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;

@@ -32,7 +32,8 @@ public class Service extends ParseObject {
     }
     
     public String getPrice() {
-        return getString(Keys.PRICE);
+    	return getNumber(Keys.PRICE).toString();
+//        return getString(Keys.PRICE);
     }
  
     public void setPrice(String price) {
