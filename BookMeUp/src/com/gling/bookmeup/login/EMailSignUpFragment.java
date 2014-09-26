@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.FragmentsFlowManager;
@@ -21,6 +20,9 @@ import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class EMailSignUpFragment extends OnClickListenerFragment {
 
@@ -74,7 +76,7 @@ public class EMailSignUpFragment extends OnClickListenerFragment {
 
                 if (e != null) {
                     Log.e(TAG, "Sign up failed: " + e.toString());
-                    Toast.makeText(getActivity(), "Sign up failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Crouton.showText(getActivity(), "Sign up failed: " + e.getMessage(), Style.ALERT);
                     return;
                 }
 
@@ -92,7 +94,7 @@ public class EMailSignUpFragment extends OnClickListenerFragment {
                     }
                 });
 
-                Toast.makeText(getActivity(), "Please verify your Email address", Toast.LENGTH_LONG).show();
+                Crouton.showText(getActivity(),"Please verify your Email address", Style.CONFIRM);
                 FragmentsFlowManager.goToNextFragment(getActivity(), R.id.login_container, viewClickedId);
             }
         });

@@ -17,12 +17,14 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.gling.bookmeup.R;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.SaveCallback;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class BusinessImageCaptureFragment extends Fragment {
 
@@ -50,8 +52,7 @@ public class BusinessImageCaptureFragment extends Fragment {
 			} catch (Exception e) {
 				Log.e(TAG, "No camera with exception: " + e.getMessage());
 				photoButton.setEnabled(false);
-				Toast.makeText(getActivity(), "No camera detected",
-						Toast.LENGTH_LONG).show();
+				Crouton.showText(getActivity(), "No camera detected", Style.ALERT);
 			}
 		}
 
@@ -141,9 +142,7 @@ public class BusinessImageCaptureFragment extends Fragment {
 
 			public void done(ParseException e) {
 				if (e != null) {
-					Toast.makeText(getActivity(),
-							"Error saving: " + e.getMessage(),
-							Toast.LENGTH_LONG).show();
+					Crouton.showText(getActivity(), "Error saving: " + e.getMessage(), Style.ALERT);
 				} else {
 					addPhotoToBusiness(imageFile);
 				}
@@ -178,8 +177,7 @@ public class BusinessImageCaptureFragment extends Fragment {
 			} catch (Exception e) {
 				Log.i(TAG, "No camera: " + e.getMessage());
 				photoButton.setEnabled(false);
-				Toast.makeText(getActivity(), "No camera detected",
-						Toast.LENGTH_LONG).show();
+				Crouton.showText(getActivity(), "No camera detected", Style.ALERT);
 			}
 		}
 	}

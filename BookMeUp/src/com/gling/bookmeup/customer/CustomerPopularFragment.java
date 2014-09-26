@@ -3,7 +3,6 @@ package com.gling.bookmeup.customer;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.DownloadManager.Query;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -26,7 +25,6 @@ import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.Service;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper.Category;
-import com.gling.bookmeup.main.ParseHelper.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;

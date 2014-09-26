@@ -9,11 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.FragmentsFlowManager;
 import com.gling.bookmeup.main.OnClickListenerFragment;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class LoginFragment extends OnClickListenerFragment {
     private static final String TAG = "LoginFragment";
@@ -35,7 +37,7 @@ public class LoginFragment extends OnClickListenerFragment {
                 try {
                     startActivity(Intent.createChooser(localIntent, "Send mail..."));
                 } catch (ActivityNotFoundException localActivityNotFoundException) {
-                    Toast.makeText(getActivity(), "There are no email clients installed.", Toast.LENGTH_LONG).show();
+                	Crouton.showText(getActivity(), "There are no email clients installed", Style.ALERT);
                 }
             }
         });

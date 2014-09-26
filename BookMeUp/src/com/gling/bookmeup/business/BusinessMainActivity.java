@@ -16,6 +16,8 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+
 public class BusinessMainActivity extends NavigationDrawerActivity {
 	private static final String TAG = "BusinessMainActivity";
 	
@@ -58,6 +60,12 @@ public class BusinessMainActivity extends NavigationDrawerActivity {
 	      		}
 			}
 		});
+	}
+	
+	@Override
+	protected void onDestroy() {
+		Crouton.cancelAllCroutons();
+		super.onDestroy();
 	}
 	
 	@Override

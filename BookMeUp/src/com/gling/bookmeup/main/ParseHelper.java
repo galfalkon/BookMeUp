@@ -1,8 +1,6 @@
 package com.gling.bookmeup.main;
 
-import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -10,7 +8,6 @@ import java.util.List;
 import android.content.Context;
 import android.provider.Settings.Secure;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
 import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.customer.Customer;
@@ -23,7 +20,6 @@ import com.parse.ParseObject;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.PushService;
-import com.parse.SaveCallback;
 
 public class ParseHelper {
 	private static final String TAG = "ParseHelper";

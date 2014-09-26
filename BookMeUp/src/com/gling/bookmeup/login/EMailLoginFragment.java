@@ -15,7 +15,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.BusinessMainActivity;
@@ -27,6 +26,9 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.RequestPasswordResetCallback;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class EMailLoginFragment extends OnClickListenerFragment {
 
@@ -108,13 +110,12 @@ public class EMailLoginFragment extends OnClickListenerFragment {
                         progressDialog.dismiss();
                         if (e != null) {
                             Log.e(TAG, "Exception: " + e.getMessage());
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            Crouton.showText(getActivity(), e.getMessage() , Style.ALERT);
                             return;
                         }
 
                         alertDialog.dismiss();
-                        Toast.makeText(getActivity(),
-                                R.string.email_login_reset_password_dialog_toast_message_on_success, Toast.LENGTH_LONG).show();
+                        Crouton.showText(getActivity(), R.string.email_login_reset_password_dialog_toast_message_on_success, Style.CONFIRM);
                     }
                 });
             }
@@ -149,7 +150,7 @@ public class EMailLoginFragment extends OnClickListenerFragment {
                 if (e != null) {
                     progressDialog.dismiss();
                     Log.i(TAG, "Login failed: " + e.toString());
-                    Toast.makeText(getActivity(), "Login failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Crouton.showText(getActivity(), "Login failed: " + e.getMessage(), Style.ALERT);
                     return;
                 }
 
@@ -158,7 +159,7 @@ public class EMailLoginFragment extends OnClickListenerFragment {
                 if (!user.getBoolean("emailVerified")) {
                     progressDialog.dismiss();
                     Log.i(TAG, "User hasn't verified Email address");
-                    Toast.makeText(getActivity(), "Please verifiy your Email address", Toast.LENGTH_LONG).show();
+                    Crouton.showText(getActivity(), "Please verifiy your Email address", Style.ALERT);
                 } else if (user.getParseObject(User.Keys.BUSINESS_POINTER) != null
                         && user.getParseObject(User.Keys.CUSTOMER_POINTER) != null) {
                     FragmentsFlowManager.goToNextFragment(getActivity(), R.id.login_container,

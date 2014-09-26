@@ -13,13 +13,15 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class CustomerOffersFragment extends OnClickListenerFragment {
 	private static final String TAG = "CustomerOffersFragment";
@@ -46,7 +48,7 @@ public class CustomerOffersFragment extends OnClickListenerFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Log.i(TAG, "onItemClick");
-				Toast.makeText(getActivity(), "Should open a booking wizard\nNot implemented", Toast.LENGTH_SHORT).show();
+				Crouton.showText(getActivity(), "Should open a booking wizard\nNot implemented", Style.ALERT);
 			}
 		});
 		

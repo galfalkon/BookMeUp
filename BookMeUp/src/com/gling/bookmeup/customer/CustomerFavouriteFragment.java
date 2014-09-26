@@ -1,17 +1,10 @@
 package com.gling.bookmeup.customer;
 
-import com.gling.bookmeup.R;
-import com.gling.bookmeup.main.OnClickListenerFragment;
-import com.gling.bookmeup.main.FragmentsFlowManager;
-
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.Toast;
+
+import com.gling.bookmeup.R;
+import com.gling.bookmeup.main.OnClickListenerFragment;
 
 public class CustomerFavouriteFragment extends OnClickListenerFragment implements OnClickListener {
 

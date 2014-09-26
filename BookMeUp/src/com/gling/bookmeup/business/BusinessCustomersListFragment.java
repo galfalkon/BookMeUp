@@ -30,7 +30,6 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.OnClickListenerFragment;
@@ -42,6 +41,9 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SendCallback;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class BusinessCustomersListFragment  extends OnClickListenerFragment implements TextWatcher {
 	private static final String TAG = "BusinessCustomersListFragment";
@@ -195,7 +197,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		    	Log.i(TAG, "Filtering by total spendings");
 		    	String spendingLimitInput = ((TextView)view.findViewById(R.id.business_customer_list_spendings_filter_dialog_edtSpendings)).getText().toString();
 		    	if (spendingLimitInput.isEmpty()) {
-		    		Toast.makeText(getActivity(), "Invalid spendings limit", Toast.LENGTH_SHORT).show();
+		    		Crouton.showText(getActivity(), "Invalid spendings limit", Style.ALERT);
 		    		return;
 		    	}
 		    	int spendingsLimit = Integer.parseInt(spendingLimitInput);
@@ -216,7 +218,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		
 		final List<String> selectedCustomersIds = getSelectedCustomersIds();
 		if (selectedCustomersIds.isEmpty()) {
-			Toast.makeText(getActivity(), "Please select customers from the list", Toast.LENGTH_SHORT).show();
+			Crouton.showText(getActivity(), "Please select customers from the list", Style.ALERT);
 			return;
 		}
 		
@@ -260,7 +262,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		
 		final List<String> selectedCustomersIds = getSelectedCustomersIds();
 		if (selectedCustomersIds.isEmpty()) {
-			Toast.makeText(getActivity(), "Please select customers from the list", Toast.LENGTH_SHORT).show();
+			Crouton.showText(getActivity(), "Please select customers from the list", Style.ALERT);
 			return;
 		}
 		

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Toast;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business;
@@ -18,6 +17,9 @@ import com.gling.bookmeup.main.ParseHelper.User;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class UserTypeSelectionFragment extends OnClickListenerFragment implements OnClickListener {
     private static final String TAG = "UserTypeSelectionFragment";
@@ -56,8 +58,7 @@ public class UserTypeSelectionFragment extends OnClickListenerFragment implement
                         startActivity(intent);
                     } else {
                         progressDialogBusiness.dismiss();
-                        Toast.makeText(getActivity(), "Oops, we're having difficulties, please try again...",
-                                Toast.LENGTH_LONG).show();
+                        Crouton.showText(getActivity(), "Oops, we're having difficulties, please try again...", Style.ALERT);
                         Log.i(TAG, "Business creation failed: " + e.getMessage());
                     }
                 }
@@ -88,8 +89,7 @@ public class UserTypeSelectionFragment extends OnClickListenerFragment implement
                         startActivity(intent);
                     } else {
                         progressDialogCustomer.dismiss();
-                        Toast.makeText(getActivity(), "Oops, we're having difficulties, please try again...",
-                                Toast.LENGTH_LONG).show();
+                        Crouton.showText(getActivity(), "Oops, we're having difficulties, please try again...", Style.ALERT);
                         Log.i(TAG, "Customer creation failed: " + e.getMessage());
                     }
                 }

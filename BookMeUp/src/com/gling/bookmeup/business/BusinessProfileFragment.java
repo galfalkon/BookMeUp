@@ -25,7 +25,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.login.LoginFragment;
@@ -45,6 +44,9 @@ import com.parse.ParseQueryAdapter;
 import com.parse.ParseQueryAdapter.OnQueryLoadListener;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class BusinessProfileFragment extends OnClickListenerFragment {
 
@@ -343,8 +345,7 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
                     ((BusinessMainActivity)getActivity()).onNavigationDrawerItemSelected(0);
                 } else {
                     Log.e(TAG, "Exception occurred: " + e.getMessage());
-                    Toast.makeText(getActivity().getApplicationContext(), "Error saving: " + e.getMessage(),
-                            Toast.LENGTH_SHORT).show();
+                    Crouton.showText(getActivity(), "Error saving: " + e.getMessage(), Style.ALERT);
                 }
                 progressDialog.dismiss();
             }
@@ -366,7 +367,7 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
             }
             if (!userInCache()) {
                 Log.i(TAG, "user not found in cache, redirecting to login...");
-                Toast.makeText(getActivity(), "Please sign up or log in first...", Toast.LENGTH_SHORT).show();
+                Crouton.showText(getActivity(), "Please sign up or log in first...", Style.ALERT);
                 getActivity().getFragmentManager().beginTransaction().addToBackStack(null).replace(
                         R.id.container,
                         Fragment.instantiate(getActivity(), LoginFragment.class.getName())).commit();

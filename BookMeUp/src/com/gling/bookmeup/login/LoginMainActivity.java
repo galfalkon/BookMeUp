@@ -1,15 +1,15 @@
 package com.gling.bookmeup.login;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.gling.bookmeup.R;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class LoginMainActivity extends Activity {
 
@@ -42,7 +42,7 @@ public class LoginMainActivity extends Activity {
 
         String message = intent.getStringExtra(SplashScreenActivity.EXTRA_MESSAGE);
         if (message != null) {
-            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        	Crouton.showText(this, message, Style.INFO);
         }
 
         getFragmentManager().beginTransaction().add(R.id.login_container, firstFragment).commit();

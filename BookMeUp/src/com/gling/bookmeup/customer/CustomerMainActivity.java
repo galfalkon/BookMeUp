@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.login.LoginMainActivity;
@@ -15,6 +14,9 @@ import com.gling.bookmeup.main.PushUtils;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class CustomerMainActivity extends NavigationDrawerActivity {
 	private static final String TAG = "CustomerMainActivity";
@@ -47,10 +49,10 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 					Log.i(TAG, pushType.toString());
 					switch (pushType) {
 					case MESSAGE_FROM_BUSINESS:
-						Toast.makeText(getApplicationContext(), "Not implemented", Toast.LENGTH_SHORT).show();
+						Crouton.showText(getParent(), "Not implemented", Style.ALERT);
 						break;
 					case OFFER_FROM_BUSINESS:
-						Toast.makeText(getApplicationContext(), "Not implemented", Toast.LENGTH_SHORT).show();
+						Crouton.showText(getParent(), "Not implemented", Style.ALERT);
 						break;
 					default:
 						Log.e(TAG, "Invalid push type");
@@ -58,6 +60,12 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 				}
 			}
 		});
+	}
+	
+	@Override
+	protected void onDestroy() {
+		Crouton.cancelAllCroutons();
+		super.onDestroy();
 	}
 	
 	@Override

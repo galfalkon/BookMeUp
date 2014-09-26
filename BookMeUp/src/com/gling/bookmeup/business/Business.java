@@ -3,7 +3,6 @@ package com.gling.bookmeup.business;
 import org.json.JSONObject;
 
 import com.gling.bookmeup.main.ParseHelper.Category;
-import com.gling.bookmeup.main.ParseHelper.Offer;
 import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
