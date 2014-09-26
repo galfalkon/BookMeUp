@@ -46,6 +46,7 @@
         <item>Bookings</item>
         <item>Customers</item>
         <item>Offers</item>
+        <item>My Profile</item>
     </string-array>
 
     <!-- Customer Activity -->

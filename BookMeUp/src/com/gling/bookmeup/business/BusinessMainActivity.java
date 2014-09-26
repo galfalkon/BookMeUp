@@ -71,10 +71,6 @@ public class BusinessMainActivity extends NavigationDrawerActivity {
 			intent = new Intent(this, BusinessCalendarActivity.class);
 			startActivity(intent);
 			return true;
-		case R.id.business_action_edit_profile:
-			intent = new Intent(this, BusinessProfileActivity.class);
-			startActivity(intent);
-			return true;
 		case R.id.business_action_settings:
 			return true;
 		case R.id.business_action_logout:
@@ -104,6 +100,8 @@ public class BusinessMainActivity extends NavigationDrawerActivity {
 			return new BusinessCustomersListFragment();
 		case 2:
 			return new BusinessOffersFragment();
+		case 3:
+			return new BusinessProfileFragment();
 		default:
 			Log.e(TAG, "trying to instantiate an unknown fragment");
 			return null;

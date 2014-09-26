@@ -3,8 +3,7 @@ package com.gling.bookmeup.business;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -21,7 +20,6 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.login.LoginMainActivity;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.SaveCallback;
@@ -160,11 +158,11 @@ public class BusinessImageCaptureFragment extends Fragment {
 	 * until we reach that Fragment.
 	 */
 	private void addPhotoToBusiness(ParseFile imageFile) {
-		BusinessProfileActivity.currentBusiness.setImageFile(imageFile);
+		((BusinessMainActivity)getActivity()).getBusiness().setImageFile(imageFile);
 		
 		Log.i(TAG, "popping back to profile creation fragment");
 		getActivity()
-		.getSupportFragmentManager()
+		.getFragmentManager()
 		.popBackStack();
 //		.popBackStack("BusinessProfileCreationFragment",
 //				FragmentManager.POP_BACK_STACK_INCLUSIVE);

@@ -6,12 +6,11 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +29,6 @@ import android.widget.Toast;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.login.LoginFragment;
-import com.gling.bookmeup.login.LoginMainActivity;
 import com.gling.bookmeup.main.FragmentsFlowManager;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
@@ -86,7 +84,7 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
         // Until the user has taken a photo, hide the preview
         imgPreviewImage.setVisibility(View.INVISIBLE);
 
-        _business = BusinessProfileActivity.currentBusiness;
+        _business = ((BusinessMainActivity)getActivity()).getBusiness();
 
         if (savedInstanceState == null) {
             Log.i(TAG, "initProfileDetails");
@@ -341,9 +339,8 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
                     Log.i(TAG, "Done saving business");
                     getActivity().setResult(Activity.RESULT_OK);
 
-                    // jump to business main activity
-                    Intent intent = new Intent(getActivity(), BusinessMainActivity.class);
-                    startActivity(intent);
+                    // jump to home screen
+                    ((BusinessMainActivity)getActivity()).onNavigationDrawerItemSelected(0);
                 } else {
                     Log.e(TAG, "Exception occurred: " + e.getMessage());
                     Toast.makeText(getActivity().getApplicationContext(), "Error saving: " + e.getMessage(),
@@ -371,14 +368,14 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
                 Log.i(TAG, "user not found in cache, redirecting to login...");
                 Toast.makeText(getActivity(), "Please sign up or log in first...", Toast.LENGTH_SHORT).show();
                 getActivity().getFragmentManager().beginTransaction().addToBackStack(null).replace(
-                        R.id.business_profile_container,
+                        R.id.container,
                         Fragment.instantiate(getActivity(), LoginFragment.class.getName())).commit();
                 return;
             }
             saveBusiness();
             return;
         }
-        FragmentsFlowManager.goToNextFragment(getActivity(), R.id.business_profile_container, v.getId());
+        FragmentsFlowManager.goToNextFragment(getActivity(), R.id.container, v.getId());
     }
 
     private boolean userInCache() { // TODO move to common

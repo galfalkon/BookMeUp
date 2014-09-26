@@ -6,10 +6,7 @@
         android:id="@+id/business_action_calendar"
         android:title="Calendar"
         android:showAsAction="always"
-        android:icon="@android:drawable/ic_menu_my_calendar"/>
-    <item
-        android:id="@+id/business_action_edit_profile"
-        android:title="@string/edit_profile"/>
+        android:icon="@android:drawable/ic_menu_my_calendar" />
     <item
         android:id="@+id/business_action_settings"
         android:orderInCategory="100"
