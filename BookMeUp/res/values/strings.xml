@@ -72,6 +72,7 @@
 
 
     <!-- Customer Favourite -->
+    <string name="customer_favourites_business_list_search_edtSearchHint">Search for...</string>
 
 
     <!-- Customer Business Profile -->

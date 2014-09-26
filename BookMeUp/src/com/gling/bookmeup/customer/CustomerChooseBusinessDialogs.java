@@ -90,10 +90,10 @@ public class CustomerChooseBusinessDialogs {
 					currentCustomer.saveInBackground();
 					clicked = false;
 				} else {
-					titleIcon.setImageDrawable(resources.getDrawable(android.R.drawable.btn_star_big_on));
-					boolean exists = false;
 					ArrayList<ParseObject> businesses = (ArrayList<ParseObject>) currentCustomer.get(Customer.Keys.FAVOURITES);
 					if (businesses.size() < 10) {
+						titleIcon.setImageDrawable(resources.getDrawable(android.R.drawable.btn_star_big_on));
+						boolean exists = false;
 						for (ParseObject parseObject : businesses) {
 							if (parseObject instanceof Business) {
 								Business businessItem = (Business) parseObject;
