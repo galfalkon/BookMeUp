@@ -79,6 +79,7 @@
     <string name="customer_business_profile_btnCancelTxt">Cancel</string>
     <string name="customer_business_profile_opening_hours">Opening Hours:</string>
     <string name="customer_business_profile_description">"Description: "</string>
+    <string name="favourites_icon">favourites icon</string>
 
     <!-- Business profile creation -->
     <string name="business_profile_creation_edtName">Business name</string>

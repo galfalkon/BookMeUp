@@ -3,10 +3,9 @@ package com.gling.bookmeup.customer;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.AlertDialog;
+import android.app.DownloadManager.Query;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -27,6 +26,7 @@ import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.Service;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper.Category;
+import com.gling.bookmeup.main.ParseHelper.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -44,11 +44,25 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
 	private ServicesAdapter _servicesAdapter;
 	ListView servicesListView = null;
 //	Button b;
+	private Customer _customer;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		Log.i(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
+		
+		//TODO: delete
+		ParseQuery<Customer> customerQuery = new ParseQuery<Customer>(Customer.CLASS_NAME);
+		customerQuery.whereEqualTo(Customer.Keys.NAME, "gefen");
+		customerQuery.include(Customer.Keys.FAVOURITES);
+		try {
+			List<Customer> customers = customerQuery.find();
+			for (int i = 0; i < customers.size(); i++) {
+				_customer = customers.get(i);
+			}
+		} catch (ParseException e1) {
+		}
+		//TODO: delete
 
 		_allBusinesses = new ArrayList<Business>();
 		_filteredBusinesses = new ArrayList<Business>();
@@ -99,6 +113,9 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
 
 		View view = super.onCreateView(inflater, container, savedInstanceState);
 		
+		Log.i(TAG, "list view is initialized");
+		servicesListView = (ListView)view.findViewById(R.id.customer_business_services_dialog_listview);
+
 		final ListView businessesListView = (ListView)view.findViewById(R.id.customer_business_list_listViewBusinesses);
 		businessesListView.setAdapter(_businessesListViewAdapter);
 		businessesListView.setOnItemClickListener(new OnItemClickListener() {
@@ -107,7 +124,8 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
                     int position, long id) {
 				Business business = (Business) businessesListView.getItemAtPosition(position);
 				Log.i(TAG, "business: " + business.getName());
-				createBusinessProfileDialog(business);
+				CustomerChooseBusinessDialogs dialog = new CustomerChooseBusinessDialogs();
+				dialog.createBusinessProfileDialog(business, getActivity(), getResources(), _customer);
             }
 
 			
@@ -138,69 +156,69 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
 		//		ArrayList<Button> buttons = new ArrayList<Button>();
 //		b = (Button) view.findViewById(R.id.customer_main_screen_btnBabrbers);
 		
-		Log.i(TAG, "list view is initialized");
-		servicesListView = (ListView)view.findViewById(R.id.customer_business_services_dialog_listview);
 //		servicesListView.setAdapter(_servicesAdapter);
 
 		return view;
 	}
 	
-	private void createBusinessProfileDialog(final Business business) {
-		LayoutInflater inflater = getActivity().getLayoutInflater();
-		final View dialogView = inflater.inflate(R.layout.customer_business_profile_dialog , null);
-		
-    	final TextView nameView = (TextView)dialogView.findViewById(R.id.customer_business_profile_dialog_name);
-    	nameView.setText(business.getName());
-    	
-    	final TextView categoryView = (TextView)dialogView.findViewById(R.id.customer_business_profile_dialog_category);
-    	if (business.getCategory() != null) {
-    		categoryView.setText(business.getCategory().getName());
-    	}
-    	
-    	final TextView descriptionView = (TextView)dialogView.findViewById(R.id.customer_business_profile_dialog_description);
-    	descriptionView.setText(business.getDescription());
-    	
-    	final TextView hoursView = (TextView)dialogView.findViewById(R.id.customer_business_profile_dialog_opening_hours);
-    	hoursView.setText(business.getOpeningHours());
-    	
-    	
-    	// Build an alert dialog
-    	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setView(dialogView);
-		builder.setTitle(business.getName());
-		
-		builder.setPositiveButton(R.string.customer_business_profile_btnNextTxt, new DialogInterface.OnClickListener() { 
-		    @Override
-		    public void onClick(DialogInterface dialog, int which) {
-		    	Log.i(TAG, "Business was chosen");
-		    	createBusinessServicesDialog(business);
-		    }
-		});
-		builder.setNegativeButton(R.string.customer_business_profile_btnCancelTxt, new DialogInterface.OnClickListener() {
-		    @Override
-		    public void onClick(DialogInterface dialog, int which) {
-		        dialog.cancel();
-		    }
-		});
-		builder.show();
-	}
+//	private void createBusinessProfileDialog(final Business business) {
+//		LayoutInflater inflater = getActivity().getLayoutInflater();
+//		final View dialogView = inflater.inflate(R.layout.customer_business_profile_dialog , null);
+//		
+//    	final TextView nameView = (TextView)dialogView.findViewById(R.id.customer_business_profile_dialog_name);
+//    	nameView.setText(business.getName());
+//    	
+//    	final TextView categoryView = (TextView)dialogView.findViewById(R.id.customer_business_profile_dialog_category);
+//    	if (business.getCategory() != null) {
+//    		categoryView.setText(business.getCategory().getName());
+//    	}
+//    	
+//    	final TextView descriptionView = (TextView)dialogView.findViewById(R.id.customer_business_profile_dialog_description);
+//    	descriptionView.setText(business.getDescription());
+//    	
+//    	final TextView hoursView = (TextView)dialogView.findViewById(R.id.customer_business_profile_dialog_opening_hours);
+//    	hoursView.setText(business.getOpeningHours());
+//    	
+//    	
+//    	// Build an alert dialog
+//    	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//		builder.setView(dialogView);
+//		builder.setTitle(business.getName());
+//		
+//		builder.setPositiveButton(R.string.customer_business_profile_btnNextTxt, new DialogInterface.OnClickListener() { 
+//		    @Override
+//		    public void onClick(DialogInterface dialog, int which) {
+//		    	Log.i(TAG, "Business was chosen");
+//		    	createBusinessServicesDialog(business);
+//		    }
+//		});
+//		builder.setNegativeButton(R.string.customer_business_profile_btnCancelTxt, new DialogInterface.OnClickListener() {
+//		    @Override
+//		    public void onClick(DialogInterface dialog, int which) {
+//		        dialog.cancel();
+//		    }
+//		});
+//		builder.show();
+//	}
 
-	private void createBusinessServicesDialog(Business business) {
-		LayoutInflater inflater = getActivity().getLayoutInflater();
-		final View servicesView = inflater.inflate(R.layout.customer_business_services_dialog , null);
-		
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setView(servicesView);
-		builder.setTitle("gefen");
-		
-//		_servicesAdapter = new ParseQueryAdapter<Service>(getActivity(),
-//				Service.CLASS_NAME);
-		_servicesAdapter = new ServicesAdapter(getActivity(), business);
-		_servicesAdapter.setTextKey(Service.Keys.NAME);
-		servicesListView.setAdapter(_servicesAdapter);
-		
-		builder.show();
-	}
+//	private void createBusinessServicesDialog(Business business) {
+//		LayoutInflater inflater = getActivity().getLayoutInflater();
+//		final View servicesView = inflater.inflate(R.layout.customer_business_services_dialog , null);
+//		
+//		servicesListView = (ListView)servicesView.findViewById(R.id.customer_business_services_dialog_listview);
+//		
+//		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//		builder.setView(servicesView);
+//		builder.setTitle("gefen");
+//		
+////		_servicesAdapter = new ParseQueryAdapter<Service>(getActivity(),
+////				Service.CLASS_NAME);
+//		_servicesAdapter = new ServicesAdapter(getActivity(), business);
+//		_servicesAdapter.setTextKey(Service.Keys.NAME);
+//		servicesListView.setAdapter(_servicesAdapter);
+//		
+//		builder.show();
+//	}
 	
 	@Override
 	protected int getFragmentLayoutId() {
@@ -273,7 +291,7 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
 
 			TextView clientNameTextView = (TextView) convertView.findViewById(R.id.business_list_item_txtBusinessName);
 			TextView totalSepndingsTextView = (TextView) convertView.findViewById(R.id.business_list_item_txtBusinessType);
-
+			
 			clientNameTextView.setText(business.getName());
 			if (business.getCategory() != null) {
 				totalSepndingsTextView.setText(business.getCategory().getName());

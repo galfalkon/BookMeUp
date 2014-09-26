@@ -15,6 +15,7 @@ public class Customer extends ParseObject {
         public static final String ID = "objectId";
         public static final String USER = "user";
         public static final String NAME = "name";
+        public static final String FAVOURITES = "favourites";
     }
     
 	public Customer() {
