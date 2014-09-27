@@ -11,10 +11,9 @@
         android:layout_height="wrap_content"
         android:text="Temporary: Update" />
     
-     <ExpandableListView
-        android:id="@+id/business_bookings_explistViewBookings"
+     <it.gmariotti.cardslib.library.view.CardListView
+        android:id="@+id/business_bookings_cardListViewBookings"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </ExpandableListView>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
