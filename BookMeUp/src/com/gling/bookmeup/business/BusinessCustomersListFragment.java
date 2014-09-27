@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -26,7 +27,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -60,8 +60,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 public class BusinessCustomersListFragment  extends OnClickListenerFragment implements TextWatcher {
 	private static final String TAG = "BusinessCustomersListFragment";
 	
-	private List<Customer> _allCustomers, _filteredCustomers;
-//	private CustomersArrayAdapter _listViewAdapter;
+	private HashMap<String, Customer> _allCustomers, _filteredCustomers;
 	private CustomerCardArrayMultiChoiceAdapter _customerCardsAdapter;
 	private List<Card> _cards;
 	
@@ -73,10 +72,8 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		super.onCreate(savedInstanceState);
 		
 		_business = ((BusinessMainActivity)getActivity()).getBusiness();
-		_allCustomers = new ArrayList<Customer>();
-//		_allCustomers = new HashMap<String, Customer>();
-		_filteredCustomers = new ArrayList<Customer>();
-//		_listViewAdapter = new CustomersArrayAdapter();
+		_allCustomers = new HashMap<String, Customer>();
+		_filteredCustomers = new HashMap<String, Customer>();
 		_cards = new ArrayList<Card>();
 		_customerCardsAdapter = new CustomerCardArrayMultiChoiceAdapter(getActivity(), _cards);
 		
@@ -115,24 +112,18 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 						}
 					});
 					
-//					if (_allCustomers.containsKey(currentCustomer._id))
-//					{
-//						_allCustomers.get(currentCustomer._id).notifyBooking(bookingParseObject);
-//					}
-//					else
-//					{
-//						_allCustomers.put(currentCustomer._id, currentCustomer);
-//					}
-					int index = _allCustomers.indexOf(currentCustomer);
-					if (index == -1) {
-						_allCustomers.add(currentCustomer);
+					if (_allCustomers.containsKey(currentCustomer._id))
+					{
+						_allCustomers.get(currentCustomer._id).notifyBooking(bookingParseObject);
+					}
+					else
+					{
 						_cards.add(customerCard);
-					} else {
-						_allCustomers.get(index).notifyBooking(bookingParseObject);
+						_allCustomers.put(currentCustomer._id, currentCustomer);
 					}
 				}
 				
-//				_listViewAdapter.notifyDataSetChanged();
+				_filteredCustomers.putAll(_allCustomers);
 				_customerCardsAdapter.notifyDataSetChanged();
 			}
 		});
@@ -187,7 +178,6 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 	public void onTextChanged(CharSequence s, int start, int before	, int count) {
 		Log.i(TAG, "onTextChanged");
 		_customerCardsAdapter.getFilter().filter(s);
-//		_listViewAdapter.getFilter().filter(s);
 	}
 	
 	private void handleLastVisitFilter() {
@@ -204,7 +194,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 				GregorianCalendar selectedDateCalendar = new GregorianCalendar(year, monthOfYear, dayOfMonth);
 				Date selectedDate = selectedDateCalendar.getTime();
 				
-//				_listViewAdapter._clientFilter.filterByLastVisit(selectedDate);
+				_customerCardsAdapter._customersFilter.filterByLastVisit(selectedDate);
 			}
 		}, today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DATE));
 		datePickerDialog.show();
@@ -232,7 +222,8 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		    		return;
 		    	}
 		    	int spendingsLimit = Integer.parseInt(spendingLimitInput);
-//		    	_listViewAdapter._clientFilter.filterBySpendings(spendingsLimit);
+		    	
+		    	_customerCardsAdapter._customersFilter.filterBySpendings(spendingsLimit);
 		    }
 		});
 		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -460,82 +451,86 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 //		}
 //	}
 //	
-//	private class CustomersFilter extends Filter {
-//		/*
-//		 *  Optional
-//		 *  Should be null if the user doesn't want to filter by the date of the last visit.
-//		 */
-//		private Date _dateOfLastVisit;
-//		
-//		/*
-//		 *  Optional
-//		 *  Should be null if the user doesn't want to filter by total spendings.
-//		 */
-//		private Integer _spendingsLimit;
-//		
-//		@Override
-//		protected FilterResults performFiltering(CharSequence constraint) {
-//			Log.i(TAG, "performFiltering(" + constraint + ")");
-//			
-//			FilterResults results = new FilterResults();
-//			
-//			_filteredCustomers.clear();
-//			for (Customer customer : _allCustomers) {
-//				if (doesSetisfyLastVisitFilter(customer) &&
-//						doestSetisfySpendingsFilter(customer) &&
-//						doesSetisfyConstraint(customer, constraint)) {
-//					_filteredCustomers.add(customer);
-//				}
-//			}
-//			
-//			results.values = _filteredCustomers;
-//			results.count = _filteredCustomers.size();
-//			
-//			return results;
-//		}
-//
-//		@Override
-//		protected void publishResults(CharSequence constraint, FilterResults results) {
-//			Log.i(TAG, "publicResults");
-//			_customerCardsAdapter.notifyDataSetChanged();
-//		}
-//		
-//		private void filterByLastVisit(Date date) {
-//			_dateOfLastVisit = date;
-//			filter(null);
-//		}
-//		
-//		private void filterBySpendings(int spendingsLimit) {
-//			Log.i(TAG, "filterBySpendings. Limit = " + spendingsLimit);
-//			
-//			_spendingsLimit = spendingsLimit;
-//			filter(null);
-//		}
-//		
-//		private void unfilterByLastVisit() {
-//			_dateOfLastVisit = null;
-//		}
-//		
-//		private boolean doesSetisfyLastVisitFilter(Customer customer) {
-//			return (_dateOfLastVisit == null) || customer._lastVisit.after(_dateOfLastVisit);
-//		}
-//		
-//		private boolean doestSetisfySpendingsFilter(Customer customer) {
-//			Log.i(TAG, "doestSetisfySpendingsFilter. customer spendings = " + customer._totalSpendings + ", limit = " + _spendingsLimit);
-//			return (_spendingsLimit == null) || (customer._totalSpendings >= _spendingsLimit);
-//		}
-//		
-//		private boolean doesSetisfyConstraint(Customer customer, CharSequence constraint) {
-//			return (constraint == null) || customer._customerName.toLowerCase().contains(constraint.toString().toLowerCase());
-//		}
-//	}
+	private class CustomersFilter extends Filter {
+		/*
+		 *  Optional
+		 *  Should be null if the user doesn't want to filter by the date of the last visit.
+		 */
+		private Date _dateOfLastVisit;
+		
+		/*
+		 *  Optional
+		 *  Should be null if the user doesn't want to filter by total spendings.
+		 */
+		private Integer _spendingsLimit;
+		
+		@Override
+		protected FilterResults performFiltering(CharSequence constraint) {
+			Log.i(TAG, "performFiltering(" + constraint + ")");
+			
+			FilterResults results = new FilterResults();
+
+			_cards.clear();
+			_filteredCustomers.clear();
+			for (Customer customer : _allCustomers.values()) {
+				if (doesSetisfyLastVisitFilter(customer) &&
+						doestSetisfySpendingsFilter(customer) &&
+						doesSetisfyConstraint(customer, constraint)) {
+					_cards.add(customer.toCard(getActivity()));
+					_filteredCustomers.put(customer._id, customer);
+				}
+			}
+			
+			results.values = _filteredCustomers;
+			results.count = _filteredCustomers.size();
+			
+			return results;
+		}
+
+		@Override
+		protected void publishResults(CharSequence constraint, FilterResults results) {
+			Log.i(TAG, "publicResults");
+			_customerCardsAdapter.notifyDataSetChanged();
+		}
+		
+		private void filterByLastVisit(Date date) {
+			_dateOfLastVisit = date;
+			filter(null);
+		}
+		
+		private void filterBySpendings(int spendingsLimit) {
+			Log.i(TAG, "filterBySpendings. Limit = " + spendingsLimit);
+			
+			_spendingsLimit = spendingsLimit;
+			filter(null);
+		}
+		
+		private void unfilterByLastVisit() {
+			_dateOfLastVisit = null;
+		}
+		
+		private boolean doesSetisfyLastVisitFilter(Customer customer) {
+			return (_dateOfLastVisit == null) || customer._lastVisit.after(_dateOfLastVisit);
+		}
+		
+		private boolean doestSetisfySpendingsFilter(Customer customer) {
+			Log.i(TAG, "doestSetisfySpendingsFilter. customer spendings = " + customer._totalSpendings + ", limit = " + _spendingsLimit);
+			return (_spendingsLimit == null) || (customer._totalSpendings >= _spendingsLimit);
+		}
+		
+		private boolean doesSetisfyConstraint(Customer customer, CharSequence constraint) {
+			return (constraint == null) || customer._customerName.toLowerCase().contains(constraint.toString().toLowerCase());
+		}
+	}
 	
 	public class CustomerCardArrayMultiChoiceAdapter extends CardArrayMultiChoiceAdapter {
+		
+		private CustomersFilter _customersFilter;
 		
 		public CustomerCardArrayMultiChoiceAdapter(Context context, List<Card> cards) {
 			super(context, cards);
 			
-			setRowLayoutId(R.layout.card_thumbnail_layout);
+			_customersFilter = new CustomersFilter();
 		}
 
 		@Override
@@ -570,6 +565,11 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
         @Override
         public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked, CardView cardView, Card card) {
         	Log.i(TAG, "Click;" + position + " - " + checked);
+        }
+        
+        @Override
+        public Filter getFilter() {
+        	return _customersFilter;
         }
         
         public List<String> getSelectedItemsId()
