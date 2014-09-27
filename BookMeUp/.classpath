@@ -5,10 +5,5 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="/cardslib/bin/cardslib.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/BookMeUp/libs/docs/cardslib-1.9.1-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
