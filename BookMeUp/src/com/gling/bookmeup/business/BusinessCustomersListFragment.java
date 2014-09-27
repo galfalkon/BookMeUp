@@ -60,7 +60,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 public class BusinessCustomersListFragment  extends OnClickListenerFragment implements TextWatcher {
 	private static final String TAG = "BusinessCustomersListFragment";
 	
-	private HashMap<String, Customer> _allCustomers, _filteredCustomers;
+	private HashMap<String, Customer> _allCustomers;
 	private CustomerCardArrayMultiChoiceAdapter _customerCardsAdapter;
 	private List<Card> _cards;
 	
@@ -73,7 +73,6 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		
 		_business = ((BusinessMainActivity)getActivity()).getBusiness();
 		_allCustomers = new HashMap<String, Customer>();
-		_filteredCustomers = new HashMap<String, Customer>();
 		_cards = new ArrayList<Card>();
 		_customerCardsAdapter = new CustomerCardArrayMultiChoiceAdapter(getActivity(), _cards);
 		
@@ -123,7 +122,6 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 					}
 				}
 				
-				_filteredCustomers.putAll(_allCustomers);
 				_customerCardsAdapter.notifyDataSetChanged();
 			}
 		});
@@ -471,18 +469,16 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 			FilterResults results = new FilterResults();
 
 			_cards.clear();
-			_filteredCustomers.clear();
 			for (Customer customer : _allCustomers.values()) {
 				if (doesSetisfyLastVisitFilter(customer) &&
 						doestSetisfySpendingsFilter(customer) &&
 						doesSetisfyConstraint(customer, constraint)) {
 					_cards.add(customer.toCard(getActivity()));
-					_filteredCustomers.put(customer._id, customer);
 				}
 			}
 			
-			results.values = _filteredCustomers;
-			results.count = _filteredCustomers.size();
+			results.values = _cards;
+			results.count = _cards.size();
 			
 			return results;
 		}
