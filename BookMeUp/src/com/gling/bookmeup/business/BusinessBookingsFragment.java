@@ -59,8 +59,8 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 
         // Define sections
         List<CardSection> sections =  new ArrayList<CardSection>();
-        sections.add(new CardSection(0, "Pending"));
-        sections.add(new CardSection(0, "Approved"));
+        sections.add(new CardSection(0, getString(R.string.business_bookings_list_pending_header)));
+        sections.add(new CardSection(0, getString(R.string.business_bookings_list_approved_header)));
 
         // Define a SectionedAdapter
         _sectionedCardAdapter = new SectionedCardAdapter(getActivity(), _cardArrayAdapter);
@@ -125,26 +125,30 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
      */
 	private void arrangeBookingsInCardListView() {
 		_cards.clear();
-        List<CardSection> newCardSections = new ArrayList<CardSection>();
         
-        newCardSections.add(new CardSection(0, "Pending"));
-        for (int i = 0; i < _bookings.size(); i++)
+        int firstPendingBooking = 0, firstApprovedBooking = _bookings.size(); 
+        for (int i = _bookings.size() - 1; i >= 0; i--)
         {
         	Booking booking = _bookings.get(i);
-        	if (booking.getStatus() == Booking.Status.CANCELED)
+        	
+        	switch (booking.getStatus())
         	{
+        	case Booking.Status.PENDING:
+        		firstPendingBooking = i;
+        		break;
+        	case Booking.Status.APPROVED:
+        		firstApprovedBooking = i;
+        		break;
+        	case Booking.Status.CANCELED:
         		continue;
         	}
-        	_cards.add(convertBookingToCard(booking));
-        	if (booking.getStatus() == Booking.Status.APPROVED && newCardSections.size() == 1)
-        	{
-        		newCardSections.add(new CardSection(i, "Approved"));
-        	}
+        	
+        	_cards.add(0, convertBookingToCard(booking));
         }
-        if (newCardSections.size() < 2)
-        {
-        	newCardSections.add(new CardSection(_bookings.size(), "Approved"));
-        }
+        
+        List<CardSection> newCardSections = new ArrayList<CardSection>();
+        newCardSections.add(new CardSection(firstPendingBooking, getString(R.string.business_bookings_list_pending_header)));
+        newCardSections.add(new CardSection(firstApprovedBooking, getString(R.string.business_bookings_list_approved_header)));
         CardSection[] cardSectionArray = new CardSection[2];
         _sectionedCardAdapter.setCardSections(newCardSections.toArray(cardSectionArray));
         
