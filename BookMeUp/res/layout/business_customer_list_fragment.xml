@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card="http://schemas.android.com/apk/res-auto" 
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
@@ -36,41 +38,11 @@
             style="?android:attr/buttonBarButtonStyle"
             android:text="@string/business_customer_list_btnFilterByLastVisit" />
     </LinearLayout>
-
-    <ListView
-        android:id="@+id/business_customer_list_listViewClients"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/business_customer_list_filtersBar"
-        android:layout_above="@+id/business_customer_list_actionBar" >
-
-    </ListView>
     
-    <LinearLayout
-        android:id="@+id/business_customer_list_actionBar"
+    <it.gmariotti.cardslib.library.view.CardListView
+        android:id="@+id/business_customer_list_listViewCustomers"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        style="?android:attr/buttonBarStyle"
-        android:orientation="horizontal" >
-
-        <!-- Disable send message
-        <Button
-            android:id="@+id/business_customer_list_btnSendMessage"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            style="?android:attr/buttonBarButtonStyle"
-            android:text="@string/business_customer_list_btnSendMessage" />
-         -->
-
-        <Button
-            android:id="@+id/business_customer_list_btnSendOffer"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            style="?android:attr/buttonBarButtonStyle"
-            android:text="@string/business_customer_list_btnSendOffer" />
-    </LinearLayout>
-
+        android:layout_height="match_parent"
+        android:layout_below="@id/business_customer_list_filtersBar" />
+    
 </RelativeLayout>
