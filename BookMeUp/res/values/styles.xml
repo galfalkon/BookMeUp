@@ -23,7 +23,6 @@
     
     <style name="Theme.BookMeUp_SplashScreen" parent="@android:style/Theme.Holo.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_background</item>
-        <item name="android:background">@drawable/splash_background</item>
     </style>
     
     <style name="Theme.BookMeUp_LoginScreen" parent="@android:style/Theme.Holo.Light.NoActionBar">

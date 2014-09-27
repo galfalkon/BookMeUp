@@ -1,7 +1,13 @@
 package com.gling.bookmeup.login;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -32,12 +38,53 @@ public class SplashScreenActivity extends Activity {
         // Track application opens
         ParseAnalytics.trackAppOpened(getIntent());
     }
-
+    
     @Override
     protected void onResume() {
         super.onResume();
 
-        final Intent intent;
+        goToNextActivityIfConnected();
+    }
+    
+    private void goToNextActivityIfConnected() {
+    	if (!isNetworkAvailable())
+        {
+        	Log.i(TAG, "No internet connection");
+        	
+        	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        	builder.setTitle(R.string.error_no_internet_connection);
+        	builder.setIconAttribute(android.R.attr.alertDialogIcon);
+        	builder.setPositiveButton(R.string.ok, new OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					Log.i(TAG, "ok click");
+					finish();
+				}
+			});
+        	builder.setNegativeButton(R.string.try_again, new OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					Log.i(TAG, "Try Again click");
+					goToNextActivityIfConnected();
+				}
+			});
+        	builder.create().show();
+        	return;
+        }
+        
+        goToNextActivity();
+    }
+    
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+    
+    private void goToNextActivity()
+    {
+    	final Intent intent;
 
         if (ParseHelper.isUserLoggedIn()) {
             ParseUser user = ParseUser.getCurrentUser();
