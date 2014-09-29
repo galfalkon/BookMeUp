@@ -1,0 +1,69 @@
+package com.gling.bookmeup.main;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import it.gmariotti.cardslib.library.internal.Card;
+import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
+import android.content.Context;
+
+/**
+ * Array adapter for classes that extends ICardViewable (i.e. Supports generation of Card instance)
+ * @author Gal Falkon
+ *
+ * @param <T> The type of elements in the array adapter
+ */
+public class GenericCardArrayAdapter<T> extends CardArrayAdapter
+{
+	private final IObservableList<T> _items;
+	private final List<Card> _cards;
+	private final ICardGenerator<T> _cardFactory;
+	
+	private GenericCardArrayAdapter(Context context, List<Card> cards, IObservableList<T> items, ICardGenerator<T> cardFactory) {
+		super(context, cards);
+		_items = items;
+		_cards = cards;
+		_items.registerChangeListener(new ItemListListener());
+		_cardFactory = cardFactory;
+	}
+	
+	@Override
+	public void remove(Card object) {
+		_items.remove(_cards.indexOf(object));
+	}
+	
+	private class ItemListListener implements IListChangeObserver
+	{
+		@Override
+		public void onAddItem(int position) {
+			_cards.add(_cardFactory.generateCard(_items.get(position)));
+			notifyDataSetChanged();
+		}
+
+		@Override
+		public void onAddAll(int fromPosition) {
+			for (int i = fromPosition; i < _items.size(); i++)
+			{
+				_cards.add(_cardFactory.generateCard(_items.get(i)));
+			}
+			notifyDataSetChanged();
+		}
+
+		@Override
+		public void onRemoveItem(int position) {
+			_cards.remove(position);
+			notifyDataSetChanged();
+		}
+
+		@Override
+		public void onClear() {
+			_cards.clear();
+			notifyDataSetChanged();
+		}
+	}
+
+	public static <T> GenericCardArrayAdapter<T> create(Context context, IObservableList<T> items, ICardGenerator<T> cardFactory)
+	{
+		return new GenericCardArrayAdapter<T>(context, new ArrayList<Card>(), items, cardFactory);
+	}
+}

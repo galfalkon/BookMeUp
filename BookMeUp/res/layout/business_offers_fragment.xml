@@ -24,8 +24,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
     
-    <ListView
-        android:id="@+id/business_offers_listViewOffers"
+    <it.gmariotti.cardslib.library.view.CardListView
+        android:id="@+id/business_offers_listViewOffersNew"
         android:layout_width="match_parent"
-           android:layout_height="wrap_content" />
+        android:layout_height="match_parent" />
 </LinearLayout>
