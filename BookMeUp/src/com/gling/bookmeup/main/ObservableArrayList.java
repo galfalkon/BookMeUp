@@ -29,40 +29,46 @@ public class ObservableArrayList<T> extends ArrayList<T> implements IObservableL
 	@Override
 	public void add(int index, T object) {
 		super.add(index, object);
-		_observer.onAddItem(index);
+		if (_observer != null)
+			_observer.onAddItem(index);
 	}
 	
 	@Override
 	public boolean add(T object) {
 		boolean ret = super.add(object);
-		_observer.onAddItem(size() - 1);
+		if (_observer != null)
+			_observer.onAddItem(size() - 1);
 		return ret;
 	}
 	
 	@Override
 	public boolean addAll(Collection<? extends T> collection) {
 		boolean ret = super.addAll(collection);
-		_observer.onAddAll(size() - collection.size());
+		if (_observer != null)
+			_observer.onAddAll(size() - collection.size());
 		return ret;
 	}
 	
 	@Override
 	public boolean addAll(int index, Collection<? extends T> collection) {
 		boolean ret = super.addAll(index, collection);
-		_observer.onAddAll(index);
+		if (_observer != null)
+			_observer.onAddAll(index);
 		return ret;
 	}
 	
 	@Override
 	public void clear() {
 		super.clear();
-		_observer.onClear();
+		if (_observer != null)
+			_observer.onClear();
 	}
 	
 	@Override
 	public T remove(int index) {
 		T ret = super.remove(index);
-		_observer.onRemoveItem(index);
+		if (_observer != null)
+			_observer.onRemoveItem(index);
 		return ret;
 	}
 	
@@ -70,7 +76,8 @@ public class ObservableArrayList<T> extends ArrayList<T> implements IObservableL
 	public boolean remove(Object object) {
 		int index = indexOf(object);
 		boolean ret = super.remove(object);
-		_observer.onRemoveItem(index);
+		if (_observer != null)
+			_observer.onRemoveItem(index);
 		return ret;
 	}
 	
