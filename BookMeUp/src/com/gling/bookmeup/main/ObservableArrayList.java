@@ -14,7 +14,7 @@ import java.util.Collection;
 public class ObservableArrayList<T> extends ArrayList<T> implements IObservableList<T> {
 	private static final long serialVersionUID = 1L;
 	
-	public IListChangeObserver _observer;
+	private IListChangeObserver _observer;
 	
 	@Override
 	public void registerChangeListener(IListChangeObserver changeObserver) {

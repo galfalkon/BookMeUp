@@ -7,6 +7,7 @@ import it.gmariotti.cardslib.library.view.CardListView;
 
 import java.util.List;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,22 +38,6 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 	    super.onCreate(savedInstanceState);
 	    _business = ((BusinessMainActivity)getActivity()).getBusiness();
 	    _offers = new ObservableArrayList<Offer>();
-	    
-	    ParseQuery<Offer> parseQuery = new ParseQuery<Offer>(Offer.class)
-	    		.whereEqualTo(ParseHelper.Offer.Keys.BUSINESS_POINTER, _business);
-	    parseQuery.findInBackground(new FindCallback<ParseHelper.Offer>() {
-			
-			@Override
-			public void done(List<Offer> objects, ParseException e) {
-				if (e != null)
-				{
-					Log.e(TAG, "Exception: " + e.getMessage());
-					return;
-				}
-				
-				_offers.addAll(objects);
-			}
-		});
 	}
 	
 	@Override
@@ -64,6 +49,25 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
         _offersAdapter = GenericCardArrayAdapter.<Offer>create(getActivity(), _offers, new OfferCardsGenerator());
         CardListView offersListView = (CardListView) view.findViewById(R.id.business_offers_listViewOffersNew);
         offersListView.setAdapter(_offersAdapter);
+        
+        ParseQuery<Offer> parseQuery = new ParseQuery<Offer>(Offer.class)
+	    		.whereEqualTo(ParseHelper.Offer.Keys.BUSINESS_POINTER, _business);
+        final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
+	    parseQuery.findInBackground(new FindCallback<ParseHelper.Offer>() {
+			
+			@Override
+			public void done(List<Offer> objects, ParseException e) {
+				Log.i(TAG, "findInBackground done");
+				progressDialog.dismiss();
+				if (e != null)
+				{
+					Log.e(TAG, "Exception: " + e.getMessage());
+					return;
+				}
+				
+				_offers.addAll(objects);
+			}
+		});
 		
 		return view;
 	}
