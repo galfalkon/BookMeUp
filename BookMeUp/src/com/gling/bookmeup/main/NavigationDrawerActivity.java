@@ -34,7 +34,7 @@ public abstract class NavigationDrawerActivity extends Activity
 
         _navigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        _title = getTitle();
+        _title = getSectionTitles()[0];
 
         // Set up the drawer.
         _navigationDrawerFragment.setUp(
@@ -44,6 +44,8 @@ public abstract class NavigationDrawerActivity extends Activity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
+    	_title = getSectionTitles()[position];
+    	
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
