@@ -1,21 +1,28 @@
 package com.gling.bookmeup.business;
 
+import java.util.List;
+
 import org.joda.time.DateTime;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Process;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.ParseHelper.Booking;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
+import com.parse.ParseQueryAdapter.OnQueryLoadListener;
 import com.parse.ParseUser;
 
 public class BusinessCalendarFragment extends Fragment {
@@ -26,8 +33,8 @@ public class BusinessCalendarFragment extends Fragment {
     private DateTime _date;
     private CustomParseQueryAdapter _businessBookingsAdapter;
     
-    private TextView _txtDate;
     private ListView _lstBookings;
+    private ProgressBar _progressBar;
     
     /**
      * Returns a new instance of this fragment for the given date.
@@ -56,28 +63,27 @@ public class BusinessCalendarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.business_calendar_fragment, container, false);
         
-        _txtDate = (TextView) rootView.findViewById(R.id.business_calendar_date);
         _lstBookings = (ListView) rootView.findViewById(R.id.business_calendar_list);
-                
-        _txtDate.setText(_date.toString("dd-MM-yy"));      
+        _progressBar = (ProgressBar) rootView.findViewById(R.id.business_calendar_progress_bar);        
+        
         _businessBookingsAdapter = new CustomParseQueryAdapter(getActivity());      
         _lstBookings.setAdapter(_businessBookingsAdapter);
         
-//        final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
-//        _businessBookingsAdapter.addOnQueryLoadListener(new OnQueryLoadListener<Booking>() {
-//            @Override
-//            public void onLoading() {
-//                
-//            }
-//
-//            @Override
-//            public void onLoaded(List<Booking> objects, Exception e) {
-//                progressDialog.dismiss();
-//            }
-//
-//          });
+        _businessBookingsAdapter.addOnQueryLoadListener(new OnQueryLoadListener<Booking>() {
+            @Override
+            public void onLoading() {
+            	_lstBookings.setVisibility(View.VISIBLE);
+            	_progressBar.setVisibility(View.GONE);
+            }
 
-        
+            @Override
+            public void onLoaded(List<Booking> objects, Exception e) {
+            	_progressBar.setVisibility(View.GONE);
+            	_lstBookings.setVisibility(View.VISIBLE);
+            }
+
+          });
+
         return rootView;
     }
     
@@ -87,7 +93,7 @@ public class BusinessCalendarFragment extends Fragment {
             super(context, new ParseQueryAdapter.QueryFactory<Booking>() {
                 public ParseQuery<Booking> create() {
                     ParseQuery<Booking> query = new ParseQuery<Booking>(Booking.CLASS_NAME);
-                    query.whereEqualTo(Booking.Keys.BUSINESS_POINTER, ParseUser.getCurrentUser().get(Business.CLASS_NAME));
+                    query.whereEqualTo(Booking.Keys.BUSINESS_POINTER, ParseUser.getCurrentUser().get(ParseHelper.User.Keys.BUSINESS_POINTER));
                     query.whereGreaterThanOrEqualTo(Booking.Keys.DATE, _date.toDate());
                     query.whereLessThan(Booking.Keys.DATE, _date.plusDays(1).toDate());
                     query.include(Booking.Keys.CUSTOMER_POINTER);
