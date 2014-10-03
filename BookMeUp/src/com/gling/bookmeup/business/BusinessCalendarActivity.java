@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -11,9 +12,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.DatePicker;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -30,6 +32,7 @@ public class BusinessCalendarActivity extends FragmentActivity {
 	private PagerSlidingTabStrip _tabs;
 	private ViewPager _viewPager;
 	private CalendarPagerAdapter _sectionsPagerAdapter;
+	private int _scrollCenter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,23 @@ public class BusinessCalendarActivity extends FragmentActivity {
 
 		// set pager to current date
 		_viewPager.setCurrentItem(DAYS_MARGIN);
+		
+		// get the scroll offset of the central (today) tab
+		_scrollCenter = 0;
+		ViewTreeObserver vto = _tabs.getViewTreeObserver(); 
+		vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+		    @SuppressWarnings("deprecation")
+			@Override
+		    public void onGlobalLayout() {
+		    	_scrollCenter = _tabs.getScrollX();
+		        ViewTreeObserver obs = _tabs.getViewTreeObserver();
+		        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+		            obs.removeOnGlobalLayoutListener(this);
+		        } else {
+		            obs.removeGlobalOnLayoutListener(this);
+		        }
+		    }
+		});
 	}
 
 	@Override
@@ -75,8 +95,10 @@ public class BusinessCalendarActivity extends FragmentActivity {
 						getSupportFragmentManager(), _today);
 				_viewPager.setAdapter(_sectionsPagerAdapter);
 				_tabs.setViewPager(_viewPager);
+				_viewPager.setCurrentItem(DAYS_MARGIN, true);
+			} else {
+				_tabs.smoothScrollTo(_scrollCenter, 0);				
 			}
-			_viewPager.setCurrentItem(DAYS_MARGIN);
 			return true;
 		case R.id.business_calendar_action_pick:
 			handleDatePicker();
@@ -101,8 +123,10 @@ public class BusinessCalendarActivity extends FragmentActivity {
 									getSupportFragmentManager(), selectedDate);
 							_viewPager.setAdapter(_sectionsPagerAdapter);
 							_tabs.setViewPager(_viewPager);
+							_viewPager.setCurrentItem(DAYS_MARGIN, true);
+						} else {
+							_tabs.smoothScrollTo(_scrollCenter, 0);				
 						}
-						_viewPager.setCurrentItem(DAYS_MARGIN);
 					}
 				}, _today.getYear(), _today.getMonthOfYear() - 1,
 				_today.getDayOfMonth());
