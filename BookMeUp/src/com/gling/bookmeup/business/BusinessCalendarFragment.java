@@ -4,10 +4,8 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Process;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
