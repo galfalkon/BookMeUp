@@ -40,7 +40,7 @@ public class CustomerChooseBusinessDialogs {
 
 		final TextView categoryView = (TextView)dialogView.findViewById(R.id.customer_business_profile_dialog_category);
 		if (business.getCategory() != null) {
-			categoryView.setText(business.getCategory().getName());
+			categoryView.setText(business.getCategory());
 		}
 
 		final TextView descriptionView = (TextView)dialogView.findViewById(R.id.customer_business_profile_dialog_description);

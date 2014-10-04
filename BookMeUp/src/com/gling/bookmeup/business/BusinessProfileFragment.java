@@ -1,6 +1,7 @@
 package com.gling.bookmeup.business;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.json.JSONObject;
 
@@ -10,7 +11,9 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -31,17 +35,13 @@ import com.gling.bookmeup.login.LoginFragment;
 import com.gling.bookmeup.main.FragmentsFlowManager;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
-import com.gling.bookmeup.main.ParseHelper.Category;
 import com.parse.DeleteCallback;
-import com.parse.GetCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseImageView;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
-import com.parse.ParseQueryAdapter.OnQueryLoadListener;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -107,45 +107,24 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
     }
 
     private void initCategorySpinner() {
-        final ParseQueryAdapter<ParseObject> adapter = new ParseQueryAdapter<ParseObject>(getActivity(),
-                ParseHelper.Category.CLASS_NAME);
-        adapter.setTextKey(ParseHelper.Category.Keys.NAME);
-        adapter.addOnQueryLoadListener(new OnQueryLoadListener<ParseObject>() {
-            public void onLoading() {
-                // Trigger any "loading" UI
+    	SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+    	Set<String> categorySet = new HashSet<String>();
+    	categorySet = sp.getStringSet(ParseHelper.BUSINESS_CATEGORIES, categorySet);
+    	final String[] categoryArr = categorySet.toArray(new String[categorySet.size()]);
+    	
+    	final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_single_choice, categoryArr);
+    	spnCategory.setAdapter(adapter);
+    	
+    	String category = _business.getCategory();
+
+        int position = 0;
+        int count = adapter.getCount();
+        for (; position < count; ++position) {
+            if (adapter.getItem(position).equalsIgnoreCase(category)) {
+            	spnCategory.setSelection(position);
+                break;
             }
-
-            public void onLoaded(final List<ParseObject> categories, Exception paramException) {
-                Category category = _business.getCategory();
-                if (category == null) {
-                    spnCategory.setSelection(0);
-                    return;
-                }
-
-                category.fetchIfNeededInBackground(new GetCallback<Category>() {
-
-                    @Override
-                    public void done(Category category, ParseException e) {
-                        if (e == null) {
-                            String categoryName = category.getString(Category.Keys.NAME);
-                            int position = 0;
-                            for (int i = 0; i < categories.size(); i++) {
-                                if (categories.get(i).getString(Category.Keys.NAME).equalsIgnoreCase(categoryName)) {
-                                    position = i;
-                                    break;
-                                }
-                            }
-
-                            spnCategory.setSelection(position);
-                        } else {
-                            Log.e(TAG, "Exception: " + e.getMessage());
-                        }
-                    }
-                });
-            }
-        });
-
-        spnCategory.setAdapter(adapter);
+        }
     }
 
     private void initOpeningHours() {
@@ -326,7 +305,7 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
         _business.setName(edtName.getText().toString());
         _business.setDescription(edtDescription.getText().toString());
         _business.setPhoneNumber(edtPhoneNumber.getText().toString());
-        _business.setCategory((Category) spnCategory.getSelectedItem());
+        _business.setCategory(spnCategory.getSelectedItem().toString());
 
         // If the user added a photo, that data will be added in the
         // BusinessImageCaptureFragment

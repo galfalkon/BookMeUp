@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
+import android.inputmethodservice.Keyboard.Key;
 import android.provider.Settings.Secure;
 import android.util.Log;
 
@@ -108,6 +109,9 @@ public class ParseHelper {
 		}
 	}
 
+	// for saving business categories in shared prefs
+	public final static String BUSINESS_CATEGORIES = "business_categories";
+	
 	@ParseClassName(Category.CLASS_NAME)
 	public static class Category extends ParseObject {
 		public static final String CLASS_NAME = "Category";
@@ -116,7 +120,7 @@ public class ParseHelper {
 			public static final String ID = "objectId";
 			public static final String NAME = "Name"; // TODO lowercase
 		}
-
+		
 		public String getName() {
 			return getString(Keys.NAME);
 		}

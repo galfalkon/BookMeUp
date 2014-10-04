@@ -1,12 +1,16 @@
 package com.gling.bookmeup.customer;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -24,6 +28,7 @@ import android.widget.TextView;
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.main.OnClickListenerFragment;
+import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.ParseHelper.Category;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -37,7 +42,7 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
 
 	private List<Business> _allBusinesses, _filteredBusinesses;
 	private BusinessesArrayAdapter _businessesListViewAdapter;
-	private ParseQueryAdapter<Category> _categoriesAdapter;
+	private ArrayAdapter<String> _categoriesAdapter;
 	ListView servicesListView = null;
 	private Customer _customer;
 
@@ -92,10 +97,11 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
 			}
 		});
 		
-		_categoriesAdapter = new ParseQueryAdapter<Category>(getActivity(),
-				Category.CLASS_NAME);
-		_categoriesAdapter.setTextKey(Category.Keys.NAME);
-		
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+    	Set<String> categorySet = new HashSet<String>();
+    	categorySet = sp.getStringSet(ParseHelper.BUSINESS_CATEGORIES, categorySet);
+    	String[] categoryArr = categorySet.toArray(new String[categorySet.size()]);
+    	_categoriesAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_single_choice, categoryArr);
 	}
 
 	@Override
@@ -132,10 +138,8 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
 			@Override
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
-				ParseObject object = (ParseObject) categoriesListView.getItemAtPosition(position);
-				Category category = (Category) object;
+				String category = _categoriesAdapter.getItem(position);
 				_businessesListViewAdapter.getBusinessFilter().filterByCatagory(category);
-
             }
 
 			
@@ -194,7 +198,7 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
 			
 			clientNameTextView.setText(business.getName());
 			if (business.getCategory() != null) {
-				totalSepndingsTextView.setText(business.getCategory().getName());
+				totalSepndingsTextView.setText(business.getCategory());
 			} else {
 				totalSepndingsTextView.setText("No Category");
 			}
@@ -215,7 +219,7 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
 	}
 
 	private class BusinessFilter extends Filter {
-		private Category _chosenCategory;
+		private String _chosenCategory;
 
 		@Override
 		protected FilterResults performFiltering(CharSequence constraint) {
@@ -250,7 +254,7 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
 			_businessesListViewAdapter.notifyDataSetChanged();
 		}
 
-		public void filterByCatagory(Category category) {
+		public void filterByCatagory(String category) {
 			_chosenCategory = category;
 			filter(null);
 		}
@@ -261,8 +265,8 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
 		
 		private boolean doesSetisfyCategory(Business business) {
 			String categoryName;
-			if ((business.getCategory() != null) && (categoryName=business.getCategory().getName()) != null) {
-				return (_chosenCategory == null) || _chosenCategory.getName().equals(categoryName);
+			if ((categoryName = business.getCategory()) != null) {
+				return (_chosenCategory == null) || _chosenCategory.equals(categoryName);
 			}
 			return false;
 		}

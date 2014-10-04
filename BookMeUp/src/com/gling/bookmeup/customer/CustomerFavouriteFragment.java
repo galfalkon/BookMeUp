@@ -23,7 +23,6 @@ import android.widget.TextView;
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.main.OnClickListenerFragment;
-import com.gling.bookmeup.main.ParseHelper.Category;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 
@@ -158,19 +157,7 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 			TextView totalSepndingsTextView = (TextView) convertView.findViewById(R.id.business_list_item_txtBusinessType);
 			
 			clientNameTextView.setText(business.getName());
-			Category category = business.getCategory();
-			if (category == null) {
-				totalSepndingsTextView.setText("No Category");				
-			} else {
-				try {
-					ParseObject parseObject = category.fetchIfNeeded();
-					category = (Category) parseObject;
-					totalSepndingsTextView.setText(category.getName());
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			totalSepndingsTextView.setText(business.getCategory());
 
 			return convertView;
 		}

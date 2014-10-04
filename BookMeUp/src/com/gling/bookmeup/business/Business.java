@@ -2,7 +2,6 @@ package com.gling.bookmeup.business;
 
 import org.json.JSONObject;
 
-import com.gling.bookmeup.main.ParseHelper.Category;
 import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
@@ -56,11 +55,11 @@ public class Business extends ParseObject {
         put(Keys.DESCRIPTION, description);
     }
     
-    public Category getCategory() {
-        return (Category) getParseObject(Keys.CATEGORY);
+    public String getCategory() {
+        return getString(Keys.CATEGORY);
     }
 	
-	public void setCategory(Category category) {
+	public void setCategory(String category) {
         put(Keys.CATEGORY, category);
     }
 	
