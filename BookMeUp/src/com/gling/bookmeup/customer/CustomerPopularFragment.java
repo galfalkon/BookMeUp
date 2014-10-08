@@ -44,7 +44,6 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
 	private BusinessesArrayAdapter _businessesListViewAdapter;
 	private ArrayAdapter<String> _categoriesAdapter;
 	ListView servicesListView = null;
-	private Customer _customer;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -121,9 +120,8 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
                     int position, long id) {
 				Business business = (Business) businessesListView.getItemAtPosition(position);
 				Log.i(TAG, "business: " + business.getName());
-				_customer = ((CustomerMainActivity)getActivity()).getCustomer();
 				CustomerChooseBusinessDialogs dialog = new CustomerChooseBusinessDialogs();
-				dialog.createBusinessProfileDialog(business, getActivity(), getResources(), _customer);
+				dialog.createBusinessProfileDialog(business, getActivity(), getResources(), Customer.getCurrentCustomer());
             }
 
 			

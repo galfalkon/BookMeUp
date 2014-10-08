@@ -21,8 +21,6 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 public class CustomerMainActivity extends NavigationDrawerActivity {
 	private static final String TAG = "CustomerMainActivity";
 	
-	private Customer _customer;
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.i(TAG, "onCreate");
@@ -40,8 +38,6 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 							| Intent.FLAG_ACTIVITY_CLEAR_TASK);
 					startActivity(intent);
 				}
-
-				_customer = customer;
 
 				PushUtils.PushNotificationType pushType = PushUtils.PushNotificationType
 						.getFromIntent(getIntent());
@@ -87,10 +83,6 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-	}
-	
-	public Customer getCustomer() {
-		return _customer;
 	}
 	
 	@Override

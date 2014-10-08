@@ -25,7 +25,6 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 
 	private static final String TAG = "CustomerHistoryFragment";
 
-	private Customer _customer;
 	private List<String> _businessesVisited;
 	private ArrayAdapter<String> _businessesAdapter;
 	
@@ -39,7 +38,6 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 		Log.i(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		
-		_customer = ((CustomerMainActivity)getActivity()).getCustomer();
 		_businessesVisited = new ArrayList<String>();
 		_businessesAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, _businessesVisited);
 		
@@ -50,7 +48,7 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 		 *		Were approved
 		 */
 		ParseQuery<Booking> query = new ParseQuery<Booking>(Booking.CLASS_NAME).
-				whereEqualTo(Booking.Keys.CUSTOMER_POINTER, _customer).
+				whereEqualTo(Booking.Keys.CUSTOMER_POINTER, Customer.getCurrentCustomer()).
 				whereLessThan(Booking.Keys.DATE, new Date()).
 				whereEqualTo(Booking.Keys.STATUS, Booking.Status.APPROVED).
 				orderByDescending(Booking.Keys.DATE);

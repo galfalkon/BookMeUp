@@ -27,12 +27,10 @@ public class CustomerOffersFragment extends OnClickListenerFragment {
 	private static final String TAG = "CustomerOffersFragment";
 	
 	private OffersListAdapter _offersAdapter;
-	private Customer _customer;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	    _customer = ((CustomerMainActivity)getActivity()).getCustomer();
 	}
 	
 	@Override
@@ -72,7 +70,7 @@ public class CustomerOffersFragment extends OnClickListenerFragment {
 				@Override
 				public ParseQuery<ParseHelper.Offer> create() {
 					ParseQuery<ParseHelper.Offer> offerQuery = new ParseQuery<ParseHelper.Offer>(ParseHelper.Offer.class).
-							whereEqualTo(ParseHelper.Offer.Keys.CUSTOMER_POINTERS, _customer).
+							whereEqualTo(ParseHelper.Offer.Keys.CUSTOMER_POINTERS, Customer.getCurrentCustomer()).
 							addDescendingOrder(ParseHelper.Offer.Keys.CREATION_DATE);
 					
 					offerQuery.include(ParseHelper.Offer.Keys.BUSINESS_POINTER);

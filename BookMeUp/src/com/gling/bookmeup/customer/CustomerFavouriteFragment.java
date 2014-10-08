@@ -32,7 +32,6 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 	private List<Business> _allBusinesses, _filteredBusinesses;
 	private BusinessesArrayAdapter _businessesListViewAdapter;
 	ListView servicesListView = null;
-	private Customer _customer;
 
 	@Override
 	protected int getFragmentLayoutId() {
@@ -58,15 +57,13 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 //		}
 //		//TODO: delete
 
-		_customer = ((CustomerMainActivity)getActivity()).getCustomer();
-		
 		_allBusinesses = new ArrayList<Business>();
 		_filteredBusinesses = new ArrayList<Business>();
 		_businessesListViewAdapter = new BusinessesArrayAdapter();
 
 
 		@SuppressWarnings("unchecked")
-		ArrayList<ParseObject> favouriteBusinesses = (ArrayList<ParseObject>) _customer.get(Customer.Keys.FAVOURITES);
+		ArrayList<ParseObject> favouriteBusinesses = (ArrayList<ParseObject>) Customer.getCurrentCustomer().get(Customer.Keys.FAVOURITES);
 		for (ParseObject parseObject : favouriteBusinesses) {
 			if (parseObject instanceof Business) {
 				Business businessItem = (Business) parseObject;
@@ -102,9 +99,8 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
                     int position, long id) {
 				Business business = (Business) businessesListView.getItemAtPosition(position);
 				Log.i(TAG, "business: " + business.getName());
-				_customer = ((CustomerMainActivity)getActivity()).getCustomer();
 				CustomerChooseBusinessDialogs dialog = new CustomerChooseBusinessDialogs();
-				dialog.createBusinessProfileDialog(business, getActivity(), getResources(), _customer);
+				dialog.createBusinessProfileDialog(business, getActivity(), getResources(), Customer.getCurrentCustomer());
             }
 
 			
