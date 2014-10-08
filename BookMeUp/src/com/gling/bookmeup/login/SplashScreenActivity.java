@@ -22,6 +22,7 @@ import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessMainActivity;
 import com.gling.bookmeup.business.wizards.BusinessProfileWizardActivity;
+import com.gling.bookmeup.customer.Customer;
 import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.ParseHelper.Category;
@@ -134,66 +135,87 @@ public class SplashScreenActivity extends Activity {
 
 		if (ParseHelper.isUserLoggedIn()) {
 			ParseUser user = ParseUser.getCurrentUser();
-			Log.i(TAG, "User '" + user.getUsername()
-					+ "' is found to be logged in");
-			ParseObject business = user
-					.getParseObject(User.Keys.BUSINESS_POINTER);
-			ParseObject customer = user
-					.getParseObject(User.Keys.CUSTOMER_POINTER);
-
-			if (!ParseHelper.isEmailVerified()) {
-				Log.i(TAG, "User '" + user.getUsername()
-						+ "' mail is not verified");
-				intent = new Intent(mContext, LoginMainActivity.class);
-				intent.putExtra(EXTRA_MESSAGE,
-						"Please verify your Email address\nYour registered mail is: "
-								+ user.getEmail());
-			} else if (business != null && customer != null) {
-				Log.i(TAG, "User '" + user.getUsername()
-						+ "' is associated with both customer and business");
-				intent = new Intent(mContext, LoginMainActivity.class);
-				intent.putExtra(EXTRA_FIRST_FRAGMENT,
-						"UserTypeSelectionFragment");
-			} else if (business != null) {
-				Log.i(TAG, "User '" + user.getUsername()
-						+ "' is associated with a business");
-
-				Business b;
-
-				try {
-					b = business.fetchIfNeeded();
-				} catch (ParseException e) {
-					intent = new Intent(mContext, LoginMainActivity.class);
-					Log.i(TAG, "Business fetch failed: " + e.getMessage());
-					startActivity(intent);
-					return;
+			Log.i(TAG, "User '" + user.getUsername() + "' is found to be logged in");
+			
+			try 
+			{
+				// Fetch current business
+				Log.i(TAG, "Fetching current business");
+				ParseObject businessParseObject = user.getParseObject(User.Keys.BUSINESS_POINTER);
+				if (businessParseObject != null) 
+				{
+					Business currentBusiness = businessParseObject.fetchIfNeeded();
+					currentBusiness.getUser().fetchIfNeeded();
+					Business.setCurrentBusiness(currentBusiness);
 				}
+				
+				// Fetch current customer
+				Log.i(TAG, "Fetching current customer");
+				ParseObject customerParseObject = user.getParseObject(User.Keys.CUSTOMER_POINTER);
+				if (customerParseObject != null) 
+				{
+					Customer currentCustomer = customerParseObject.fetchIfNeeded();
+					Customer.setCurrentCustomer(currentCustomer);
+				}
+			} 
+			catch (ParseException e) 
+			{
+				Log.e(TAG, "Exception: " + e.getMessage());
+				intent = new Intent(mContext, LoginMainActivity.class);
+				startActivity(intent);
+				return;
+			}
 
-				if (TextUtils.isEmpty(b.getName())) {
-					intent = new Intent(mContext,
-							LoginMainActivity.class);
-				} else {
+			if (!ParseHelper.isEmailVerified())
+			{
+				Log.i(TAG, "User '" + user.getUsername() + "' mail is not verified");
+				intent = new Intent(mContext, LoginMainActivity.class);
+				intent.putExtra(EXTRA_MESSAGE, "Please verify your Email address\nYour registered mail is: " + user.getEmail());
+			} 
+			else if (Business.getCurrentBusiness() != null && Customer.getCurrentCustomer() != null) 
+			{
+				Log.i(TAG, "User '" + user.getUsername() + "' is associated with both customer and business");
+				intent = new Intent(mContext, LoginMainActivity.class);
+				intent.putExtra(EXTRA_FIRST_FRAGMENT, "UserTypeSelectionFragment");
+			} 
+			else if (Business.getCurrentBusiness() != null) 
+			{
+				Log.i(TAG, "User '" + user.getUsername() + "' is associated with a business");
+
+				if (TextUtils.isEmpty(Business.getCurrentBusiness().getName())) 
+				{
+					intent = new Intent(mContext, LoginMainActivity.class);
+				}
+				else
+				{
 					intent = new Intent(mContext, BusinessMainActivity.class);
 				}
-			} else if (customer != null) {
-				Log.i(TAG, "User '" + user.getUsername()
-						+ "' is associated with a customer");
+			}
+			else if (Customer.getCurrentCustomer() != null) 
+			{
+				Log.i(TAG, "User '" + user.getUsername() + "' is associated with a customer");
 				intent = new Intent(mContext, CustomerMainActivity.class);
-			} else {
-				Log.i(TAG, "User '" + user.getUsername()
-						+ "' is not associated with a business or a customer");
+			}
+			else 
+			{
+				Log.i(TAG, "User '" + user.getUsername() + "' is not associated with a business or a customer");
 				intent = new Intent(mContext, LoginMainActivity.class);
 			}
-			user.refreshInBackground(new RefreshCallback() {
+			user.refreshInBackground(new RefreshCallback() 
+			{
 				@Override
-				public void done(ParseObject object, ParseException e) {
-					if (e != null) {
+				public void done(ParseObject object, ParseException e) 
+				{
+					if (e != null) 
+					{
 						Log.e(TAG, e.getMessage());
 					}
 					startActivity(intent);
 				}
 			});
-		} else {
+		}
+		else 
+		{
 			intent = new Intent(mContext, LoginMainActivity.class);
 			startActivity(intent);
 		}

@@ -17,6 +17,16 @@ public class Customer extends ParseObject {
         public static final String NAME = "name";
         public static final String FAVOURITES = "favourites";
     }
+
+	private static Customer _currentCustomer;
+	
+    public static void setCurrentCustomer(Customer currentCustomer) {
+    	_currentCustomer = currentCustomer;
+	}
+    
+    public static Customer getCurrentCustomer() {
+    	return _currentCustomer;
+    }
     
 	public Customer() {
         // A default constructor is required.
@@ -37,5 +47,4 @@ public class Customer extends ParseObject {
     public void setUser(ParseUser user) {
         put(Keys.USER, user);
     }
-    
 }

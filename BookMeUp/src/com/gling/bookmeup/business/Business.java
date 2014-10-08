@@ -23,6 +23,16 @@ public class Business extends ParseObject {
         public static final String IMAGE = "image";
     }
     
+    private static Business _currentBusiness;
+    
+    public static void setCurrentBusiness(Business currentBusiness) {
+    	_currentBusiness = currentBusiness;
+    }
+    
+    public static Business getCurrentBusiness() {
+    	return _currentBusiness;
+    }
+    
 	public Business() {
         // A default constructor is required.
     }
