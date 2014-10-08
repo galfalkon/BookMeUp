@@ -221,8 +221,6 @@ public class BusinessProfileWizardActivity extends FragmentActivity implements
 					R.style.TextAppearanceWizardFinish);
 		} else {
 			mNextButton.setText(mEditingAfterReview ? "Review" : "Next");
-			mNextButton
-					.setBackgroundResource(R.drawable.selectable_item_background);
 			TypedValue v = new TypedValue();
 			getTheme().resolveAttribute(android.R.attr.textAppearanceMedium, v,
 					true);
