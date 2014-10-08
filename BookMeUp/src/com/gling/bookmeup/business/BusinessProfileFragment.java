@@ -11,6 +11,7 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -31,6 +32,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.business.wizards.BusinessProfileWizardActivity;
 import com.gling.bookmeup.login.LoginFragment;
 import com.gling.bookmeup.main.FragmentsFlowManager;
 import com.gling.bookmeup.main.OnClickListenerFragment;
@@ -52,16 +54,10 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
 
     private static final String TAG = "BusinessProfileFragment";
 
-    private EditText edtName, edtDescription, edtPhoneNumber;
-    private TextView txtPreviewImage;
-    private ParseImageView imgPreviewImage;
-    private TextView txtOpeningHours;
-    private Button btnOpeningHours;
+    private Button btnLaunchWizard;
     private ListView lstServices;
-    private Spinner spnCategory;
-
     private ServicesAdapter _servicesAdapter;
-
+    
     private Business _business;
 
     @Override
@@ -72,137 +68,30 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
-
-        edtName = (EditText) view.findViewById(R.id.business_profile_creation_edtName);
-        imgPreviewImage = (ParseImageView) view.findViewById(R.id.business_profile_creation_imgPreviewImage);
-        txtPreviewImage = (TextView) view.findViewById(R.id.business_profile_creation_txtPreviewImage);
-        edtDescription = (EditText) view.findViewById(R.id.business_profile_creation_edtDescription);
-        edtPhoneNumber = (EditText) view.findViewById(R.id.business_profile_creation_edtPhoneNumber);
-        txtOpeningHours = (TextView) view.findViewById(R.id.business_profile_creation_txtOpeningHours);
-        btnOpeningHours = (Button) view.findViewById(R.id.opening_hours_edit_btnEdit);
+        btnLaunchWizard = (Button) view.findViewById(R.id.business_profile_wizard_launch);
         lstServices = (ListView) view.findViewById(R.id.business_profile_creation_lstServices);
-        spnCategory = (Spinner) view.findViewById(R.id.business_profile_creation_spnCategory);
-
-        // Until the user has taken a photo, hide the preview
-        imgPreviewImage.setVisibility(View.INVISIBLE);
 
         _business = ((BusinessMainActivity)getActivity()).getBusiness();
-
+        
         if (savedInstanceState == null) {
             Log.i(TAG, "initProfileDetails");
             initProfileDetails();
         }
+        
+        btnLaunchWizard.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getActivity(), BusinessProfileWizardActivity.class);
+				startActivity(intent);
+			}
+		});
 
         return view;
     }
 
     private void initProfileDetails() {
-        edtName.setText(_business.getName());
-        edtDescription.setText(_business.getDescription());
-        edtPhoneNumber.setText(_business.getPhoneNumber());
-        initOpeningHours();
         initServiceList();
-        initCategorySpinner();
-        initImage();
-    }
-
-    private void initCategorySpinner() {
-    	SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-    	Set<String> categorySet = new HashSet<String>();
-    	categorySet = sp.getStringSet(ParseHelper.BUSINESS_CATEGORIES, categorySet);
-    	final String[] categoryArr = categorySet.toArray(new String[categorySet.size()]);
-    	
-    	final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_single_choice, categoryArr);
-    	spnCategory.setAdapter(adapter);
-    	
-    	String category = _business.getCategory();
-
-        int position = 0;
-        int count = adapter.getCount();
-        for (; position < count; ++position) {
-            if (adapter.getItem(position).equalsIgnoreCase(category)) {
-            	spnCategory.setSelection(position);
-                break;
-            }
-        }
-    }
-
-    private void initOpeningHours() {
-        final LayoutInflater inflater = getActivity().getLayoutInflater();
-
-        txtOpeningHours.setText(_business.getOpeningHours());
-        btnOpeningHours.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View paramView) {
-                AlertDialog dialog = createEditOpeningHoursDialog(inflater);
-                dialog.show();
-            }
-        });
-    }
-
-    private AlertDialog createEditOpeningHoursDialog(LayoutInflater inflater) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        final View dialogView = inflater.inflate(R.layout.business_edit_opening_hours_dialog, null);
-
-        AlertDialog dialog = builder.setTitle("Edit Opening Hours").setView(dialogView).setPositiveButton("Save",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        OpeningHours oh = new OpeningHours(new JSONObject());
-                        oh.setDay(
-                                OpeningHours.Day.SUNDAY,
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_sunday_isOpen)).getText().toString(),
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_sunday_from)).getText().toString(),
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_sunday_to)).getText().toString());
-
-                        oh.setDay(
-                                OpeningHours.Day.MONDAY,
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_monday_isOpen)).getText().toString(),
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_monday_from)).getText().toString(),
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_monday_to)).getText().toString());
-
-                        oh.setDay(
-                                OpeningHours.Day.TUESDAY,
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_tuesday_isOpen)).getText().toString(),
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_tuesday_from)).getText().toString(),
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_tuesday_to)).getText().toString());
-
-                        oh.setDay(
-                                OpeningHours.Day.WEDNESDAY,
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_wednesday_isOpen)).getText().toString(),
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_wednesday_from)).getText().toString(),
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_wednesday_to)).getText().toString());
-
-                        oh.setDay(
-                                OpeningHours.Day.THURSDAY,
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_thursday_isOpen)).getText().toString(),
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_thursday_from)).getText().toString(),
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_thursday_to)).getText().toString());
-
-                        oh.setDay(
-                                OpeningHours.Day.FRIDAY,
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_friday_isOpen)).getText().toString(),
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_friday_from)).getText().toString(),
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_friday_to)).getText().toString());
-
-                        oh.setDay(
-                                OpeningHours.Day.SATURDAY,
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_saturday_isOpen)).getText().toString(),
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_saturday_from)).getText().toString(),
-                                ((EditText) dialogView.findViewById(R.id.opening_hours_saturday_to)).getText().toString());
-
-                        _business.setOpeningHours(oh);
-                        Log.i(TAG, _business.getOpeningHours());
-                        txtOpeningHours.setText(_business.getOpeningHours());
-                    }
-                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-
-            }
-        }).create();
-
-        return dialog;
     }
 
     private void initServiceList() {
@@ -297,91 +186,14 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
         return dialog;
     }
 
-    private void saveBusiness() {
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        Log.i(TAG, "current user is: " + currentUser.getUsername());
-
-        _business.setUser(currentUser);
-        _business.setName(edtName.getText().toString());
-        _business.setDescription(edtDescription.getText().toString());
-        _business.setPhoneNumber(edtPhoneNumber.getText().toString());
-        _business.setCategory(spnCategory.getSelectedItem().toString());
-
-        // If the user added a photo, that data will be added in the
-        // BusinessImageCaptureFragment
-        // services are edited via list vie
-        // opening hours are edited via dialog
-
-        final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
-        _business.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Log.i(TAG, "Done saving business");
-                    getActivity().setResult(Activity.RESULT_OK);
-
-                    // jump to home screen
-                    ((BusinessMainActivity)getActivity()).onNavigationDrawerItemSelected(0);
-                } else {
-                    Log.e(TAG, "Exception occurred: " + e.getMessage());
-                    Crouton.showText(getActivity(), "Error saving: " + e.getMessage(), Style.ALERT);
-                }
-                progressDialog.dismiss();
-            }
-        });
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-        case R.id.business_profile_creation_btnImageUpload:
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(edtName.getWindowToken(), 0);
+        case R.id.business_profile_wizard_launch:
+
             break;
-        case R.id.business_profile_creation_btnCreate:
-            Log.i(TAG, "business_profile_creation_btnCreate clicked");
-            if (!validateInput()) {
-                Log.i(TAG, "invalid input");
-                return;
-            }
-            if (!userInCache()) {
-                Log.i(TAG, "user not found in cache, redirecting to login...");
-                Crouton.showText(getActivity(), "Please sign up or log in first...", Style.ALERT);
-                getActivity().getFragmentManager().beginTransaction().addToBackStack(null).replace(
-                        R.id.container,
-                        Fragment.instantiate(getActivity(), LoginFragment.class.getName())).commit();
-                return;
-            }
-            saveBusiness();
-            return;
         }
         FragmentsFlowManager.goToNextFragment(getActivity(), R.id.container, v.getId());
-    }
-
-    private boolean userInCache() { // TODO move to common
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        return (currentUser != null);
-    }
-
-    private boolean validateInput() {
-        return true;
-    }
-
-    private void initImage() {
-        ParseFile imageFile = _business.getImageFile();
-        if (imageFile != null) {
-            txtPreviewImage.setText("Image");
-            imgPreviewImage.setParseFile(imageFile);
-            imgPreviewImage.loadInBackground(new GetDataCallback() {
-                @Override
-                public void done(byte[] data, ParseException e) {
-                    imgPreviewImage.setVisibility(View.VISIBLE);
-                }
-            });
-        } else {
-            imgPreviewImage.setVisibility(View.INVISIBLE);
-            txtPreviewImage.setText("Please upload an image");
-        }
     }
 
     private class ServicesAdapter extends ParseQueryAdapter<Service> {

@@ -45,5 +45,9 @@
         <item name="android:listViewWhiteStyle">@style/ListViewBookMeUp_Widgets.White</item>
         <item name="android:spinnerItemStyle">@style/SpinnerItemBookMeUp_Widgets</item>
     </style>
+
+    <style name="TextAppearanceWizardFinish">
+        <item name="android:textColor">#fff</item>
+    </style>
     
 </resources>

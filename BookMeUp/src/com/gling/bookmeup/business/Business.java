@@ -1,7 +1,5 @@
 package com.gling.bookmeup.business;
 
-import org.json.JSONObject;
-
 import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
@@ -12,8 +10,6 @@ import com.parse.ParseUser;
 
 @ParseClassName(Business.CLASS_NAME)
 public class Business extends ParseObject {
-	private static final String TAG = "Business";
-
     public static final String CLASS_NAME = "Business";
     
     public static class Keys {
@@ -72,17 +68,11 @@ public class Business extends ParseObject {
     }
     
     public String getOpeningHours() {
-        // TODO refactor
-        JSONObject oh = getJSONObject(Keys.OPENING_HOURS);
-        if (oh == null) {
-            return "";
-        }
-        
-        return oh.toString();
+    	return getString(Keys.OPENING_HOURS);
     }
  
-    public void setOpeningHours(OpeningHours openingHours) {
-        put(Keys.OPENING_HOURS, openingHours.getJson());
+    public void setOpeningHours(String openingHours) {
+        put(Keys.OPENING_HOURS, openingHours);
     }
  
     public ParseFile getImageFile() {

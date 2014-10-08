@@ -35,8 +35,6 @@ public class FragmentsFlowManager {
 		// E-Mail login
 		_buttonIdsToFragmentName.put(R.id.email_login_btnLogin, UserTypeSelectionFragment.class.getName());
 		
-		// Business image upload
-		_buttonIdsToFragmentName.put(R.id.business_profile_creation_btnImageUpload, BusinessImageCaptureFragment.class.getName());
 	}
 	
 	public static void goToNextFragment(Activity activity, int container, int buttonClickedId) {

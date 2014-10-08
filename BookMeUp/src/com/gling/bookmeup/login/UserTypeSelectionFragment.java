@@ -2,6 +2,7 @@ package com.gling.bookmeup.login;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -9,11 +10,13 @@ import android.view.View.OnClickListener;
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessMainActivity;
+import com.gling.bookmeup.business.wizards.BusinessProfileWizardActivity;
 import com.gling.bookmeup.customer.Customer;
 import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.ParseHelper.User;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -38,8 +41,24 @@ public class UserTypeSelectionFragment extends OnClickListenerFragment implement
             Log.i(TAG, "btnBusiness clicked");
             
             if (currentUser.getParseObject(User.Keys.BUSINESS_POINTER) != null) {
-                Intent intent = new Intent(getActivity(), BusinessMainActivity.class);
-                startActivity(intent);
+            	ParseHelper.fetchBusiness(new GetCallback<Business>() {
+					
+					@Override
+					public void done(Business business, ParseException e) {
+						if (e == null) {
+							Intent intent;
+							if (TextUtils.isEmpty(business.getName())) {
+								intent = new Intent(getActivity(), BusinessProfileWizardActivity.class);
+							} else {
+								intent = new Intent(getActivity(), BusinessMainActivity.class);
+							}
+							startActivity(intent);
+	                    } else {
+	                        Crouton.showText(getActivity(), "Oops, we're having difficulties, please try again...", Style.ALERT);
+	                        Log.i(TAG, "Business fetch failed: " + e.getMessage());
+	                    }
+					}
+				});
                 return;
             };
             
@@ -54,7 +73,7 @@ public class UserTypeSelectionFragment extends OnClickListenerFragment implement
                 public void done(ParseException e) {
                     if (e == null) {
                         progressDialogBusiness.dismiss();
-                        Intent intent = new Intent(getActivity(), BusinessMainActivity.class);
+                        Intent intent = new Intent(getActivity(), BusinessProfileWizardActivity.class);
                         startActivity(intent);
                     } else {
                         progressDialogBusiness.dismiss();

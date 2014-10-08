@@ -1,4 +1,4 @@
-package com.tech.freak.wizardpager.ui;
+package com.gling.bookmeup.business.wizards;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,12 +16,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import com.tech.freak.wizardpager.R;
-import com.tech.freak.wizardpager.model.Page;
 
-public class ImageFragment extends Fragment {
+import com.gling.bookmeup.R;
+import com.gling.bookmeup.business.Business;
+import com.gling.bookmeup.main.BookMeUpApplication;
+import com.gling.bookmeup.main.ParseHelper;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseImageView;
+import com.tech.freak.wizardpager.model.Page;
+import com.tech.freak.wizardpager.ui.PageFragmentCallbacks;
+
+public class ParseImageFragment extends Fragment {
 
 	private static final String NEW_IMAGE_URI = "new_image_uri";
 	private static final int GALLERY_REQUEST_CODE = 0;
@@ -33,15 +41,15 @@ public class ImageFragment extends Fragment {
 	private String mKey;
 	private Page mPage;
 
-	private ImageView imageView;
+	private ParseImageView imageView;
 
 	private Uri mNewImageUri;
 
-	public static ImageFragment create(String key) {
+	public static ParseImageFragment create(String key) {
 		Bundle args = new Bundle();
 		args.putString(ARG_KEY, key);
 
-		ImageFragment f = new ImageFragment();
+		ParseImageFragment f = new ParseImageFragment();
 		f.setArguments(args);
 		return f;
 	}
@@ -73,21 +81,32 @@ public class ImageFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_page_image,
+		View rootView = inflater.inflate(R.layout.business_profile_wizard_parse_image_fragment,
 				container, false);
 		((TextView) rootView.findViewById(android.R.id.title)).setText(mPage
 				.getTitle());
 
-		imageView = (ImageView) rootView.findViewById(R.id.imageView);
+		imageView = (ParseImageView) rootView.findViewById(R.id.parseImageView);
 
-		String imageData = mPage.getData().getString(Page.SIMPLE_DATA_KEY);
-		if (!TextUtils.isEmpty(imageData)) {
-			Uri imageUri = Uri.parse(imageData);
-			imageView.setImageURI(imageUri);
+		imageView.setPlaceholder(BookMeUpApplication.getContext().getResources().getDrawable(R.drawable.ic_person));
+		
+		String imageUri = mPage.getData().getString(Page.SIMPLE_DATA_KEY);
+		if (!TextUtils.isEmpty(imageUri)) {
+			imageView.setImageURI(Uri.parse(imageUri));
 		} else {
-			imageView.setImageResource(R.drawable.ic_person);
+			ParseHelper.fetchBusiness(new GetCallback<Business>() {
+				
+				@Override
+				public void done(Business business, ParseException e) {
+					ParseFile imageFile = business.getImageFile();
+					if (imageFile != null) {
+						imageView.setParseFile(imageFile);
+						imageView.loadInBackground();
+					}
+				}
+			});
 		}
-
+		
 		imageView.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -189,10 +208,10 @@ public class ImageFragment extends Fragment {
 		}
 	}
 
-	// Modified
 	private void writeResult() {
+		
 		mPage.getData().putString(Page.SIMPLE_DATA_KEY,
-				(mNewImageUri != null) ? "Review" : null);
+				(mNewImageUri != null) ? mNewImageUri.toString() : null);
 		mPage.notifyDataChanged();
 	}
 

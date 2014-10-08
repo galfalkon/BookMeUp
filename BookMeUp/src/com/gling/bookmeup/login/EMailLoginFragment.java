@@ -17,11 +17,15 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessMainActivity;
+import com.gling.bookmeup.business.wizards.BusinessProfileWizardActivity;
 import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.gling.bookmeup.main.FragmentsFlowManager;
 import com.gling.bookmeup.main.OnClickListenerFragment;
+import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.ParseHelper.User;
+import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -157,27 +161,43 @@ public class EMailLoginFragment extends OnClickListenerFragment {
                 Log.i(TAG, "User '" + user.getUsername() + "' logged in");
 
                 if (!user.getBoolean("emailVerified")) {
-                    progressDialog.dismiss();
+                	progressDialog.dismiss();
                     Log.i(TAG, "User hasn't verified Email address");
                     Crouton.showText(getActivity(), "Please verifiy your Email address", Style.ALERT);
                 } else if (user.getParseObject(User.Keys.BUSINESS_POINTER) != null
                         && user.getParseObject(User.Keys.CUSTOMER_POINTER) != null) {
+                	progressDialog.dismiss();
                     FragmentsFlowManager.goToNextFragment(getActivity(), R.id.login_container,
                             R.id.email_login_btnLogin);
                 } else if (user.getParseObject(User.Keys.BUSINESS_POINTER) != null) {
-                    progressDialog.dismiss();
-                    Intent intent = new Intent(getActivity(), BusinessMainActivity.class);
-                    startActivity(intent);
+                	ParseHelper.fetchBusiness(new GetCallback<Business>() {
+						
+						@Override
+						public void done(Business business, ParseException e) {
+							progressDialog.dismiss();
+							if (e == null) {
+								Intent intent;
+								if (TextUtils.isEmpty(business.getName())) {
+									intent = new Intent(getActivity(), BusinessProfileWizardActivity.class);
+								} else {
+									intent = new Intent(getActivity(), BusinessMainActivity.class);
+								}
+								startActivity(intent);
+		                    } else {
+		                        Crouton.showText(getActivity(), "Oops, we're having difficulties, please try again...", Style.ALERT);
+		                        Log.i(TAG, "Business fetch failed: " + e.getMessage());
+		                    }
+						}
+					});
                 } else if (user.getParseObject(User.Keys.CUSTOMER_POINTER) != null) {
-                    progressDialog.dismiss();
+                	progressDialog.dismiss();
                     Intent intent = new Intent(getActivity(), CustomerMainActivity.class);
                     startActivity(intent);
-                    return;
                 } else {
+                	progressDialog.dismiss();
                     FragmentsFlowManager.goToNextFragment(getActivity(), R.id.login_container,
                             R.id.email_login_btnLogin);
                 }
-                progressDialog.dismiss();
             }
         });
     }

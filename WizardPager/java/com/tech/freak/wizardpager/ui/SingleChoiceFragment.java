@@ -34,12 +34,12 @@ import com.tech.freak.wizardpager.model.Page;
 import com.tech.freak.wizardpager.model.SingleFixedChoicePage;
 
 public class SingleChoiceFragment extends ListFragment {
-    private static final String ARG_KEY = "key";
+    protected static final String ARG_KEY = "key";
 
     private PageFragmentCallbacks mCallbacks;
-    private List<String> mChoices;
+    protected List<String> mChoices;
     private String mKey;
-    private Page mPage;
+    protected Page mPage;
 
     public static SingleChoiceFragment create(String key) {
         Bundle args = new Bundle();
