@@ -64,14 +64,11 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 	private CustomerCardArrayMultiChoiceAdapter _customerCardsAdapter;
 	private List<Card> _cards;
 	
-	private Business _business;
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		Log.i(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		
-		_business = ((BusinessMainActivity)getActivity()).getBusiness();
 		_allCustomers = new HashMap<String, Customer>();
 		_cards = new ArrayList<Card>();
 		_customerCardsAdapter = new CustomerCardArrayMultiChoiceAdapter(getActivity(), _cards);
@@ -84,7 +81,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		 *		Were approved
 		 */
 		ParseQuery<Booking> query = new ParseQuery<Booking>(Booking.CLASS_NAME).
-				whereEqualTo(Booking.Keys.BUSINESS_POINTER, _business).
+				whereEqualTo(Booking.Keys.BUSINESS_POINTER, Business.getCurrentBusiness()).
 				whereLessThan(Booking.Keys.DATE, new Date()).
 				whereEqualTo(Booking.Keys.STATUS, Booking.Status.APPROVED);
 		query.include(Booking.Keys.CUSTOMER_POINTER);
@@ -255,7 +252,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		    	Log.i(TAG, "Sending message to selected clients");
 		    	String message = ((TextView)view.findViewById(R.id.business_client_list_send_message_dialog_edtMessage)).getText().toString();
 		    	
-		    	PushUtils.sendMessageToCustomers(_business.getObjectId(), _business.getName(), selectedCustomersIds, message, new SendCallback() {
+		    	PushUtils.sendMessageToCustomers(Business.getCurrentBusiness().getObjectId(), Business.getCurrentBusiness().getName(), selectedCustomersIds, message, new SendCallback() {
 					@Override
 					public void done(ParseException e) {
 						Log.i(TAG, "sendMessageToCustomers done");
@@ -311,7 +308,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 
 		    	final int discount = (Integer) discountSpinner.getSelectedItem();
 		    	final int duration = (Integer) durationSpinner.getSelectedItem();
-		    	PushUtils.sendOfferToCustomers(_business.getObjectId(), _business.getName(), selectedCustomersIds, discount, duration, new SendCallback() {
+		    	PushUtils.sendOfferToCustomers(Business.getCurrentBusiness().getObjectId(), Business.getCurrentBusiness().getName(), selectedCustomersIds, discount, duration, new SendCallback() {
 					
 					@Override
 					public void done(ParseException e) {

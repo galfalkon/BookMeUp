@@ -1,7 +1,6 @@
 package com.gling.bookmeup.business;
 
 import android.app.Fragment;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,10 +9,7 @@ import android.view.MenuItem;
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.login.LoginMainActivity;
 import com.gling.bookmeup.main.NavigationDrawerActivity;
-import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.PushUtils;
-import com.parse.GetCallback;
-import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -21,45 +17,30 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 public class BusinessMainActivity extends NavigationDrawerActivity {
 	private static final String TAG = "BusinessMainActivity";
 	
-	private Business _business;
-	
-	public Business getBusiness() {
-		return _business;
-	}
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.i(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		
-		final ProgressDialog progressDialog = ProgressDialog.show(this, null, "Loading Business...");
-		ParseHelper.fetchBusiness( new GetCallback<Business>() {
-			@Override
-			public void done(Business business, ParseException e) {
-				if (e != null) {
-					Log.e(TAG, "Exception: " + e.getMessage());
-					progressDialog.dismiss();
-					ParseUser.logOut();
-					Intent intent = new Intent(getApplicationContext(), LoginMainActivity.class);
-					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-					startActivity(intent);
-				}
-		        
-		        _business = business;
-		        progressDialog.dismiss();
-		        PushUtils.PushNotificationType pushType = PushUtils.PushNotificationType.getFromIntent(getIntent());
-	      		if (pushType != null) {
-	      			Log.i(TAG, pushType.toString());
-	      			switch (pushType) {
-	      			case NEW_BOOKING_REQUEST:
-	      				onNavigationDrawerItemSelected(0);
-	      				break;
-	      			default:
-	      				Log.e(TAG, "Invalid push type");
-	      			}
-	      		}
-			}
-		});
+		if (Business.getCurrentBusiness() == null)
+		{
+			ParseUser.logOut();
+			Intent intent = new Intent(getApplicationContext(), LoginMainActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+			startActivity(intent);
+		}
+		
+		PushUtils.PushNotificationType pushType = PushUtils.PushNotificationType.getFromIntent(getIntent());
+  		if (pushType != null) {
+  			Log.i(TAG, pushType.toString());
+  			switch (pushType) {
+  			case NEW_BOOKING_REQUEST:
+  				onNavigationDrawerItemSelected(0);
+  				break;
+  			default:
+  				Log.e(TAG, "Invalid push type");
+  			}
+  		}
 	}
 	
 	@Override

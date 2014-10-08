@@ -30,13 +30,11 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 	private static final String TAG = "BusinessOffersFragment";
 	
 	private GenericCardArrayAdapter<Offer> _offersAdapter;
-	private Business _business;
 	private IObservableList<Offer> _offers;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	    _business = ((BusinessMainActivity)getActivity()).getBusiness();
 	    _offers = new ObservableArrayList<Offer>();
 	}
 	
@@ -51,7 +49,7 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
         offersListView.setAdapter(_offersAdapter);
         
         ParseQuery<Offer> parseQuery = new ParseQuery<Offer>(Offer.class)
-	    		.whereEqualTo(ParseHelper.Offer.Keys.BUSINESS_POINTER, _business);
+	    		.whereEqualTo(ParseHelper.Offer.Keys.BUSINESS_POINTER, Business.getCurrentBusiness());
         final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
 	    parseQuery.findInBackground(new FindCallback<ParseHelper.Offer>() {
 			

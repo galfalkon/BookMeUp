@@ -1,54 +1,32 @@
 package com.gling.bookmeup.business;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.json.JSONObject;
-
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.wizards.BusinessProfileWizardActivity;
-import com.gling.bookmeup.login.LoginFragment;
 import com.gling.bookmeup.main.FragmentsFlowManager;
 import com.gling.bookmeup.main.OnClickListenerFragment;
-import com.gling.bookmeup.main.ParseHelper;
 import com.parse.DeleteCallback;
-import com.parse.GetDataCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseImageView;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
-import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class BusinessProfileFragment extends OnClickListenerFragment {
 
@@ -58,8 +36,6 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
     private ListView lstServices;
     private ServicesAdapter _servicesAdapter;
     
-    private Business _business;
-
     @Override
     protected int getFragmentLayoutId() {
         return R.layout.business_profile_fragment;
@@ -70,8 +46,6 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         btnLaunchWizard = (Button) view.findViewById(R.id.business_profile_wizard_launch);
         lstServices = (ListView) view.findViewById(R.id.business_profile_creation_lstServices);
-
-        _business = ((BusinessMainActivity)getActivity()).getBusiness();
         
         if (savedInstanceState == null) {
             Log.i(TAG, "initProfileDetails");
@@ -201,7 +175,7 @@ public class BusinessProfileFragment extends OnClickListenerFragment {
         public ServicesAdapter(Context context) {
             super(context, new ParseQueryAdapter.QueryFactory<Service>() {
                 public ParseQuery<Service> create() {
-                    return _business.getServicesQuery();
+                    return Business.getCurrentBusiness().getServicesQuery();
                 }
             });
         }

@@ -29,7 +29,6 @@ import com.gling.bookmeup.main.ParseHelper.Booking;
 import com.gling.bookmeup.main.ParseHelper.Booking.Status;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 public class BusinessBookingsFragment extends OnClickListenerFragment {
@@ -41,9 +40,6 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 
 	private TextView txtPendingBookingsTitle, txtApprovedBookingsTitle;
     
-    // TODO: Temporary! The businessId should be saved in the shared preferences during the profile creation. 
-    private static final String BUSINESS_ID = "rsWO5YJW9u";
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,12 +79,8 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
     }
 
     private void inflateListWithFutureBookings() {
-        // TODO: The businessId should be saved in the shared preferences during the profile creation. 
-        final ParseQuery<ParseObject> innerBusinessPointerQuery = new ParseQuery<ParseObject>(Business.CLASS_NAME).
-                whereEqualTo(Business.Keys.ID, BUSINESS_ID);
-        
         ParseQuery<Booking> query = new ParseQuery<Booking>(Booking.CLASS_NAME).
-                whereMatchesQuery(Booking.Keys.BUSINESS_POINTER, innerBusinessPointerQuery).
+                whereEqualTo(Booking.Keys.BUSINESS_POINTER, Business.getCurrentBusiness()).
                 whereGreaterThan(Booking.Keys.DATE, new Date());
         query.include(Booking.Keys.BUSINESS_POINTER);
         query.include(Booking.Keys.CUSTOMER_POINTER);
