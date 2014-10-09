@@ -6,7 +6,6 @@ import it.gmariotti.cardslib.library.internal.Card.OnLongCardClickListener;
 import it.gmariotti.cardslib.library.internal.CardArrayMultiChoiceAdapter;
 import it.gmariotti.cardslib.library.internal.CardExpand;
 import it.gmariotti.cardslib.library.internal.CardHeader;
-import it.gmariotti.cardslib.library.view.CardListView;
 import it.gmariotti.cardslib.library.view.CardView;
 
 import java.text.SimpleDateFormat;
@@ -48,6 +47,7 @@ import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper.Booking;
 import com.gling.bookmeup.main.ParseHelper.CustomerClass;
 import com.gling.bookmeup.main.PushUtils;
+import com.gling.bookmeup.main.views.CustomCardListView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -63,15 +63,24 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 	private HashMap<String, Customer> _allCustomers;
 	private CustomerCardArrayMultiChoiceAdapter _customerCardsAdapter;
 	private List<Card> _cards;
+
+	private CustomCardListView _customerCardListView;
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		Log.i(TAG, "onCreate");
-		super.onCreate(savedInstanceState);
-		
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		Log.i(TAG, "onCreateView");
+
 		_allCustomers = new HashMap<String, Customer>();
 		_cards = new ArrayList<Card>();
 		_customerCardsAdapter = new CustomerCardArrayMultiChoiceAdapter(getActivity(), _cards);
+		
+		View view = super.onCreateView(inflater, container, savedInstanceState);
+		_customerCardListView = (CustomCardListView) view.findViewById(R.id.business_customer_list_listViewCustomers);
+		_customerCardListView.getCardListView().setAdapter(_customerCardsAdapter);
+		_customerCardListView.getCardListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		
+		EditText edtSearch = (EditText)view.findViewById(R.id.business_customer_list_edtSearch);
+		edtSearch.addTextChangedListener(this);
 		
 		/*
 		 * Build a query that represents bookings with the following properties:
@@ -87,11 +96,11 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		query.include(Booking.Keys.CUSTOMER_POINTER);
 		query.include(Booking.Keys.SERVICE_POINTER);
 		
-		final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
+		_customerCardListView.showLoading();
 		query.findInBackground(new FindCallback<Booking>() {
 			@Override
 			public void done(List<Booking> objects, ParseException e) {
-				progressDialog.dismiss();
+				_customerCardListView.stopLoading();
 				if (e != null) {
 					Log.e(TAG, "Exception: " + e.getMessage());
 					return;
@@ -122,19 +131,6 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 				_customerCardsAdapter.notifyDataSetChanged();
 			}
 		});
-	}
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		Log.i(TAG, "onCreateView");
-
-		View view = super.onCreateView(inflater, container, savedInstanceState);
-		CardListView listView = (CardListView)view.findViewById(R.id.business_customer_list_listViewCustomers);
-		listView.setAdapter(_customerCardsAdapter);
-		listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-		
-		EditText edtSearch = (EditText)view.findViewById(R.id.business_customer_list_edtSearch);
-		edtSearch.addTextChangedListener(this);
 		
 		return view;
 	}
