@@ -3,11 +3,9 @@ package com.gling.bookmeup.business;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardExpand;
 import it.gmariotti.cardslib.library.internal.CardHeader;
-import it.gmariotti.cardslib.library.view.CardListView;
 
 import java.util.List;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +20,7 @@ import com.gling.bookmeup.main.ObservableArrayList;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.ParseHelper.Offer;
+import com.gling.bookmeup.main.views.CustomCardListView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -31,6 +30,8 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 	
 	private GenericCardArrayAdapter<Offer> _offersAdapter;
 	private IObservableList<Offer> _offers;
+	
+	private CustomCardListView _offersListView;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -45,18 +46,18 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 		final View view = super.onCreateView(inflater, container, savedInstanceState);
 		
         _offersAdapter = GenericCardArrayAdapter.<Offer>create(getActivity(), _offers, new OfferCardsGenerator());
-        CardListView offersListView = (CardListView) view.findViewById(R.id.business_offers_listViewOffersNew);
-        offersListView.setAdapter(_offersAdapter);
+        _offersListView = (CustomCardListView) view.findViewById(R.id.business_offers_listViewOffersNew);
+        _offersListView.getCardListView().setAdapter(_offersAdapter);
         
         ParseQuery<Offer> parseQuery = new ParseQuery<Offer>(Offer.class)
 	    		.whereEqualTo(ParseHelper.Offer.Keys.BUSINESS_POINTER, Business.getCurrentBusiness());
-        final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
+        _offersListView.showLoading();
 	    parseQuery.findInBackground(new FindCallback<ParseHelper.Offer>() {
 			
 			@Override
 			public void done(List<Offer> objects, ParseException e) {
 				Log.i(TAG, "findInBackground done");
-				progressDialog.dismiss();
+				_offersListView.stopLoading();
 				if (e != null)
 				{
 					Log.e(TAG, "Exception: " + e.getMessage());
