@@ -104,17 +104,23 @@
     <string name="business_customer_list_btnSendOffer">Send offer</string>
     <string name="business_customer_list_send_message_dialog_btnSend">Send</string>
     <string name="business_customer_list_send_message_dialog_edtMessageHint">Type in your message...\n(Up to 60 characters)</string>
+    <string name="business_customer_list_no_customers">No customers</string>
+    <string name="business_customer_list_spendings_filter_dialog_edtSpendingsHint">Please enter limit</string>
+    <string name="business_customer_list_spendings_filter_dialog_title">Filter customer by total spendings in the last X weeks</string>
+    <string name="business_customer_list_send_offer_dialog_title">Offer specification</string>
+    <string name="business_customer_list_send_offer_dialog_txtDiscount">Discount (%)</string>
+    <string name="business_customer_list_send_offer_dialog_txtDuration">Duration (Weeks)</string>
 
     <!-- Business bookings list -->
     <string name="business_bookings_list_pending_header">Pending</string>
     <string name="business_bookings_list_approved_header">Approved</string>
     <string name="business_bookings_list_pending_click_dialog">Approve booking?</string>
     <string name="business_bookings_list_approved_click_dialog">Cancel booking?</string>
-    <string name="business_customer_list_spendings_filter_dialog_edtSpendingsHint">Please enter limit</string>
-    <string name="business_customer_list_spendings_filter_dialog_title">Filter customer by total spendings in the last X weeks</string>
-    <string name="business_customer_list_send_offer_dialog_title">Offer specification</string>
-    <string name="business_customer_list_send_offer_dialog_txtDiscount">Discount (%)</string>
-    <string name="business_customer_list_send_offer_dialog_txtDuration">Duration (Weeks)</string>
+    <string name="business_bookings_list_no_pending_bookings">No pending bookings</string>
+    <string name="business_bookings_list_no_approved_bookings">No approved bookings</string>
+    
+    <!-- Business offer list -->
+    <string name="business_offer_list_no_offers">No offers</string>
 
     <!-- Shared prefs -->
     <string name="preference_file_key">com.gling.bookmeup</string>
@@ -136,6 +142,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
     <string name="title_activity_business_profile_wizard">Business Profile Wizard</string>
-    <string name="no_items">No items</string>
+    <string name="default_no_items_in_list_text">No items</string>
 
 </resources>

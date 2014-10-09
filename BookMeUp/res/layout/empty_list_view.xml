@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     android:drawableLeft="@drawable/card_menu_button_expand"
     android:gravity="center"
-    style="?android:attr/textAppearanceMedium"
-    android:text="@string/no_items" >
+    style="?android:attr/textAppearanceMedium" >
 
 </TextView>
