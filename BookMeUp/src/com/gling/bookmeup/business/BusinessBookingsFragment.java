@@ -17,7 +17,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.ViewSwitcher;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.GenericCardArrayAdapter;
@@ -38,7 +39,8 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
     private IObservableList<Booking> _pendingBookings, _approvedBookings;
     private GenericCardArrayAdapter<Booking> _pendingBookingsAdapter, _approvedBookingsAdapter;
 
-	private TextView txtPendingBookingsTitle, txtApprovedBookingsTitle;
+	private Button _btnPending, _btnApproved;
+	private ViewSwitcher _viewSwitcher;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,8 +57,8 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
             Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         
-        txtPendingBookingsTitle = (TextView)view.findViewById(R.id.business_bookings_txtPendingBookings);
-        txtApprovedBookingsTitle = (TextView)view.findViewById(R.id.business_bookings_txtApprovedBookings);
+        _btnPending = (Button)view.findViewById(R.id.business_bookings_btnPending);
+        _btnApproved = (Button)view.findViewById(R.id.business_bookings_btnApproved);
         
         CardListView pendingBookingsCardListView = (CardListView)view.findViewById(R.id.business_bookings_cardListViewPendingBookings);
         pendingBookingsCardListView.setAdapter(_pendingBookingsAdapter);
@@ -64,13 +66,33 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
         CardListView approvedBookingsCardListView = (CardListView)view.findViewById(R.id.business_bookings_cardListViewApprovedBookings);
         approvedBookingsCardListView.setAdapter(_approvedBookingsAdapter);
         
+        _viewSwitcher = (ViewSwitcher)view.findViewById(R.id.business_bookings_viewSwitcher); 
+        
         inflateListWithFutureBookings();
         
         return view;
     }
 
     @Override
-    public void onClick(View v) {       
+    public void onClick(View v) {
+    	int displayedChiled = _viewSwitcher.getDisplayedChild();
+    	switch (v.getId())
+    	{
+    	case R.id.business_bookings_btnPending:
+    		Log.i(TAG, "btnPending clicked");
+    		if (displayedChiled != 0)
+    		{
+    			_viewSwitcher.showNext();
+    		}
+    		break;
+    	case R.id.business_bookings_btnApproved:
+    		Log.i(TAG, "btnApproved clicked");
+    		if (displayedChiled != 1)
+    		{
+    			_viewSwitcher.showPrevious();
+    		}
+    		break;
+    	}
     }
 
     @Override
@@ -119,12 +141,12 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
     
     private void updatePendingBookingsTitle()
     {
-    	txtPendingBookingsTitle.setText(String.format("%s (%d)",getString(R.string.business_bookings_list_pending_header), _pendingBookings.size()));
+    	_btnPending.setText(String.format("%s (%d)",getString(R.string.business_bookings_list_pending_header), _pendingBookings.size()));
     }
     
     private void updateApprovedBookingsTitle()
     {
-    	txtApprovedBookingsTitle.setText(String.format("%s (%d)",getString(R.string.business_bookings_list_approved_header), _approvedBookings.size()));
+    	_btnApproved.setText(String.format("%s (%d)",getString(R.string.business_bookings_list_approved_header), _approvedBookings.size()));
     }
     
     private class PendingBookingCardGenerator implements ICardGenerator<Booking>
