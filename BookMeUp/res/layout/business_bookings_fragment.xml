@@ -35,12 +35,12 @@
         android:inAnimation="@android:anim/slide_in_left"
         android:outAnimation="@android:anim/slide_out_right">
         
-        <com.gling.bookmeup.main.views.CustomCardListView
+        <com.gling.bookmeup.main.views.CardListViewWrapperView
             android:id="@+id/business_bookings_cardListViewPendingBookings"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />
 
-        <com.gling.bookmeup.main.views.CustomCardListView
+        <com.gling.bookmeup.main.views.CardListViewWrapperView
             android:id="@+id/business_bookings_cardListViewApprovedBookings"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />

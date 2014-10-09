@@ -26,7 +26,7 @@ import com.gling.bookmeup.main.ObservableArrayList;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper.Booking;
 import com.gling.bookmeup.main.ParseHelper.Booking.Status;
-import com.gling.bookmeup.main.views.CustomCardListView;
+import com.gling.bookmeup.main.views.CardListViewWrapperView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -41,7 +41,7 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 	private Button _btnPending, _btnApproved;
 	private ViewSwitcher _viewSwitcher;
 	
-	private CustomCardListView _pendingBookingsListView, _approvedBookingsListView;
+	private CardListViewWrapperView _pendingBookingsListView, _approvedBookingsListView;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,11 +61,11 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
         _btnPending = (Button)view.findViewById(R.id.business_bookings_btnPending);
         _btnApproved = (Button)view.findViewById(R.id.business_bookings_btnApproved);
         
-        _pendingBookingsListView = (CustomCardListView)view.findViewById(R.id.business_bookings_cardListViewPendingBookings);
-        _pendingBookingsListView.getCardListView().setAdapter(_pendingBookingsAdapter);
+        _pendingBookingsListView = (CardListViewWrapperView)view.findViewById(R.id.business_bookings_cardListViewPendingBookings);
+        _pendingBookingsListView.getListView().setAdapter(_pendingBookingsAdapter);
         
-        _approvedBookingsListView = (CustomCardListView)view.findViewById(R.id.business_bookings_cardListViewApprovedBookings);
-        _approvedBookingsListView.getCardListView().setAdapter(_approvedBookingsAdapter);
+        _approvedBookingsListView = (CardListViewWrapperView)view.findViewById(R.id.business_bookings_cardListViewApprovedBookings);
+        _approvedBookingsListView.getListView().setAdapter(_approvedBookingsAdapter);
         
         _viewSwitcher = (ViewSwitcher)view.findViewById(R.id.business_bookings_viewSwitcher); 
         

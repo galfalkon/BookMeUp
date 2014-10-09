@@ -9,17 +9,19 @@ import android.widget.ProgressBar;
 import android.widget.ViewFlipper;
 
 /**
- * A view that wraps a {@link ListView} that allows showing 'loading' indication. 
+ * A view that wraps a {@link ListView} that allows showing 'loading' indication.
  * @author Gal Falkon
+ *
+ * @param <T> The type of the list view to be wrapped (e.g. {@link ListView}, {@link CardListView}) 
  */
-public class CustomListView extends ViewFlipper {
-	private final ListView _listView;
+public abstract class BaseListViewWrapperView<T extends ListView> extends ViewFlipper {
+	private final T _listView;
 	private final ProgressBar _progressBar;
 	
-	public CustomListView(Context context, AttributeSet attrs) {
+	public BaseListViewWrapperView(Context context, AttributeSet attrs, T listView) {
 		super(context, attrs);
 
-		_listView = new ListView(context);
+		_listView = listView;
 		addView(_listView);
 		
 		_progressBar = new ProgressBar(context);
@@ -34,14 +36,13 @@ public class CustomListView extends ViewFlipper {
 		showProgressBar();
 	}
 
-	
 	public void stopLoading()
 	{
 		showListView();
 	}
 
 
-	public ListView getListView()
+	public T getListView()
 	{
 		return _listView;
 	}

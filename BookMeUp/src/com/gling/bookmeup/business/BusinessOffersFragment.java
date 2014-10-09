@@ -20,7 +20,7 @@ import com.gling.bookmeup.main.ObservableArrayList;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.ParseHelper.Offer;
-import com.gling.bookmeup.main.views.CustomCardListView;
+import com.gling.bookmeup.main.views.CardListViewWrapperView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -31,7 +31,7 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 	private GenericCardArrayAdapter<Offer> _offersAdapter;
 	private IObservableList<Offer> _offers;
 	
-	private CustomCardListView _offersListView;
+	private CardListViewWrapperView _offersListView;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,8 +46,8 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 		final View view = super.onCreateView(inflater, container, savedInstanceState);
 		
         _offersAdapter = GenericCardArrayAdapter.<Offer>create(getActivity(), _offers, new OfferCardsGenerator());
-        _offersListView = (CustomCardListView) view.findViewById(R.id.business_offers_listViewOffersNew);
-        _offersListView.getCardListView().setAdapter(_offersAdapter);
+        _offersListView = (CardListViewWrapperView) view.findViewById(R.id.business_offers_listViewOffersNew);
+        _offersListView.getListView().setAdapter(_offersAdapter);
         
         ParseQuery<Offer> parseQuery = new ParseQuery<Offer>(Offer.class)
 	    		.whereEqualTo(ParseHelper.Offer.Keys.BUSINESS_POINTER, Business.getCurrentBusiness());

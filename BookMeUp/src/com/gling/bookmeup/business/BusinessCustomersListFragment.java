@@ -46,7 +46,7 @@ import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper.Booking;
 import com.gling.bookmeup.main.ParseHelper.CustomerClass;
 import com.gling.bookmeup.main.PushUtils;
-import com.gling.bookmeup.main.views.CustomCardListView;
+import com.gling.bookmeup.main.views.CardListViewWrapperView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -63,7 +63,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 	private CustomerCardArrayMultiChoiceAdapter _customerCardsAdapter;
 	private List<Card> _cards;
 
-	private CustomCardListView _customerCardListView;
+	private CardListViewWrapperView _customerCardListView;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,9 +74,9 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		_customerCardsAdapter = new CustomerCardArrayMultiChoiceAdapter(getActivity(), _cards);
 		
 		View view = super.onCreateView(inflater, container, savedInstanceState);
-		_customerCardListView = (CustomCardListView) view.findViewById(R.id.business_customer_list_listViewCustomers);
-		_customerCardListView.getCardListView().setAdapter(_customerCardsAdapter);
-		_customerCardListView.getCardListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		_customerCardListView = (CardListViewWrapperView) view.findViewById(R.id.business_customer_list_listViewCustomers);
+		_customerCardListView.getListView().setAdapter(_customerCardsAdapter);
+		_customerCardListView.getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 		
 		EditText edtSearch = (EditText)view.findViewById(R.id.business_customer_list_edtSearch);
 		edtSearch.addTextChangedListener(this);
