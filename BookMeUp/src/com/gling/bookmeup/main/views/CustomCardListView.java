@@ -46,12 +46,12 @@ public class CustomCardListView extends ViewFlipper {
 		return _cardListView;
 	}
 	
-	private void showProgressBar() 
-	{
+	private void showListView() {
 		setDisplayedChild(0);
 	}
 	
-	private void showListView() {
+	private void showProgressBar() 
+	{
 		setDisplayedChild(1);
 	}
 }
