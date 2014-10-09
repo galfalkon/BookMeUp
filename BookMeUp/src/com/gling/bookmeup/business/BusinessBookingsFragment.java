@@ -3,14 +3,12 @@ package com.gling.bookmeup.business;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
 import it.gmariotti.cardslib.library.internal.CardHeader;
-import it.gmariotti.cardslib.library.view.CardListView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +26,7 @@ import com.gling.bookmeup.main.ObservableArrayList;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper.Booking;
 import com.gling.bookmeup.main.ParseHelper.Booking.Status;
+import com.gling.bookmeup.main.views.CustomCardListView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -41,6 +40,8 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 
 	private Button _btnPending, _btnApproved;
 	private ViewSwitcher _viewSwitcher;
+	
+	private CustomCardListView _pendingBookingsListView, _approvedBookingsListView;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,11 +61,11 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
         _btnPending = (Button)view.findViewById(R.id.business_bookings_btnPending);
         _btnApproved = (Button)view.findViewById(R.id.business_bookings_btnApproved);
         
-        CardListView pendingBookingsCardListView = (CardListView)view.findViewById(R.id.business_bookings_cardListViewPendingBookings);
-        pendingBookingsCardListView.setAdapter(_pendingBookingsAdapter);
+        _pendingBookingsListView = (CustomCardListView)view.findViewById(R.id.business_bookings_cardListViewPendingBookings);
+        _pendingBookingsListView.getCardListView().setAdapter(_pendingBookingsAdapter);
         
-        CardListView approvedBookingsCardListView = (CardListView)view.findViewById(R.id.business_bookings_cardListViewApprovedBookings);
-        approvedBookingsCardListView.setAdapter(_approvedBookingsAdapter);
+        _approvedBookingsListView = (CustomCardListView)view.findViewById(R.id.business_bookings_cardListViewApprovedBookings);
+        _approvedBookingsListView.getCardListView().setAdapter(_approvedBookingsAdapter);
         
         _viewSwitcher = (ViewSwitcher)view.findViewById(R.id.business_bookings_viewSwitcher); 
         
@@ -75,22 +76,15 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 
     @Override
     public void onClick(View v) {
-    	int displayedChiled = _viewSwitcher.getDisplayedChild();
     	switch (v.getId())
     	{
     	case R.id.business_bookings_btnPending:
     		Log.i(TAG, "btnPending clicked");
-    		if (displayedChiled != 0)
-    		{
-    			_viewSwitcher.showNext();
-    		}
+    		showPendingBookings();
     		break;
     	case R.id.business_bookings_btnApproved:
     		Log.i(TAG, "btnApproved clicked");
-    		if (displayedChiled != 1)
-    		{
-    			_viewSwitcher.showPrevious();
-    		}
+    		showApprovedBookings();
     		break;
     	}
     }
@@ -108,11 +102,11 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
         query.include(Booking.Keys.CUSTOMER_POINTER);
         query.include(Booking.Keys.SERVICE_POINTER);
 
-        final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
+        _pendingBookingsListView.showLoading();
+        _approvedBookingsListView.showLoading();
         query.findInBackground(new FindCallback<Booking>() {
             @Override
             public void done(List<Booking> objects, ParseException e) {
-                progressDialog.dismiss();
                 Log.i(TAG, "Done querying future bookings. #objects = " + objects.size());
                 if (e != null) {
                     Log.e(TAG, "Exception occurred: " + e.getMessage());
@@ -135,8 +129,27 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
                 updateApprovedBookingsTitle();
                 _pendingBookingsAdapter.notifyDataSetChanged();
                 _approvedBookingsAdapter.notifyDataSetChanged();
+                
+                _pendingBookingsListView.stopLoading();
+                _approvedBookingsListView.stopLoading();
             }
         });
+    }
+    
+    private void showPendingBookings()
+    {
+    	if (_viewSwitcher.getDisplayedChild() != 0)
+    	{
+    		_viewSwitcher.setDisplayedChild(0);
+    	}
+    }
+    
+    private void showApprovedBookings()
+    {
+    	if (_viewSwitcher.getDisplayedChild() != 1)
+    	{
+    		_viewSwitcher.setDisplayedChild(1);
+    	}
     }
     
     private void updatePendingBookingsTitle()
