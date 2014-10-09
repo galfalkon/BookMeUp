@@ -100,6 +100,8 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 		case 2:
 			return new CustomerFavouriteFragment();
 		case 3:
+			return new CustomerMyBookingsFragment();
+		case 4:
 			return new CustomerOffersFragment();
 		default:
 			Log.e(TAG, "trying to instantiate an unknown fragment");

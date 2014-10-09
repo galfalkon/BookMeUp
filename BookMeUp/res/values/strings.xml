@@ -56,6 +56,7 @@
         <item>Popular</item>
         <item>History</item>
         <item>Favourites</item>
+        <item>My Bookings</item>
         <item>Offers</item>
     </string-array>
 
@@ -75,13 +76,18 @@
     <!-- Customer Favourite -->
     <string name="customer_favourites_business_list_search_edtSearchHint">Search for...</string>
 
-
     <!-- Customer Business Profile -->
     <string name="customer_business_profile_btnNextTxt">Next</string>
     <string name="customer_business_profile_btnCancelTxt">Cancel</string>
     <string name="customer_business_profile_opening_hours">Opening Hours:</string>
     <string name="customer_business_profile_description">"Description: "</string>
     <string name="favourites_icon">favourites icon</string>
+    
+    <!-- Customer My Bookings -->
+    <string name="customer_my_bookings_no_bookings">No bookings</string>
+    <string name="customer_my_bookings_booking_approved">Approved</string>
+    <string name="customer_my_bookings_booking_pending_for_approval">Pending for approval</string>
+    <string name="customer_my_bookings_status_tag">Status: </string>
 
     <!-- Business profile creation -->
     <string name="business_profile_creation_edtName">Business name</string>
