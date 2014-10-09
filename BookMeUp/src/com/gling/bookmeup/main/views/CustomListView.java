@@ -19,14 +19,14 @@ public class CustomListView extends ViewFlipper {
 	public CustomListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
+		_listView = new ListView(context);
+		addView(_listView);
+		
 		_progressBar = new ProgressBar(context);
 		FrameLayout.LayoutParams progressBarLayoutParams = new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		progressBarLayoutParams.gravity = Gravity.CENTER;
 		_progressBar.setLayoutParams(progressBarLayoutParams);
 		addView(_progressBar);
-
-		_listView = new ListView(context);
-		addView(_listView);
 	}
 
 	public void showLoading()

@@ -19,15 +19,14 @@ public class CustomCardListView extends ViewFlipper {
 	public CustomCardListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
+		_cardListView = new CardListView(context);
+		addView(_cardListView);
+		
 		_progressBar = new ProgressBar(context);
 		FrameLayout.LayoutParams progressBarLayoutParams = new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		progressBarLayoutParams.gravity = Gravity.CENTER;
 		_progressBar.setLayoutParams(progressBarLayoutParams);
 		addView(_progressBar);
-
-		_cardListView = new CardListView(context);
-		addView(_cardListView);
-		
 	}
 
 	public void showLoading()
