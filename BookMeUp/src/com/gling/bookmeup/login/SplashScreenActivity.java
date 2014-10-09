@@ -145,7 +145,6 @@ public class SplashScreenActivity extends Activity {
 				if (businessParseObject != null) 
 				{
 					Business currentBusiness = businessParseObject.fetchIfNeeded();
-					currentBusiness.getUser().fetchIfNeeded();
 					Business.setCurrentBusiness(currentBusiness);
 				}
 				

@@ -14,7 +14,6 @@ public class Business extends ParseObject {
     
     public static class Keys {
         public static final String ID = "objectId";
-        public static final String USER = "user";
         public static final String NAME = "name";
         public static final String DESCRIPTION = "description";
         public static final String PHONE_NUMBER = "phone_number";
@@ -43,14 +42,6 @@ public class Business extends ParseObject {
  
     public void setName(String name) {
         put(Keys.NAME, name);
-    }
- 
-    public ParseUser getUser() {
-        return getParseUser(Keys.USER);
-    }
- 
-    public void setUser(ParseUser user) {
-        put(Keys.USER, user);
     }
  
     public String getDescription() {
