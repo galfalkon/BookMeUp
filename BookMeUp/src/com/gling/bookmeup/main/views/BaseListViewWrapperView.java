@@ -26,6 +26,10 @@ import com.gling.bookmeup.R;
  */
 public abstract class BaseListViewWrapperView<T extends ListView> extends ViewFlipper 
 {
+	public static enum DisplayMode {
+		LIST_VIEW, LOADING_VIEW, NO_ITEMS_VIEW;
+	}
+
 	private final T _listView;
 	private final ProgressBar _progressBar;
 	private final String _noItemsText;
@@ -76,37 +80,29 @@ public abstract class BaseListViewWrapperView<T extends ListView> extends ViewFl
 	{
 		if (getDisplayedChild() == 0 && _listView.getCount() == 0)
 		{
-			showNoItems();
+			setDisplayMode(DisplayMode.NO_ITEMS_VIEW);
 		}
 		super.dispatchDraw(canvas);
 	}
 	
-	public void showLoading()
+	public void setDisplayMode(DisplayMode mode)
 	{
-		showProgressBar();
+		switch (mode)
+		{
+		case LIST_VIEW:
+			setDisplayedChild(0);
+			break;
+		case LOADING_VIEW:
+			setDisplayedChild(1);
+			break;
+		case NO_ITEMS_VIEW:
+			setDisplayedChild(2);
+			break;
+		}
 	}
-
-	public void stopLoading()
-	{
-		showListView();
-	}
-
+	
 	public T getListView()
 	{
 		return _listView;
-	}
-
-	private void showListView() {
-		setDisplayedChild(0);
-	}
-	
-	private void showProgressBar() 
-	{
-		setDisplayedChild(1);
-	}
-	
-	private void showNoItems()
-	{
-		setDisplayedChild(2);
 	}
 }

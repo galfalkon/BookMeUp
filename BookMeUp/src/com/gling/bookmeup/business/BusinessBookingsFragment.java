@@ -27,6 +27,7 @@ import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper.Booking;
 import com.gling.bookmeup.main.ParseHelper.Booking.Status;
 import com.gling.bookmeup.main.views.CardListViewWrapperView;
+import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -102,8 +103,8 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
         query.include(Booking.Keys.CUSTOMER_POINTER);
         query.include(Booking.Keys.SERVICE_POINTER);
 
-        _pendingBookingsListView.showLoading();
-        _approvedBookingsListView.showLoading();
+        _pendingBookingsListView.setDisplayMode(DisplayMode.LOADING_VIEW);
+        _approvedBookingsListView.setDisplayMode(DisplayMode.LOADING_VIEW);
         query.findInBackground(new FindCallback<Booking>() {
             @Override
             public void done(List<Booking> objects, ParseException e) {
@@ -130,8 +131,8 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
                 _pendingBookingsAdapter.notifyDataSetChanged();
                 _approvedBookingsAdapter.notifyDataSetChanged();
                 
-                _pendingBookingsListView.stopLoading();
-                _approvedBookingsListView.stopLoading();
+                _pendingBookingsListView.setDisplayMode(DisplayMode.LIST_VIEW);
+                _approvedBookingsListView.setDisplayMode(DisplayMode.LIST_VIEW);
             }
         });
     }

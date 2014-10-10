@@ -47,6 +47,7 @@ import com.gling.bookmeup.main.ParseHelper.Booking;
 import com.gling.bookmeup.main.ParseHelper.CustomerClass;
 import com.gling.bookmeup.main.PushUtils;
 import com.gling.bookmeup.main.views.CardListViewWrapperView;
+import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -95,11 +96,11 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		query.include(Booking.Keys.CUSTOMER_POINTER);
 		query.include(Booking.Keys.SERVICE_POINTER);
 		
-		_customerCardListView.showLoading();
+		_customerCardListView.setDisplayMode(DisplayMode.LOADING_VIEW);
 		query.findInBackground(new FindCallback<Booking>() {
 			@Override
 			public void done(List<Booking> objects, ParseException e) {
-				_customerCardListView.stopLoading();
+				_customerCardListView.setDisplayMode(DisplayMode.LIST_VIEW);
 				if (e != null) {
 					Log.e(TAG, "Exception: " + e.getMessage());
 					return;

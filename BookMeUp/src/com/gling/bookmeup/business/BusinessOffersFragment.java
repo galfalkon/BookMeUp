@@ -21,6 +21,7 @@ import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.ParseHelper.Offer;
 import com.gling.bookmeup.main.views.CardListViewWrapperView;
+import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -51,13 +52,13 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
         
         ParseQuery<Offer> parseQuery = new ParseQuery<Offer>(Offer.class)
 	    		.whereEqualTo(ParseHelper.Offer.Keys.BUSINESS_POINTER, Business.getCurrentBusiness());
-        _offersListView.showLoading();
+        _offersListView.setDisplayMode(DisplayMode.LOADING_VIEW);
 	    parseQuery.findInBackground(new FindCallback<ParseHelper.Offer>() {
 			
 			@Override
 			public void done(List<Offer> objects, ParseException e) {
 				Log.i(TAG, "findInBackground done");
-				_offersListView.stopLoading();
+				_offersListView.setDisplayMode(DisplayMode.LIST_VIEW);
 				if (e != null)
 				{
 					Log.e(TAG, "Exception: " + e.getMessage());
