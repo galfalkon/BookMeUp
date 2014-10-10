@@ -83,6 +83,10 @@
     <string name="customer_business_profile_description">"Description: "</string>
     <string name="favourites_icon">favourites icon</string>
     
+    <!-- Customer Choose Services -->
+    <string name="customer_choose_services_btnScheduleTxt">Schedule</string>
+    <string name="customer_choose_services_btnCancelTxt">Cancel</string>
+    
     <!-- Customer My Bookings -->
     <string name="customer_my_bookings_no_bookings">No bookings</string>
     <string name="customer_my_bookings_booking_approved">Approved</string>
@@ -91,6 +95,7 @@
 
     <!-- Customer Calendar -->
     <string name="customer_calendar">Calendar</string>
+    <string name="title_activity_customer_calendar">Calendar</string>
 
     <!-- Business profile creation -->
     <string name="business_profile_creation_edtName">Business name</string>

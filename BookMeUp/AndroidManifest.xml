@@ -92,6 +92,10 @@
             android:name="com.gling.bookmeup.business.BusinessCalendarActivity"
             android:label="@string/title_activity_business_calendar" >
         </activity>
+        <activity
+            android:name="com.gling.bookmeup.customer.CustomerCalendarActivity"
+            android:label="@string/title_activity_customer_calendar" >
+        </activity>
         <activity android:name="com.gling.bookmeup.main.PushHandlerActivity" >
         </activity>
         <activity

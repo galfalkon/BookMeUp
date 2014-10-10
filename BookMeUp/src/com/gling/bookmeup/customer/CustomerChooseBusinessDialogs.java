@@ -6,15 +6,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -51,7 +49,7 @@ public class CustomerChooseBusinessDialogs {
 
 
 		// Build an alert dialog
-		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+		final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 		builder.setView(dialogView);
 		View titleView = inflater.inflate(R.layout.customer_business_profile_dialog_title, null);
 		TextView titleName = (TextView) titleView.findViewById(R.id.customer_business_profile_dialog_title_name);
@@ -150,14 +148,29 @@ public class CustomerChooseBusinessDialogs {
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 		builder.setView(servicesView);
-		builder.setTitle("gefen");
+		builder.setTitle(business.getName() + " - Choose service");
 
 		//		_servicesAdapter = new ParseQueryAdapter<Service>(getActivity(),
 		//				Service.CLASS_NAME);
 		ServicesAdapter servicesAdapter = new ServicesAdapter(activity, business);
 		servicesAdapter.setTextKey(Service.Keys.NAME);
-		Log.e("gefen", ((Boolean)(servicesListView==null)).toString());
 		servicesListView.setAdapter(servicesAdapter);
+		
+		builder.setPositiveButton(R.string.customer_choose_services_btnScheduleTxt, new DialogInterface.OnClickListener() { 
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Log.i(TAG, "Business was chosen");
+				
+				Intent intent = new Intent(activity, CustomerCalendarActivity.class);
+				activity.startActivity(intent);
+			}
+		});
+		builder.setNegativeButton(R.string.customer_choose_services_btnCancelTxt, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();
+			}
+		});
 
 		builder.show();
 	}
@@ -189,15 +202,15 @@ public class CustomerChooseBusinessDialogs {
 				Service service = (Service) object;
 				
 
-				CheckBox checkBox = (CheckBox) v.findViewById(R.id.customer_business_services_list_item_checkbox);
-				checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-					@Override
-					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-						// TODO Auto-generated method stub
-
-					}
-				});
+//				CheckBox checkBox = (CheckBox) v.findViewById(R.id.customer_business_services_list_item_checkbox);
+//				checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+//
+//					@Override
+//					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//						// TODO Auto-generated method stub
+//
+//					}
+//				});
 
 				TextView nameView = (TextView) v.findViewById(R.id.customer_business_services_list_item_txtServiceName);
 				nameView.setText(service.getName());

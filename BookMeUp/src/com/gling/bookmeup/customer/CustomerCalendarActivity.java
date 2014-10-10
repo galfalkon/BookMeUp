@@ -40,15 +40,15 @@ public class CustomerCalendarActivity extends FragmentActivity {
 		Log.i(TAG, "onCreate");
 
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.business_calendar_activity);
+		setContentView(R.layout.customer_calendar_activity);
 
 		DateTime now = new DateTime();
 		_today = new DateTime(now.getYear(), now.getMonthOfYear(),
 				now.getDayOfMonth(), 0, 0);
 
-		_tabs = (PagerSlidingTabStrip) findViewById(R.id.business_calendar_activity_tabs);
+		_tabs = (PagerSlidingTabStrip) findViewById(R.id.customer_calendar_activity_tabs);
 		// Set up the ViewPager with the sections adapter.
-		_viewPager = (ViewPager) findViewById(R.id.business_calendar_activity_pager);
+		_viewPager = (ViewPager) findViewById(R.id.customer_calendar_activity_pager);
 		// this adapter will generate a new BusinessDayViewFragment for each
 		// day.
 		// it will allow scrolling for up to DAYS_MARGIN days before the anchor

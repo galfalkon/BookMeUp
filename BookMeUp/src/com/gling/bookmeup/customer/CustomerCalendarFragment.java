@@ -26,10 +26,10 @@ import com.parse.ParseUser;
 public class CustomerCalendarFragment extends Fragment {
 
     private static final String TAG = "CustomerCalendarFragment";
-    private static final String ARG_DATE = "business_calendar_fragment_date";
+    private static final String ARG_DATE = "customer_calendar_fragment_date";
 
     private DateTime _date;
-    private CustomParseQueryAdapter _businessBookingsAdapter;
+    private CustomParseQueryAdapter _customerBookingsAdapter;
     
     private ListView _lstBookings;
     private ProgressBar _progressBar;
@@ -59,15 +59,15 @@ public class CustomerCalendarFragment extends Fragment {
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.business_calendar_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.customer_calendar_fragment, container, false);
         
-        _lstBookings = (ListView) rootView.findViewById(R.id.business_calendar_list);
-        _progressBar = (ProgressBar) rootView.findViewById(R.id.business_calendar_progress_bar);        
+        _lstBookings = (ListView) rootView.findViewById(R.id.customer_calendar_list);
+        _progressBar = (ProgressBar) rootView.findViewById(R.id.customer_calendar_progress_bar);        
         
-        _businessBookingsAdapter = new CustomParseQueryAdapter(getActivity());      
-        _lstBookings.setAdapter(_businessBookingsAdapter);
+        _customerBookingsAdapter = new CustomParseQueryAdapter(getActivity());      
+        _lstBookings.setAdapter(_customerBookingsAdapter);
         
-        _businessBookingsAdapter.addOnQueryLoadListener(new OnQueryLoadListener<Booking>() {
+        _customerBookingsAdapter.addOnQueryLoadListener(new OnQueryLoadListener<Booking>() {
             @Override
             public void onLoading() {
             	_lstBookings.setVisibility(View.VISIBLE);
@@ -104,15 +104,15 @@ public class CustomerCalendarFragment extends Fragment {
         @Override
         public View getItemView(Booking booking, View v, ViewGroup parent) {
             if (v == null) {
-                v = View.inflate(getContext(), R.layout.business_calendar_item, null);
+                v = View.inflate(getContext(), R.layout.customer_calendar_item, null);
             }
             super.getItemView(booking, v, parent);
             
-            TextView txtCustomerName = (TextView) v.findViewById(R.id.business_calendar_customer_name);
-//            ParseImageView imgCustomerImage = (ParseImageView) v.findViewById(R.id.business_calendar_customer_image);
-            TextView txtBookingTime = (TextView) v.findViewById(R.id.business_calendar_booking_date);
-            TextView txtBookingService = (TextView) v.findViewById(R.id.business_calendar_booking_service);
-            TextView txtBookingStatus = (TextView) v.findViewById(R.id.business_calendar_booking_status);
+            TextView txtCustomerName = (TextView) v.findViewById(R.id.customer_calendar_business_name);
+//            ParseImageView imgCustomerImage = (ParseImageView) v.findViewById(R.id.customer_calendar_business_image);
+            TextView txtBookingTime = (TextView) v.findViewById(R.id.customer_calendar_booking_date);
+            TextView txtBookingService = (TextView) v.findViewById(R.id.customer_calendar_booking_service);
+            TextView txtBookingStatus = (TextView) v.findViewById(R.id.customer_calendar_booking_status);
 
             // Add customer name
             txtCustomerName.setText(booking.getCustomerName());
