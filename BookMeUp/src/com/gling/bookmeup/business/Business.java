@@ -1,11 +1,13 @@
 package com.gling.bookmeup.business;
 
+import com.gling.bookmeup.main.ParseHelper;
+import com.gling.bookmeup.main.ParseHelper.Category;
 import com.parse.FindCallback;
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 
 @ParseClassName(Business.CLASS_NAME)
@@ -52,8 +54,16 @@ public class Business extends ParseObject {
         put(Keys.DESCRIPTION, description);
     }
     
-    public String getCategory() {
-        return getString(Keys.CATEGORY);
+    public Category getCategory() {
+    	Category category = (Category) getParseObject(Keys.CATEGORY);
+    	try {
+			category.fetchIfNeeded();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return category;
+//        return getString(Keys.CATEGORY);
     }
 	
 	public void setCategory(String category) {

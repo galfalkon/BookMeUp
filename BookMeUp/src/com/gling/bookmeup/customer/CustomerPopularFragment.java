@@ -196,7 +196,7 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
 			
 			clientNameTextView.setText(business.getName());
 			if (business.getCategory() != null) {
-				totalSepndingsTextView.setText(business.getCategory());
+				totalSepndingsTextView.setText(business.getCategory().getName());
 			} else {
 				totalSepndingsTextView.setText("No Category");
 			}
@@ -263,7 +263,7 @@ public class CustomerPopularFragment extends OnClickListenerFragment implements 
 		
 		private boolean doesSetisfyCategory(Business business) {
 			String categoryName;
-			if ((categoryName = business.getCategory()) != null) {
+			if ((categoryName = business.getCategory().getName()) != null) {
 				return (_chosenCategory == null) || _chosenCategory.equals(categoryName);
 			}
 			return false;

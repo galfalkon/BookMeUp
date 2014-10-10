@@ -118,7 +118,7 @@ public class ParseHelper {
 
 		public static class Keys {
 			public static final String ID = "objectId";
-			public static final String NAME = "Name"; // TODO lowercase
+			public static final String NAME = "name"; 
 		}
 		
 		public String getName() {

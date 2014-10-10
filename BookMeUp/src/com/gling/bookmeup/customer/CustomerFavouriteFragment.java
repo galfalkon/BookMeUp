@@ -153,7 +153,7 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 			TextView totalSepndingsTextView = (TextView) convertView.findViewById(R.id.business_list_item_txtBusinessType);
 			
 			clientNameTextView.setText(business.getName());
-			totalSepndingsTextView.setText(business.getCategory());
+			totalSepndingsTextView.setText(business.getCategory().getName());
 
 			return convertView;
 		}

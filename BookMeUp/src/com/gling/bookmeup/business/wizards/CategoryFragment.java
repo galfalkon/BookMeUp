@@ -62,7 +62,7 @@ public class CategoryFragment extends SingleChoiceFragment {
 
 				@Override
 				public void done(Business business, ParseException e) {
-					final String category = business.getCategory();
+					final String category = business.getCategory().getName();
 					mPage.getData().putString(CategoryPage.SIMPLE_DATA_KEY, category);
 					mPage.notifyDataChanged();
 				}
