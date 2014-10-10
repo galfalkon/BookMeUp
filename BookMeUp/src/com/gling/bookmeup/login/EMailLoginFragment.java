@@ -20,6 +20,7 @@ import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessMainActivity;
 import com.gling.bookmeup.business.wizards.BusinessProfileWizardActivity;
+import com.gling.bookmeup.customer.Customer;
 import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.gling.bookmeup.main.FragmentsFlowManager;
 import com.gling.bookmeup.main.OnClickListenerFragment;
@@ -28,6 +29,7 @@ import com.gling.bookmeup.main.ParseHelper.User;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.RequestPasswordResetCallback;
 
@@ -159,6 +161,33 @@ public class EMailLoginFragment extends OnClickListenerFragment {
                 }
 
                 Log.i(TAG, "User '" + user.getUsername() + "' logged in");
+                try 
+    			{
+    				// Fetch current business
+    				Log.i(TAG, "Fetching current business");
+    				ParseObject businessParseObject = user.getParseObject(User.Keys.BUSINESS_POINTER);
+    				if (businessParseObject != null) 
+    				{
+    					Business currentBusiness = businessParseObject.fetchIfNeeded();
+    					Business.setCurrentBusiness(currentBusiness);
+    				}
+    				
+    				// Fetch current customer
+    				Log.i(TAG, "Fetching current customer");
+    				ParseObject customerParseObject = user.getParseObject(User.Keys.CUSTOMER_POINTER);
+    				if (customerParseObject != null) 
+    				{
+    					Customer currentCustomer = customerParseObject.fetchIfNeeded();
+    					Customer.setCurrentCustomer(currentCustomer);
+    				}
+    			} 
+    			catch (ParseException e2) 
+    			{
+    				Log.e(TAG, "Exception: " + e2.getMessage());
+    				Log.i(TAG, "Login failed: " + e.toString());
+                    Crouton.showText(getActivity(), "Login failed: " + e.getMessage(), Style.ALERT);
+                    return;
+    			}
 
                 if (!user.getBoolean("emailVerified")) {
                 	progressDialog.dismiss();
