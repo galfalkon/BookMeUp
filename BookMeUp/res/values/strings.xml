@@ -89,6 +89,9 @@
     <string name="customer_my_bookings_booking_pending_for_approval">Pending for approval</string>
     <string name="customer_my_bookings_status_tag">Status: </string>
 
+    <!-- Customer Calendar -->
+    <string name="customer_calendar">Calendar</string>
+
     <!-- Business profile creation -->
     <string name="business_profile_creation_edtName">Business name</string>
     <string name="business_profile_creation_edtDescriptionHint">Business description</string>
