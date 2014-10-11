@@ -7,7 +7,7 @@
 
     <style name="_BookMeUp_Widgets" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:editTextBackground">@drawable/bookmeup_widgets_edit_text_holo_light</item>
-        <item name="android:textColorHighlight">#99488fcd</item>
+        <item name="android:textColorHighlight">#ff0099cc</item>
         <item name="android:textSelectHandleLeft">@drawable/bookmeup_widgets_text_select_handle_left</item>
         <item name="android:textSelectHandleRight">@drawable/bookmeup_widgets_text_select_handle_right</item>
         <item name="android:textSelectHandle">@drawable/bookmeup_widgets_text_select_handle_middle</item>
@@ -26,6 +26,7 @@
         <item name="android:listChoiceBackgroundIndicator">@drawable/bookmeup_widgets_list_selector_holo_light</item>
         <item name="android:activatedBackgroundIndicator">@drawable/bookmeup_widgets_activated_background_holo_light</item>
         <item name="android:fastScrollThumbDrawable">@drawable/bookmeup_widgets_fastscroll_thumb_holo</item>
+        <item name="android:windowBackground">@drawable/background</item>
     </style>
 
 </resources>

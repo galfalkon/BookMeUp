@@ -7,7 +7,7 @@
 
     <style name="_BookMeUp_Widgets" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:editTextStyle">@style/EditTextBookMeUp_Widgets</item>
-        <item name="android:textColorHighlight">#99488fcd</item>
+        <item name="android:textColorHighlight">#ff0099cc</item>
         <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewBookMeUp_Widgets</item>
         <item name="android:checkboxStyle">@style/CheckBoxBookMeUp_Widgets</item>
         <item name="android:radioButtonStyle">@style/RadioButtonBookMeUp_Widgets</item>
@@ -24,6 +24,7 @@
         <item name="android:listViewStyle">@style/ListViewBookMeUp_Widgets</item>
         <item name="android:listViewWhiteStyle">@style/ListViewBookMeUp_Widgets.White</item>
         <item name="android:spinnerItemStyle">@style/SpinnerItemBookMeUp_Widgets</item>
+        <item name="android:windowBackground">@drawable/background</item>
     </style>
 
 </resources>

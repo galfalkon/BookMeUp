@@ -10,10 +10,11 @@
     tools:context="com.gling.bookmeup.main.MainActivity$LoginWithEmail" >
 
     <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="300dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_splash_launcher" />
+        android:layout_width="wrap_content"
+        android:layout_height="130dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="120dp"
+        android:src="@drawable/logo_with_title" />
 
     <LinearLayout
         android:layout_width="match_parent"

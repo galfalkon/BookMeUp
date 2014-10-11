@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- File created by the Android Action Bar Style Generator
+<!--
+     File created by the Android Action Bar Style Generator
 
      Copyright (C) 2011 The Android Open Source Project
      Copyright (C) 2012 readyState Software Ltd
@@ -17,7 +18,7 @@
      limitations under the License.
 -->
 
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="Theme.Bookmeup_ActionBar" parent="@style/BookMeUp_Widgets">
         <item name="android:actionBarItemBackground">@drawable/selectable_background_bookmeup_actionbar</item>
@@ -29,10 +30,9 @@
         <item name="android:actionModeBackground">@drawable/cab_background_top_bookmeup_actionbar</item>
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_bookmeup_actionbar</item>
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Bookmeup_ActionBar</item>
-        
-                <!-- Light.DarkActionBar specific -->
-        <item name="android:actionBarWidgetTheme">@style/Theme.Bookmeup_ActionBar.Widget</item>
 
+        <!-- Light.DarkActionBar specific -->
+        <item name="android:actionBarWidgetTheme">@style/Theme.Bookmeup_ActionBar.Widget</item>
     </style>
 
     <style name="ActionBar.Solid.Bookmeup_ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
@@ -46,7 +46,7 @@
         <item name="android:background">@drawable/ab_transparent_bookmeup_actionbar</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Bookmeup_ActionBar</item>
     </style>
-    
+
     <!-- this style is only referenced in a Light.DarkActionBar based theme -->
     <style name="Theme.Bookmeup_ActionBar.Widget" parent="@style/Theme.AppCompat">
         <item name="android:popupMenuStyle">@style/PopupMenu.Bookmeup_ActionBar</item>
