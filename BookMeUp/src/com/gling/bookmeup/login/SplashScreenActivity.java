@@ -145,6 +145,8 @@ public class SplashScreenActivity extends Activity {
 				{
 					Log.i(TAG, "Fetching current business");
 					Business currentBusiness = businessParseObject.fetchIfNeeded();
+					Category category = currentBusiness.getCategory();
+					category.fetchIfNeeded();
 					Business.setCurrentBusiness(currentBusiness);
 				}
 				

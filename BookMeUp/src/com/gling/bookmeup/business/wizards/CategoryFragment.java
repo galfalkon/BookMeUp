@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.main.ParseHelper;
+import com.gling.bookmeup.main.ParseHelper.Category;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.tech.freak.wizardpager.R;
@@ -62,8 +63,15 @@ public class CategoryFragment extends SingleChoiceFragment {
 
 				@Override
 				public void done(Business business, ParseException e) {
-					final String category = business.getCategory().getName();
-					mPage.getData().putString(CategoryPage.SIMPLE_DATA_KEY, category);
+					String categoryString = "";
+					if (business != null) {
+						Category category = business.getCategory();
+						if (category != null) {						
+							categoryString = business.getCategory().getName();
+						}
+					}
+					final String finalCategoryString = categoryString;					
+					mPage.getData().putString(CategoryPage.SIMPLE_DATA_KEY, finalCategoryString);
 					mPage.notifyDataChanged();
 				}
 			});

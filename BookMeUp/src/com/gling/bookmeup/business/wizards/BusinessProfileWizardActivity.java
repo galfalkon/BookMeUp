@@ -135,7 +135,7 @@ public class BusinessProfileWizardActivity extends FragmentActivity implements
 								business.setDescription(description);
 							}
 
-							business.setCategory(mWizardModel
+							business.setCategoryByString(mWizardModel
 									.findByKey(
 											BusinessProfileWizardModel.CATEGORY)
 									.getData().getString(Page.SIMPLE_DATA_KEY));

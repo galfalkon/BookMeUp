@@ -1,6 +1,7 @@
 package com.gling.bookmeup.business;
 
-import com.gling.bookmeup.main.ParseHelper;
+import android.util.Log;
+
 import com.gling.bookmeup.main.ParseHelper.Category;
 import com.parse.FindCallback;
 import com.parse.ParseClassName;
@@ -59,16 +60,30 @@ public class Business extends ParseObject {
     	try {
 			category.fetchIfNeeded();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e(CLASS_NAME, "Coud not fetch category");
+			return null;
 		}
     	return category;
 //        return getString(Keys.CATEGORY);
     }
 	
-	public void setCategory(String category) {
+	public void setCategory(Category category) {
         put(Keys.CATEGORY, category);
     }
+	
+	public void setCategoryByString(String categoryString) {
+		final ParseQuery<Category> query = ParseQuery.getQuery(Category.class).whereEqualTo(
+                Category.Keys.NAME, categoryString);
+		
+		Category category;
+		try {
+			category = query.getFirst();
+		} catch (ParseException e) {
+			Log.e(CLASS_NAME, "Could not update category in DB");
+			return;
+		}
+		put(Keys.CATEGORY, category);
+	}
 	
 	public String getPhoneNumber() {
         return getString(Keys.PHONE_NUMBER);
