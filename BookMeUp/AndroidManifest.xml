@@ -35,9 +35,8 @@
         android:name="com.gling.bookmeup.main.BookMeUpApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:logo="@drawable/ic_launcher_bevel"
         android:label="@string/app_name"
-        
+        android:logo="@drawable/ic_launcher_bevel"
         android:theme="@style/Theme.Bookmeup_ActionBar" >
         <service android:name="com.parse.PushService" />
 
@@ -89,7 +88,13 @@
         </activity>
         <activity
             android:name="com.gling.bookmeup.business.BusinessCalendarActivity"
-            android:label="@string/title_activity_business_calendar" >
+            android:label="@string/title_activity_business_calendar"
+            android:parentActivityName="com.gling.bookmeup.business.BusinessMainActivity" >
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gling.bookmeup.business.BusinessMainActivity" />
         </activity>
         <activity
             android:name="com.gling.bookmeup.customer.CustomerCalendarActivity"
