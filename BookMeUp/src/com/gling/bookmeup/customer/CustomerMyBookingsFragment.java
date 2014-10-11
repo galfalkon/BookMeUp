@@ -68,10 +68,6 @@ public class CustomerMyBookingsFragment extends OnClickListenerFragment {
 				
 				for (Booking booking : retrievedBookings)
 				{
-					if (booking.getStatus() == Booking.Status.CANCELED)
-					{
-						continue;
-					}
 					_bookings.add(booking);
 				}
 				
@@ -114,9 +110,13 @@ public class CustomerMyBookingsFragment extends OnClickListenerFragment {
 				statusColor = getResources().getColor(android.R.color.holo_purple);
 				break;
 			case Booking.Status.APPROVED:
-			default:
 				status = getString(R.string.customer_my_bookings_booking_approved);
 				statusColor = getResources().getColor(android.R.color.holo_green_light);
+				break;
+			case Booking.Status.CANCELED:
+			default:
+				status = getString(R.string.customer_my_bookings_booking_canceled);
+				statusColor = getResources().getColor(android.R.color.holo_red_light);
 				break;
 			}
 	    	Card card = new BookingCard(getActivity(), cardTitle, status, statusColor); 
