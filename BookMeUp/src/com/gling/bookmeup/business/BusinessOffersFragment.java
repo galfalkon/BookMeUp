@@ -46,7 +46,7 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 		Log.i(TAG, "onCreateView");
 		final View view = super.onCreateView(inflater, container, savedInstanceState);
 		
-        _offersAdapter = GenericCardArrayAdapter.<Offer>create(getActivity(), _offers, new OfferCardsGenerator());
+        _offersAdapter = new GenericCardArrayAdapter<Offer>(getActivity(), _offers, new OfferCardsGenerator());
         _offersListView = (CardListViewWrapperView) view.findViewById(R.id.business_offers_listViewOffersNew);
         _offersListView.getListView().setAdapter(_offersAdapter);
         

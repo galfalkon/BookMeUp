@@ -40,7 +40,7 @@ public class CustomerMyBookingsFragment extends OnClickListenerFragment {
 		View view = super.onCreateView(inflater, container, savedInstanceState);
 		
 		_bookings = new ObservableArrayList<Booking>();
-		_bookingsCardAdapter = GenericCardArrayAdapter.<Booking>create(getActivity(), _bookings, new BookingCardGenerator());
+		_bookingsCardAdapter = new GenericCardArrayAdapter<Booking>(getActivity(), _bookings, new BookingCardGenerator());
 		
 		_bookingsListViewWrapperView = (CardListViewWrapperView) view.findViewById(R.id.customer_my_booking_listViewWrapper);
 		_bookingsListViewWrapperView.getListView().setAdapter(_bookingsCardAdapter);

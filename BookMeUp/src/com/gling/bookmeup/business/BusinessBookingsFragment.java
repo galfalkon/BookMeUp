@@ -50,8 +50,8 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
         
         _pendingBookings = new ObservableArrayList<Booking>();
         _approvedBookings = new ObservableArrayList<Booking>();
-        _pendingBookingsAdapter = GenericCardArrayAdapter.<Booking>create(getActivity(), _pendingBookings, new PendingBookingCardGenerator());
-        _approvedBookingsAdapter = GenericCardArrayAdapter.<Booking>create(getActivity(), _approvedBookings, new ApprovedBookingCardGenerator());
+        _pendingBookingsAdapter = new GenericCardArrayAdapter<Booking>(getActivity(), _pendingBookings, new PendingBookingCardGenerator());
+        _approvedBookingsAdapter = new GenericCardArrayAdapter<Booking>(getActivity(), _approvedBookings, new ApprovedBookingCardGenerator());
     }
     
     @Override
