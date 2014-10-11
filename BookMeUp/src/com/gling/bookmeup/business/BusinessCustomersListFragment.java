@@ -8,7 +8,7 @@ import it.gmariotti.cardslib.library.internal.CardExpand;
 import it.gmariotti.cardslib.library.internal.CardHeader;
 import it.gmariotti.cardslib.library.view.CardView;
 
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -42,6 +42,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.main.Constants;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper.Booking;
 import com.gling.bookmeup.main.ParseHelper.CustomerClass;
@@ -384,7 +385,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 			CardExpand expand = new CardExpand(context);
 			expand.setTitle(
 					"Total spendings: " + _totalSpendings + " NIS\n" +
-					"Last visit: " + new SimpleDateFormat("dd-MM-yy").format(_lastVisit));
+					"Last visit: " + Constants.DATE_FORMAT.format(_lastVisit));
 			
 			Card card = new Card(context);
 			card.addCardHeader(header);

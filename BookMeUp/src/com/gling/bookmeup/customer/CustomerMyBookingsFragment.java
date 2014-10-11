@@ -5,7 +5,7 @@ import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
 import it.gmariotti.cardslib.library.internal.CardExpand;
 import it.gmariotti.cardslib.library.internal.CardHeader;
 
-import java.text.SimpleDateFormat;
+
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.main.Constants;
 import com.gling.bookmeup.main.GenericCardArrayAdapter;
 import com.gling.bookmeup.main.ICardGenerator;
 import com.gling.bookmeup.main.IObservableList;
@@ -102,11 +103,11 @@ public class CustomerMyBookingsFragment extends OnClickListenerFragment {
 			cardHeader.setButtonExpandVisible(true);
 	    	
 			CardExpand expand = new CardExpand(getActivity());
-			expand.setTitle("Last updated: " + (new SimpleDateFormat("dd-MM-yy")).format(booking.getUpdatedAt()));
+			expand.setTitle("Last updated: " + Constants.DATE_FORMAT.format(booking.getUpdatedAt()));
 			
 			String cardTitle = 
 					"Service: " + booking.getServiceName() + "\n" +
-							"Date: " + (new SimpleDateFormat("dd-MM-yy")).format(booking.getDate()) + "\n";
+							"Date: " + Constants.DATE_FORMAT.format(booking.getDate()) + "\n";
 			String status;
 			int statusColor;
 			switch (booking.getStatus())

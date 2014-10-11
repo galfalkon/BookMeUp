@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.main.Constants;
 import com.gling.bookmeup.main.GenericCardArrayAdapter;
 import com.gling.bookmeup.main.ICardGenerator;
 import com.gling.bookmeup.main.IObservableList;
@@ -90,7 +91,7 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 			cardHeader.setButtonExpandVisible(true);
 			
 			CardExpand cardExpand = new CardExpand(getActivity());
-			cardExpand.setTitle("Valid until " + Offer.EXPIRATION_DATE_FORMAT.format(offer.getExpirationData()));
+			cardExpand.setTitle("Valid until " + Constants.DATE_FORMAT.format(offer.getExpirationData()));
 			
 			Card card = new Card(getActivity());
 			card.addCardHeader(cardHeader);

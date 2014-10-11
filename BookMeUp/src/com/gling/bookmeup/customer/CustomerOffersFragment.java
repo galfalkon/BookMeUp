@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.main.Constants;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
 import com.parse.ParseQuery;
@@ -107,7 +108,7 @@ public class CustomerOffersFragment extends OnClickListenerFragment {
 			final TextView txtDisount = (TextView) convertView.findViewById(R.id.customer_offer_list_item_txtDiscount);
 
 			txtBusinessName.setText(offer.getBusinessName());
-			txtExpiration.setText(ParseHelper.Offer.EXPIRATION_DATE_FORMAT.format(offer.getExpirationData()));
+			txtExpiration.setText(Constants.DATE_FORMAT.format(offer.getExpirationData()));
 			txtDisount.setText(offer.getDiscount() + "%");
 			
 			return convertView;

@@ -4,7 +4,7 @@ import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
 import it.gmariotti.cardslib.library.internal.CardHeader;
 
-import java.text.SimpleDateFormat;
+
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ViewSwitcher;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.main.Constants;
 import com.gling.bookmeup.main.GenericCardArrayAdapter;
 import com.gling.bookmeup.main.ICardGenerator;
 import com.gling.bookmeup.main.IObservableList;
@@ -184,7 +185,7 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 	    	card.addCardHeader(cardHeader);
 	    	card.setTitle(
 	    			"Service: " + booking.getServiceName() + "\n" +
-	    			"Date: " + (new SimpleDateFormat("dd-MM-yy")).format(booking.getDate()));
+	    			"Date: " + Constants.DATE_FORMAT.format(booking.getDate()));
 
 	    	card.setClickable(true);
 	    	card.setOnClickListener(new OnCardClickListener() 
@@ -240,7 +241,7 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 	    	card.addCardHeader(cardHeader);
 	    	card.setTitle(
 	    			"Service: " + booking.getServiceName() + "\n" +
-	    			"Date: " + (new SimpleDateFormat("dd-MM-yy")).format(booking.getDate()));
+	    			"Date: " + Constants.DATE_FORMAT.format(booking.getDate()));
 
 	    	card.setClickable(true);
 	    	card.setOnClickListener(new OnCardClickListener() {

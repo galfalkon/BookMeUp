@@ -1,6 +1,6 @@
 package com.gling.bookmeup.main;
 
-import java.text.SimpleDateFormat;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -212,8 +212,6 @@ public class ParseHelper {
 			public static final String DURATION = "duration";
 			public static final String EXPIRATION_DATE = "expirationData";
 		}
-		
-		public static final SimpleDateFormat EXPIRATION_DATE_FORMAT = new SimpleDateFormat("dd-MM-yy");
 		
 		public Offer() {
 			// Do not modify the ParseObject
