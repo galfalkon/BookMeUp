@@ -47,4 +47,5 @@ public class Customer extends ParseObject {
     public void setUser(ParseUser user) {
         put(Keys.USER, user);
     }
+    
 }
