@@ -9,10 +9,7 @@ import android.view.MenuItem;
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.login.LoginMainActivity;
 import com.gling.bookmeup.main.NavigationDrawerActivity;
-import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.PushUtils;
-import com.parse.GetCallback;
-import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -26,36 +23,38 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 		Log.i(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 
-		ParseHelper.fetchCustomer(new GetCallback<Customer>() {
-			@Override
-			public void done(Customer customer, ParseException e) {
-				if (e != null) {
-					Log.e(TAG, "Exception: " + e.getMessage());
-					ParseUser.logOut();
-					Intent intent = new Intent(getApplicationContext(),
-							LoginMainActivity.class);
-					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-							| Intent.FLAG_ACTIVITY_CLEAR_TASK);
-					startActivity(intent);
-				}
-
-				PushUtils.PushNotificationType pushType = PushUtils.PushNotificationType
-						.getFromIntent(getIntent());
-				if (pushType != null) {
-					Log.i(TAG, pushType.toString());
-					switch (pushType) {
-					case MESSAGE_FROM_BUSINESS:
-						Crouton.showText(getParent(), "Not implemented", Style.ALERT);
-						break;
-					case OFFER_FROM_BUSINESS:
-						Crouton.showText(getParent(), "Not implemented", Style.ALERT);
-						break;
-					default:
-						Log.e(TAG, "Invalid push type");
-					}
-				}
+		if (Customer.getCurrentCustomer() == null)
+		{
+			Log.e(TAG, "No current customer");
+			
+			ParseUser.logOut();
+			Intent intent = new Intent(getApplicationContext(),
+					LoginMainActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+			startActivity(intent);
+			return;
+		}
+		
+		PushUtils.PushNotificationType pushType = PushUtils.PushNotificationType
+				.getFromIntent(getIntent());
+		if (pushType != null) {
+			Log.i(TAG, String.format("pushType = %s", pushType.toString()));
+			
+			switch (pushType) {
+			case MESSAGE_FROM_BUSINESS:
+				Crouton.showText(this, "Not implemented", Style.ALERT);
+				break;
+			case OFFER_FROM_BUSINESS:
+				Crouton.showText(this, "Not implemented", Style.ALERT);
+				break;
+			case BOOKING_APPROVED:
+			case BOOKING_CANCELED:
+				onNavigationDrawerItemSelected(3);
+				break;
+			default:
+				Log.e(TAG, "Invalid push type");
 			}
-		});
+		}
 	}
 	
 	@Override

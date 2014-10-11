@@ -14,6 +14,7 @@ import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessMainActivity;
 import com.gling.bookmeup.customer.Customer;
 import com.gling.bookmeup.customer.CustomerMainActivity;
+import com.gling.bookmeup.main.ParseHelper.Booking;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
@@ -34,6 +35,8 @@ public class PushUtils {
 	{
 		MESSAGE_FROM_BUSINESS("com.gling.bookmeup.main.intent.MESSAGE_FROM_BUSINESS", CustomerMainActivity.class),
 		OFFER_FROM_BUSINESS("com.gling.bookmeup.main.intent.OFFER_FROM_BUSINESS", CustomerMainActivity.class),
+		BOOKING_APPROVED("com.gling.bookmeup.main.intent.BOOKING_APPROVED", CustomerMainActivity.class),
+		BOOKING_CANCELED("com.gling.bookmeup.main.intent.BOOKING_CANCELED", CustomerMainActivity.class),
 		
 		NEW_BOOKING_REQUEST("com.gling.bookmeup.main.intent.NEW_BOOKING_REQUEST", BusinessMainActivity.class);
 		
@@ -140,12 +143,58 @@ public class PushUtils {
 		sendPushInBackground(installationQuery, data, callback);
 	}
 	
+	public static void notifyCustomerAboutApprovedBooking(Booking booking, SendCallback callback)
+	{
+		Log.i(TAG, "notifyCustomerAboutApprovedBooking");
+		
+		String alert = booking.getBusinessName() + " approved your booking request";
+		JSONObject data = generatePushData(alert, PushNotificationType.BOOKING_APPROVED);
+		if (data == null)
+		{
+			return;
+		}
+		
+		ParseQuery<ParseInstallation> installationQuery = generateInstallationQueryForCustomerId(booking.getCustomerId());
+		sendPushInBackground(installationQuery, data, callback);
+	}
+	
+	public static void notifyCustomerAboutCanceledBooking(Booking booking, SendCallback callback)
+	{
+		Log.i(TAG, "notifyCustomerAboutCanceledBooking");
+		
+		String alert = booking.getBusinessName() + " canceled your booking";
+		JSONObject data = generatePushData(alert, PushNotificationType.BOOKING_CANCELED);
+		if (data == null)
+		{
+			return;
+		}
+		
+		ParseQuery<ParseInstallation> installationQuery = generateInstallationQueryForCustomerId(booking.getCustomerId());
+		sendPushInBackground(installationQuery, data, callback);
+	}
+	
 	private static ParseQuery<ParseInstallation> generateInstallationQueryForCustomerIds(List<String> customerIds)
 	{
 		Log.i(TAG, "generateInstallationQueryForCustomerIds");
 		
 		ParseQuery<Customer> customerQuery = new ParseQuery<Customer>(Customer.CLASS_NAME).
 				whereContainedIn(Customer.Keys.ID, customerIds);
+		
+		ParseQuery<ParseUser> userQuery = ParseUser.getQuery().
+				whereMatchesQuery(ParseHelper.User.Keys.CUSTOMER_POINTER, customerQuery);
+		
+		ParseQuery<ParseInstallation> installationQuery = ParseInstallation.getQuery().
+				whereMatchesQuery(ParseHelper.Installation.Keys.USER_POINTER, userQuery);
+		
+		return installationQuery;
+	}
+	
+	private static ParseQuery<ParseInstallation> generateInstallationQueryForCustomerId(String customerId)
+	{
+		Log.i(TAG, "generateInstallationQueryForCustomerIds");
+		
+		ParseQuery<Customer> customerQuery = new ParseQuery<Customer>(Customer.CLASS_NAME).
+				whereEqualTo(Customer.Keys.ID, customerId);
 		
 		ParseQuery<ParseUser> userQuery = ParseUser.getQuery().
 				whereMatchesQuery(ParseHelper.User.Keys.CUSTOMER_POINTER, customerQuery);

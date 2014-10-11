@@ -26,11 +26,13 @@ import com.gling.bookmeup.main.ObservableArrayList;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper.Booking;
 import com.gling.bookmeup.main.ParseHelper.Booking.Status;
+import com.gling.bookmeup.main.PushUtils;
 import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
 import com.gling.bookmeup.main.views.CardListViewWrapperView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.SendCallback;
 
 public class BusinessBookingsFragment extends OnClickListenerFragment {
 
@@ -203,6 +205,18 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 		                    _approvedBookings.add(booking);
 		                    updatePendingBookingsTitleAndDisplayMode();
 		                    updateApprovedBookingsTitleAndDisplayMode();
+		                    
+		                    PushUtils.notifyCustomerAboutApprovedBooking(booking, new SendCallback() {
+								@Override
+								public void done(ParseException e) {
+									Log.i(TAG, "notifyCustomerAboutApprovedBooking done");
+									if (e != null)
+									{
+										Log.e(TAG, "Exception: " + e.getMessage());
+										return;
+									}
+								}
+							});
 		                }
 		            })
 		            .setNegativeButton(R.string.cancel, null);
@@ -244,6 +258,18 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 		                    
 		                    _approvedBookings.remove(booking);
 		                    updateApprovedBookingsTitleAndDisplayMode();
+		                    
+		                    PushUtils.notifyCustomerAboutCanceledBooking(booking, new SendCallback() {
+								@Override
+								public void done(ParseException e) {
+									Log.i(TAG, "notifyCustomerAboutCanceledBooking done");
+									if (e != null)
+									{
+										Log.e(TAG, "Exception: " + e.getMessage());
+										return;
+									}
+								}
+							});
 		                }
 		            })
 		            .setNegativeButton(R.string.cancel, null);
