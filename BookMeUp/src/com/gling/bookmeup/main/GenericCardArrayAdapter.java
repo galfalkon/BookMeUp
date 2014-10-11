@@ -21,11 +21,13 @@ public class GenericCardArrayAdapter<T> extends CardArrayAdapter
 	private final List<Card> _cards;
 	private final ICardGenerator<T> _cardFactory;
 	
-	public GenericCardArrayAdapter(Context context, IObservableList<T> items, ICardGenerator<T> cardFactory) {
+	public GenericCardArrayAdapter(Context context, IObservableList<T> items, ICardGenerator<T> cardFactory) 
+	{
 		this(context, new ArrayList<Card>(), items, cardFactory);
 	}
 	
-	private GenericCardArrayAdapter(Context context, List<Card> cards, IObservableList<T> items, ICardGenerator<T> cardFactory) {
+	private GenericCardArrayAdapter(Context context, List<Card> cards, IObservableList<T> items, ICardGenerator<T> cardFactory) 
+	{
 		super(context, cards);
 		_items = items;
 		_cards = cards;

@@ -43,7 +43,7 @@ public class CustomerMyBookingsFragment extends OnClickListenerFragment {
 		_bookingsCardAdapter = new GenericCardArrayAdapter<Booking>(getActivity(), _bookings, new BookingCardGenerator());
 		
 		_bookingsListViewWrapperView = (CardListViewWrapperView) view.findViewById(R.id.customer_my_booking_listViewWrapper);
-		_bookingsListViewWrapperView.getListView().setAdapter(_bookingsCardAdapter);
+		_bookingsListViewWrapperView.setAdapter(_bookingsCardAdapter);
 
 		ParseQuery<Booking> bookingsQuery = new ParseQuery<Booking>(Booking.CLASS_NAME)
 				.whereEqualTo(Booking.Keys.CUSTOMER_POINTER, Customer.getCurrentCustomer())

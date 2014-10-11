@@ -140,19 +140,19 @@ public class SplashScreenActivity extends Activity {
 			try 
 			{
 				// Fetch current business
-				Log.i(TAG, "Fetching current business");
 				ParseObject businessParseObject = user.getParseObject(User.Keys.BUSINESS_POINTER);
 				if (businessParseObject != null) 
 				{
+					Log.i(TAG, "Fetching current business");
 					Business currentBusiness = businessParseObject.fetchIfNeeded();
 					Business.setCurrentBusiness(currentBusiness);
 				}
 				
 				// Fetch current customer
-				Log.i(TAG, "Fetching current customer");
 				ParseObject customerParseObject = user.getParseObject(User.Keys.CUSTOMER_POINTER);
 				if (customerParseObject != null) 
 				{
+					Log.i(TAG, "Fetching current customer");
 					Customer currentCustomer = customerParseObject.fetchIfNeeded();
 					Customer.setCurrentCustomer(currentCustomer);
 				}

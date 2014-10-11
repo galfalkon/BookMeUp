@@ -76,8 +76,8 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		
 		View view = super.onCreateView(inflater, container, savedInstanceState);
 		_customerCardListView = (CardListViewWrapperView) view.findViewById(R.id.business_customer_list_listViewCustomers);
-		_customerCardListView.getListView().setAdapter(_customerCardsAdapter);
-		_customerCardListView.getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		_customerCardListView.setAdapter(_customerCardsAdapter);
+		_customerCardListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 		
 		EditText edtSearch = (EditText)view.findViewById(R.id.business_customer_list_edtSearch);
 		edtSearch.addTextChangedListener(this);

@@ -8,8 +8,10 @@ import android.widget.ListView;
  * A view that wraps a {@link ListView} that allows showing 'loading' indication. 
  * @author Gal Falkon
  */
-public class ListViewWrapperView extends BaseListViewWrapperView<ListView> {
-	public ListViewWrapperView(Context context, AttributeSet attrs) {
+public class ListViewWrapperView extends BaseListViewWrapperView<ListView> 
+{
+	public ListViewWrapperView(Context context, AttributeSet attrs) 
+	{
 		super(context, attrs, new ListView(context));
 	}
 }

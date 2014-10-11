@@ -63,10 +63,10 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
         _btnApproved = (Button)view.findViewById(R.id.business_bookings_btnApproved);
         
         _pendingBookingsListView = (CardListViewWrapperView)view.findViewById(R.id.business_bookings_cardListViewPendingBookings);
-        _pendingBookingsListView.getListView().setAdapter(_pendingBookingsAdapter);
+        _pendingBookingsListView.setAdapter(_pendingBookingsAdapter);
         
         _approvedBookingsListView = (CardListViewWrapperView)view.findViewById(R.id.business_bookings_cardListViewApprovedBookings);
-        _approvedBookingsListView.getListView().setAdapter(_approvedBookingsAdapter);
+        _approvedBookingsListView.setAdapter(_approvedBookingsAdapter);
         
         _viewSwitcher = (ViewSwitcher)view.findViewById(R.id.business_bookings_viewSwitcher); 
         

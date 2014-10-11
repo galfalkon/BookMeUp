@@ -48,7 +48,7 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 		
         _offersAdapter = new GenericCardArrayAdapter<Offer>(getActivity(), _offers, new OfferCardsGenerator());
         _offersListView = (CardListViewWrapperView) view.findViewById(R.id.business_offers_listViewOffersNew);
-        _offersListView.getListView().setAdapter(_offersAdapter);
+        _offersListView.setAdapter(_offersAdapter);
         
         ParseQuery<Offer> parseQuery = new ParseQuery<Offer>(Offer.class)
 	    		.whereEqualTo(ParseHelper.Offer.Keys.BUSINESS_POINTER, Business.getCurrentBusiness());

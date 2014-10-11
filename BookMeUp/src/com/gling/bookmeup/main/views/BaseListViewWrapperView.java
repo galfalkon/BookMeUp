@@ -5,10 +5,12 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,11 +28,14 @@ import com.gling.bookmeup.R;
  */
 public abstract class BaseListViewWrapperView<T extends ListView> extends ViewFlipper 
 {
-	public static enum DisplayMode {
+	private static final String TAG = "BaseListViewWrapperView";
+	
+	public static enum DisplayMode 
+	{
 		LIST_VIEW, LOADING_VIEW, NO_ITEMS_VIEW;
 	}
 
-	private final T _listView;
+	protected final T _listView;
 	private final ProgressBar _progressBar;
 	private final String _noItemsText;
 	private final TextView _noItemsView;
@@ -85,6 +90,13 @@ public abstract class BaseListViewWrapperView<T extends ListView> extends ViewFl
 		super.dispatchDraw(canvas);
 	}
 	
+	public void setAdapter(ListAdapter listAdapter)
+	{
+		Log.i(TAG, "setAdapter");
+		
+		_listView.setAdapter(listAdapter);
+	}
+	
 	public DisplayMode getDisplayMode()
 	{
 		switch (getDisplayedChild())
@@ -101,6 +113,8 @@ public abstract class BaseListViewWrapperView<T extends ListView> extends ViewFl
 	
 	public void setDisplayMode(DisplayMode mode)
 	{
+		Log.i(TAG, String.format("setDisplayMode(%s)", mode.toString()));
+		
 		if (mode == getDisplayMode())
 		{
 			return;
@@ -118,10 +132,5 @@ public abstract class BaseListViewWrapperView<T extends ListView> extends ViewFl
 			setDisplayedChild(2);
 			break;
 		}
-	}
-	
-	public T getListView()
-	{
-		return _listView;
 	}
 }
