@@ -53,14 +53,14 @@
     <!-- Customer Activity -->
     <string name="customer_activity_title">BookMeUp! - For Customers</string>
     <string-array name="customer_navigation_drawer_items">
-        <item>Popular</item>
+        <item>All Businesses</item>
         <item>History</item>
         <item>Favourites</item>
         <item>My Bookings</item>
         <item>Offers</item>
     </string-array>
 
-    <!-- Customer popular -->
+    <!-- Customer All Businesses -->
     <string name="customer_business_list_search_edtSearchHint">Search for...</string>
     <string name="logout">Logout</string>
 

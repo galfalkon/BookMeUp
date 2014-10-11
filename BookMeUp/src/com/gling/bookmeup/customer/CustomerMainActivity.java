@@ -94,7 +94,7 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 	protected Fragment getSectionFragment(int position) {
 		switch (position) {
 		case 0:
-			return new CustomerPopularFragment();
+			return new CustomerAllBusinessesFragment();
 		case 1:
 			return new CustomerHistoryFragment();
 		case 2:
