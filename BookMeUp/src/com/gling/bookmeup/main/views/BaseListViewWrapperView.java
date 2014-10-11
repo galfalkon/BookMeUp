@@ -85,8 +85,27 @@ public abstract class BaseListViewWrapperView<T extends ListView> extends ViewFl
 		super.dispatchDraw(canvas);
 	}
 	
+	public DisplayMode getDisplayMode()
+	{
+		switch (getDisplayedChild())
+		{
+		case 0:
+			return DisplayMode.LIST_VIEW;
+		case 1:
+			return DisplayMode.LOADING_VIEW;
+		case 2:
+		default:
+			return DisplayMode.NO_ITEMS_VIEW;
+		}
+	}
+	
 	public void setDisplayMode(DisplayMode mode)
 	{
+		if (mode == getDisplayMode())
+		{
+			return;
+		}
+		
 		switch (mode)
 		{
 		case LIST_VIEW:
