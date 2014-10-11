@@ -26,8 +26,8 @@ import com.gling.bookmeup.main.ObservableArrayList;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper.Booking;
 import com.gling.bookmeup.main.ParseHelper.Booking.Status;
-import com.gling.bookmeup.main.views.CardListViewWrapperView;
 import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
+import com.gling.bookmeup.main.views.CardListViewWrapperView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -126,13 +126,10 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
                 	}
                 }
                 
-                updatePendingBookingsTitle();
-                updateApprovedBookingsTitle();
+                updatePendingBookingsTitleAndDisplayMode();
+                updateApprovedBookingsTitleAndDisplayMode();
                 _pendingBookingsAdapter.notifyDataSetChanged();
                 _approvedBookingsAdapter.notifyDataSetChanged();
-                
-                _pendingBookingsListView.setDisplayMode(DisplayMode.LIST_VIEW);
-                _approvedBookingsListView.setDisplayMode(DisplayMode.LIST_VIEW);
             }
         });
     }
@@ -153,14 +150,24 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
     	}
     }
     
-    private void updatePendingBookingsTitle()
+    private void updatePendingBookingsTitleAndDisplayMode()
     {
+    	// Update title
     	_btnPending.setText(String.format("%s (%d)",getString(R.string.business_bookings_list_pending_header), _pendingBookings.size()));
+
+    	// Update display mode
+    	DisplayMode newDisplayMode = _pendingBookings.isEmpty()? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;
+    	_pendingBookingsListView.setDisplayMode(newDisplayMode);
     }
     
-    private void updateApprovedBookingsTitle()
+    private void updateApprovedBookingsTitleAndDisplayMode()
     {
+    	// Update title
     	_btnApproved.setText(String.format("%s (%d)",getString(R.string.business_bookings_list_approved_header), _approvedBookings.size()));
+    	
+    	// Update display mode
+    	DisplayMode newDisplayMode = _approvedBookings.isEmpty()? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;
+    	_approvedBookingsListView.setDisplayMode(newDisplayMode);
     }
     
     private class PendingBookingCardGenerator implements ICardGenerator<Booking>
@@ -194,8 +201,8 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 		                    
 		                    _pendingBookings.remove(booking);
 		                    _approvedBookings.add(booking);
-		                    updatePendingBookingsTitle();
-		                    updateApprovedBookingsTitle();
+		                    updatePendingBookingsTitleAndDisplayMode();
+		                    updateApprovedBookingsTitleAndDisplayMode();
 		                }
 		            })
 		            .setNegativeButton(R.string.cancel, null);
@@ -236,7 +243,7 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 		                    booking.saveInBackground();
 		                    
 		                    _approvedBookings.remove(booking);
-		                    updateApprovedBookingsTitle();
+		                    updateApprovedBookingsTitleAndDisplayMode();
 		                }
 		            })
 		            .setNegativeButton(R.string.cancel, null);

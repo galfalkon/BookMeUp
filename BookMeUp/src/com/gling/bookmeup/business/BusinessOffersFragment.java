@@ -58,14 +58,15 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 			@Override
 			public void done(List<Offer> objects, ParseException e) {
 				Log.i(TAG, "findInBackground done");
-				_offersListView.setDisplayMode(DisplayMode.LIST_VIEW);
 				if (e != null)
 				{
 					Log.e(TAG, "Exception: " + e.getMessage());
 					return;
 				}
-				
 				_offers.addAll(objects);
+				
+				DisplayMode newDisplayMode = _offers.isEmpty()? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;  
+				_offersListView.setDisplayMode(newDisplayMode);
 			}
 		});
 		

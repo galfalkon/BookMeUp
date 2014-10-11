@@ -60,7 +60,6 @@ public class CustomerMyBookingsFragment extends OnClickListenerFragment {
 			public void done(List<Booking> retrievedBookings, ParseException e) 
 			{
 				Log.i(TAG, "bookingsQuery.findInBackground done");
-				_bookingsListViewWrapperView.setDisplayMode(DisplayMode.LIST_VIEW);
 				if (e != null)
 				{
 					Log.e(TAG, "Exception: " + e.getMessage());
@@ -75,6 +74,9 @@ public class CustomerMyBookingsFragment extends OnClickListenerFragment {
 					}
 					_bookings.add(booking);
 				}
+				
+				DisplayMode newDisplayMode = _bookings.isEmpty()? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;
+				_bookingsListViewWrapperView.setDisplayMode(newDisplayMode);
 			}
 		});
 		

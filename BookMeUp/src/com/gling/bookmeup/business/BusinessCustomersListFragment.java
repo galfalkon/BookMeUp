@@ -100,7 +100,6 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		query.findInBackground(new FindCallback<Booking>() {
 			@Override
 			public void done(List<Booking> objects, ParseException e) {
-				_customerCardListView.setDisplayMode(DisplayMode.LIST_VIEW);
 				if (e != null) {
 					Log.e(TAG, "Exception: " + e.getMessage());
 					return;
@@ -127,8 +126,10 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 						_allCustomers.put(currentCustomer._id, currentCustomer);
 					}
 				}
-				
 				_customerCardsAdapter.notifyDataSetChanged();
+				
+				DisplayMode newDisplayMode = _allCustomers.isEmpty()? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;  
+				_customerCardListView.setDisplayMode(newDisplayMode);
 			}
 		});
 		

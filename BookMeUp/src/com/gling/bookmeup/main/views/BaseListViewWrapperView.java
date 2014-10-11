@@ -3,7 +3,6 @@ package com.gling.bookmeup.main.views;
 import it.gmariotti.cardslib.library.view.CardListView;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -78,16 +77,6 @@ public abstract class BaseListViewWrapperView<T extends ListView> extends ViewFl
 		noItemsViewLayoutParams.gravity = Gravity.CENTER;
 		_noItemsView.setLayoutParams(noItemsViewLayoutParams);
 		addView(_noItemsView);
-	}
-	
-	@Override
-	protected void dispatchDraw(Canvas canvas) 
-	{
-		if (getDisplayedChild() == 0 && _listView.getCount() == 0)
-		{
-			setDisplayMode(DisplayMode.NO_ITEMS_VIEW);
-		}
-		super.dispatchDraw(canvas);
 	}
 	
 	public void setAdapter(ListAdapter listAdapter)
