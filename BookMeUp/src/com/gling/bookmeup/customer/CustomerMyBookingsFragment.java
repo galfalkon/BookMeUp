@@ -1,6 +1,8 @@
 package com.gling.bookmeup.customer;
 
 import it.gmariotti.cardslib.library.internal.Card;
+import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
+import it.gmariotti.cardslib.library.internal.CardExpand;
 import it.gmariotti.cardslib.library.internal.CardHeader;
 
 import java.text.SimpleDateFormat;
@@ -21,8 +23,8 @@ import com.gling.bookmeup.main.ObservableArrayList;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.ParseHelper.Booking;
-import com.gling.bookmeup.main.views.CardListViewWrapperView;
 import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
+import com.gling.bookmeup.main.views.CardListViewWrapperView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -97,7 +99,11 @@ public class CustomerMyBookingsFragment extends OnClickListenerFragment {
 		{
 			CardHeader cardHeader = new CardHeader(getActivity());
 			cardHeader.setTitle(booking.getBusinessName());
+			cardHeader.setButtonExpandVisible(true);
 	    	
+			CardExpand expand = new CardExpand(getActivity());
+			expand.setTitle("Last updated: " + (new SimpleDateFormat("dd-MM-yy")).format(booking.getUpdatedAt()));
+			
 			String cardTitle = 
 					"Service: " + booking.getServiceName() + "\n" +
 							"Date: " + (new SimpleDateFormat("dd-MM-yy")).format(booking.getDate()) + "\n";
@@ -121,7 +127,15 @@ public class CustomerMyBookingsFragment extends OnClickListenerFragment {
 			}
 	    	Card card = new BookingCard(getActivity(), cardTitle, status, statusColor); 
 	    	card.addCardHeader(cardHeader);
+	    	card.addCardExpand(expand);
 			card.setTitle(cardTitle);
+			card.setOnClickListener(new OnCardClickListener() {
+				
+				@Override
+				public void onClick(Card card, View view) {
+					card.doToogleExpand();
+				}
+			});
 
 	    	return card;
 		}
