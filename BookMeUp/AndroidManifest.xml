@@ -96,7 +96,9 @@
             android:name="com.gling.bookmeup.customer.CustomerCalendarActivity"
             android:label="@string/title_activity_customer_calendar" >
         </activity>
-        <activity android:name="com.gling.bookmeup.main.PushHandlerActivity" >
+        <activity 
+            android:name="com.gling.bookmeup.main.PushHandlerActivity" 
+            android:noHistory="true">
         </activity>
         <activity
             android:name="com.gling.bookmeup.main.NavigationDrawerActivity"
