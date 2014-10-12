@@ -55,11 +55,11 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 		_businessesCardAdapter = new BusinessCardArrayMultiChoiceAdapter(getActivity(), _filteredBusinesses);
 		
 		View view = super.onCreateView(inflater, container, savedInstanceState);
-		_businessesCardListView = (CardListViewWrapperView) view.findViewById(R.id.customer_favourites_business_list_listViewBusinesses);
+		_businessesCardListView = (CardListViewWrapperView) view.findViewById(R.id.customer_history_business_list_listViewBusinesses);
 		_businessesCardListView.setAdapter(_businessesCardAdapter);
 		_businessesCardListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 
-		EditText edtSearch = (EditText)view.findViewById(R.id.customer_favourites_business_list_edtSearch);
+		EditText edtSearch = (EditText)view.findViewById(R.id.customer_history_business_list_edtSearch);
 		edtSearch.addTextChangedListener(this);
 
 		ParseQuery<Booking> query = new ParseQuery<Booking>(Booking.CLASS_NAME).
@@ -126,7 +126,7 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 	
 	@Override
 	protected int getFragmentLayoutId() {
-		return R.layout.customer_favourites_fragment;
+		return R.layout.customer_history_fragment;
 	}
 		
 	@Override

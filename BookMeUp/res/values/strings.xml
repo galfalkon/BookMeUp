@@ -71,7 +71,7 @@
     <string name="customer_main_screen_btnGaragesText">Garages</string>
 
     <!-- Customer History -->
-
+	<string name="customer_history_business_list_search_edtSearchHint">Search for...</string>
 
     <!-- Customer Favourite -->
     <string name="customer_favourites_business_list_search_edtSearchHint">Search for...</string>
