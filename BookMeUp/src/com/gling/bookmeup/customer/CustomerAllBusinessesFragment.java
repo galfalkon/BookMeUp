@@ -46,19 +46,6 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
 		Log.i(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		
-//		//TODO: delete
-//		ParseQuery<Customer> customerQuery = new ParseQuery<Customer>(Customer.CLASS_NAME);
-//		customerQuery.whereEqualTo(Customer.Keys.NAME, "gefen");
-//		customerQuery.include(Customer.Keys.FAVOURITES);
-//		try {
-//			List<Customer> customers = customerQuery.find();
-//			for (int i = 0; i < customers.size(); i++) {
-//				_customer = customers.get(i);
-//			}
-//		} catch (ParseException e1) {
-//		}
-//		//TODO: delete
-
 //		_customer = ((CustomerMainActivity)getActivity()).getCustomer();
 		
 		_allBusinesses = new ArrayList<Business>();

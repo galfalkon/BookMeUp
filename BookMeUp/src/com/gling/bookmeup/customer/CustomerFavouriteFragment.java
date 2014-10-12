@@ -45,18 +45,6 @@
 //		Log.i(TAG, "onCreate");
 //		super.onCreate(savedInstanceState);
 //		
-////		//TODO: delete
-////		ParseQuery<Customer> customerQuery = new ParseQuery<Customer>(Customer.CLASS_NAME);
-////		customerQuery.whereEqualTo(Customer.Keys.NAME, "gefen");
-////		customerQuery.include(Customer.Keys.FAVOURITES);
-////		try {
-////			List<Customer> customers = customerQuery.find();
-////			for (int i = 0; i < customers.size(); i++) {
-////				_customer = customers.get(i);
-////			}
-////		} catch (ParseException e1) {
-////		}
-////		//TODO: delete
 //
 //		_allBusinesses = new ArrayList<Business>();
 //		_filteredBusinesses = new ArrayList<Business>();
@@ -219,10 +207,9 @@
 package com.gling.bookmeup.customer;
 
 import it.gmariotti.cardslib.library.internal.Card;
-import it.gmariotti.cardslib.library.internal.Card.OnLongCardClickListener;
-import it.gmariotti.cardslib.library.internal.CardArrayMultiChoiceAdapter;
+import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
+import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import it.gmariotti.cardslib.library.internal.CardHeader;
-import it.gmariotti.cardslib.library.view.CardView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -233,10 +220,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -250,10 +234,14 @@ import com.gling.bookmeup.main.views.CardListViewWrapperView;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+
 public class CustomerFavouriteFragment extends OnClickListenerFragment implements TextWatcher {
 	private static final String TAG = "CustomerMainActivity";
 	
 	private HashMap<String, Business> _allBusinesses;
+	private HashMap<String, com.gling.bookmeup.business.Business> _allParseBusinesses;
 	private BusinessCardArrayMultiChoiceAdapter _businessesCardAdapter;
 	private List<Card> _filteredBusinesses;
 	
@@ -265,6 +253,7 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 		Log.i(TAG, "onCreateView");
 
 		_allBusinesses = new HashMap<String, Business>();
+		_allParseBusinesses = new HashMap<String, com.gling.bookmeup.business.Business>();
 		_filteredBusinesses = new ArrayList<Card>();
 		_businessesCardAdapter = new BusinessCardArrayMultiChoiceAdapter(getActivity(), _filteredBusinesses);
 		
@@ -279,7 +268,6 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 		_businessesCardListView.setDisplayMode(DisplayMode.LOADING_VIEW);
 		@SuppressWarnings("unchecked")
 		ArrayList<ParseObject> favouriteBusinesses = (ArrayList<ParseObject>) Customer.getCurrentCustomer().get(Customer.Keys.FAVOURITES);
-		Log.e("gefen - customer", (((Boolean)(favouriteBusinesses==null)).toString()));
 		for (ParseObject parseObject : favouriteBusinesses) {
 			if (parseObject instanceof com.gling.bookmeup.business.Business) {
 				com.gling.bookmeup.business.Business businessItem = (com.gling.bookmeup.business.Business) parseObject;
@@ -289,12 +277,26 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 					
 					Business currentBusiness = new Business(businessItem);
 					Card businessCard = currentBusiness.toCard(getActivity());
-					businessCard.setOnLongClickListener(new OnLongCardClickListener() {
+//					businessCard.setOnLongClickListener(new OnLongCardClickListener() {
+//						
+//						@Override
+//						public boolean onLongClick(Card arg0, View arg1) {
+//							return _businessesCardAdapter.
+//						}
+//					});
+					businessCard.setOnClickListener(new OnCardClickListener() {
 						
 						@Override
-						public boolean onLongClick(Card arg0, View arg1) {
-							// TODO Auto-generated method stub
-							return false;
+						public void onClick(Card businessCard, View arg1) {
+							if (!_allParseBusinesses.containsKey(businessCard.getId())) {
+								Log.i(TAG, "Business Dialog - could not find business");
+								Crouton.showText(getActivity(), "Could not find business", Style.ALERT);
+								return;
+							}
+							com.gling.bookmeup.business.Business business = _allParseBusinesses.get(businessCard.getId());
+							Log.i(TAG, "Business Dialog - " + business.getName());
+							CustomerChooseBusinessDialogs dialog = new CustomerChooseBusinessDialogs();
+							dialog.createBusinessProfileDialog(business, getActivity(), getResources(), Customer.getCurrentCustomer());
 						}
 					});
 					
@@ -302,6 +304,12 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 						_filteredBusinesses.add(businessCard);
 						_allBusinesses.put(currentBusiness._id, currentBusiness);
 					}
+					
+					String id = businessItem.getObjectId();
+					if (!_allParseBusinesses.containsKey(id)) {
+						_allParseBusinesses.put(id, businessItem);
+					}
+					
 				} catch (ParseException e) {
 					Log.e(TAG, "Exception: " + e.getMessage());
 				}
@@ -351,7 +359,6 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 //					businessItem = (Business) businessObject;
 //					_allBusinesses.add(businessItem);
 //				} catch (ParseException e) {
-//					// TODO Auto-generated catch block
 //					e.printStackTrace();
 //				}
 //			}
@@ -386,7 +393,6 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 		public Business(com.gling.bookmeup.business.Business business) {
 			_id = business.getObjectId();
 			_businessName = business.getName();
-			// TODO Auto-generated constructor stub
 		}
 
 		@Override
@@ -402,10 +408,11 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 		public Card toCard(Context context) {
 			CardHeader header = new CardHeader(context);
 			header.setTitle(_businessName);
-			header.setButtonExpandVisible(true);
+			header.setButtonExpandVisible(false);
 			
 			Card card = new Card(context);
 			card.addCardHeader(header);
+			card.setId(_id);
 			
 			return card;
 		}
@@ -443,7 +450,7 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 		}
 	}
 	
-	private class BusinessCardArrayMultiChoiceAdapter extends CardArrayMultiChoiceAdapter {
+	private class BusinessCardArrayMultiChoiceAdapter extends CardArrayAdapter {//CardArrayMultiChoiceAdapter {
 
 		private BusinessFilter _businessFilter;
 
@@ -464,29 +471,29 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 //            return true;
 //        }
 		
-		@Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
+//		@Override
+//        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+//            return false;
+//        }
 		
-		@Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-        	Log.i(TAG, "onActionItemClicked");
-			switch (item.getItemId())
-        	{
-//        	case R.id.busienss_customer_list_action_bar_menu_send_offer:
-//        		handleSendOfferToSelectedClients();
-//        		mode.finish();
-//        		return true;
-        	}
-//        	
-        	return false;
-        }
+//		@Override
+//        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+//        	Log.i(TAG, "onActionItemClicked");
+//			switch (item.getItemId())
+//        	{
+////        	case R.id.busienss_customer_list_action_bar_menu_send_offer:
+////        		handleSendOfferToSelectedClients();
+////        		mode.finish();
+////        		return true;
+//        	}
+////        	
+//        	return false;
+//        }
 		
-		@Override
-        public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked, CardView cardView, Card card) {
-        	Log.i(TAG, "Click;" + position + " - " + checked);
-        }
+//		@Override
+//        public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked, CardView cardView, Card card) {
+//        	Log.i(TAG, "Click;" + position + " - " + checked);
+//        }
 		
 		@Override
 		public Filter getFilter() {
@@ -494,18 +501,18 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 			return _businessFilter;
 		}
 		
-		public List<String> getSelectedItemsId()
-        {
-        	List<String> selectedItemsId = new ArrayList<String>();
+//		public List<String> getSelectedItemsId()
+//        {
+//        	List<String> selectedItemsId = new ArrayList<String>();
+//        	
+//        	List<Card> selectedCards = getSelectedItemsId();
+//        	for (Card card : selectedCards)
+//        	{
+//        		selectedItemsId.add(card.getId());
+//        	}
         	
-        	List<Card> selectedCards = getSelectedCards();
-        	for (Card card : selectedCards)
-        	{
-        		selectedItemsId.add(card.getId());
-        	}
-        	
-        	return selectedItemsId;
-        }
+//        	return getSelectedItemsId();
+//        }
 
 //		@Override
 //		public View getView(int position, View convertView, ViewGroup parent) {
