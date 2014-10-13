@@ -60,15 +60,19 @@
         <item>Offers</item>
     </string-array>
 
-    <!-- Customer All Businesses -->
-    <string name="customer_business_list_search_edtSearchHint">Search for...</string>
-    <string name="logout">Logout</string>
-
     <!-- Customer main screen -->
     <string name="customer_main_screen_btnBarbersText">Barbers</string>
     <string name="customer_main_screen_btnCosmeticsText">Cosmetics</string>
     <string name="customer_main_screen_btnDentistsText">Dentists</string>
     <string name="customer_main_screen_btnGaragesText">Garages</string>
+
+    <!-- Customer All Businesses -->
+    <string name="customer_business_list_search_edtSearchHint">Search for...</string>
+    <string name="logout">Logout</string>
+    <string name="customer_all_businesses_list_all_header">All Businesses</string>
+    <string name="customer_all_businesses_list_by_type_header">Businesses By Type</string>
+    <string name="customer_all_businesses_list_no_businesses">No businesses</string>
+    <string name="customer_all_businesses_list_no_businesses_by_type">No businesses exists at this type</string>
 
     <!-- Customer History -->
 	<string name="customer_history_business_list_search_edtSearchHint">Search for...</string>
