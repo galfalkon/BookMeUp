@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bookmeup="http://schemas.android.com/apk/res/com.gling.bookmeup"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <ListView
+    <com.gling.bookmeup.main.views.CardListViewWrapperView 
         android:id="@+id/customer_inbox_offersListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        bookmeup:emptyListText="@string/customer_offer_list_no_offers" />
 
 </LinearLayout>

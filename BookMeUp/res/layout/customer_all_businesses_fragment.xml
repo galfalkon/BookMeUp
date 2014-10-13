@@ -6,6 +6,7 @@
     android:layout_margin="10dp"
     android:orientation="vertical" >
     
+    
     <EditText
         android:id="@+id/customer_business_list_edtSearch"
         android:layout_width="match_parent"
@@ -50,44 +51,13 @@
             android:layout_height="fill_parent"
             bookmeup:emptyListText="@string/customer_all_businesses_list_no_businesses" />
 
+        <!-- <com.gling.bookmeup.main.views.CardExpandableListViewWrapperView-->
         <com.gling.bookmeup.main.views.CardListViewWrapperView
             android:id="@+id/customer_all_businesses_cardListViewBusinessesByType"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             bookmeup:emptyListText="@string/customer_all_businesses_list_no_businesses_by_type" />
     </ViewSwitcher>
+    
 
 </LinearLayout>
-<!-- 
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" > 
-         
-    <ListView
-        android:id="@+id/customer_business_list_listViewBusinessesCategories"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true">
-    
-    
-    </ListView>    
-    
-    <ListView
-        android:id="@+id/customer_business_list_listViewBusinesses"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/customer_business_list_edtSearch">
-    </ListView>
-    
-    <EditText 
-        android:id="@+id/customer_business_list_edtSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:cursorVisible="false"
-        android:hint="@string/customer_business_list_search_edtSearchHint"
-        android:layout_alignParentBottom="true" />
-
-</RelativeLayout>
- -->

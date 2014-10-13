@@ -1,25 +1,32 @@
 package com.gling.bookmeup.customer;
 
+import it.gmariotti.cardslib.library.internal.Card;
+import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
+import it.gmariotti.cardslib.library.internal.CardExpand;
+import it.gmariotti.cardslib.library.internal.CardHeader;
+
 import java.util.List;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.Constants;
+import com.gling.bookmeup.main.GenericCardArrayAdapter;
+import com.gling.bookmeup.main.ICardGenerator;
+import com.gling.bookmeup.main.IObservableList;
+import com.gling.bookmeup.main.ObservableArrayList;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
+import com.gling.bookmeup.main.ParseHelper.Offer;
+import com.gling.bookmeup.main.views.CardListViewWrapperView;
+import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.ParseQueryAdapter;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -27,11 +34,15 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 public class CustomerOffersFragment extends OnClickListenerFragment {
 	private static final String TAG = "CustomerOffersFragment";
 	
-	private OffersListAdapter _offersAdapter;
+	private GenericCardArrayAdapter<Offer> _offersAdapter;
+	private IObservableList<Offer> _offers;
+	
+	private CardListViewWrapperView _offersListView;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
+	    _offers = new ObservableArrayList<Offer>();
 	}
 	
 	@Override
@@ -40,14 +51,30 @@ public class CustomerOffersFragment extends OnClickListenerFragment {
 		Log.i(TAG, "onCreateView");
 		final View view = super.onCreateView(inflater, container, savedInstanceState);
 		
-		_offersAdapter = new OffersListAdapter();
-        ListView offersListView = (ListView) view.findViewById(R.id.customer_inbox_offersListView);
-        offersListView.setAdapter(_offersAdapter);
-        offersListView.setOnItemClickListener(new OnItemClickListener() {
+        _offersAdapter = new GenericCardArrayAdapter<Offer>(getActivity(), _offers, new OfferCardsGenerator());
+        _offersListView = (CardListViewWrapperView) view.findViewById(R.id.customer_inbox_offersListView);
+        _offersListView.setAdapter(_offersAdapter);
+        
+		ParseQuery<ParseHelper.Offer> parseQuery = new ParseQuery<ParseHelper.Offer>(ParseHelper.Offer.class).
+				whereEqualTo(ParseHelper.Offer.Keys.CUSTOMER_POINTERS, Customer.getCurrentCustomer()).
+				addDescendingOrder(ParseHelper.Offer.Keys.CREATION_DATE);
+		
+		parseQuery.include(ParseHelper.Offer.Keys.BUSINESS_POINTER);
+        _offersListView.setDisplayMode(DisplayMode.LOADING_VIEW);
+	    parseQuery.findInBackground(new FindCallback<ParseHelper.Offer>() {
+			
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Log.i(TAG, "onItemClick");
-				Crouton.showText(getActivity(), "Should open a booking wizard\nNot implemented", Style.ALERT);
+			public void done(List<Offer> objects, ParseException e) {
+				Log.i(TAG, "findInBackground done");
+				if (e != null)
+				{
+					Log.e(TAG, "Exception: " + e.getMessage());
+					return;
+				}
+				_offers.addAll(objects);
+				
+				DisplayMode newDisplayMode = _offers.isEmpty()? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;  
+				_offersListView.setDisplayMode(newDisplayMode);
 			}
 		});
 		
@@ -63,55 +90,32 @@ public class CustomerOffersFragment extends OnClickListenerFragment {
 		return R.layout.customer_offer_list_fragment;
 	}
 	
-	private class OffersListAdapter extends ParseQueryAdapter<ParseHelper.Offer>
+	private class OfferCardsGenerator implements ICardGenerator<Offer>
 	{
-		
-		public OffersListAdapter() {
-			super(getActivity(), new QueryFactory<ParseHelper.Offer>() {
-				@Override
-				public ParseQuery<ParseHelper.Offer> create() {
-					ParseQuery<ParseHelper.Offer> offerQuery = new ParseQuery<ParseHelper.Offer>(ParseHelper.Offer.class).
-							whereEqualTo(ParseHelper.Offer.Keys.CUSTOMER_POINTERS, Customer.getCurrentCustomer()).
-							addDescendingOrder(ParseHelper.Offer.Keys.CREATION_DATE);
-					
-					offerQuery.include(ParseHelper.Offer.Keys.BUSINESS_POINTER);
-					
-					return offerQuery;
-				}
-			});
-			
-			addOnQueryLoadListener(new OnQueryLoadListener<ParseHelper.Offer>() {
-
-	        	private ProgressDialog _progressDialog;
-	        	
-				@Override
-				public void onLoaded(List<com.gling.bookmeup.main.ParseHelper.Offer> objects, Exception e) {
-					_progressDialog.dismiss();
-				}
-
-				@Override
-				public void onLoading() {
-					_progressDialog = ProgressDialog.show(getActivity(), null, "Please wait...");
-				}
-			});
-		}
-		
 		@Override
-		public View getItemView(ParseHelper.Offer offer, View convertView, ViewGroup parent) {
-			LayoutInflater inflator = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			if (convertView == null) {
-				convertView = inflator.inflate(R.layout.customer_offer_list_item, null);
-			}
-
-			final TextView txtBusinessName = (TextView) convertView.findViewById(R.id.customer_offer_list_item_txtBusinessName);
-			final TextView txtExpiration = (TextView) convertView.findViewById(R.id.customer_offer_list_item_txtExpiration);
-			final TextView txtDisount = (TextView) convertView.findViewById(R.id.customer_offer_list_item_txtDiscount);
-
-			txtBusinessName.setText(offer.getBusinessName());
-			txtExpiration.setText(Constants.DATE_FORMAT.format(offer.getExpirationData()));
-			txtDisount.setText(offer.getDiscount() + "%");
+		public Card generateCard(Offer offer) {
+			CardHeader cardHeader= new CardHeader(getActivity());
+			cardHeader.setButtonExpandVisible(true);
 			
-			return convertView;
+			CardExpand cardExpand = new CardExpand(getActivity());
+			cardExpand.setTitle("Valid until " + Constants.DATE_FORMAT.format(offer.getExpirationData()));
+			
+			Card card = new Card(getActivity());
+			card.addCardHeader(cardHeader);
+			card.setTitle(offer.getDiscount() + "% off @ " + offer.getBusinessName());
+			card.addCardExpand(cardExpand);
+			
+			card.setOnClickListener(new OnCardClickListener() {
+				
+				@Override
+				public void onClick(Card arg0, View arg1) {					
+					Log.i(TAG, "onItemClick");
+					//TODO
+					Crouton.showText(getActivity(), "Should open a booking wizard\nNot implemented", Style.ALERT);
+				}
+			});
+			
+			return card;
 		}
 	}
 }

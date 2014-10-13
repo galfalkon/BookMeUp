@@ -300,15 +300,16 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment {
     
     private IObservableList<Business> _allBusinesses, _businessesByType;
     private GenericCardArrayAdapter<Business> _allBusinessesAdapter, _businessesByTypeAdapter;
+//    private exp_businessesByTypeAdapter;
 
 	private ViewSwitcher _viewSwitcher;
 	
 	private CardListViewWrapperView _allBusinessesListView, _businessesByTypeListView;
-    
+//	private CardExpandableListViewWrapperView _businessesByTypeListView;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
         _allBusinesses = new ObservableArrayList<Business>();
         _businessesByType = new ObservableArrayList<Business>();
         _allBusinessesAdapter = new GenericCardArrayAdapter<Business>(getActivity(), _allBusinesses, new AllBusinessesCardGenerator());
@@ -319,10 +320,10 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
-        
         _allBusinessesListView = (CardListViewWrapperView)view.findViewById(R.id.customer_all_businesses_cardListViewAllBusinesses);
         _allBusinessesListView.setAdapter(_allBusinessesAdapter);
         
+//        _businessesByTypeListView = (CardExpandableListViewWrapperView)view.findViewById(R.id.customer_all_businesses_cardListViewBusinessesByType);
         _businessesByTypeListView = (CardListViewWrapperView)view.findViewById(R.id.customer_all_businesses_cardListViewBusinessesByType);
         _businessesByTypeListView.setAdapter(_businessesByTypeAdapter);
         

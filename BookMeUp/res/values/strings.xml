@@ -102,6 +102,9 @@
     <string name="customer_calendar">Calendar</string>
     <string name="title_activity_customer_calendar">Calendar</string>
 
+    <!-- Customer offer list -->
+    <string name="customer_offer_list_no_offers">No offers</string>
+    
     <!-- Business profile creation -->
     <string name="business_profile_creation_edtName">Business name</string>
     <string name="business_profile_creation_edtDescriptionHint">Business description</string>
