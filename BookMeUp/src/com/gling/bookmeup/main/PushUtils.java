@@ -60,7 +60,7 @@ public class PushUtils {
 			Bundle extras = intent.getExtras();
 			if (extras == null || !extras.containsKey("pushType"))
 			{
-				Log.e(TAG, "pushType doesn't exist in the given intent");
+				Log.w(TAG, "pushType doesn't exist in the given intent");
 				return null;
 			}
 			
