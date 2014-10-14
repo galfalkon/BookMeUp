@@ -6,16 +6,17 @@ import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
-import android.inputmethodservice.Keyboard.Key;
 import android.provider.Settings.Secure;
 import android.util.Log;
 
 import com.gling.bookmeup.business.Business;
+import com.gling.bookmeup.business.Business.Keys;
 import com.gling.bookmeup.customer.Customer;
 import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseRelation;
@@ -118,12 +119,21 @@ public class ParseHelper {
 
 		public static class Keys {
 			public static final String ID = "objectId";
-			public static final String NAME = "name"; 
+			public static final String NAME = "name";
+			public static final String IMAGE = "image";
 		}
 		
 		public String getName() {
 			return getString(Keys.NAME);
 		}
+		
+		public ParseFile getImageFile() {
+			return getParseFile(Keys.IMAGE);
+		}
+		
+		public void setImageFile(ParseFile image) {
+	        put(Keys.IMAGE, image);
+	    }
 	}
 
 	@ParseClassName(Booking.CLASS_NAME)

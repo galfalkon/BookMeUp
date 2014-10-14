@@ -1,63 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bookmeup="http://schemas.android.com/apk/res/com.gling.bookmeup"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
-    android:orientation="vertical" >
-    
-    
-    <EditText
-        android:id="@+id/customer_business_list_edtSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:cursorVisible="false"
-        android:hint="@string/customer_business_list_search_edtSearchHint"
-        android:maxLines="1" />
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.babydays.MainMenuCard"
+    xmlns:card="http://schemas.android.com/apk/res-auto" >
 
-    <LinearLayout
-        style="?android:attr/buttonBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+   <com.gling.bookmeup.main.views.CardGridViewWrapperView
+          android:id="@+id/customer_all_businesses_categoryGridView"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:columnWidth="150dp"
+          android:numColumns="auto_fit"
+          android:verticalSpacing="3dp"
+          android:horizontalSpacing="2dp"
+          android:stretchMode="columnWidth"
+          android:gravity="center"/>
 
-        <Button
-            android:id="@+id/customer_all_businesses_btnAll"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/customer_all_businesses_list_all_header" />
-
-        <Button
-            android:id="@+id/customer_all_businesses_btnByType"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/customer_all_businesses_list_by_type_header" />
-    </LinearLayout>
-
-    <ViewSwitcher
-        android:id="@+id/customer_all_businesses_viewSwitcher"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:inAnimation="@android:anim/slide_in_left"
-        android:outAnimation="@android:anim/slide_out_right">
-        
-        <com.gling.bookmeup.main.views.CardListViewWrapperView
-            android:id="@+id/customer_all_businesses_cardListViewAllBusinesses"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            bookmeup:emptyListText="@string/customer_all_businesses_list_no_businesses" />
-
-        <!-- <com.gling.bookmeup.main.views.CardExpandableListViewWrapperView-->
-        <com.gling.bookmeup.main.views.CardListViewWrapperView
-            android:id="@+id/customer_all_businesses_cardListViewBusinessesByType"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            bookmeup:emptyListText="@string/customer_all_businesses_list_no_businesses_by_type" />
-    </ViewSwitcher>
-    
-
-</LinearLayout>
+</RelativeLayout>

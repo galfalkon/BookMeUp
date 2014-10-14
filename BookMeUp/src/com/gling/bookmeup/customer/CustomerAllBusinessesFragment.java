@@ -266,30 +266,341 @@
 //	
 //}
 
+//package com.gling.bookmeup.customer;
+//
+//import it.gmariotti.cardslib.library.internal.Card;
+//import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
+//import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
+//import it.gmariotti.cardslib.library.internal.CardGridArrayAdapter;
+//import it.gmariotti.cardslib.library.internal.CardHeader;
+//import it.gmariotti.cardslib.library.internal.CardThumbnail;
+//import it.gmariotti.cardslib.library.view.CardGridView;
+//
+//import java.util.ArrayList;
+//import java.util.List;
+//
+//import android.os.Bundle;
+//import android.util.Log;
+//import android.view.LayoutInflater;
+//import android.view.View;
+//import android.view.ViewGroup;
+//import android.widget.ViewSwitcher;
+//
+//import com.gling.bookmeup.R;
+//import com.gling.bookmeup.business.Business;
+//import com.gling.bookmeup.main.GenericCardArrayAdapter;
+//import com.gling.bookmeup.main.ICardGenerator;
+//import com.gling.bookmeup.main.IObservableList;
+//import com.gling.bookmeup.main.ObservableArrayList;
+//import com.gling.bookmeup.main.OnClickListenerFragment;
+//import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
+//import com.gling.bookmeup.main.views.CardListViewWrapperView;
+//import com.parse.FindCallback;
+//import com.parse.ParseException;
+//import com.parse.ParseQuery;
+//
+//public class CustomerAllBusinessesFragment extends OnClickListenerFragment {
+//
+//    private static final String TAG = "CustomerAllBusinessesFragment";
+//    
+//    private IObservableList<Business> _allBusinesses, _businessesByType;
+//    private GenericCardArrayAdapter<Business> _allBusinessesAdapter, _businessesByTypeAdapter;
+////    private exp_businessesByTypeAdapter;
+//
+//	private ViewSwitcher _viewSwitcher;
+//	
+//	private CardListViewWrapperView _allBusinessesListView, _businessesByTypeListView;
+////	private CardExpandableListViewWrapperView _businessesByTypeListView;
+//	
+//	private CardGridView _gefenView;
+//	private CardGridArrayAdapter _gefenAdapter;
+//	
+//	static final String[] items = new String[]{"Feed", "Nap", "Diaper", "Milestone", "Diary"};
+//    static final Integer[] imageId = {  R.drawable.logo_with_title,
+//                                        R.drawable.logo_with_title,
+//                                        R.drawable.logo_with_title,
+//                                        R.drawable.logo_with_title,
+//                                        R.drawable.logo_with_title};
+//	
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        /**
+//        _allBusinesses = new ObservableArrayList<Business>();
+//        _businessesByType = new ObservableArrayList<Business>();
+//        _allBusinessesAdapter = new GenericCardArrayAdapter<Business>(getActivity(), _allBusinesses, new AllBusinessesCardGenerator());
+//        _businessesByTypeAdapter = new GenericCardArrayAdapter<Business>(getActivity(), _businessesByType, new BusinessesByTypeCardGenerator());
+//        */
+////        CardHeader aHeader = new CardHeader(getActivity());
+////        aHeader.setTitle("a");
+////        Card a = new Card(getActivity());
+////        a.addCardHeader(aHeader);
+////        a.setTitle("a");
+////        CardHeader bHeader = new CardHeader(getActivity());
+////        aHeader.setTitle("b");
+////        Card b = new Card(getActivity());
+////        b.addCardHeader(bHeader);
+////        b.setTitle("b");
+////        ArrayList<Card> cards = new ArrayList<Card>();
+////        cards.add(a);
+////        cards.add(b);
+////        _gefenAdapter = new CardGridArrayAdapter(getActivity(), cards); 
+//    }
+//    
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//            Bundle savedInstanceState) {
+//        View view = super.onCreateView(inflater, container, savedInstanceState);
+//        /**
+//        _allBusinessesListView = (CardListViewWrapperView)view.findViewById(R.id.customer_all_businesses_cardListViewAllBusinesses);
+//        _allBusinessesListView.setAdapter(_allBusinessesAdapter);
+//        
+////        _businessesByTypeListView = (CardExpandableListViewWrapperView)view.findViewById(R.id.customer_all_businesses_cardListViewBusinessesByType);
+//        _businessesByTypeListView = (CardListViewWrapperView)view.findViewById(R.id.customer_all_businesses_cardListViewBusinessesByType);
+//        _businessesByTypeListView.setAdapter(_businessesByTypeAdapter);
+//        
+//        _viewSwitcher = (ViewSwitcher)view.findViewById(R.id.customer_all_businesses_viewSwitcher); 
+//        
+//        inflateListWithAllBusinesses();
+//        **/
+////        _gefenView = (GefenGridView) view.findViewById(R.id.gefenView);
+////        _gefenAdapter.notifyDataSetChanged();
+//        
+//        _gefenView = (CardGridView) view.findViewById(R.id.cardGridMenu);
+//        //create Card list
+//        ArrayList<Card> cards = new ArrayList<Card>();
+//        for(int i = 0; i < items.length; i++){
+//            Card c = new Card(getActivity());
+//            //add header
+//            CardHeader cheader = new CardHeader(getActivity());
+//            cheader.setTitle(items[i]);
+//            c.addCardHeader(cheader);
+//            //add card thumb nail
+//            CardThumbnail thumb = new CardThumbnail(getActivity());
+//            thumb.setDrawableResource(imageId[i]);
+//            c.addCardThumbnail(thumb);
+//
+//            cards.add(c);
+//        }
+//        CardArrayAdapter cardAdapter = new CardArrayAdapter(getActivity(), cards);
+//        _gefenView.setAdapter(cardAdapter);
+//        
+//        return view;
+//    }
+//
+//    @Override
+//    public void onClick(View v) {
+//    	/**
+//    	switch (v.getId())
+//    	{
+//    	case R.id.customer_all_businesses_btnAll:
+//    		Log.i(TAG, "btnPending clicked");
+//    		showAllBusinesses();
+//    		break;
+//    	case R.id.customer_all_businesses_btnByType:
+//    		Log.i(TAG, "btnApproved clicked");
+//    		showBusinessesByType();
+//    		break;
+//    	}
+//    	*/
+//    }
+//
+//    @Override
+//    protected int getFragmentLayoutId() {
+//        return R.layout.customer_all_businesses_fragment;
+//    }
+//
+//    private void inflateListWithAllBusinesses() {
+//    	ParseQuery<Business> query = new ParseQuery<Business>(Business.CLASS_NAME);
+//    	query.include(Business.Keys.CATEGORY);
+//		
+//        _allBusinessesListView.setDisplayMode(DisplayMode.LOADING_VIEW);
+//        _businessesByTypeListView.setDisplayMode(DisplayMode.LOADING_VIEW);
+//        query.findInBackground(new FindCallback<Business>() {
+//            @Override
+//            public void done(List<Business> objects, ParseException e) {
+//                Log.i(TAG, "Done querying businesses. #objects = " + objects.size());
+//                if (e != null) {
+//                    Log.e(TAG, "Exception occurred: " + e.getMessage());
+//                    return;
+//                }
+//                
+//                for (Business business : objects)
+//                {
+//                	_allBusinesses.add(business);
+//                }
+//                
+//                updateAllBusinessesDisplayMode();
+//                updateBusinessesByTypeDisplayMode();
+//                _allBusinessesAdapter.notifyDataSetChanged();
+//                _businessesByTypeAdapter.notifyDataSetChanged();
+//            }
+//        });
+//    }
+//    
+//    private void showAllBusinesses()
+//    {
+//    	if (_viewSwitcher.getDisplayedChild() != 0)
+//    	{
+//    		_viewSwitcher.setDisplayedChild(0);
+//    	}
+//    }
+//    
+//    private void showBusinessesByType()
+//    {
+//    	if (_viewSwitcher.getDisplayedChild() != 1)
+//    	{
+//    		_viewSwitcher.setDisplayedChild(1);
+//    	}
+//    }
+//    
+//    private void updateAllBusinessesDisplayMode()
+//    {
+//    	// Update display mode
+//    	DisplayMode newDisplayMode = _allBusinesses.isEmpty()? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;
+//    	_allBusinessesListView.setDisplayMode(newDisplayMode);
+//    }
+//    
+//    private void updateBusinessesByTypeDisplayMode()
+//    {
+//    	// Update display mode
+//    	DisplayMode newDisplayMode = _businessesByType.isEmpty()? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;
+//    	_businessesByTypeListView.setDisplayMode(newDisplayMode);
+//    }
+//    
+//    private class AllBusinessesCardGenerator implements ICardGenerator<Business>
+//    {
+//		@Override
+//		public Card generateCard(final Business business) 
+//		{
+//			CardHeader cardHeader = new CardHeader(getActivity());
+//	    	cardHeader.setTitle(business.getName());
+//	    	
+//	    	Card card = new Card(getActivity());
+//	    	card.addCardHeader(cardHeader);
+////	    	card.setTitle(
+////	    			"Service: " + business.getServiceName() + "\n" +
+////	    			"Date: " + Constants.DATE_FORMAT.format(business.getDate()));
+//
+//	    	card.setClickable(true);
+//	    	card.setOnClickListener(new OnCardClickListener() 
+//	    	{
+//				@Override
+//				public void onClick(Card card, View view) 
+//				{
+////					Log.i(TAG, "Pending booking clicked");
+////					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+////		            builder.setMessage(R.string.business_bookings_list_pending_click_dialog)
+////		            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+////		                public void onClick(DialogInterface dialog, int id) {
+////		                    Log.i(TAG, "Approving pending booking");
+////		                    business.setStatus(Status.APPROVED);
+////		                    business.saveInBackground();
+////		                    
+////		                    _pendingBookings.remove(business);
+////		                    _approvedBookings.add(business);
+////		                    updatePendingBookingsTitleAndDisplayMode();
+////		                    updateApprovedBookingsTitleAndDisplayMode();
+////		                    
+////		                    PushUtils.notifyCustomerAboutApprovedBooking(business, new SendCallback() {
+////								@Override
+////								public void done(ParseException e) {
+////									Log.i(TAG, "notifyCustomerAboutApprovedBooking done");
+////									if (e != null)
+////									{
+////										Log.e(TAG, "Exception: " + e.getMessage());
+////										return;
+////									}
+////								}
+////							});
+////		                }
+////		            })
+////		            .setNegativeButton(R.string.cancel, null);
+////			        builder.show();
+//				}
+//	    	});
+//	    	
+//	    	return card;
+//		}
+//    }
+//    
+//    private class BusinessesByTypeCardGenerator implements ICardGenerator<Business>
+//    {
+//		@Override
+//		public Card generateCard(final Business business) 
+//		{
+//			CardHeader cardHeader = new CardHeader(getActivity());
+//	    	cardHeader.setTitle(business.getName());
+//	    	
+//	    	Card card = new Card(getActivity());
+//	    	card.addCardHeader(cardHeader);
+////	    	card.setTitle(
+////	    			"Service: " + business.getServiceName() + "\n" +
+////	    			"Date: " + Constants.DATE_FORMAT.format(business.getDate()));
+//
+//	    	card.setClickable(true);
+//	    	card.setOnClickListener(new OnCardClickListener() {
+//				
+//				@Override
+//				public void onClick(Card card, View view) {
+////					Log.i(TAG, "Approved booking clicked");
+////					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+////		            builder.setMessage(R.string.business_bookings_list_approved_click_dialog)
+////		            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+////		                public void onClick(DialogInterface dialog, int id) {
+////		                    Log.i(TAG, "Deleting approved booking");
+////		                    business.setStatus(Status.CANCELED);
+////		                    business.saveInBackground();
+////		                    
+////		                    _approvedBookings.remove(business);
+////		                    updateApprovedBookingsTitleAndDisplayMode();
+////		                    
+////		                    PushUtils.notifyCustomerAboutCanceledBooking(business, new SendCallback() {
+////								@Override
+////								public void done(ParseException e) {
+////									Log.i(TAG, "notifyCustomerAboutCanceledBooking done");
+////									if (e != null)
+////									{
+////										Log.e(TAG, "Exception: " + e.getMessage());
+////										return;
+////									}
+////								}
+////							});
+////		                }
+////		            })
+////		            .setNegativeButton(R.string.cancel, null);
+////		            builder.show();
+//				}
+//			});
+//	    	
+//	    	return card;
+//		}
+//    }
+//}
+
 package com.gling.bookmeup.customer;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
+import it.gmariotti.cardslib.library.internal.CardGridArrayAdapter;
 import it.gmariotti.cardslib.library.internal.CardHeader;
+import it.gmariotti.cardslib.library.internal.CardThumbnail;
+import it.gmariotti.cardslib.library.view.CardView;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ViewSwitcher;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.business.Business;
-import com.gling.bookmeup.main.GenericCardArrayAdapter;
-import com.gling.bookmeup.main.ICardGenerator;
-import com.gling.bookmeup.main.IObservableList;
-import com.gling.bookmeup.main.ObservableArrayList;
 import com.gling.bookmeup.main.OnClickListenerFragment;
-import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
-import com.gling.bookmeup.main.views.CardListViewWrapperView;
+import com.gling.bookmeup.main.ParseHelper.Category;
+import com.gling.bookmeup.main.views.CardGridViewWrapperView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -298,44 +609,32 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment {
 
     private static final String TAG = "CustomerAllBusinessesFragment";
     
-    private IObservableList<Business> _allBusinesses, _businessesByType;
-    private GenericCardArrayAdapter<Business> _allBusinessesAdapter, _businessesByTypeAdapter;
-//    private exp_businessesByTypeAdapter;
-
-	private ViewSwitcher _viewSwitcher;
-	
-	private CardListViewWrapperView _allBusinessesListView, _businessesByTypeListView;
-//	private CardExpandableListViewWrapperView _businessesByTypeListView;
+	private CardGridViewWrapperView _categoryView;
+	private CardGridArrayAdapter _categoryAdapter;
+	private ArrayList<Card> _allCategories;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        _allBusinesses = new ObservableArrayList<Business>();
-        _businessesByType = new ObservableArrayList<Business>();
-        _allBusinessesAdapter = new GenericCardArrayAdapter<Business>(getActivity(), _allBusinesses, new AllBusinessesCardGenerator());
-        _businessesByTypeAdapter = new GenericCardArrayAdapter<Business>(getActivity(), _businessesByType, new BusinessesByTypeCardGenerator());
+        _allCategories = new ArrayList<Card>();
+        _categoryAdapter = new CardGridArrayAdapter(getActivity(), _allCategories);
     }
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
-        _allBusinessesListView = (CardListViewWrapperView)view.findViewById(R.id.customer_all_businesses_cardListViewAllBusinesses);
-        _allBusinessesListView.setAdapter(_allBusinessesAdapter);
+        _categoryView = (CardGridViewWrapperView) view.findViewById(R.id.customer_all_businesses_categoryGridView);
+        _categoryView.setAdapter(_categoryAdapter);
         
-//        _businessesByTypeListView = (CardExpandableListViewWrapperView)view.findViewById(R.id.customer_all_businesses_cardListViewBusinessesByType);
-        _businessesByTypeListView = (CardListViewWrapperView)view.findViewById(R.id.customer_all_businesses_cardListViewBusinessesByType);
-        _businessesByTypeListView.setAdapter(_businessesByTypeAdapter);
-        
-        _viewSwitcher = (ViewSwitcher)view.findViewById(R.id.customer_all_businesses_viewSwitcher); 
-        
-        inflateListWithAllBusinesses();
+        inflateListWithAllCategories();
         
         return view;
     }
 
     @Override
     public void onClick(View v) {
+    	/**
     	switch (v.getId())
     	{
     	case R.id.customer_all_businesses_btnAll:
@@ -347,6 +646,7 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment {
     		showBusinessesByType();
     		break;
     	}
+    	*/
     }
 
     @Override
@@ -354,170 +654,48 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment {
         return R.layout.customer_all_businesses_fragment;
     }
 
-    private void inflateListWithAllBusinesses() {
-    	ParseQuery<Business> query = new ParseQuery<Business>(Business.CLASS_NAME);
-    	query.include(Business.Keys.CATEGORY);
+    private void inflateListWithAllCategories() {
+    	ParseQuery<Category> query = new ParseQuery<Category>(Category.CLASS_NAME);
 		
-        _allBusinessesListView.setDisplayMode(DisplayMode.LOADING_VIEW);
-        _businessesByTypeListView.setDisplayMode(DisplayMode.LOADING_VIEW);
-        query.findInBackground(new FindCallback<Business>() {
+        query.findInBackground(new FindCallback<Category>() {
             @Override
-            public void done(List<Business> objects, ParseException e) {
+            public void done(List<Category> objects, ParseException e) {
                 Log.i(TAG, "Done querying businesses. #objects = " + objects.size());
                 if (e != null) {
                     Log.e(TAG, "Exception occurred: " + e.getMessage());
                     return;
                 }
                 
-                for (Business business : objects)
+                for (Category category: objects)
                 {
-                	_allBusinesses.add(business);
+                	_allCategories.add(categoryToCard(category, getActivity()));
                 }
                 
-                updateAllBusinessesDisplayMode();
-                updateBusinessesByTypeDisplayMode();
-                _allBusinessesAdapter.notifyDataSetChanged();
-                _businessesByTypeAdapter.notifyDataSetChanged();
+                _categoryAdapter.notifyDataSetChanged();
             }
         });
     }
     
-    private void showAllBusinesses()
-    {
-    	if (_viewSwitcher.getDisplayedChild() != 0)
-    	{
-    		_viewSwitcher.setDisplayedChild(0);
-    	}
+    private static Card categoryToCard(Category category, Activity activity) {
+    	Card card = new Card(activity);
+    	CardHeader header = new CardHeader(activity);
+    	header.setTitle(category.getName());
+    	card.addCardHeader(header);
+//    	card.setCardView(cardView)
+//    	card.
+//    	CardThumbnail thumb = new CardThumbnail(activity);
+//    	thumb.setDrawableResource(R.drawable.logo_with_title);
+//    	card.addCardThumbnail(thumb);
+    	card.setId(category.getObjectId());
+    	card.setOnClickListener(new OnCardClickListener() {
+			
+			@Override
+			public void onClick(Card arg0, View arg1) {
+				//TODO
+			}
+		});
+    	return card;
     }
-    
-    private void showBusinessesByType()
-    {
-    	if (_viewSwitcher.getDisplayedChild() != 1)
-    	{
-    		_viewSwitcher.setDisplayedChild(1);
-    	}
-    }
-    
-    private void updateAllBusinessesDisplayMode()
-    {
-    	// Update display mode
-    	DisplayMode newDisplayMode = _allBusinesses.isEmpty()? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;
-    	_allBusinessesListView.setDisplayMode(newDisplayMode);
-    }
-    
-    private void updateBusinessesByTypeDisplayMode()
-    {
-    	// Update display mode
-    	DisplayMode newDisplayMode = _businessesByType.isEmpty()? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;
-    	_businessesByTypeListView.setDisplayMode(newDisplayMode);
-    }
-    
-    private class AllBusinessesCardGenerator implements ICardGenerator<Business>
-    {
-		@Override
-		public Card generateCard(final Business business) 
-		{
-			CardHeader cardHeader = new CardHeader(getActivity());
-	    	cardHeader.setTitle(business.getName());
-	    	
-	    	Card card = new Card(getActivity());
-	    	card.addCardHeader(cardHeader);
-//	    	card.setTitle(
-//	    			"Service: " + business.getServiceName() + "\n" +
-//	    			"Date: " + Constants.DATE_FORMAT.format(business.getDate()));
-
-	    	card.setClickable(true);
-	    	card.setOnClickListener(new OnCardClickListener() 
-	    	{
-				@Override
-				public void onClick(Card card, View view) 
-				{
-//					Log.i(TAG, "Pending booking clicked");
-//					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//		            builder.setMessage(R.string.business_bookings_list_pending_click_dialog)
-//		            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-//		                public void onClick(DialogInterface dialog, int id) {
-//		                    Log.i(TAG, "Approving pending booking");
-//		                    business.setStatus(Status.APPROVED);
-//		                    business.saveInBackground();
-//		                    
-//		                    _pendingBookings.remove(business);
-//		                    _approvedBookings.add(business);
-//		                    updatePendingBookingsTitleAndDisplayMode();
-//		                    updateApprovedBookingsTitleAndDisplayMode();
-//		                    
-//		                    PushUtils.notifyCustomerAboutApprovedBooking(business, new SendCallback() {
-//								@Override
-//								public void done(ParseException e) {
-//									Log.i(TAG, "notifyCustomerAboutApprovedBooking done");
-//									if (e != null)
-//									{
-//										Log.e(TAG, "Exception: " + e.getMessage());
-//										return;
-//									}
-//								}
-//							});
-//		                }
-//		            })
-//		            .setNegativeButton(R.string.cancel, null);
-//			        builder.show();
-				}
-	    	});
-	    	
-	    	return card;
-		}
-    }
-    
-    private class BusinessesByTypeCardGenerator implements ICardGenerator<Business>
-    {
-		@Override
-		public Card generateCard(final Business business) 
-		{
-			CardHeader cardHeader = new CardHeader(getActivity());
-	    	cardHeader.setTitle(business.getName());
-	    	
-	    	Card card = new Card(getActivity());
-	    	card.addCardHeader(cardHeader);
-//	    	card.setTitle(
-//	    			"Service: " + business.getServiceName() + "\n" +
-//	    			"Date: " + Constants.DATE_FORMAT.format(business.getDate()));
-
-	    	card.setClickable(true);
-	    	card.setOnClickListener(new OnCardClickListener() {
-				
-				@Override
-				public void onClick(Card card, View view) {
-//					Log.i(TAG, "Approved booking clicked");
-//					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//		            builder.setMessage(R.string.business_bookings_list_approved_click_dialog)
-//		            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-//		                public void onClick(DialogInterface dialog, int id) {
-//		                    Log.i(TAG, "Deleting approved booking");
-//		                    business.setStatus(Status.CANCELED);
-//		                    business.saveInBackground();
-//		                    
-//		                    _approvedBookings.remove(business);
-//		                    updateApprovedBookingsTitleAndDisplayMode();
-//		                    
-//		                    PushUtils.notifyCustomerAboutCanceledBooking(business, new SendCallback() {
-//								@Override
-//								public void done(ParseException e) {
-//									Log.i(TAG, "notifyCustomerAboutCanceledBooking done");
-//									if (e != null)
-//									{
-//										Log.e(TAG, "Exception: " + e.getMessage());
-//										return;
-//									}
-//								}
-//							});
-//		                }
-//		            })
-//		            .setNegativeButton(R.string.cancel, null);
-//		            builder.show();
-				}
-			});
-	    	
-	    	return card;
-		}
-    }
+ 
+ 
 }
