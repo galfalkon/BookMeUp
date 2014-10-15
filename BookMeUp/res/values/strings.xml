@@ -67,6 +67,7 @@
     <string name="customer_main_screen_btnGaragesText">Garages</string>
 
     <!-- Customer All Businesses -->
+    <string name="customer_all_businesses_list_search_edtSearchHint">Search for...</string>
     <string name="customer_business_list_search_edtSearchHint">Search for...</string>
     <string name="logout">Logout</string>
     <string name="customer_all_businesses_list_all_header">All Businesses</string>

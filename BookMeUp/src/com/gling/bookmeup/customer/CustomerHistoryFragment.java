@@ -39,7 +39,7 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 	
 	private HashMap<String, Business> _allBusinesses;
 	private HashMap<String, com.gling.bookmeup.business.Business> _allParseBusinesses;
-	private BusinessCardArrayMultiChoiceAdapter _businessesCardAdapter;
+	private BusinessCardArrayAdapter _businessesCardAdapter;
 	private List<Card> _filteredBusinesses;
 	
 	private CardListViewWrapperView _businessesCardListView; 
@@ -52,7 +52,7 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 		_allBusinesses = new HashMap<String, Business>();
 		_allParseBusinesses = new HashMap<String, com.gling.bookmeup.business.Business>();
 		_filteredBusinesses = new ArrayList<Card>();
-		_businessesCardAdapter = new BusinessCardArrayMultiChoiceAdapter(getActivity(), _filteredBusinesses);
+		_businessesCardAdapter = new BusinessCardArrayAdapter(getActivity(), _filteredBusinesses);
 		
 		View view = super.onCreateView(inflater, container, savedInstanceState);
 		_businessesCardListView = (CardListViewWrapperView) view.findViewById(R.id.customer_history_business_list_listViewBusinesses);
@@ -212,11 +212,11 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 		}
 	}
 	
-	private class BusinessCardArrayMultiChoiceAdapter extends CardArrayAdapter {//CardArrayMultiChoiceAdapter {
+	private class BusinessCardArrayAdapter extends CardArrayAdapter {//CardArrayMultiChoiceAdapter {
 
 		private BusinessFilter _businessFilter;
 
-		public BusinessCardArrayMultiChoiceAdapter(Context context, List<Card> cards) {
+		public BusinessCardArrayAdapter(Context context, List<Card> cards) {
 			super(context, cards);
 			
 			_businessFilter = new BusinessFilter();

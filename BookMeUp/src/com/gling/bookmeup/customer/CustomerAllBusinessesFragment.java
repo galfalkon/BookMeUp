@@ -582,52 +582,89 @@ package com.gling.bookmeup.customer;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
+import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import it.gmariotti.cardslib.library.internal.CardGridArrayAdapter;
 import it.gmariotti.cardslib.library.internal.CardHeader;
-import it.gmariotti.cardslib.library.internal.CardThumbnail;
-import it.gmariotti.cardslib.library.view.CardView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.ViewSwitcher;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper.Category;
+import com.gling.bookmeup.main.views.BaseGridViewWrapperView.DisplayMode;
 import com.gling.bookmeup.main.views.CardGridViewWrapperView;
+import com.gling.bookmeup.main.views.CardListViewWrapperView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
-public class CustomerAllBusinessesFragment extends OnClickListenerFragment {
+public class CustomerAllBusinessesFragment extends OnClickListenerFragment implements TextWatcher {
 
     private static final String TAG = "CustomerAllBusinessesFragment";
     
-	private CardGridViewWrapperView _categoryView;
+    //category view
+	private CardGridViewWrapperView _allCategoriesView;
 	private CardGridArrayAdapter _categoryAdapter;
-	private ArrayList<Card> _allCategories;
+	private ArrayList<Card> _allCategoriesCards;
+//	private HashMap<String, Category> _allParseCategories;
+	
+	//switcher
+	private ViewSwitcher _viewSwitcher;
+	
+	//businesses view
+	private CardListViewWrapperView _allBusinessesListView;
+	private BusinessCardArrayAdapter _allBusinessesAdapter;
+//	private GenericCardArrayAdapter<Business> _allBusinessesAdapter;
+	private List<Business> _allBusinesses;
+//	private List<Business> _allBusinesses;
+	private List<Card> _filteredBusinesses;
+	
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        _allCategories = new ArrayList<Card>();
-        _categoryAdapter = new CardGridArrayAdapter(getActivity(), _allCategories);
+        _allBusinesses = new ArrayList<Business>();
+        _filteredBusinesses = new ArrayList<Card>();
+//        _allBusinessesAdapter = new GenericCardArrayAdapter<Business>(getActivity(), _allBusinesses, new AllBusinessesCardGenerator());
+        _allBusinessesAdapter = new BusinessCardArrayAdapter(getActivity(), _filteredBusinesses);
+        _allCategoriesCards = new ArrayList<Card>();
+//        _allParseCategories = new HashMap<String, Category>();
+        _categoryAdapter = new CardGridArrayAdapter(getActivity(), _allCategoriesCards);
     }
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
-        _categoryView = (CardGridViewWrapperView) view.findViewById(R.id.customer_all_businesses_categoryGridView);
-        _categoryView.setAdapter(_categoryAdapter);
+        
+        EditText edtSearch = (EditText)view.findViewById(R.id.customer_all_businesses_list_edtSearch);
+		edtSearch.addTextChangedListener(this);
+        
+        _allBusinessesListView = (CardListViewWrapperView)view.findViewById(R.id.customer_all_businesses_cardListViewAllBusinessesByType);
+        _allBusinessesListView.setAdapter(_allBusinessesAdapter);
+        
+        _allCategoriesView = (CardGridViewWrapperView) view.findViewById(R.id.customer_all_businesses_categoryGridView);
+        _allCategoriesView.setAdapter(_categoryAdapter);
+        
+        _viewSwitcher = (ViewSwitcher)view.findViewById(R.id.customer_all_businesses_viewSwitcher); 
         
         inflateListWithAllCategories();
+        inflateListWithAllBusinesses();
         
         return view;
     }
@@ -653,10 +690,28 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment {
     protected int getFragmentLayoutId() {
         return R.layout.customer_all_businesses_fragment;
     }
+    
+    @Override
+	public void afterTextChanged(Editable s) {
+		Log.i(TAG, "afterTextChanged");
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+		Log.i(TAG, "beforeTextChanged");		
+	}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before	, int count) {
+		Log.i(TAG, "onTextChanged");
+		showBusinessesByType(null, s);
+//		_allBusinessesAdapter.getFilter().filter(s);
+	}
 
     private void inflateListWithAllCategories() {
     	ParseQuery<Category> query = new ParseQuery<Category>(Category.CLASS_NAME);
-		
+    	_allCategoriesView.setDisplayMode(DisplayMode.LOADING_VIEW);
+    	
         query.findInBackground(new FindCallback<Category>() {
             @Override
             public void done(List<Category> objects, ParseException e) {
@@ -668,10 +723,20 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment {
                 
                 for (Category category: objects)
                 {
-                	_allCategories.add(categoryToCard(category, getActivity()));
+                	Card card = categoryToCard(category, getActivity());
+        			card.setOnClickListener(new OnCardClickListener() {
+        				
+        				@Override
+        				public void onClick(Card card, View view) {
+        					showBusinessesByType(card.getId(), null);
+        					
+        				}
+        			});
+                	_allCategoriesCards.add(card);
                 }
                 
                 _categoryAdapter.notifyDataSetChanged();
+                updateCategoriesDisplayMode();
             }
         });
     }
@@ -687,15 +752,147 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment {
 //    	thumb.setDrawableResource(R.drawable.logo_with_title);
 //    	card.addCardThumbnail(thumb);
     	card.setId(category.getObjectId());
-    	card.setOnClickListener(new OnCardClickListener() {
-			
-			@Override
-			public void onClick(Card arg0, View arg1) {
-				//TODO
-			}
-		});
     	return card;
     }
  
- 
+    private void inflateListWithAllBusinesses() {
+    	ParseQuery<Business> query = new ParseQuery<Business>(Business.CLASS_NAME);
+    	query.include(Business.Keys.CATEGORY);
+    	
+    	_allBusinessesListView.setDisplayMode(com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode.LOADING_VIEW);
+        query.findInBackground(new FindCallback<Business>() {
+            @Override
+            public void done(List<Business> objects, ParseException e) {
+                Log.i(TAG, "Done querying businesses. #objects = " + objects.size());
+                if (e != null) {
+                    Log.e(TAG, "Exception occurred: " + e.getMessage());
+                    return;
+                }
+                
+                for (Business business: objects)
+                {
+                	_allBusinesses.add(business);
+                }
+                updateBusinessesDisplayMode();
+            }
+        });
+    }
+    
+    private void showCategoriesView()
+    {
+    	if (_viewSwitcher.getDisplayedChild() != 0)
+    	{
+    		_viewSwitcher.setDisplayedChild(0);
+    	}
+    }
+  
+    private void showBusinessesByType(String categoryId, CharSequence s)
+    {
+    	if (_viewSwitcher.getDisplayedChild() != 1)
+    	{
+    		_viewSwitcher.setDisplayedChild(1);
+    		BusinessFilter filter = _allBusinessesAdapter._businessFilter;
+    		filter.addCategoryFilter(categoryId);
+    		filter.filter(s);
+    	}
+    }
+    
+    private void updateCategoriesDisplayMode()
+    {
+    	// Update display mode
+    	DisplayMode newDisplayMode = _allCategoriesCards.isEmpty()? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;
+    	_allCategoriesView.setDisplayMode(newDisplayMode);
+    }
+    
+    private void updateBusinessesDisplayMode()
+    {
+    	// Update display mode
+    	com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode newDisplayMode = 
+    			_filteredBusinesses.isEmpty()? 
+    					com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode.NO_ITEMS_VIEW : 
+    						com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode.LIST_VIEW;
+    	_allBusinessesListView.setDisplayMode(newDisplayMode);
+    }
+    
+    private class BusinessFilter extends Filter {
+    	
+    	String categoryId = null;
+    	
+    	public void addCategoryFilter(String categoryId) {
+    		this.categoryId = categoryId;
+    	}
+
+		@Override
+		protected FilterResults performFiltering(CharSequence constraint) {
+			Log.i(TAG, "performFiltering(" + constraint + ")");
+
+			FilterResults results = new FilterResults();
+
+			_filteredBusinesses.clear();
+			for (Business business : _allBusinesses) {
+				if (doesSetisfyConstraint(business, constraint) &&
+						doesSetisfyCategory(business, categoryId)) {
+					Card card = businessToCard(business, getActivity());
+					_filteredBusinesses.add(card);
+					//TODO: card on click
+				}
+			}
+
+			results.values = _filteredBusinesses;
+			results.count = _filteredBusinesses.size();
+
+			return results;
+		}
+
+		@Override
+		protected void publishResults(CharSequence constraint, FilterResults results) {
+			Log.i(TAG, "publicResults");
+			_allBusinessesAdapter.notifyDataSetChanged();
+		}
+
+		private boolean doesSetisfyConstraint(Business business, CharSequence constraint) {
+			return (constraint == null) || business.getName().toLowerCase().contains(constraint.toString().toLowerCase());
+		}
+		
+		private boolean doesSetisfyCategory(Business business, String categoryId) {
+			return (categoryId == null) || business.getCategory().getObjectId().toLowerCase().equals(categoryId.toLowerCase());
+		}
+	}
+    
+    private static Card businessToCard(Business business, Activity activity) {
+    	Card card = new Card(activity);
+    	CardHeader header = new CardHeader(activity);
+    	header.setTitle(business.getName());
+    	card.addCardHeader(header);
+//    	card.setCardView(cardView)
+//    	card.
+//    	CardThumbnail thumb = new CardThumbnail(activity);
+//    	thumb.setDrawableResource(R.drawable.logo_with_title);
+//    	card.addCardThumbnail(thumb);
+    	card.setId(business.getObjectId());
+    	return card;
+    }
+    
+    private class BusinessCardArrayAdapter extends CardArrayAdapter {//CardArrayMultiChoiceAdapter {
+
+		public BusinessFilter _businessFilter;
+
+		public BusinessCardArrayAdapter(Context context, List<Card> cards) {
+			super(context, cards);
+
+			_businessFilter = new BusinessFilter();
+		}
+
+		@Override
+		public Filter getFilter() {
+			Log.i(TAG, "getFilter");
+			return _businessFilter;
+		}
+
+		@Override
+			public void notifyDataSetChanged() {
+				super.notifyDataSetChanged();
+				updateBusinessesDisplayMode();
+			}
+	}
 }
