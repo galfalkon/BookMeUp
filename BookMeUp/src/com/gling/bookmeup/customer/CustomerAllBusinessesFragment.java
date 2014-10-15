@@ -791,10 +791,10 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
     	if (_viewSwitcher.getDisplayedChild() != 1)
     	{
     		_viewSwitcher.setDisplayedChild(1);
-    		BusinessFilter filter = _allBusinessesAdapter._businessFilter;
-    		filter.addCategoryFilter(categoryId);
-    		filter.filter(s);
     	}
+    	BusinessFilter filter = _allBusinessesAdapter._businessFilter;
+    	filter.addCategoryFilter(categoryId);
+    	filter.filter(s);
     }
     
     private void updateCategoriesDisplayMode()
