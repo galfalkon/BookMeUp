@@ -4,6 +4,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -14,21 +17,19 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessMainActivity;
-import com.gling.bookmeup.business.wizards.BusinessProfileWizardActivity;
 import com.gling.bookmeup.customer.Customer;
 import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.ParseHelper.Category;
 import com.gling.bookmeup.main.ParseHelper.User;
+import com.gling.bookmeup.main.PushUtils;
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -36,12 +37,12 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.RefreshCallback;
 
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
-
 public class SplashScreenActivity extends Activity {
 
 	private static final String TAG = "SplashScreenActivity";
+	
+	private static final String EXTRA_PUSH_NOTIFICATION_DATA = "com.parse.Data";
+	
 	public final static String EXTRA_FIRST_FRAGMENT = "com.gling.bookmeup.FIRST_FRAGMENT";
 	public final static String EXTRA_MESSAGE = "com.gling.bookmeup.MESSAGE";
 
@@ -166,6 +167,14 @@ public class SplashScreenActivity extends Activity {
 				startActivity(intent);
 				return;
 			}
+			
+			// Handle push notification if needed
+			Bundle extras = getIntent().getExtras();			
+			if ((extras != null) && extras.containsKey(EXTRA_PUSH_NOTIFICATION_DATA))
+			{
+				handlePushNotification();
+				return;
+			}
 
 			if (!ParseHelper.isEmailVerified())
 			{
@@ -220,5 +229,23 @@ public class SplashScreenActivity extends Activity {
 			intent = new Intent(mContext, LoginMainActivity.class);
 			startActivity(intent);
 		}
+	}
+	
+	private void handlePushNotification()
+	{
+		try {
+			JSONObject json = new JSONObject(getIntent().getExtras().getString(EXTRA_PUSH_NOTIFICATION_DATA));
+			String action = json.getString("action");
+			Log.i(TAG, "Push action: " + action);
+			
+			PushUtils.PushNotificationType pushType = PushUtils.PushNotificationType.valueOfAction(action);
+			// TODO: Check if activity is already running
+			Intent intent = new Intent(getApplicationContext(), pushType._activity);
+			pushType.putIntoIntent(intent);
+			startActivity(intent);
+		} catch (JSONException e) {
+			Log.e(TAG, "Exception: " + e.getMessage());
+			return;
+		} 
 	}
 }

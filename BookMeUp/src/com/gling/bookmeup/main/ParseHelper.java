@@ -10,8 +10,8 @@ import android.provider.Settings.Secure;
 import android.util.Log;
 
 import com.gling.bookmeup.business.Business;
-import com.gling.bookmeup.business.Business.Keys;
 import com.gling.bookmeup.customer.Customer;
+import com.gling.bookmeup.login.SplashScreenActivity;
 import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseClassName;
@@ -62,7 +62,7 @@ public class ParseHelper {
 
 		// Configure parse push service
 		Log.i(TAG, "Configuring parse push service");
-		PushService.setDefaultPushCallback(context, PushHandlerActivity.class);
+		PushService.setDefaultPushCallback(context, SplashScreenActivity.class);
 
 		ParseInstallation installation = ParseInstallation
 				.getCurrentInstallation();
