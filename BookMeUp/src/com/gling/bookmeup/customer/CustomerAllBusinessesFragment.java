@@ -617,6 +617,8 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
 
     private static final String TAG = "CustomerAllBusinessesFragment";
     
+    EditText _edtSearch;
+    
     //category view
 	private CardGridViewWrapperView _allCategoriesView;
 	private CardGridArrayAdapter _categoryAdapter;
@@ -652,8 +654,8 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
             Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         
-        EditText edtSearch = (EditText)view.findViewById(R.id.customer_all_businesses_list_edtSearch);
-		edtSearch.addTextChangedListener(this);
+        _edtSearch = (EditText)view.findViewById(R.id.customer_all_businesses_list_edtSearch);
+		_edtSearch.addTextChangedListener(this);
         
         _allBusinessesListView = (CardListViewWrapperView)view.findViewById(R.id.customer_all_businesses_cardListViewAllBusinessesByType);
         _allBusinessesListView.setAdapter(_allBusinessesAdapter);
@@ -704,8 +706,12 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before	, int count) {
 		Log.i(TAG, "onTextChanged");
-		showBusinessesByType(null, s);
-//		_allBusinessesAdapter.getFilter().filter(s);
+		String categoryFilter = _allBusinessesAdapter._businessFilter.getCategoryFilter();
+		if ((categoryFilter == null) && ((s == null) || ("".equals(s.toString())))) {
+			showCategoriesView();
+		} else {
+			showBusinessesByTypeView(s);
+		}
 	}
 
     private void inflateListWithAllCategories() {
@@ -728,7 +734,7 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
         				
         				@Override
         				public void onClick(Card card, View view) {
-        					showBusinessesByType(card.getId(), null);
+        					showBusinessesByTypeView(card.getId(), null);
         					
         				}
         			});
@@ -778,22 +784,57 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
         });
     }
     
+    public void clearAll() {
+    	Log.i(TAG, "clearAll");
+    	BusinessFilter filter = _allBusinessesAdapter._businessFilter;
+    	filter.setCategoryFilter(null);
+    	_edtSearch.setText(null);
+    }
+    
     private void showCategoriesView()
     {
+    	Log.i(TAG, "showCategoriesView");
+//    	_edtSearch.setText(null);
+    	Activity activity = getActivity();
+    	if (activity instanceof CustomerMainActivity) {
+    		((CustomerMainActivity)activity).setAllFragment(null);
+    	}
     	if (_viewSwitcher.getDisplayedChild() != 0)
     	{
     		_viewSwitcher.setDisplayedChild(0);
     	}
+//    	BusinessFilter filter = _allBusinessesAdapter._businessFilter;
+//    	filter.addCategoryFilter(null);
     }
   
-    private void showBusinessesByType(String categoryId, CharSequence s)
+    private void showBusinessesByTypeView(CharSequence s)
     {
+    	Log.i(TAG, "showBusinessByTypeView");
+    	Activity activity = getActivity();
+    	if (activity instanceof CustomerMainActivity) {
+    		((CustomerMainActivity)activity).setAllFragment(this);
+    	}
     	if (_viewSwitcher.getDisplayedChild() != 1)
     	{
     		_viewSwitcher.setDisplayedChild(1);
     	}
     	BusinessFilter filter = _allBusinessesAdapter._businessFilter;
-    	filter.addCategoryFilter(categoryId);
+    	filter.filter(s);
+    }
+    
+    private void showBusinessesByTypeView(String categoryId, CharSequence s)
+    {
+    	Log.i(TAG, "showBusinessByTypeView");
+    	Activity activity = getActivity();
+    	if (activity instanceof CustomerMainActivity) {
+    		((CustomerMainActivity)activity).setAllFragment(this);
+    	}
+    	if (_viewSwitcher.getDisplayedChild() != 1)
+    	{
+    		_viewSwitcher.setDisplayedChild(1);
+    	}
+    	BusinessFilter filter = _allBusinessesAdapter._businessFilter;
+    	filter.setCategoryFilter(categoryId);
     	filter.filter(s);
     }
     
@@ -818,8 +859,12 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
     	
     	String categoryId = null;
     	
-    	public void addCategoryFilter(String categoryId) {
+    	public void setCategoryFilter(String categoryId) {
     		this.categoryId = categoryId;
+    	}
+    	
+    	public String getCategoryFilter() {
+    		return this.categoryId;
     	}
 
 		@Override
@@ -829,12 +874,16 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
 			FilterResults results = new FilterResults();
 
 			_filteredBusinesses.clear();
-			for (Business business : _allBusinesses) {
-				if (doesSetisfyConstraint(business, constraint) &&
-						doesSetisfyCategory(business, categoryId)) {
-					Card card = businessToCard(business, getActivity());
-					_filteredBusinesses.add(card);
-					//TODO: card on click
+			if ((constraint == null) && (categoryId == null)) {
+				showCategoriesView();
+			} else {
+				for (Business business : _allBusinesses) {
+					if (doesSetisfyConstraint(business, constraint) &&
+							doesSetisfyCategory(business, categoryId)) {
+						Card card = businessToCard(business, getActivity());
+						_filteredBusinesses.add(card);
+						//TODO: card on click
+					}
 				}
 			}
 

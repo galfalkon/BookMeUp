@@ -18,6 +18,22 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 public class CustomerMainActivity extends NavigationDrawerActivity {
 	private static final String TAG = "CustomerMainActivity";
 	
+	private CustomerAllBusinessesFragment _fragment = null;
+	
+	public void setAllFragment(CustomerAllBusinessesFragment fragment) {
+		this._fragment = fragment;
+	}
+	
+	@Override
+	public void onBackPressed() {
+		Log.i(TAG, "onBackPressed");
+		if (_fragment == null) {
+			super.onBackPressed();
+		} else {
+			_fragment.clearAll();
+		}
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.i(TAG, "onCreate");
