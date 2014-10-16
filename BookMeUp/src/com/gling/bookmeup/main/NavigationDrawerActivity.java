@@ -49,7 +49,6 @@ public abstract class NavigationDrawerActivity extends Activity
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
-        		.addToBackStack(null)
                 .replace(R.id.container, getSectionFragment(position))
                 .commit();
     }
