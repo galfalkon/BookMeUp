@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.business.wizards.BusinessProfileWizardActivity;
 import com.gling.bookmeup.login.LoginMainActivity;
 import com.gling.bookmeup.main.NavigationDrawerActivity;
 import com.gling.bookmeup.main.PushUtils;
@@ -56,6 +57,10 @@ public class BusinessMainActivity extends NavigationDrawerActivity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		switch (item.getItemId()) {
+		case R.id.business_action_profile:
+			intent = new Intent(this, BusinessProfileWizardActivity.class);
+			startActivity(intent);
+			return true;
 		case R.id.business_action_calendar:
 			intent = new Intent(this, BusinessCalendarActivity.class);
 			startActivity(intent);
@@ -89,8 +94,6 @@ public class BusinessMainActivity extends NavigationDrawerActivity {
 			return new BusinessCustomersListFragment();
 		case 2:
 			return new BusinessOffersFragment();
-		case 3:
-			return new BusinessProfileFragment();
 		default:
 			Log.e(TAG, "trying to instantiate an unknown fragment");
 			return null;

@@ -3,6 +3,7 @@ package com.gling.bookmeup.business.wizards;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardExpand;
 import it.gmariotti.cardslib.library.internal.CardHeader;
+import it.gmariotti.cardslib.library.internal.dismissanimation.SwipeDismissAnimation;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,7 @@ public class BusinessProfileWizardServiceCard extends Card {
 	private final int _duration;
 
 	public BusinessProfileWizardServiceCard(Context context, String name,
-			int price, int duration, String expand) {
+			int price, int duration, CardHeader.OnClickCardHeaderOtherButtonListener dissmissCallback) {
 		super(context, R.layout.business_profile_wizard_service_card);
 		
 		_price = price;
@@ -24,20 +25,10 @@ public class BusinessProfileWizardServiceCard extends Card {
 		CardHeader cardHeader = new CardHeader(context);
 		cardHeader.setTitle(name);
 		
-		if (expand != null) {
-			cardHeader.setButtonExpandVisible(true);
-			CardExpand cardExpand = new CardExpand(context);
-			cardExpand.setTitle(expand);
-			addCardExpand(cardExpand);
-			
-			setOnClickListener(new OnCardClickListener() {
-				
-				@Override
-				public void onClick(Card card, View view) {
-					doToogleExpand();
-				}
-			});
-		}
+		cardHeader.setOtherButtonDrawable(R.drawable.card_menu_button_other_dismiss);
+		cardHeader.setOtherButtonVisible(true);
+		// TODO check if null arg is OK
+		cardHeader.setOtherButtonClickListener(dissmissCallback);
 		
 		addCardHeader(cardHeader);
 	}

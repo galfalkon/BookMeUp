@@ -3,6 +3,11 @@
     tools:context="com.gling.bookmeup.MainActivityActivity" >
 
     <item
+        android:id="@+id/business_action_profile"
+        android:title="Profile"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_menu_friendslist" />
+    <item
         android:id="@+id/business_action_calendar"
         android:title="Calendar"
         android:showAsAction="always"

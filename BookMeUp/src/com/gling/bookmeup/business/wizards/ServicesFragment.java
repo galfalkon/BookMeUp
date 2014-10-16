@@ -4,6 +4,7 @@ import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardExpand;
 import it.gmariotti.cardslib.library.internal.CardHeader;
 import it.gmariotti.cardslib.library.internal.ViewToClickToExpand;
+import it.gmariotti.cardslib.library.internal.dismissanimation.SwipeDismissAnimation;
 import it.gmariotti.cardslib.library.view.CardView;
 
 import java.util.List;
@@ -48,6 +49,7 @@ public class ServicesFragment extends Fragment {
 	private IObservableList<Service> _services;
 	private GenericCardArrayAdapter<Service> _servicesCardAdapter;
 	private CardListViewWrapperView _servicesListViewWrapperView;
+	private SwipeDismissAnimation _dismissAnimation;
 
 	private Card _addServiceCard;
 
@@ -111,6 +113,9 @@ public class ServicesFragment extends Fragment {
 		_services = new ObservableArrayList<Service>();
 		_servicesCardAdapter = new GenericCardArrayAdapter<Service>(
 				getActivity(), _services, new ServicesCardGenerator());
+
+		_dismissAnimation = (SwipeDismissAnimation) new SwipeDismissAnimation(
+				getActivity()).setup(_servicesCardAdapter);
 
 		_servicesListViewWrapperView = (CardListViewWrapperView) rootView
 				.findViewById(R.id.business_profile_wizard_services_cardListViewWrapper);
@@ -207,10 +212,11 @@ public class ServicesFragment extends Fragment {
 								Log.e(TAG,
 										"saving service failed "
 												+ e.getMessage());
-								//TODO crouton
+								// TODO crouton
 								return;
 							}
-							// TODO prepend the service so it appears on the top of the list
+							// TODO prepend the service so it appears on the top
+							// of the list
 							_services.add(0, service);
 
 							_addServiceCard.doToogleExpand();
@@ -219,7 +225,7 @@ public class ServicesFragment extends Fragment {
 							edtDuration.setText("");
 
 							_servicesListViewWrapperView
-							.setDisplayMode(DisplayMode.LIST_VIEW);
+									.setDisplayMode(DisplayMode.LIST_VIEW);
 						}
 					});
 				}
@@ -227,14 +233,23 @@ public class ServicesFragment extends Fragment {
 		}
 	}
 
+	// TODO maybe pass the service to the card in the constructor, and do all the logic there
 	private class ServicesCardGenerator implements ICardGenerator<Service> {
 		@Override
-		public Card generateCard(Service service) {
+		public Card generateCard(final Service service) {
+
+			CardHeader.OnClickCardHeaderOtherButtonListener dissmissCallback = new CardHeader.OnClickCardHeaderOtherButtonListener() {
+				@Override
+				public void onButtonItemClick(Card card, View view) {
+					_dismissAnimation.animateDismiss(card);
+					// TODO show an "undo" crouton
+					service.deleteInBackground();
+				}
+			};
+
 			return new BusinessProfileWizardServiceCard(getActivity(),
 					service.getName(), service.getPrice(),
-					service.getDuration(), "Last updated: "
-							+ Constants.DATE_FORMAT.format(service
-									.getUpdatedAt()));
+					service.getDuration(), dissmissCallback);
 		}
 	}
 }
