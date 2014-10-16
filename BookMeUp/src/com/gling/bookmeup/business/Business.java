@@ -118,7 +118,7 @@ public class Business extends ParseObject {
     
     public ParseQuery<Service> getServicesQuery() {
         final ParseQuery<Service> query = ParseQuery.getQuery(Service.class).whereEqualTo(
-                Service.Keys.BUSINESS, this).orderByAscending("updatedAt");
+                Service.Keys.BUSINESS, this).orderByDescending("updatedAt");
 
         return query;
     }

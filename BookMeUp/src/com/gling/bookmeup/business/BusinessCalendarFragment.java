@@ -33,9 +33,9 @@ public class BusinessCalendarFragment extends Fragment {
 
     private DateTime _date;
 
-    IObservableList<Booking> _bookings;
-	GenericCardArrayAdapter<Booking> _bookingsCardAdapter;
-	CardListViewWrapperView _bookingsListViewWrapperView;
+    private IObservableList<Booking> _bookings;
+    private GenericCardArrayAdapter<Booking> _bookingsCardAdapter;
+    private CardListViewWrapperView _bookingsListViewWrapperView;
     
     /**
      * Returns a new instance of this fragment for the given date.

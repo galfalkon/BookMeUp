@@ -10,6 +10,7 @@ import android.provider.Settings.Secure;
 import android.util.Log;
 
 import com.gling.bookmeup.business.Business;
+import com.gling.bookmeup.business.Service;
 import com.gling.bookmeup.customer.Customer;
 import com.gling.bookmeup.login.SplashScreenActivity;
 import com.parse.GetCallback;
@@ -52,7 +53,7 @@ public class ParseHelper {
 
 		// Register ParseObject subclasses
 		ParseObject.registerSubclass(Business.class);
-		ParseObject.registerSubclass(com.gling.bookmeup.business.Service.class);
+		ParseObject.registerSubclass(Service.class);
 		ParseObject.registerSubclass(Booking.class);
 		ParseObject.registerSubclass(Customer.class);
 		ParseObject.registerSubclass(Category.class);
@@ -194,18 +195,6 @@ public class ParseHelper {
 		public int getServicePrice() {
 			return getParseObject(Keys.SERVICE_POINTER).getInt(
 					Service.Keys.PRICE);
-		}
-	}
-
-	public static class Service {
-		public static final String CLASS_NAME = "Service";
-
-		public static class Keys {
-			public static final String ID = "objectId";
-			public static final String BUSINESS_POINTER = "businessPointer";
-			public static final String NAME = "name";
-			public static final String PRICE = "price";
-			public static final String DURATION = "duration";
 		}
 	}
 	

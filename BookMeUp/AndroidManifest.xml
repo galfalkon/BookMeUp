@@ -106,7 +106,8 @@
         </activity>
         <activity
             android:name="com.gling.bookmeup.business.wizards.BusinessProfileWizardActivity"
-            android:label="@string/title_activity_business_profile_wizard" >
+            android:label="@string/title_activity_business_profile_wizard" 
+            android:windowSoftInputMode="adjustNothing">
         </activity>
     </application>
 

@@ -44,7 +44,7 @@ public class GenericCardArrayAdapter<T> extends CardArrayAdapter
 	{
 		@Override
 		public void onAddItem(int position) {
-			_cards.add(_cardFactory.generateCard(_items.get(position)));
+			_cards.add(position, _cardFactory.generateCard(_items.get(position)));
 			notifyDataSetChanged();
 		}
 

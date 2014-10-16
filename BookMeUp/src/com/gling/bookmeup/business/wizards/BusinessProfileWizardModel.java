@@ -20,6 +20,7 @@ public class BusinessProfileWizardModel extends AbstractWizardModel {
 	public static final String CATEGORY = "Category";
 	public static final String DETAILS = "Details";
 	public static final String IMAGE = "Image";
+	public static final String SERVICES = "Services";
 
 	public BusinessProfileWizardModel(Context context) {
 		super(context);
@@ -45,6 +46,8 @@ public class BusinessProfileWizardModel extends AbstractWizardModel {
 
 		new PhoneOpeningHoursPage(this, DETAILS).setRequired(true),
 
-		new ParseImagePage(this, IMAGE));
+		new ParseImagePage(this, IMAGE),
+		
+		new ServicesPage(this, SERVICES));
 	}
 }

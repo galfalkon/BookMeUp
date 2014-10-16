@@ -1,0 +1,29 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.gling.bookmeup"
+    style="@style/WizardPageContainer"
+    android:orientation="vertical" >
+
+    <TextView style="@style/WizardPageTitle" />
+
+    <it.gmariotti.cardslib.library.view.CardView
+        android:id="@+id/business_profile_wizard_add_service_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/list_card_padding_left"
+        android:paddingRight="@dimen/list_card_padding_right"
+        android:paddingBottom="@dimen/list_card_padding_bottom"
+        app:card_layout_resourceID="@layout/business_profile_wizard_add_service_card" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <com.gling.bookmeup.main.views.CardListViewWrapperView
+            xmlns:bookmeup="http://schemas.android.com/apk/res/com.gling.bookmeup"
+            android:id="@+id/business_profile_wizard_services_cardListViewWrapper"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            bookmeup:emptyListText="No services yet" />
+    </RelativeLayout>
+
+</LinearLayout>

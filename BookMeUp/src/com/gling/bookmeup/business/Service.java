@@ -19,33 +19,36 @@ public class Service extends ParseObject {
         // A default constructor is required.
     }
  
-    public void setBusiness(Business business) {
+    public Service setBusiness(Business business) {
         put(Keys.BUSINESS, business);
+        return this;
     }
     
     public String getName() {
         return getString(Keys.NAME);
     }
  
-    public void setName(String name) {
+    public Service setName(String name) {
         put(Keys.NAME, name);
+        return this;
     }
     
-    public String getPrice() {
-    	return getNumber(Keys.PRICE).toString();
-//        return getString(Keys.PRICE);
+    public int getPrice() {
+    	return getInt(Keys.PRICE);
     }
  
-    public void setPrice(String price) {
+    public Service setPrice(int price) {
         put(Keys.PRICE, price);
+        return this;
     }
     
-    public String getDuration() {
-        return getString(Keys.DURATION);
+    public int getDuration() {
+        return getInt(Keys.DURATION);
     }
  
-    public void setDuration(String duration) {
+    public Service setDuration(int duration) {
         put(Keys.DURATION, duration);
+        return this;
     }
     
 }

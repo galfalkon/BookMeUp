@@ -23,10 +23,4 @@
             android:text="Launch" />
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/business_profile_creation_lstServices"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </ListView>
-
 </LinearLayout>
