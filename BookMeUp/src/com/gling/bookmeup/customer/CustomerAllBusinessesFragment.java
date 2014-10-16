@@ -591,6 +591,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -604,6 +605,7 @@ import android.widget.ViewSwitcher;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business;
+import com.gling.bookmeup.business.BusinessCalendarActivity;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper.Category;
 import com.gling.bookmeup.main.views.BaseGridViewWrapperView.DisplayMode;
@@ -880,9 +882,17 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
 				for (Business business : _allBusinesses) {
 					if (doesSetisfyConstraint(business, constraint) &&
 							doesSetisfyCategory(business, categoryId)) {
-						Card card = businessToCard(business, getActivity());
+						final Card card = businessToCard(business, getActivity());
 						_filteredBusinesses.add(card);
-						//TODO: card on click
+						card.setOnClickListener(new OnCardClickListener() {
+							@Override
+							public void onClick(Card arg0, View arg1) {
+								//TODO: card on click
+								Intent intent = new Intent(getActivity(), CustomerCalendarActivity.class);
+								intent.putExtra(CustomerCalendarActivity.BUSINESS_ID_EXTRA, card.getId());
+								startActivity(intent);
+							}
+						});
 					}
 				}
 			}

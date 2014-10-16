@@ -24,6 +24,8 @@ import com.gling.bookmeup.R;
 public class CustomerCalendarActivity extends FragmentActivity {
 
 	private static final String TAG = "CustomerCalendarActivity";
+	
+	public static final String BUSINESS_ID_EXTRA = "BusinessIdExtra";
 
 	private static final int DAYS_MARGIN = 30;
 
@@ -79,17 +81,25 @@ public class CustomerCalendarActivity extends FragmentActivity {
 		    }
 		});
 	}
+	
+	public String getStringExtra(String extraName) {
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			return extras.getString(extraName);
+		}
+		return null;
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.business_calendar, menu);
+		getMenuInflater().inflate(R.menu.customer_calendar, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.business_calendar_action_today:
+		case R.id.customer_calendar_action_today:
 			if (!_sectionsPagerAdapter.getAnchor().equals(_today)) {
 				_sectionsPagerAdapter = new CalendarPagerAdapter(
 						getSupportFragmentManager(), _today);
@@ -100,7 +110,7 @@ public class CustomerCalendarActivity extends FragmentActivity {
 				_tabs.smoothScrollTo(_scrollCenter, 0);				
 			}
 			return true;
-		case R.id.business_calendar_action_pick:
+		case R.id.customer_calendar_action_pick:
 			handleDatePicker();
 			return true;
 		default:
