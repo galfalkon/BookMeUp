@@ -83,10 +83,6 @@
             android:label="@string/customer_activity_title" >
         </activity>
         <activity
-            android:name="com.gling.bookmeup.business.BusinessProfileActivity"
-            android:label="@string/title_activity_profile_edit" >
-        </activity>
-        <activity
             android:name="com.gling.bookmeup.business.BusinessCalendarActivity"
             android:label="@string/title_activity_business_calendar"
             android:parentActivityName="com.gling.bookmeup.business.BusinessMainActivity" >

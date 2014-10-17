@@ -38,9 +38,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:textColor="@android:color/black"
-            android:text="Previous" />
+            style="?android:attr/buttonBarButtonStyle"
+            android:text="@string/business_profile_wizard_previous" />
 
         <Button
             android:id="@+id/business_profile_wizard_next_button"
@@ -48,7 +47,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/selectable_item_background"
-            android:text="Next" />
+            android:textColor="@android:color/black"
+            android:text="@string/business_profile_wizard_next" />
     </LinearLayout>
 
 </LinearLayout>
