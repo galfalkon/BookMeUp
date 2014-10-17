@@ -45,7 +45,7 @@ public class BusinessProfileWizardModel extends AbstractWizardModel {
                                                  .setValue(categoryName)
                                                  .setRequired(true),
 
-        new PhoneOpeningHoursPage(this, DETAILS).setRequired(true),
+        new PhoneOpeningHoursPage(this, DETAILS),
 
         new ParseImagePage(this, IMAGE),
 

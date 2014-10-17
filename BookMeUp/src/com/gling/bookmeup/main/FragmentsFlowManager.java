@@ -6,7 +6,6 @@ import android.util.Log;
 import android.util.SparseArray;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.business.BusinessImageCaptureFragment;
 import com.gling.bookmeup.login.EMailLoginFragment;
 import com.gling.bookmeup.login.EMailSignUpFragment;
 import com.gling.bookmeup.login.UserTypeSelectionFragment;

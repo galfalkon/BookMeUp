@@ -21,10 +21,7 @@ import android.widget.TextView;
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.main.BookMeUpApplication;
-import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.Utils;
-import com.parse.GetCallback;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseImageView;
 import com.tech.freak.wizardpager.model.Page;
@@ -96,17 +93,11 @@ public class ParseImageFragment extends Fragment {
         if (!TextUtils.isEmpty(imageUri)) {
             imageView.setImageURI(Uri.parse(imageUri));
         } else {
-            ParseHelper.fetchBusiness(new GetCallback<Business>() {
-
-                @Override
-                public void done(Business business, ParseException e) {
-                    ParseFile imageFile = business.getImageFile();
-                    if (imageFile != null) {
-                        imageView.setParseFile(imageFile);
-                        imageView.loadInBackground();
-                    }
-                }
-            });
+            ParseFile imageFile = Business.getCurrentBusiness().getImageFile();
+            if (imageFile != null) {
+                imageView.setParseFile(imageFile);
+                imageView.loadInBackground();
+            }
         }
 
         imageView.setOnClickListener(new OnClickListener() {

@@ -25,6 +25,7 @@ import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.gling.bookmeup.main.FragmentsFlowManager;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
+import com.gling.bookmeup.main.ParseHelper.Category;
 import com.gling.bookmeup.main.ParseHelper.User;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
@@ -169,6 +170,10 @@ public class EMailLoginFragment extends OnClickListenerFragment {
     				if (businessParseObject != null) 
     				{
     					Business currentBusiness = businessParseObject.fetchIfNeeded();
+    					Category category = currentBusiness.getCategory();
+                        if (category != null) {
+                            category.fetchIfNeeded();
+                        }
     					Business.setCurrentBusiness(currentBusiness);
     				}
     				
