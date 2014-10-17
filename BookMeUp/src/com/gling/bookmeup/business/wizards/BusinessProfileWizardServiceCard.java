@@ -1,9 +1,7 @@
 package com.gling.bookmeup.business.wizards;
 
 import it.gmariotti.cardslib.library.internal.Card;
-import it.gmariotti.cardslib.library.internal.CardExpand;
 import it.gmariotti.cardslib.library.internal.CardHeader;
-import it.gmariotti.cardslib.library.internal.dismissanimation.SwipeDismissAnimation;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;

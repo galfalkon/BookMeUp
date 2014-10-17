@@ -4,9 +4,11 @@ import java.util.List;
 
 import android.content.Context;
 
+import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.main.ParseHelper.Category;
 import com.tech.freak.wizardpager.model.AbstractWizardModel;
 import com.tech.freak.wizardpager.model.PageList;
+import com.tech.freak.wizardpager.model.SingleFixedChoicePage;
 
 public class BusinessProfileWizardModel extends AbstractWizardModel {
 
@@ -29,11 +31,19 @@ public class BusinessProfileWizardModel extends AbstractWizardModel {
             categoryNames[i] = categories.get(i).getName();
         }
 
+        String categoryName = null;
+        Category category = Business.getCurrentBusiness().getCategory();
+        if (category != null) {
+            categoryName = category.getName();
+        }
+
         return new PageList(
 
         new NameDescriptionPage(this, GENERAL_INFO).setRequired(true),
 
-        new CategoryPage(this, CATEGORY).setChoices(categoryNames).setRequired(true),
+        new SingleFixedChoicePage(this, CATEGORY).setChoices(categoryNames)
+                                                 .setValue(categoryName)
+                                                 .setRequired(true),
 
         new PhoneOpeningHoursPage(this, DETAILS).setRequired(true),
 
