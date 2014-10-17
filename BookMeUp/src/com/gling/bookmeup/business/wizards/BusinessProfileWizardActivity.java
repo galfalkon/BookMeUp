@@ -5,12 +5,14 @@ import java.util.List;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.View;
@@ -20,7 +22,6 @@ import android.widget.Button;
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessMainActivity;
-import com.gling.bookmeup.main.Utils;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.SaveCallback;
@@ -58,53 +59,61 @@ public class BusinessProfileWizardActivity extends FragmentActivity implements
         final ProgressDialog progressDialog = ProgressDialog
                                                             .show(_context,
                                                                   null,
-                                                                  getString(R.string.progress_dialog_please_wait));
+                                                                  getString(R.string.progress_dialog_saving_profile));
 
-        Business business = Business.getCurrentBusiness();
-        business.setName(_wizardModel.findByKey(BusinessProfileWizardModel.GENERAL_INFO)
-                                     .getData()
-                                     .getString(NameDescriptionPage.NAME_DATA_KEY));
-
-        String description = _wizardModel.findByKey(BusinessProfileWizardModel.GENERAL_INFO)
-                                         .getData()
-                                         .getString(NameDescriptionPage.DESCRIPTION_DATA_KEY);
-        if (description != null) {
-            business.setDescription(description);
-        }
-
-        business.setCategoryByString(_wizardModel.findByKey(BusinessProfileWizardModel.CATEGORY)
-                                                 .getData()
-                                                 .getString(Page.SIMPLE_DATA_KEY));
-
-        business.setPhoneNumber(_wizardModel.findByKey(BusinessProfileWizardModel.DETAILS)
-                                            .getData()
-                                            .getString(PhoneOpeningHoursPage.PHONE_DATA_KEY));
-
-        String openingHours = _wizardModel.findByKey(BusinessProfileWizardModel.DETAILS)
-                                          .getData()
-                                          .getString(PhoneOpeningHoursPage.OPENING_HOURS_DATA_KEY);
-        if (openingHours != null) {
-            business.setOpeningHours(openingHours);
-        }
-
-        String imageUri = _wizardModel.findByKey(BusinessProfileWizardModel.IMAGE)
-                                      .getData()
-                                      .getString(ParseImagePage.SIMPLE_DATA_KEY);
-
-        if (imageUri != null) {
-            business.setImageFile(new ParseFile("business_image.jpg",
-                    Utils.getScaledImage(getBaseContext(), imageUri)));
-        }
-
-        business.saveInBackground(new SaveCallback() {
-
+        new AsyncTask<Void, Void, Void>() {
             @Override
-            public void done(ParseException e) {
-                progressDialog.dismiss();
-                Intent intent = new Intent(_context, BusinessMainActivity.class);
-                startActivity(intent);
+            protected Void doInBackground(Void... params) {
+                Business business = Business.getCurrentBusiness();
+                business.setName(_wizardModel.findByKey(BusinessProfileWizardModel.GENERAL_INFO)
+                                             .getData()
+                                             .getString(NameDescriptionPage.NAME_DATA_KEY));
+
+                String description = _wizardModel.findByKey(BusinessProfileWizardModel.GENERAL_INFO)
+                                                 .getData()
+                                                 .getString(NameDescriptionPage.DESCRIPTION_DATA_KEY);
+                if (description != null) {
+                    business.setDescription(description);
+                }
+
+                business.setCategoryByString(_wizardModel.findByKey(BusinessProfileWizardModel.CATEGORY)
+                                                         .getData()
+                                                         .getString(Page.SIMPLE_DATA_KEY));
+
+                business.setPhoneNumber(_wizardModel.findByKey(BusinessProfileWizardModel.DETAILS)
+                                                    .getData()
+                                                    .getString(PhoneOpeningHoursPage.PHONE_DATA_KEY));
+
+                String openingHours = _wizardModel.findByKey(BusinessProfileWizardModel.DETAILS)
+                                                  .getData()
+                                                  .getString(PhoneOpeningHoursPage.OPENING_HOURS_DATA_KEY);
+                if (openingHours != null) {
+                    business.setOpeningHours(openingHours);
+                }
+
+                byte[] scaledImage = _wizardModel.findByKey(BusinessProfileWizardModel.IMAGE)
+                                                 .getData()
+                                                 .getByteArray(ParseImagePage.SIMPLE_DATA_KEY);
+
+                if (scaledImage != null) {
+                    business.setImageFile(new ParseFile("business_image.jpg", scaledImage));
+                }
+
+                try {
+                    business.save();
+                    progressDialog.dismiss();
+                    Intent intent = new Intent(_context, BusinessMainActivity.class);
+                    startActivity(intent);
+                } catch (ParseException e) {
+                    Log.e(TAG, "Failed saving profile " + e.getMessage());
+                    // TODO what in this case?
+                    // TODO crouton
+                }
+                
+                return null;
             }
-        });
+            
+        }.execute();
     }
 
     public void onCreate(Bundle savedInstanceState) {

@@ -17,12 +17,12 @@ public class Utils {
 
     private static final int IMAGE_WIDTH = 612;
 
-    public static byte[] getScaledImage(Context context, String uri) {
+    public static byte[] getScaledImage(Context context, Uri uri) {
         byte[] data = null;
 
         try {
             ContentResolver cr = context.getContentResolver();
-            InputStream inputStream = cr.openInputStream(Uri.parse(uri));
+            InputStream inputStream = cr.openInputStream(uri);
             Bitmap businessImage = BitmapFactory.decodeStream(inputStream);
 
             // Resize photo
