@@ -124,6 +124,16 @@ public class ParseHelper {
 			public static final String IMAGE = "image";
 		}
 		
+		private static List<Category> _categories;
+	    
+	    public static void setCategories(List<Category> categories) {
+	        _categories = categories;
+	    }
+	    
+	    public static List<Category> getCategories() {
+	        return _categories;
+	    }
+		
 		public String getName() {
 			return getString(Keys.NAME);
 		}

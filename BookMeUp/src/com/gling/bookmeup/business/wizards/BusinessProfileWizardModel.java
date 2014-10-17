@@ -1,53 +1,44 @@
 package com.gling.bookmeup.business.wizards;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
-import com.gling.bookmeup.R;
-import com.gling.bookmeup.main.BookMeUpApplication;
-import com.gling.bookmeup.main.ParseHelper;
+import com.gling.bookmeup.main.ParseHelper.Category;
 import com.tech.freak.wizardpager.model.AbstractWizardModel;
-import com.tech.freak.wizardpager.model.ImagePage;
 import com.tech.freak.wizardpager.model.PageList;
-import com.tech.freak.wizardpager.model.SingleFixedChoicePage;
 
 public class BusinessProfileWizardModel extends AbstractWizardModel {
 
-	public static final String GENERAL_INFO = "General Info";
-	public static final String CATEGORY = "Category";
-	public static final String DETAILS = "Details";
-	public static final String IMAGE = "Image";
-	public static final String SERVICES = "Services";
+    public static final String GENERAL_INFO = "General Info";
+    public static final String CATEGORY = "Category";
+    public static final String DETAILS = "Details";
+    public static final String IMAGE = "Image";
+    public static final String SERVICES = "Services";
 
-	public BusinessProfileWizardModel(Context context) {
-		super(context);
-	}
+    public BusinessProfileWizardModel(Context context) {
+        super(context);
+    }
 
-	@Override
-	protected PageList onNewRootPageList() {
-		SharedPreferences sp = BookMeUpApplication.getContext().getSharedPreferences(
-				BookMeUpApplication.getContext().getString(R.string.preference_file_key),
-				Context.MODE_PRIVATE);
-		Set<String> categorySet = new HashSet<String>();
-		categorySet = sp.getStringSet(ParseHelper.BUSINESS_CATEGORIES,
-				categorySet);
-		final String[] categoryArr = categorySet.toArray(new String[categorySet
-				.size()]);
+    @Override
+    protected PageList onNewRootPageList() {
 
-		return new PageList(
+        List<Category> categories = Category.getCategories();
+        String[] categoryNames = new String[categories.size()];
+        for (int i = 0; i < categories.size(); ++i) {
+            categoryNames[i] = categories.get(i).getName();
+        }
 
-		new NameDescriptionPage(this, GENERAL_INFO).setRequired(true),
+        return new PageList(
 
-		new CategoryPage(this, CATEGORY).setChoices(categoryArr)
-				.setRequired(true),
+        new NameDescriptionPage(this, GENERAL_INFO).setRequired(true),
 
-		new PhoneOpeningHoursPage(this, DETAILS).setRequired(true),
+        new CategoryPage(this, CATEGORY).setChoices(categoryNames).setRequired(true),
 
-		new ParseImagePage(this, IMAGE),
-		
-		new ServicesPage(this, SERVICES));
-	}
+        new PhoneOpeningHoursPage(this, DETAILS).setRequired(true),
+
+        new ParseImagePage(this, IMAGE),
+
+        new ServicesPage(this, SERVICES));
+    }
 }

@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
@@ -22,9 +23,9 @@ import android.widget.Button;
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessMainActivity;
+import com.gling.bookmeup.main.ParseHelper.Category;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.SaveCallback;
 import com.tech.freak.wizardpager.model.AbstractWizardModel;
 import com.tech.freak.wizardpager.model.ModelCallbacks;
 import com.tech.freak.wizardpager.model.Page;
@@ -76,11 +77,20 @@ public class BusinessProfileWizardActivity extends FragmentActivity implements
                     business.setDescription(description);
                 }
 
-                business.setCategoryByString(_wizardModel.findByKey(BusinessProfileWizardModel.CATEGORY)
-                                                         .getData()
-                                                         .getString(Page.SIMPLE_DATA_KEY));
+                String categoryName = _wizardModel.findByKey(BusinessProfileWizardModel.CATEGORY)
+                                                  .getData()
+                                                  .getString(Page.SIMPLE_DATA_KEY);
+                Category category = null;
+                for (Category c : Category.getCategories()) {
+                    if (TextUtils.equals(categoryName, c.getName())) {
+                        category = c;
+                    }
+                }
 
-                business.setPhoneNumber(_wizardModel.findByKey(BusinessProfileWizardModel.DETAILS)
+                business.setCategory(category);
+
+                business
+                        .setPhoneNumber(_wizardModel.findByKey(BusinessProfileWizardModel.DETAILS)
                                                     .getData()
                                                     .getString(PhoneOpeningHoursPage.PHONE_DATA_KEY));
 
@@ -109,10 +119,10 @@ public class BusinessProfileWizardActivity extends FragmentActivity implements
                     // TODO what in this case?
                     // TODO crouton
                 }
-                
+
                 return null;
             }
-            
+
         }.execute();
     }
 
