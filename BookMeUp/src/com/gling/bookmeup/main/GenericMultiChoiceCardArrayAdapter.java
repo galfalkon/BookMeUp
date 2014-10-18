@@ -11,8 +11,16 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.ActionMode;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.gling.bookmeup.R;
 
 public abstract class GenericMultiChoiceCardArrayAdapter<T> extends CardArrayMultiChoiceAdapter
 {
@@ -44,8 +52,30 @@ public abstract class GenericMultiChoiceCardArrayAdapter<T> extends CardArrayMul
 	}
 	
 	@Override
-    public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked, CardView cardView, Card card) {
+    public void onItemCheckedStateChanged(final ActionMode mode, int position, long id, boolean checked, CardView cardView, Card card) 
+	{
     	Log.i(TAG, "Click;" + position + " - " + checked);
+    	
+    	LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    	View view = layoutInflater.inflate(R.layout.contextual_action_bar_title, null);
+    	
+    	TextView txtNumItems = (TextView)view.findViewById(R.id.contextual_action_bar_txtNumItems);
+    	txtNumItems.setText(getCardListView().getCheckedItemCount() + "\nSelected");
+    	
+    	Button btnSelectAll = (Button)view.findViewById(R.id.contextual_action_bar_btnSelectAll);
+    	btnSelectAll.setOnClickListener(new OnClickListener() 
+    	{
+			@Override
+			public void onClick(View view) 
+			{
+				ListView listView = getCardListView();
+				for (int i = 0; i < _cards.size(); i++)
+				{
+					listView.setItemChecked(i, true);
+				}
+			}
+		});
+    	mode.setCustomView(view);
     }
 
 	@Override

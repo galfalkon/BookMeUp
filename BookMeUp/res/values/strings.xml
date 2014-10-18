@@ -171,5 +171,8 @@
     <string name="business_profile_wizard_next">Next</string>
     <string name="progress_dialog_please_wait">Please wait...</string>
     <string name="progress_dialog_saving_profile">Saving your profile..</string>
+    
+    <!-- Contextual action bar -->
+    <string name="contextual_action_bar_btnSelectAll">Select All</string>
 
 </resources>

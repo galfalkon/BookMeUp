@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    style="?android:attr/actionBarTabBarStyle"
+    android:orientation="horizontal" >
+    
+    <Button
+        android:id="@+id/contextual_action_bar_btnSelectAll"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:textAppearance="?android:attr/actionBarTabTextStyle"
+        style="?android:attr/actionBarTabStyle"
+        android:gravity="center"
+        android:text="@string/contextual_action_bar_btnSelectAll" />
+    
+    <TextView 
+        android:id="@+id/contextual_action_bar_txtNumItems"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:textAppearance="?android:attr/actionBarTabTextStyle" />
+
+</LinearLayout>
