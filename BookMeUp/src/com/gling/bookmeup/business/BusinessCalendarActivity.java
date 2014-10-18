@@ -95,10 +95,10 @@ public class BusinessCalendarActivity extends FragmentActivity {
 						getSupportFragmentManager(), _today);
 				_viewPager.setAdapter(_sectionsPagerAdapter);
 				_tabs.setViewPager(_viewPager);
-				_viewPager.setCurrentItem(DAYS_MARGIN, true);
 			} else {
-				_tabs.smoothScrollTo(_scrollCenter, 0);				
+				_tabs.smoothScrollTo(_scrollCenter, 0);	
 			}
+			_viewPager.setCurrentItem(DAYS_MARGIN, true);
 			return true;
 		case R.id.business_calendar_action_pick:
 			handleDatePicker();
@@ -123,10 +123,10 @@ public class BusinessCalendarActivity extends FragmentActivity {
 									getSupportFragmentManager(), selectedDate);
 							_viewPager.setAdapter(_sectionsPagerAdapter);
 							_tabs.setViewPager(_viewPager);
-							_viewPager.setCurrentItem(DAYS_MARGIN, true);
 						} else {
 							_tabs.smoothScrollTo(_scrollCenter, 0);				
 						}
+						_viewPager.setCurrentItem(DAYS_MARGIN, true);
 					}
 				}, _today.getYear(), _today.getMonthOfYear() - 1,
 				_today.getDayOfMonth());

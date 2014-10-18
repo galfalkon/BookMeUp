@@ -3,15 +3,17 @@
     tools:context="com.gling.bookmeup.MainActivityActivity" >
 
     <item
-        android:id="@+id/business_action_profile"
-        android:title="Profile"
-        android:showAsAction="always"
-        android:icon="@drawable/ic_menu_friendslist" />
-    <item
         android:id="@+id/business_action_calendar"
-        android:title="Calendar"
+        android:icon="@android:drawable/ic_menu_my_calendar"
+        android:orderInCategory="1"
         android:showAsAction="always"
-        android:icon="@android:drawable/ic_menu_my_calendar" />
+        android:title="Calendar"/>
+    <item
+        android:id="@+id/business_action_profile"
+        android:icon="@drawable/ic_menu_friendslist"
+        android:orderInCategory="2"
+        android:showAsAction="always"
+        android:title="Profile"/>
     <item
         android:id="@+id/business_action_logout"
         android:orderInCategory="100"
