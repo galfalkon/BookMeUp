@@ -605,7 +605,7 @@ import android.widget.ViewSwitcher;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business;
-import com.gling.bookmeup.business.BusinessCalendarActivity;
+import com.gling.bookmeup.customer.cards.CategoryCard;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper.Category;
 import com.gling.bookmeup.main.views.BaseGridViewWrapperView.DisplayMode;
@@ -737,7 +737,6 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
         				@Override
         				public void onClick(Card card, View view) {
         					showBusinessesByTypeView(card.getId(), null);
-        					
         				}
         			});
                 	_allCategoriesCards.add(card);
@@ -750,10 +749,7 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
     }
     
     private static Card categoryToCard(Category category, Activity activity) {
-    	Card card = new Card(activity);
-    	CardHeader header = new CardHeader(activity);
-    	header.setTitle(category.getName());
-    	card.addCardHeader(header);
+    	Card card = new CategoryCard(activity, category);
 //    	card.setCardView(cardView)
 //    	card.
 //    	CardThumbnail thumb = new CardThumbnail(activity);
