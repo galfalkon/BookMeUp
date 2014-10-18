@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.login.LoginMainActivity;
 import com.gling.bookmeup.main.NavigationDrawerActivity;
+import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.PushUtils;
 import com.parse.ParseUser;
 
@@ -85,11 +86,9 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		switch (item.getItemId()) {
-		case R.id.customer_action_settings:
-			return true;
 		case R.id.customer_action_logout:
 			// TODO extract to session manager class
-			ParseUser.logOut();
+			ParseHelper.logOut();
 			Intent intent = new Intent(this, LoginMainActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
 					| Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -37,6 +37,13 @@ public class ParseHelper {
 	    return ParseUser.getCurrentUser().getBoolean("emailVerified");
 	}
 	
+	public static void logOut() {
+	    Business.setCurrentBusiness(null);
+	    Customer.setCurrentCustomer(null);
+	    ParseUser.logOut();
+	    Log.i(TAG, "Logged out");
+	}
+	
 	public static void fetchBusiness(GetCallback<Business> callback) {
 		// TODO null checks on getCurrentUser()
 		ParseUser.getCurrentUser().getParseObject(User.Keys.BUSINESS_POINTER)
