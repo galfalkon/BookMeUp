@@ -1,11 +1,12 @@
 package com.gling.bookmeup.main;
 
+import it.gmariotti.cardslib.library.internal.Card;
+import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import it.gmariotti.cardslib.library.internal.Card;
-import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
-import android.content.Context;
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -17,18 +18,20 @@ import android.util.Log;
  */
 public class GenericCardArrayAdapter<T> extends CardArrayAdapter
 {
+	private final Activity _activity;
 	private final IObservableList<T> _items;
 	private final List<Card> _cards;
 	private final ICardGenerator<T> _cardFactory;
 	
-	public GenericCardArrayAdapter(Context context, IObservableList<T> items, ICardGenerator<T> cardFactory) 
+	public GenericCardArrayAdapter(Activity activity, IObservableList<T> items, ICardGenerator<T> cardFactory) 
 	{
-		this(context, new ArrayList<Card>(), items, cardFactory);
+		this(activity, new ArrayList<Card>(), items, cardFactory);
 	}
 	
-	private GenericCardArrayAdapter(Context context, List<Card> cards, IObservableList<T> items, ICardGenerator<T> cardFactory) 
+	private GenericCardArrayAdapter(Activity activity, List<Card> cards, IObservableList<T> items, ICardGenerator<T> cardFactory) 
 	{
-		super(context, cards);
+		super(activity, cards);
+		_activity = activity;
 		_items = items;
 		_cards = cards;
 		_items.registerChangeListener(new ItemListListener());
@@ -45,7 +48,14 @@ public class GenericCardArrayAdapter<T> extends CardArrayAdapter
 		@Override
 		public void onAddItem(int position) {
 			_cards.add(position, _cardFactory.generateCard(_items.get(position)));
-			notifyDataSetChanged();
+			_activity.runOnUiThread(new Runnable() 
+			{
+				@Override
+				public void run() 
+				{
+					notifyDataSetChanged();
+				}
+			});
 		}
 
 		@Override
@@ -76,13 +86,27 @@ public class GenericCardArrayAdapter<T> extends CardArrayAdapter
 		@Override
 		public void onRemoveItem(int position) {
 			_cards.remove(position);
-			notifyDataSetChanged();
+			_activity.runOnUiThread(new Runnable() 
+			{
+				@Override
+				public void run() 
+				{
+					notifyDataSetChanged();
+				}
+			});
 		}
 
 		@Override
 		public void onClear() {
 			_cards.clear();
-			notifyDataSetChanged();
+			_activity.runOnUiThread(new Runnable() 
+			{
+				@Override
+				public void run() 
+				{
+					notifyDataSetChanged();
+				}
+			});
 		}
 	}
 }

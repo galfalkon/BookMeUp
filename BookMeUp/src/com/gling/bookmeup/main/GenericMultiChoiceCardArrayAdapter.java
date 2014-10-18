@@ -7,6 +7,7 @@ import it.gmariotti.cardslib.library.view.CardView;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -26,19 +27,21 @@ public abstract class GenericMultiChoiceCardArrayAdapter<T> extends CardArrayMul
 {
 	private static final String TAG = "GenericMultiChoiceCardArrayAdapter";
 	
+	private final Activity _activity;
 	private final IObservableList<T> _items;
 	private final List<Card> _cards;
 	private final ICardGenerator<T> _cardFactory;
 	private final int _menuRes;
 	
-	public GenericMultiChoiceCardArrayAdapter(Context context, IObservableList<T> items, ICardGenerator<T> cardFactory, int menuRes) 
+	public GenericMultiChoiceCardArrayAdapter(Activity activity, IObservableList<T> items, ICardGenerator<T> cardFactory, int menuRes) 
 	{
-		this(context, new ArrayList<Card>(), items, cardFactory, menuRes);
+		this(activity, new ArrayList<Card>(), items, cardFactory, menuRes);
 	}
 	
-	private GenericMultiChoiceCardArrayAdapter(Context context, List<Card> cards, IObservableList<T> items, ICardGenerator<T> cardFactory, int menuRes) 
+	private GenericMultiChoiceCardArrayAdapter(Activity activity, List<Card> cards, IObservableList<T> items, ICardGenerator<T> cardFactory, int menuRes) 
 	{
-		super(context, cards);
+		super(activity, cards);
+		_activity = activity;
 		_items = items;
 		_cards = cards;
 		_items.registerChangeListener(new ItemListListener());
@@ -111,7 +114,14 @@ public abstract class GenericMultiChoiceCardArrayAdapter<T> extends CardArrayMul
 		@Override
 		public void onAddItem(int position) {
 			_cards.add(position, _cardFactory.generateCard(_items.get(position)));
-			notifyDataSetChanged();
+			_activity.runOnUiThread(new Runnable() 
+			{
+				@Override
+				public void run() 
+				{
+					notifyDataSetChanged();
+				}
+			});
 		}
 
 		@Override
@@ -142,13 +152,27 @@ public abstract class GenericMultiChoiceCardArrayAdapter<T> extends CardArrayMul
 		@Override
 		public void onRemoveItem(int position) {
 			_cards.remove(position);
-			notifyDataSetChanged();
+			_activity.runOnUiThread(new Runnable() 
+			{
+				@Override
+				public void run() 
+				{
+					notifyDataSetChanged();
+				}
+			});
 		}
 
 		@Override
 		public void onClear() {
 			_cards.clear();
-			notifyDataSetChanged();
+			_activity.runOnUiThread(new Runnable() 
+			{
+				@Override
+				public void run() 
+				{
+					notifyDataSetChanged();
+				}
+			});
 		}
 	}
 }

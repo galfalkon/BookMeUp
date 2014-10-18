@@ -3,23 +3,18 @@ package com.gling.bookmeup.business;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
 import it.gmariotti.cardslib.library.internal.Card.OnLongCardClickListener;
-import it.gmariotti.cardslib.library.internal.CardArrayMultiChoiceAdapter;
 import it.gmariotti.cardslib.library.internal.CardExpand;
 import it.gmariotti.cardslib.library.internal.CardHeader;
-import it.gmariotti.cardslib.library.view.CardView;
-
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -27,8 +22,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,12 +36,16 @@ import android.widget.TextView;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.Constants;
+import com.gling.bookmeup.main.GenericMultiChoiceCardArrayAdapter;
+import com.gling.bookmeup.main.ICardGenerator;
+import com.gling.bookmeup.main.IObservableList;
+import com.gling.bookmeup.main.ObservableArrayList;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper.Booking;
 import com.gling.bookmeup.main.ParseHelper.CustomerClass;
 import com.gling.bookmeup.main.PushUtils;
-import com.gling.bookmeup.main.views.CardListViewWrapperView;
 import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
+import com.gling.bookmeup.main.views.CardListViewWrapperView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -60,20 +57,20 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class BusinessCustomersListFragment  extends OnClickListenerFragment implements TextWatcher {
 	private static final String TAG = "BusinessCustomersListFragment";
-	
-	private HashMap<String, Customer> _allCustomers;
-	private CustomerCardArrayMultiChoiceAdapter _customerCardsAdapter;
-	private List<Card> _cards;
 
+	private IObservableList<Customer> _allCustomers, _filteredCustomers;
+	private CustomerCardArrayMultiChoiceAdapter _customerCardsAdapter;
+	
 	private CardListViewWrapperView _customerCardListView;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.i(TAG, "onCreateView");
 
-		_allCustomers = new HashMap<String, Customer>();
-		_cards = new ArrayList<Card>();
-		_customerCardsAdapter = new CustomerCardArrayMultiChoiceAdapter(getActivity(), _cards);
+		_allCustomers = new ObservableArrayList<Customer>();
+		_filteredCustomers = new ObservableArrayList<Customer>();
+		
+		_customerCardsAdapter = new CustomerCardArrayMultiChoiceAdapter(_filteredCustomers, new CustomerCardGenerator(), R.menu.business_customer_list_mutlichoice);
 		
 		View view = super.onCreateView(inflater, container, savedInstanceState);
 		_customerCardListView = (CardListViewWrapperView) view.findViewById(R.id.business_customer_list_listViewCustomers);
@@ -108,25 +105,18 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 				
 				for (Booking bookingParseObject : objects) {
 					Customer currentCustomer = new Customer(bookingParseObject);
-					Card customerCard = currentCustomer.toCard(getActivity());
-					customerCard.setOnLongClickListener(new OnLongCardClickListener() {
-						
-						@Override
-						public boolean onLongClick(Card arg0, View arg1) {
-							return _customerCardsAdapter.startActionMode(getActivity());
-						}
-					});
-					
-					if (_allCustomers.containsKey(currentCustomer._id))
+					int indexOfCustomer = _allCustomers.indexOf(currentCustomer);
+					if (indexOfCustomer == -1)
 					{
-						_allCustomers.get(currentCustomer._id).notifyBooking(bookingParseObject);
+						_allCustomers.add(currentCustomer);
 					}
 					else
 					{
-						_cards.add(customerCard);
-						_allCustomers.put(currentCustomer._id, currentCustomer);
+						_allCustomers.get(indexOfCustomer).notifyBooking(bookingParseObject);
 					}
 				}
+				
+				_filteredCustomers.addAll(_allCustomers);
 				_customerCardsAdapter.notifyDataSetChanged();
 				
 				DisplayMode newDisplayMode = _allCustomers.isEmpty()? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;  
@@ -231,10 +221,16 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 	private void handleSendMessageToSelectedClients() {
 		Log.i(TAG, "handleSendMessageToSelectedClients");
 		
-		final List<String> selectedCustomersIds = _customerCardsAdapter.getSelectedItemsId();
-		if (selectedCustomersIds.isEmpty()) {
+		List<Customer> selectedCustomers = _customerCardsAdapter.getSelectedItems();
+		if (selectedCustomers.isEmpty()) {
 			Crouton.showText(getActivity(), "Please select customers from the list", Style.ALERT);
 			return;
+		}
+		
+		final List<String> selectedCustomerIds = new ArrayList<String>();
+		for (Customer customer : selectedCustomers)
+		{
+			selectedCustomerIds.add(customer._id);
 		}
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -250,7 +246,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		    	Log.i(TAG, "Sending message to selected clients");
 		    	String message = ((TextView)view.findViewById(R.id.business_client_list_send_message_dialog_edtMessage)).getText().toString();
 		    	
-		    	PushUtils.sendMessageToCustomers(Business.getCurrentBusiness().getObjectId(), Business.getCurrentBusiness().getName(), selectedCustomersIds, message, new SendCallback() {
+		    	PushUtils.sendMessageToCustomers(Business.getCurrentBusiness().getObjectId(), Business.getCurrentBusiness().getName(), selectedCustomerIds, message, new SendCallback() {
 					@Override
 					public void done(ParseException e) {
 						Log.i(TAG, "sendMessageToCustomers done");
@@ -275,10 +271,16 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 	private void handleSendOfferToSelectedClients() {
 		Log.i(TAG, "handleSendOfferToSelectedClients");
 		
-		final List<String> selectedCustomersIds = _customerCardsAdapter.getSelectedItemsId();
-		if (selectedCustomersIds.isEmpty()) {
+		List<Customer> selectedCustomers = _customerCardsAdapter.getSelectedItems();
+		if (selectedCustomers.isEmpty()) {
 			Crouton.showText(getActivity(), "Please select customers from the list", Style.ALERT);
 			return;
+		}
+		
+		final List<String> selectedCustomerIds = new ArrayList<String>();
+		for (Customer customer : selectedCustomers)
+		{
+			selectedCustomerIds.add(customer._id);
 		}
 		
 		LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -306,7 +308,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 
 		    	final int discount = (Integer) discountSpinner.getSelectedItem();
 		    	final int duration = (Integer) durationSpinner.getSelectedItem();
-		    	PushUtils.sendOfferToCustomers(Business.getCurrentBusiness().getObjectId(), Business.getCurrentBusiness().getName(), selectedCustomersIds, discount, duration, new SendCallback() {
+		    	PushUtils.sendOfferToCustomers(Business.getCurrentBusiness().getObjectId(), Business.getCurrentBusiness().getName(), selectedCustomerIds, discount, duration, new SendCallback() {
 					
 					@Override
 					public void done(ParseException e) {
@@ -375,75 +377,8 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		public boolean equals(Object other) {
 			return !(other instanceof Customer) || (_id.equals(((Customer)other)._id)); 
 		}
-		
-		public Card toCard(Context context)
-		{
-			CardHeader header = new CardHeader(context);
-			header.setTitle(_customerName);
-			header.setButtonExpandVisible(true);
-
-			CardExpand expand = new CardExpand(context);
-			expand.setTitle(
-					"Total spendings: " + _totalSpendings + " NIS\n" +
-					"Last visit: " + Constants.DATE_FORMAT.format(_lastVisit));
-			
-			Card card = new Card(context);
-			card.addCardHeader(header);
-			card.addCardExpand(expand);
-			card.setId(_id);
-			card.setOnClickListener(new OnCardClickListener() {
-				
-				@Override
-				public void onClick(Card card, View view) {
-					card.doToogleExpand();
-				}
-			});
-			
-			return card;
-		}
 	}
 	
-//	private class CustomersArrayAdapter extends ArrayAdapter<Customer> {
-//		
-//		private CustomersFilter _clientFilter;
-//		
-//		public CustomersArrayAdapter() {
-//			super(getActivity(), R.layout.business_customer_list_item, _filteredCustomers);
-//			_clientFilter = new CustomersFilter();
-//		}
-//		
-//		@Override
-//		public View getView(int position, View convertView, ViewGroup parent) {
-//			LayoutInflater inflator = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//			if (convertView == null) {
-//				convertView = inflator.inflate(R.layout.business_customer_list_item, null);
-//			}
-//			
-//			final Customer client = _filteredCustomers.get(position);
-//			
-//			TextView clientNameTextView = (TextView) convertView.findViewById(R.id.client_list_item_txtClientName);
-//			TextView totalSepndingsTextView = (TextView) convertView.findViewById(R.id.client_list_item_txtTotalSpent);
-//			CheckBox checkBoxView = (CheckBox)convertView.findViewById(R.id.client_list_item_chkBox);
-//			checkBoxView.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-//				@Override
-//				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//					client._isSelected = isChecked;
-//				}
-//			});
-//			
-//			clientNameTextView.setText(client._customerName);
-//			totalSepndingsTextView.setText(client._totalSpendings + " NIS");
-//			
-//			return convertView;
-//		}
-//		
-//		@Override
-//		public Filter getFilter() {
-//			Log.i(TAG, "getFilter");
-//			return _clientFilter;
-//		}
-//	}
-//	
 	private class CustomersFilter extends Filter {
 		/*
 		 *  Optional
@@ -462,25 +397,25 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 			Log.i(TAG, "performFiltering(" + constraint + ")");
 			
 			FilterResults results = new FilterResults();
-
-			_cards.clear();
-			for (Customer customer : _allCustomers.values()) {
+			
+			_filteredCustomers.clear();
+			for (Customer customer : _allCustomers) {
 				if (doesSetisfyLastVisitFilter(customer) &&
 						doestSetisfySpendingsFilter(customer) &&
 						doesSetisfyConstraint(customer, constraint)) {
-					_cards.add(customer.toCard(getActivity()));
+					_filteredCustomers.add(customer);
 				}
 			}
 			
-			results.values = _cards;
-			results.count = _cards.size();
+			results.values = _filteredCustomers;
+			results.count = _filteredCustomers.size();
 			
 			return results;
 		}
 
 		@Override
 		protected void publishResults(CharSequence constraint, FilterResults results) {
-			Log.i(TAG, "publicResults");
+			Log.i(TAG, "publicResults. results.count = " + results.count);
 			_customerCardsAdapter.notifyDataSetChanged();
 		}
 		
@@ -514,31 +449,15 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		}
 	}
 	
-	public class CustomerCardArrayMultiChoiceAdapter extends CardArrayMultiChoiceAdapter {
+	public class CustomerCardArrayMultiChoiceAdapter extends GenericMultiChoiceCardArrayAdapter<Customer> {
 		
 		private CustomersFilter _customersFilter;
 		
-		public CustomerCardArrayMultiChoiceAdapter(Context context, List<Card> cards) {
-			super(context, cards);
-			
+		public CustomerCardArrayMultiChoiceAdapter(IObservableList<Customer> items, ICardGenerator<Customer> cardFactory, int menuRes) 
+		{
+			super(getActivity(), items, cardFactory, menuRes);
 			_customersFilter = new CustomersFilter();
 		}
-
-		@Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            super.onCreateActionMode(mode, menu);
-
-            //If you would like to inflate your menu
-            MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.business_customer_list_mutlichoice, menu);
-
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
@@ -554,26 +473,47 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
         }
 
         @Override
-        public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked, CardView cardView, Card card) {
-        	Log.i(TAG, "Click;" + position + " - " + checked);
-        }
-        
-        @Override
         public Filter getFilter() {
         	return _customersFilter;
         }
-        
-        public List<String> getSelectedItemsId()
-        {
-        	List<String> selectedItemsId = new ArrayList<String>();
-        	
-        	List<Card> selectedCards = getSelectedCards();
-        	for (Card card : selectedCards)
-        	{
-        		selectedItemsId.add(card.getId());
-        	}
-        	
-        	return selectedItemsId;
-        }
     }
+	
+	private class CustomerCardGenerator implements ICardGenerator<Customer>
+	{
+		@Override
+		public Card generateCard(Customer customer) 
+		{
+			CardHeader header = new CardHeader(getActivity());
+			header.setTitle(customer._customerName);
+			header.setButtonExpandVisible(true);
+
+			CardExpand expand = new CardExpand(getActivity());
+			expand.setTitle(
+					"Total spendings: " + customer._totalSpendings + " NIS\n" +
+					"Last visit: " + Constants.DATE_FORMAT.format(customer._lastVisit));
+			
+			Card card = new Card(getActivity());
+			card.addCardHeader(header);
+			card.addCardExpand(expand);
+			card.setId(customer._id);
+			card.setOnClickListener(new OnCardClickListener() 
+			{
+				@Override
+				public void onClick(Card card, View view) 
+				{
+					card.doToogleExpand();
+				}
+			});
+			card.setOnLongClickListener(new OnLongCardClickListener() 
+			{
+				@Override
+				public boolean onLongClick(Card card, View view) 
+				{
+					return _customerCardsAdapter.startActionMode(getActivity());
+				}
+			});
+			
+			return card;
+		}
+	}
 }
