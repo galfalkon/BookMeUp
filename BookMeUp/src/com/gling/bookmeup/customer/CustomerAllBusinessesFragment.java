@@ -585,6 +585,9 @@ import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import it.gmariotti.cardslib.library.internal.CardGridArrayAdapter;
 import it.gmariotti.cardslib.library.internal.CardHeader;
+import it.gmariotti.cardslib.library.internal.CardThumbnail;
+import it.gmariotti.cardslib.library.view.CardView;
+import it.gmariotti.cardslib.library.view.component.CardThumbnailView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -605,6 +608,7 @@ import android.widget.ViewSwitcher;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.Business;
+import com.gling.bookmeup.customer.cards.CardThumbnailRoundCorners;
 import com.gling.bookmeup.customer.cards.CategoryCard;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper.Category;
@@ -661,6 +665,7 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
         
         _allBusinessesListView = (CardListViewWrapperView)view.findViewById(R.id.customer_all_businesses_cardListViewAllBusinessesByType);
         _allBusinessesListView.setAdapter(_allBusinessesAdapter);
+        _allBusinessesAdapter.setRowLayoutId(R.layout.customer_business_card_view);
         
         _allCategoriesView = (CardGridViewWrapperView) view.findViewById(R.id.customer_all_businesses_categoryGridView);
         _allCategoriesView.setAdapter(_categoryAdapter);
@@ -916,14 +921,10 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
     
     private static Card businessToCard(Business business, Activity activity) {
     	Card card = new Card(activity);
-    	CardHeader header = new CardHeader(activity);
-    	header.setTitle(business.getName());
-    	card.addCardHeader(header);
-//    	card.setCardView(cardView)
-//    	card.
-//    	CardThumbnail thumb = new CardThumbnail(activity);
-//    	thumb.setDrawableResource(R.drawable.logo_with_title);
-//    	card.addCardThumbnail(thumb);
+    	card.setTitle(business.getName());
+    	card.setBackgroundResourceId(android.R.color.holo_orange_dark);
+        CardThumbnailRoundCorners thumb = new CardThumbnailRoundCorners(activity, business.getImageFile().getUrl());
+        card.addCardThumbnail(thumb);
     	card.setId(business.getObjectId());
     	return card;
     }
