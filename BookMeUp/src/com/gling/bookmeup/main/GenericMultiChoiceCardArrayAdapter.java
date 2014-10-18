@@ -1,0 +1,124 @@
+package com.gling.bookmeup.main;
+
+import it.gmariotti.cardslib.library.internal.Card;
+import it.gmariotti.cardslib.library.internal.CardArrayMultiChoiceAdapter;
+import it.gmariotti.cardslib.library.view.CardView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuInflater;
+
+public abstract class GenericMultiChoiceCardArrayAdapter<T> extends CardArrayMultiChoiceAdapter
+{
+	private static final String TAG = "GenericMultiChoiceCardArrayAdapter";
+	
+	private final IObservableList<T> _items;
+	private final List<Card> _cards;
+	private final ICardGenerator<T> _cardFactory;
+	private final int _menuRes;
+	
+	public GenericMultiChoiceCardArrayAdapter(Context context, IObservableList<T> items, ICardGenerator<T> cardFactory, int menuRes) 
+	{
+		this(context, new ArrayList<Card>(), items, cardFactory, menuRes);
+	}
+	
+	private GenericMultiChoiceCardArrayAdapter(Context context, List<Card> cards, IObservableList<T> items, ICardGenerator<T> cardFactory, int menuRes) 
+	{
+		super(context, cards);
+		_items = items;
+		_cards = cards;
+		_items.registerChangeListener(new ItemListListener());
+		_cardFactory = cardFactory;
+		_menuRes = menuRes;
+	}
+	
+	@Override
+	public void remove(Card object) {
+		_items.remove(_cards.indexOf(object));
+	}
+	
+	@Override
+    public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked, CardView cardView, Card card) {
+    	Log.i(TAG, "Click;" + position + " - " + checked);
+    }
+
+	@Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) 
+	{
+        return false;
+    }
+	
+	@Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) 
+	{
+        super.onCreateActionMode(mode, menu);
+
+        MenuInflater inflater = mode.getMenuInflater();
+        inflater.inflate(_menuRes, menu);
+
+        return true;
+    }
+	
+	public List<T> getSelectedItems()
+	{
+		List<T> selectedItems = new ArrayList<T>();
+		List<Card> selectedCards = getSelectedCards();
+		for (Card card : selectedCards)
+		{
+			selectedItems.add(_items.get(_cards.indexOf(card)));
+		}
+		return selectedItems;
+	}
+	
+	private class ItemListListener implements IListChangeObserver
+	{
+		@Override
+		public void onAddItem(int position) {
+			_cards.add(position, _cardFactory.generateCard(_items.get(position)));
+			notifyDataSetChanged();
+		}
+
+		@Override
+		public void onAddAll(final int fromPosition) {
+			new AsyncTask<Void, Void, Void>() {
+				@Override
+				protected Void doInBackground(Void... params) {
+					Log.i(TAG, "doInBackground");
+					for (int i = fromPosition; i < _items.size(); i++)
+					{
+						_cards.add(_cardFactory.generateCard(_items.get(i)));
+						publishProgress();
+					}
+					
+					return null;
+				}
+				
+				@Override
+				protected void onProgressUpdate(Void... values) {
+					// TODO: Show an indication to the user that more cards are being loaded
+					Log.i(TAG, "onProgressUpdate");
+					super.onProgressUpdate(values);
+					notifyDataSetChanged();
+				}
+			}.execute();
+		}
+
+		@Override
+		public void onRemoveItem(int position) {
+			_cards.remove(position);
+			notifyDataSetChanged();
+		}
+
+		@Override
+		public void onClear() {
+			_cards.clear();
+			notifyDataSetChanged();
+		}
+	}
+}

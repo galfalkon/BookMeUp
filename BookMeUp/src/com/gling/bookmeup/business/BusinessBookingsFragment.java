@@ -1,26 +1,26 @@
 package com.gling.bookmeup.business;
 
 import it.gmariotti.cardslib.library.internal.Card;
-import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
+import it.gmariotti.cardslib.library.internal.Card.OnLongCardClickListener;
 import it.gmariotti.cardslib.library.internal.CardHeader;
-
 
 import java.util.Date;
 import java.util.List;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.ViewSwitcher;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.Constants;
-import com.gling.bookmeup.main.GenericCardArrayAdapter;
+import com.gling.bookmeup.main.GenericMultiChoiceCardArrayAdapter;
 import com.gling.bookmeup.main.ICardGenerator;
 import com.gling.bookmeup.main.IObservableList;
 import com.gling.bookmeup.main.ObservableArrayList;
@@ -40,7 +40,7 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
     private static final String TAG = "BusinessBookingsFragment";
     
     private IObservableList<Booking> _pendingBookings, _approvedBookings;
-    private GenericCardArrayAdapter<Booking> _pendingBookingsAdapter, _approvedBookingsAdapter;
+    private GenericMultiChoiceCardArrayAdapter<Booking> _pendingBookingsAdapter, _approvedBookingsAdapter;
 
 	private Button _btnPending, _btnApproved;
 	private ViewSwitcher _viewSwitcher;
@@ -53,8 +53,38 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
         
         _pendingBookings = new ObservableArrayList<Booking>();
         _approvedBookings = new ObservableArrayList<Booking>();
-        _pendingBookingsAdapter = new GenericCardArrayAdapter<Booking>(getActivity(), _pendingBookings, new PendingBookingCardGenerator());
-        _approvedBookingsAdapter = new GenericCardArrayAdapter<Booking>(getActivity(), _approvedBookings, new ApprovedBookingCardGenerator());
+        _pendingBookingsAdapter = new GenericMultiChoiceCardArrayAdapter<Booking>(getActivity(), _pendingBookings, new PendingBookingCardGenerator(), R.menu.business_booking_list_pending_mutlichoice)
+		{
+			@Override
+			public boolean onActionItemClicked(ActionMode mode, MenuItem item) 
+			{
+				switch (item.getItemId())
+				{
+				case R.id.business_booking_list_pending_mutlichoice_action_bar_menu_approve:
+					handleApprovalOfSelectedBookings();
+					break;
+				}
+				
+				mode.finish();
+				return false;
+			}
+		};
+        _approvedBookingsAdapter = new GenericMultiChoiceCardArrayAdapter<Booking>(getActivity(), _approvedBookings, new ApprovedBookingCardGenerator(), R.menu.business_booking_list_approved_mutlichoice)
+		{
+			@Override
+			public boolean onActionItemClicked(ActionMode mode, MenuItem item) 
+			{
+				switch (item.getItemId())
+				{
+				case R.id.business_booking_list_approved_mutlichoice_action_bar_menu_cancel:
+					handleCancellationOfSelectedBookings();
+					break;
+				}
+				
+				mode.finish();
+				return false;
+			}
+		};
     }
     
     @Override
@@ -67,9 +97,11 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
         
         _pendingBookingsListView = (CardListViewWrapperView)view.findViewById(R.id.business_bookings_cardListViewPendingBookings);
         _pendingBookingsListView.setAdapter(_pendingBookingsAdapter);
+        _pendingBookingsListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         
         _approvedBookingsListView = (CardListViewWrapperView)view.findViewById(R.id.business_bookings_cardListViewApprovedBookings);
         _approvedBookingsListView.setAdapter(_approvedBookingsAdapter);
+        _approvedBookingsListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         
         _viewSwitcher = (ViewSwitcher)view.findViewById(R.id.business_bookings_viewSwitcher); 
         
@@ -187,43 +219,14 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 	    			"Service: " + booking.getServiceName() + "\n" +
 	    			"Date: " + Constants.DATE_FORMAT.format(booking.getDate()));
 
-	    	card.setClickable(true);
-	    	card.setOnClickListener(new OnCardClickListener() 
+	    	card.setOnLongClickListener(new OnLongCardClickListener() 
 	    	{
 				@Override
-				public void onClick(Card card, View view) 
+				public boolean onLongClick(Card card, View view) 
 				{
-					Log.i(TAG, "Pending booking clicked");
-					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		            builder.setMessage(R.string.business_bookings_list_pending_click_dialog)
-		            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-		                public void onClick(DialogInterface dialog, int id) {
-		                    Log.i(TAG, "Approving pending booking");
-		                    booking.setStatus(Status.APPROVED);
-		                    booking.saveInBackground();
-		                    
-		                    _pendingBookings.remove(booking);
-		                    _approvedBookings.add(booking);
-		                    updatePendingBookingsTitleAndDisplayMode();
-		                    updateApprovedBookingsTitleAndDisplayMode();
-		                    
-		                    PushUtils.notifyCustomerAboutApprovedBooking(booking, new SendCallback() {
-								@Override
-								public void done(ParseException e) {
-									Log.i(TAG, "notifyCustomerAboutApprovedBooking done");
-									if (e != null)
-									{
-										Log.e(TAG, "Exception: " + e.getMessage());
-										return;
-									}
-								}
-							});
-		                }
-		            })
-		            .setNegativeButton(R.string.cancel, null);
-			        builder.show();
+					return _pendingBookingsAdapter.startActionMode(getActivity());
 				}
-	    	});
+			});
 	    	
 	    	return card;
 		}
@@ -243,42 +246,70 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 	    			"Service: " + booking.getServiceName() + "\n" +
 	    			"Date: " + Constants.DATE_FORMAT.format(booking.getDate()));
 
-	    	card.setClickable(true);
-	    	card.setOnClickListener(new OnCardClickListener() {
-				
+	    	card.setOnLongClickListener(new OnLongCardClickListener() 
+	    	{
 				@Override
-				public void onClick(Card card, View view) {
-					Log.i(TAG, "Approved booking clicked");
-					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		            builder.setMessage(R.string.business_bookings_list_approved_click_dialog)
-		            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-		                public void onClick(DialogInterface dialog, int id) {
-		                    Log.i(TAG, "Deleting approved booking");
-		                    booking.setStatus(Status.CANCELED);
-		                    booking.saveInBackground();
-		                    
-		                    _approvedBookings.remove(booking);
-		                    updateApprovedBookingsTitleAndDisplayMode();
-		                    
-		                    PushUtils.notifyCustomerAboutCanceledBooking(booking, new SendCallback() {
-								@Override
-								public void done(ParseException e) {
-									Log.i(TAG, "notifyCustomerAboutCanceledBooking done");
-									if (e != null)
-									{
-										Log.e(TAG, "Exception: " + e.getMessage());
-										return;
-									}
-								}
-							});
-		                }
-		            })
-		            .setNegativeButton(R.string.cancel, null);
-		            builder.show();
+				public boolean onLongClick(Card card, View view) 
+				{
+					return _approvedBookingsAdapter.startActionMode(getActivity());
 				}
 			});
 	    	
 	    	return card;
 		}
+    }
+    
+    private void handleApprovalOfSelectedBookings()
+    {
+    	Log.i(TAG, "handleApprovalOfSelectedBookings");
+    	List<Booking> selectedBookings = _pendingBookingsAdapter.getSelectedItems();
+    	for (Booking booking : selectedBookings)
+    	{
+    		booking.setStatus(Status.APPROVED);
+            booking.saveInBackground();
+            
+            _pendingBookings.remove(booking);
+            _approvedBookings.add(booking);
+            updatePendingBookingsTitleAndDisplayMode();
+            updateApprovedBookingsTitleAndDisplayMode();
+            
+            PushUtils.notifyCustomerAboutApprovedBooking(booking, new SendCallback() {
+				@Override
+				public void done(ParseException e) {
+					Log.i(TAG, "notifyCustomerAboutApprovedBooking done");
+					if (e != null)
+					{
+						Log.e(TAG, "Exception: " + e.getMessage());
+						return;
+					}
+				}
+			});
+    	}
+    }
+    
+    private void handleCancellationOfSelectedBookings()
+    {
+    	Log.i(TAG, "handleCancellationOfSelectedBookings");
+    	List<Booking> selectedBookings = _approvedBookingsAdapter.getSelectedItems();
+    	for (Booking booking : selectedBookings)
+    	{
+    		booking.setStatus(Status.CANCELED);
+            booking.saveInBackground();
+            
+            _approvedBookings.remove(booking);
+            updateApprovedBookingsTitleAndDisplayMode();
+            
+            PushUtils.notifyCustomerAboutCanceledBooking(booking, new SendCallback() {
+				@Override
+				public void done(ParseException e) {
+					Log.i(TAG, "notifyCustomerAboutCanceledBooking done");
+					if (e != null)
+					{
+						Log.e(TAG, "Exception: " + e.getMessage());
+						return;
+					}
+				}
+			});
+    	}
     }
 }

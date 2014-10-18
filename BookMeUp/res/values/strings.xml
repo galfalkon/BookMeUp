@@ -140,6 +140,8 @@
     <string name="business_bookings_list_approved_click_dialog">Cancel booking?</string>
     <string name="business_bookings_list_no_pending_bookings">No pending bookings</string>
     <string name="business_bookings_list_no_approved_bookings">No approved bookings</string>
+    <string name="business_booking_list_approved_mutlichoice_action_bar_menu_cancel">Cancel</string>
+    <string name="business_booking_list_pending_mutlichoice_action_bar_menu_approve">Approve</string>
     
     <!-- Business offer list -->
     <string name="business_offer_list_no_offers">No offers</string>
