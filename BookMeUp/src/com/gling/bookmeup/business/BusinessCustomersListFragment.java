@@ -1,10 +1,9 @@
 package com.gling.bookmeup.business;
 
 import it.gmariotti.cardslib.library.internal.Card;
-import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
 import it.gmariotti.cardslib.library.internal.Card.OnLongCardClickListener;
-import it.gmariotti.cardslib.library.internal.CardExpand;
 import it.gmariotti.cardslib.library.internal.CardHeader;
+import it.gmariotti.cardslib.library.internal.CardHeader.OnClickCardHeaderOtherButtonListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,6 +15,8 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -332,7 +333,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 	}
 	
 	private static class CustomerForBusiness {
-		public final String _id, _customerName;
+		public final String _id, _customerName, _phoneNumber;
 		public Date _lastVisit;
 		public int _totalSpendings;
 
@@ -343,6 +344,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 			Customer customer = booking.getCustomer();
 			_id = customer.getObjectId();
 			_customerName = customer.getName();
+			_phoneNumber = customer.getPhoneNumber();
 			_lastVisit = booking.getDate();
 			_totalSpendings = booking.getServicePrice();
 		}
@@ -485,25 +487,31 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		{
 			CardHeader header = new CardHeader(getActivity());
 			header.setTitle(customer._customerName);
-			header.setButtonExpandVisible(true);
-
-			CardExpand expand = new CardExpand(getActivity());
-			expand.setTitle(
-					"Total spendings: " + customer._totalSpendings + " NIS\n" +
-					"Last visit: " + Constants.DATE_FORMAT.format(customer._lastVisit));
 			
+			final String phoneNumber = customer._phoneNumber;
+			if (phoneNumber != null)
+			{
+				header.setOtherButtonDrawable(R.drawable.btn_action_call);
+				header.setOtherButtonVisible(true);
+				header.setOtherButtonClickListener(new OnClickCardHeaderOtherButtonListener() 
+				{
+					@Override
+					public void onButtonItemClick(Card card, View view) 
+					{
+						Log.i(TAG, "btn_action_call clicked");
+						Intent callIntent = new Intent(Intent.ACTION_CALL);
+						callIntent.setData(Uri.parse("tel:" + phoneNumber));
+						startActivity(callIntent);
+					}
+				});
+			}
+
 			Card card = new Card(getActivity());
 			card.addCardHeader(header);
-			card.addCardExpand(expand);
+			card.setTitle(
+					"Total spendings: " + customer._totalSpendings + " NIS\n" +
+					"Last visit: " + Constants.DATE_FORMAT.format(customer._lastVisit));
 			card.setId(customer._id);
-			card.setOnClickListener(new OnCardClickListener() 
-			{
-				@Override
-				public void onClick(Card card, View view) 
-				{
-					card.doToogleExpand();
-				}
-			});
 			card.setOnLongClickListener(new OnLongCardClickListener() 
 			{
 				@Override
