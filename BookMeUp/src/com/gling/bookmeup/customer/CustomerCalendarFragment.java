@@ -155,7 +155,7 @@ public class CustomerCalendarFragment extends Fragment {
 
 			return new CustomerCalendarBookingCard(
 					getActivity(), 
-					booking.getCustomerName(),
+					booking.getCustomer().getName(),
 					booking.getServiceName(), 
 					Constants.TIME_FORMAT.format(booking.getDate()), 
 					status, 

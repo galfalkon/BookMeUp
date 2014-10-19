@@ -147,14 +147,14 @@ public class PushUtils {
 	{
 		Log.i(TAG, "notifyCustomerAboutApprovedBooking");
 		
-		String alert = booking.getBusinessName() + " approved your booking request";
+		String alert = booking.getBusiness().getName() + " approved your booking request";
 		JSONObject data = generatePushData(alert, PushNotificationType.BOOKING_APPROVED);
 		if (data == null)
 		{
 			return;
 		}
 		
-		ParseQuery<ParseInstallation> installationQuery = generateInstallationQueryForCustomerId(booking.getCustomerId());
+		ParseQuery<ParseInstallation> installationQuery = generateInstallationQueryForCustomerId(booking.getCustomer().getObjectId());
 		sendPushInBackground(installationQuery, data, callback);
 	}
 	
@@ -162,14 +162,14 @@ public class PushUtils {
 	{
 		Log.i(TAG, "notifyCustomerAboutCanceledBooking");
 		
-		String alert = booking.getBusinessName() + " canceled your booking";
+		String alert = booking.getBusiness().getName() + " canceled your booking";
 		JSONObject data = generatePushData(alert, PushNotificationType.BOOKING_CANCELED);
 		if (data == null)
 		{
 			return;
 		}
 		
-		ParseQuery<ParseInstallation> installationQuery = generateInstallationQueryForCustomerId(booking.getCustomerId());
+		ParseQuery<ParseInstallation> installationQuery = generateInstallationQueryForCustomerId(booking.getCustomer().getObjectId());
 		sendPushInBackground(installationQuery, data, callback);
 	}
 	

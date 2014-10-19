@@ -211,7 +211,7 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 		public Card generateCard(final Booking booking) 
 		{
 			CardHeader cardHeader = new CardHeader(getActivity());
-	    	cardHeader.setTitle(booking.getCustomerName());
+	    	cardHeader.setTitle(booking.getCustomer().getName());
 	    	
 	    	Card card = new Card(getActivity());
 	    	card.addCardHeader(cardHeader);
@@ -238,7 +238,7 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 		public Card generateCard(final Booking booking) 
 		{
 			CardHeader cardHeader = new CardHeader(getActivity());
-	    	cardHeader.setTitle(booking.getCustomerName());
+	    	cardHeader.setTitle(booking.getCustomer().getName());
 	    	
 	    	Card card = new Card(getActivity());
 	    	card.addCardHeader(cardHeader);

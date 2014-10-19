@@ -130,7 +130,7 @@ public class BusinessCalendarFragment extends Fragment {
 			
 			return new BusinessCalendarBookingCard(
 					getActivity(), 
-					booking.getCustomerName(),
+					booking.getCustomer().getName(),
 					booking.getServiceName(), 
 					Constants.TIME_FORMAT.format(booking.getDate()), 
 					status, 

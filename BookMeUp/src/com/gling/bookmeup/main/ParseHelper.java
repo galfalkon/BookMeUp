@@ -180,20 +180,28 @@ public class ParseHelper {
 			put(Keys.STATUS, status);
 		}
 
-		public String getBusinessName() {
-			return getParseObject(Keys.BUSINESS_POINTER).getString(
-					Business.Keys.NAME);
-		}
-
-		public String getCustomerId() {
-			return getParseObject(Keys.CUSTOMER_POINTER).getObjectId();
+		public Customer getCustomer() {
+			Log.v(TAG, "getCustomer");
+			
+			try {
+				return getParseObject(Keys.CUSTOMER_POINTER).fetchIfNeeded();
+			} catch (ParseException e) {
+				Log.e(TAG, "Exception: " + e.getMessage());
+				return null;
+			}
 		}
 		
-		public String getCustomerName() {
-			return getParseObject(Keys.CUSTOMER_POINTER).getString(
-					Customer.Keys.NAME);
+		public Business getBusiness() {
+			Log.v(TAG, "getBusiness");
+			
+			try {
+				return getParseObject(Keys.BUSINESS_POINTER).fetchIfNeeded();
+			} catch (ParseException e) {
+				Log.e(TAG, "Exception: " + e.getMessage());
+				return null;
+			}
 		}
-
+		
 		public String getServiceName() {
 			return getParseObject(Keys.SERVICE_POINTER).getString(
 					Service.Keys.NAME);

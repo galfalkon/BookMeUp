@@ -99,7 +99,7 @@ public class CustomerMyBookingsFragment extends OnClickListenerFragment {
 		public Card generateCard(Booking booking) 
 		{
 			CardHeader cardHeader = new CardHeader(getActivity());
-			cardHeader.setTitle(booking.getBusinessName());
+			cardHeader.setTitle(booking.getBusiness().getName());
 			cardHeader.setButtonExpandVisible(true);
 	    	
 			CardExpand expand = new CardExpand(getActivity());
