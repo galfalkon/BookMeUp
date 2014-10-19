@@ -340,10 +340,10 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		 * Creates a Client instance out of a Bookings record.
 		 */
 		public CustomerForBusiness(Booking booking) {
-			ParseObject customerParseObject = booking.getParseObject(Booking.Keys.CUSTOMER_POINTER);
-			_id = customerParseObject.getObjectId();
-			_customerName = customerParseObject.getString(Customer.Keys.NAME);
-			_lastVisit = booking.getDate(Booking.Keys.DATE);
+			Customer customer = booking.getCustomer();
+			_id = customer.getObjectId();
+			_customerName = customer.getName();
+			_lastVisit = booking.getDate();
 			_totalSpendings = booking.getServicePrice();
 		}
 		
