@@ -108,16 +108,6 @@ public class ParseHelper {
 		}
 	}
 
-	public static class CustomerClass {
-		public static final String CLASS_NAME = "Customer";
-
-		public static class Keys {
-			public static final String ID = "objectId";
-			public static final String NAME = "name";
-			public static final String FAVOURITES = "favourites";
-		}
-	}
-
 	// for saving business categories in shared prefs
 	public final static String BUSINESS_CATEGORIES = "business_categories";
 	
@@ -201,7 +191,7 @@ public class ParseHelper {
 		
 		public String getCustomerName() {
 			return getParseObject(Keys.CUSTOMER_POINTER).getString(
-					CustomerClass.Keys.NAME);
+					Customer.Keys.NAME);
 		}
 
 		public String getServiceName() {

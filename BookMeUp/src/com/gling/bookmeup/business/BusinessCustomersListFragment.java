@@ -35,6 +35,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.customer.Customer;
 import com.gling.bookmeup.main.Constants;
 import com.gling.bookmeup.main.GenericMultiChoiceCardArrayAdapter;
 import com.gling.bookmeup.main.ICardGenerator;
@@ -42,7 +43,6 @@ import com.gling.bookmeup.main.IObservableList;
 import com.gling.bookmeup.main.ObservableArrayList;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper.Booking;
-import com.gling.bookmeup.main.ParseHelper.CustomerClass;
 import com.gling.bookmeup.main.PushUtils;
 import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
 import com.gling.bookmeup.main.views.CardListViewWrapperView;
@@ -58,7 +58,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 public class BusinessCustomersListFragment  extends OnClickListenerFragment implements TextWatcher {
 	private static final String TAG = "BusinessCustomersListFragment";
 
-	private IObservableList<Customer> _allCustomers, _filteredCustomers;
+	private IObservableList<CustomerForBusiness> _allCustomers, _filteredCustomers;
 	private CustomerCardArrayMultiChoiceAdapter _customerCardsAdapter;
 	
 	private CardListViewWrapperView _customerCardListView;
@@ -67,8 +67,8 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.i(TAG, "onCreateView");
 
-		_allCustomers = new ObservableArrayList<Customer>();
-		_filteredCustomers = new ObservableArrayList<Customer>();
+		_allCustomers = new ObservableArrayList<CustomerForBusiness>();
+		_filteredCustomers = new ObservableArrayList<CustomerForBusiness>();
 		
 		_customerCardsAdapter = new CustomerCardArrayMultiChoiceAdapter(_filteredCustomers, new CustomerCardGenerator(), R.menu.business_customer_list_mutlichoice);
 		
@@ -104,7 +104,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 				}
 				
 				for (Booking bookingParseObject : objects) {
-					Customer currentCustomer = new Customer(bookingParseObject);
+					CustomerForBusiness currentCustomer = new CustomerForBusiness(bookingParseObject);
 					int indexOfCustomer = _allCustomers.indexOf(currentCustomer);
 					if (indexOfCustomer == -1)
 					{
@@ -221,14 +221,14 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 	private void handleSendMessageToSelectedClients() {
 		Log.i(TAG, "handleSendMessageToSelectedClients");
 		
-		List<Customer> selectedCustomers = _customerCardsAdapter.getSelectedItems();
+		List<CustomerForBusiness> selectedCustomers = _customerCardsAdapter.getSelectedItems();
 		if (selectedCustomers.isEmpty()) {
 			Crouton.showText(getActivity(), "Please select customers from the list", Style.ALERT);
 			return;
 		}
 		
 		final List<String> selectedCustomerIds = new ArrayList<String>();
-		for (Customer customer : selectedCustomers)
+		for (CustomerForBusiness customer : selectedCustomers)
 		{
 			selectedCustomerIds.add(customer._id);
 		}
@@ -271,14 +271,14 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 	private void handleSendOfferToSelectedClients() {
 		Log.i(TAG, "handleSendOfferToSelectedClients");
 		
-		List<Customer> selectedCustomers = _customerCardsAdapter.getSelectedItems();
+		List<CustomerForBusiness> selectedCustomers = _customerCardsAdapter.getSelectedItems();
 		if (selectedCustomers.isEmpty()) {
 			Crouton.showText(getActivity(), "Please select customers from the list", Style.ALERT);
 			return;
 		}
 		
 		final List<String> selectedCustomerIds = new ArrayList<String>();
-		for (Customer customer : selectedCustomers)
+		for (CustomerForBusiness customer : selectedCustomers)
 		{
 			selectedCustomerIds.add(customer._id);
 		}
@@ -331,7 +331,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		builder.show();
 	}
 	
-	private static class Customer {
+	private static class CustomerForBusiness {
 		public final String _id, _customerName;
 		public Date _lastVisit;
 		public int _totalSpendings;
@@ -339,10 +339,10 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		/*
 		 * Creates a Client instance out of a Bookings record.
 		 */
-		public Customer(Booking booking) {
+		public CustomerForBusiness(Booking booking) {
 			ParseObject customerParseObject = booking.getParseObject(Booking.Keys.CUSTOMER_POINTER);
 			_id = customerParseObject.getObjectId();
-			_customerName = customerParseObject.getString(CustomerClass.Keys.NAME);
+			_customerName = customerParseObject.getString(Customer.Keys.NAME);
 			_lastVisit = booking.getDate(Booking.Keys.DATE);
 			_totalSpendings = booking.getServicePrice();
 		}
@@ -375,7 +375,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		
 		@Override
 		public boolean equals(Object other) {
-			return !(other instanceof Customer) || (_id.equals(((Customer)other)._id)); 
+			return !(other instanceof CustomerForBusiness) || (_id.equals(((CustomerForBusiness)other)._id)); 
 		}
 	}
 	
@@ -399,7 +399,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 			FilterResults results = new FilterResults();
 			
 			_filteredCustomers.clear();
-			for (Customer customer : _allCustomers) {
+			for (CustomerForBusiness customer : _allCustomers) {
 				if (doesSetisfyLastVisitFilter(customer) &&
 						doestSetisfySpendingsFilter(customer) &&
 						doesSetisfyConstraint(customer, constraint)) {
@@ -435,25 +435,25 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 			_dateOfLastVisit = null;
 		}
 		
-		private boolean doesSetisfyLastVisitFilter(Customer customer) {
+		private boolean doesSetisfyLastVisitFilter(CustomerForBusiness customer) {
 			return (_dateOfLastVisit == null) || customer._lastVisit.after(_dateOfLastVisit);
 		}
 		
-		private boolean doestSetisfySpendingsFilter(Customer customer) {
+		private boolean doestSetisfySpendingsFilter(CustomerForBusiness customer) {
 			Log.i(TAG, "doestSetisfySpendingsFilter. customer spendings = " + customer._totalSpendings + ", limit = " + _spendingsLimit);
 			return (_spendingsLimit == null) || (customer._totalSpendings >= _spendingsLimit);
 		}
 		
-		private boolean doesSetisfyConstraint(Customer customer, CharSequence constraint) {
+		private boolean doesSetisfyConstraint(CustomerForBusiness customer, CharSequence constraint) {
 			return (constraint == null) || customer._customerName.toLowerCase().contains(constraint.toString().toLowerCase());
 		}
 	}
 	
-	public class CustomerCardArrayMultiChoiceAdapter extends GenericMultiChoiceCardArrayAdapter<Customer> {
+	public class CustomerCardArrayMultiChoiceAdapter extends GenericMultiChoiceCardArrayAdapter<CustomerForBusiness> {
 		
 		private CustomersFilter _customersFilter;
 		
-		public CustomerCardArrayMultiChoiceAdapter(IObservableList<Customer> items, ICardGenerator<Customer> cardFactory, int menuRes) 
+		public CustomerCardArrayMultiChoiceAdapter(IObservableList<CustomerForBusiness> items, ICardGenerator<CustomerForBusiness> cardFactory, int menuRes) 
 		{
 			super(getActivity(), items, cardFactory, menuRes);
 			_customersFilter = new CustomersFilter();
@@ -478,10 +478,10 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
         }
     }
 	
-	private class CustomerCardGenerator implements ICardGenerator<Customer>
+	private class CustomerCardGenerator implements ICardGenerator<CustomerForBusiness>
 	{
 		@Override
-		public Card generateCard(Customer customer) 
+		public Card generateCard(CustomerForBusiness customer) 
 		{
 			CardHeader header = new CardHeader(getActivity());
 			header.setTitle(customer._customerName);
