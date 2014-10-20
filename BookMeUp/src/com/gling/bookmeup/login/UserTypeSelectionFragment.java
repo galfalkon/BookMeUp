@@ -13,6 +13,7 @@ import com.gling.bookmeup.business.BusinessMainActivity;
 import com.gling.bookmeup.business.wizards.BusinessProfileWizardActivity;
 import com.gling.bookmeup.customer.Customer;
 import com.gling.bookmeup.customer.CustomerMainActivity;
+import com.gling.bookmeup.customer.CustomerProfileCreationActivity;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
 import com.parse.ParseUser;
@@ -65,7 +66,13 @@ public class UserTypeSelectionFragment extends OnClickListenerFragment implement
             Customer currentCustomer = Customer.getCurrentCustomer();
             if (currentCustomer != null) 
             {
-            	startActivity(CustomerMainActivity.class);
+            	if (TextUtils.isEmpty(currentCustomer.getPhoneNumber())) 
+            	{
+            		startActivity(CustomerProfileCreationActivity.class);
+				} else 
+				{
+					startActivity(CustomerMainActivity.class);
+				}
             }
             else
             {
@@ -76,7 +83,7 @@ public class UserTypeSelectionFragment extends OnClickListenerFragment implement
             	currentUser.put(ParseHelper.User.Keys.CUSTOMER_POINTER, customer);
             	currentUser.saveInBackground();
             	
-            	startActivity(CustomerMainActivity.class);
+            	startActivity(CustomerProfileCreationActivity.class);
             }
             
             break;

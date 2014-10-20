@@ -50,7 +50,8 @@
     </string-array>
 
     <!-- Customer Activity -->
-    <string name="customer_activity_title">BookMeUp! - For Customers</string>
+    <string name="customer_main_activity_title">BookMeUp! - For Customers</string>
+    <string name="customer_profile_creation_activity_title">Customer Profile Configuration</string>
     <string-array name="customer_navigation_drawer_items">
         <item>All Businesses</item>
         <item>History</item>
@@ -174,5 +175,13 @@
     
     <!-- Contextual action bar -->
     <string name="contextual_action_bar_btnSelectAll">Select All</string>
+    
+    <!-- Customer profile creation -->
+    <string name="customer_profile_creation_txtWelcome">Welcome to BookeMeUp!</string>
+    <string name="customer_profile_creation_txtSubtitle">You\'ve just made your first step of making your life a lot more easier!</string>
+    <string name="customer_profile_creation_txtPhoneNumberRequest">Please insert your phone number so that businesses you visit can contact you.</string>
+    <string name="customer_profile_creation_btnDone">Done</string>
+    <string name="customer_profile_creation_edtPhoneNumber_hint">Phone number</string>
+    <string name="customer_profile_creation_edtPhoneNumberError">Invalid phone number</string>
 
 </resources>
