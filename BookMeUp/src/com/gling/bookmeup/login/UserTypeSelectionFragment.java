@@ -1,6 +1,6 @@
 package com.gling.bookmeup.login;
 
-import android.app.ProgressDialog;
+import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,105 +15,76 @@ import com.gling.bookmeup.customer.Customer;
 import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.ParseHelper;
-import com.gling.bookmeup.main.ParseHelper.User;
-import com.parse.GetCallback;
-import com.parse.ParseException;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
-
-public class UserTypeSelectionFragment extends OnClickListenerFragment implements OnClickListener {
+public class UserTypeSelectionFragment extends OnClickListenerFragment implements OnClickListener 
+{
     private static final String TAG = "UserTypeSelectionFragment";
 
-    public int getFragmentLayoutId() {
+    public int getFragmentLayoutId() 
+    {
         return R.layout.login_user_type_selection_fragment;
     }
 
     @Override
-    public void onClick(View v) {
-
+    public void onClick(View v) 
+    {
         ParseUser currentUser = ParseUser.getCurrentUser();
 
         switch (v.getId()) {
         case R.id.user_type_selection_btnBusiness:
             Log.i(TAG, "btnBusiness clicked");
             
-            if (currentUser.getParseObject(User.Keys.BUSINESS_POINTER) != null) {
-            	ParseHelper.fetchBusiness(new GetCallback<Business>() {
-					
-					@Override
-					public void done(Business business, ParseException e) {
-						if (e == null) {
-							Intent intent;
-							if (TextUtils.isEmpty(business.getName())) {
-								intent = new Intent(getActivity(), BusinessProfileWizardActivity.class);
-							} else {
-								intent = new Intent(getActivity(), BusinessMainActivity.class);
-							}
-							startActivity(intent);
-	                    } else {
-	                        Crouton.showText(getActivity(), "Oops, we're having difficulties, please try again...", Style.ALERT);
-	                        Log.i(TAG, "Business fetch failed: " + e.getMessage());
-	                    }
-					}
-				});
-                return;
-            };
+            Business currentBusiness = Business.getCurrentBusiness(); 
+            if (currentBusiness != null)
+            {
+            	if (TextUtils.isEmpty(currentBusiness.getName())) 
+            	{
+            		startActivity(BusinessProfileWizardActivity.class);
+				} else 
+				{
+					startActivity(BusinessMainActivity.class);
+				}
+            }
+            else
+            {
+            	currentBusiness = new Business();
+            	Business.setCurrentBusiness(currentBusiness);
+            	currentBusiness.saveInBackground();
+            	
+                currentUser.put(ParseHelper.User.Keys.BUSINESS_POINTER, currentBusiness);
+                currentUser.saveInBackground();
+
+                startActivity(BusinessProfileWizardActivity.class);
+            }
             
-            Business business = new Business();
-            currentUser.put(ParseHelper.User.Keys.BUSINESS_POINTER, business);
-
-            final ProgressDialog progressDialogBusiness = ProgressDialog.show(getActivity(), null,
-                    "Creating your business profile...");
-            currentUser.saveInBackground(new SaveCallback() {
-
-                @Override
-                public void done(ParseException e) {
-                    if (e == null) {
-                        progressDialogBusiness.dismiss();
-                        Intent intent = new Intent(getActivity(), BusinessProfileWizardActivity.class);
-                        startActivity(intent);
-                    } else {
-                        progressDialogBusiness.dismiss();
-                        Crouton.showText(getActivity(), "Oops, we're having difficulties, please try again...", Style.ALERT);
-                        Log.i(TAG, "Business creation failed: " + e.getMessage());
-                    }
-                }
-            });
             break;
         case R.id.user_type_selection_btnCustomer:
-            Log.i(TAG, "btnBusiness clicked");
+            Log.i(TAG, "btnCustomer clicked");
             
-            if (currentUser.getParseObject(User.Keys.CUSTOMER_POINTER) != null) {
-                Intent intent = new Intent(getActivity(), CustomerMainActivity.class);
-                startActivity(intent);
-                return;
-            };
+            Customer currentCustomer = Customer.getCurrentCustomer();
+            if (currentCustomer != null) 
+            {
+            	startActivity(CustomerMainActivity.class);
+            }
+            else
+            {
+            	Customer customer = new Customer();
+            	Customer.setCurrentCustomer(currentCustomer);
+            	customer.saveInBackground();
+            	
+            	currentUser.put(ParseHelper.User.Keys.CUSTOMER_POINTER, customer);
+            	currentUser.saveInBackground();
+            	
+            	startActivity(CustomerMainActivity.class);
+            }
             
-            Customer customer = new Customer();
-            currentUser.put(ParseHelper.User.Keys.CUSTOMER_POINTER, customer);
-            //customer.setUser(ParseUser.getCurrentUser());
-
-            final ProgressDialog progressDialogCustomer = ProgressDialog.show(getActivity(), null,
-                    "Creating your customer profile...");
-            currentUser.saveInBackground(new SaveCallback() {
-
-                @Override
-                public void done(ParseException e) {
-                    if (e == null) {
-                        progressDialogCustomer.dismiss();
-                        Intent intent = new Intent(getActivity(), CustomerMainActivity.class);
-                        startActivity(intent);
-                    } else {
-                        progressDialogCustomer.dismiss();
-                        Crouton.showText(getActivity(), "Oops, we're having difficulties, please try again...", Style.ALERT);
-                        Log.i(TAG, "Customer creation failed: " + e.getMessage());
-                    }
-                }
-            });
             break;
         }
+    }
+    
+    public void startActivity(Class<? extends Activity> activity)
+    {
+    	startActivity(new Intent(getActivity(), activity));
     }
 }
