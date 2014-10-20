@@ -38,6 +38,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/customer_profile_creation_edtPhoneNumber_hint"
             android:imeOptions="actionDone"
+            android:maxLength="13"
             android:inputType="phone" />
     </LinearLayout>
 
