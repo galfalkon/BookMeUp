@@ -177,7 +177,7 @@
     <string name="contextual_action_bar_btnSelectAll">Select All</string>
     
     <!-- Customer profile creation -->
-    <string name="customer_profile_creation_txtWelcome">Welcome to BookeMeUp!</string>
+    <string name="customer_profile_creation_txtWelcome">Welcome to BookMeUp!</string>
     <string name="customer_profile_creation_txtSubtitle">You\'ve just made your first step of making your life a lot more easier!</string>
     <string name="customer_profile_creation_txtPhoneNumberRequest">Please insert your phone number so that businesses you visit can contact you.</string>
     <string name="customer_profile_creation_btnDone">Done</string>
