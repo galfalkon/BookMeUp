@@ -1,4 +1,4 @@
-package com.gling.bookmeup.main.views;
+package com.gling.bookmeup.shared.views;
 
 import android.content.Context;
 import android.util.AttributeSet;

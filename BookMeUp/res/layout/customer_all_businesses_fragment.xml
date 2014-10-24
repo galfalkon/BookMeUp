@@ -28,7 +28,7 @@
             android:layout_height="fill_parent"
             bookmeup:emptyListText="@string/business_bookings_list_no_pending_bookings" /> -->
         
-        <com.gling.bookmeup.main.views.CardGridViewWrapperView
+        <com.gling.bookmeup.shared.views.CardGridViewWrapperView
           android:id="@+id/customer_all_businesses_categoryGridView"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
           android:stretchMode="columnWidth"
           android:gravity="center"/>
 
-        <com.gling.bookmeup.main.views.CardListViewWrapperView
+        <com.gling.bookmeup.shared.views.CardListViewWrapperView
             android:id="@+id/customer_all_businesses_cardListViewAllBusinessesByType"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"

@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <com.gling.bookmeup.main.views.CardListViewWrapperView
+        <com.gling.bookmeup.shared.views.CardListViewWrapperView
             xmlns:bookmeup="http://schemas.android.com/apk/res/com.gling.bookmeup"
             android:id="@+id/business_profile_wizard_services_cardListViewWrapper"
             android:layout_width="fill_parent"

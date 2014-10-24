@@ -1,4 +1,4 @@
-<com.gling.bookmeup.main.views.CardListViewWrapperView 
+<com.gling.bookmeup.shared.views.CardListViewWrapperView 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:bookmeup="http://schemas.android.com/apk/res/com.gling.bookmeup"
     android:id="@+id/customer_my_booking_listViewWrapper"

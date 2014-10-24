@@ -1,4 +1,4 @@
-package com.gling.bookmeup.main.views;
+package com.gling.bookmeup.shared.views;
 
 import it.gmariotti.cardslib.library.view.CardGridView;
 import android.content.Context;
