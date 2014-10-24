@@ -15,7 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
-import com.gling.bookmeupsharedlib.R;
+import com.gling.bookmeup.sharedlib.R;
 
 /**
  * A view that wraps a {@link ListView} that allows showing 'loading' and 'no items' indications.

@@ -15,7 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
-import com.gling.bookmeupsharedlib.R;
+import com.gling.bookmeup.sharedlib.R;
 
 public abstract class BaseGridViewWrapperView<T extends GridView> extends ViewFlipper 
 {
