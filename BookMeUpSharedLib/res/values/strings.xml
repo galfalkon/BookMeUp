@@ -2,4 +2,8 @@
 
     <string name="app_name">BookMeUpSharedLib</string>
 
+    <!-- Contextual action bar -->
+    <string name="contextual_action_bar_btnSelectAll">Select All</string>
+    
+    <string name="default_no_items_in_list_text">No items</string>
 </resources>

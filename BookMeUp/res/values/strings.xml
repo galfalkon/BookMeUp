@@ -166,15 +166,12 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
+    
     <string name="title_activity_business_profile_wizard">Business Profile Wizard</string>
-    <string name="default_no_items_in_list_text">No items</string>
     <string name="business_profile_wizard_previous">Previous</string>
     <string name="business_profile_wizard_next">Next</string>
     <string name="progress_dialog_please_wait">Please wait...</string>
     <string name="progress_dialog_saving_profile">Saving your profile..</string>
-    
-    <!-- Contextual action bar -->
-    <string name="contextual_action_bar_btnSelectAll">Select All</string>
     
     <!-- Customer profile creation -->
     <string name="customer_profile_creation_txtWelcome">Welcome to BookMeUp!</string>
