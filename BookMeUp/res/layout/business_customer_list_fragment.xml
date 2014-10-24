@@ -40,7 +40,7 @@
             android:text="@string/business_customer_list_btnFilterByLastVisit" />
     </LinearLayout>
     
-    <com.gling.bookmeup.shared.views.CardListViewWrapperView
+    <com.gling.bookmeup.main.views.CardListViewWrapperView
         android:id="@+id/business_customer_list_listViewCustomers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

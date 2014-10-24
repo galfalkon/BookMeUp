@@ -16,7 +16,7 @@
         android:hint="@string/customer_history_business_list_search_edtSearchHint"
         android:maxLines="1" />
 
-    <com.gling.bookmeup.shared.views.CardListViewWrapperView
+    <com.gling.bookmeup.main.views.CardListViewWrapperView
         android:id="@+id/customer_history_business_list_listViewBusinesses"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

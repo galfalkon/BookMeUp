@@ -1,4 +1,4 @@
-package com.gling.bookmeup.shared.views;
+package com.gling.bookmeup.main.views;
 
 import it.gmariotti.cardslib.library.view.CardListView;
 import android.content.Context;
@@ -15,7 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
-import com.gling.bookmeup.sharedlib.R;
+import com.gling.bookmeupsharedlib.R;
 
 /**
  * A view that wraps a {@link ListView} that allows showing 'loading' and 'no items' indications.

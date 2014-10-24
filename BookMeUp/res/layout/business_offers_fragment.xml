@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <com.gling.bookmeup.shared.views.CardListViewWrapperView 
+    <com.gling.bookmeup.main.views.CardListViewWrapperView 
         android:id="@+id/business_offers_listViewOffersNew"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

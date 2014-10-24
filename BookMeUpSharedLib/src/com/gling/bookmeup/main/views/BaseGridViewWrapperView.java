@@ -1,4 +1,4 @@
-package com.gling.bookmeup.shared.views;
+package com.gling.bookmeup.main.views;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import android.content.Context;
@@ -15,7 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
-import com.gling.bookmeup.sharedlib.R;
+import com.gling.bookmeupsharedlib.R;
 
 public abstract class BaseGridViewWrapperView<T extends GridView> extends ViewFlipper 
 {
