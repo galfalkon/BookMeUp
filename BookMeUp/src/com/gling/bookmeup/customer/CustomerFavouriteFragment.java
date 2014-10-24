@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -59,59 +60,9 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 		EditText edtSearch = (EditText)view.findViewById(R.id.customer_favourites_business_list_edtSearch);
 		edtSearch.addTextChangedListener(this);
 
-		_businessesCardListView.setDisplayMode(DisplayMode.LOADING_VIEW);
-		@SuppressWarnings("unchecked")
-		ArrayList<ParseObject> favouriteBusinesses = (ArrayList<ParseObject>) Customer.getCurrentCustomer().get(Customer.Keys.FAVOURITES);
-		if (favouriteBusinesses == null) {
-			_businessesCardListView.setDisplayMode(DisplayMode.NO_ITEMS_VIEW);
-		} else {
-			for (ParseObject parseObject : favouriteBusinesses) {
-				if (parseObject instanceof com.gling.bookmeup.business.Business) {
-					com.gling.bookmeup.business.Business businessItem = (com.gling.bookmeup.business.Business) parseObject;
-					try {
-						ParseObject businessObject = businessItem.fetchIfNeeded();
-						businessItem = (com.gling.bookmeup.business.Business) businessObject;
-
-						Business currentBusiness = new Business(businessItem);
-						Card businessCard = currentBusiness.toCard(getActivity());
-						businessCard.setOnClickListener(new OnCardClickListener() {
-
-							@Override
-							public void onClick(Card businessCard, View arg1) {
-								if (!_allParseBusinesses.containsKey(businessCard.getId())) {
-									Log.i(TAG, "Business Dialog - could not find business");
-									Crouton.showText(getActivity(), "Could not find business", Style.ALERT);
-									return;
-								}
-								com.gling.bookmeup.business.Business business = _allParseBusinesses.get(businessCard.getId());
-								Log.i(TAG, "Business Dialog - " + business.getName());
-								CustomerChooseBusinessDialogs dialog = new CustomerChooseBusinessDialogs();
-								dialog.createBusinessProfileDialog(business, getActivity(), getResources(), Customer.getCurrentCustomer());
-							}
-						});
-
-						if (!_allBusinesses.containsKey(currentBusiness._id)) {						
-							_filteredBusinesses.add(businessCard);
-							_allBusinesses.put(currentBusiness._id, currentBusiness);
-						}
-
-						String id = businessItem.getObjectId();
-						if (!_allParseBusinesses.containsKey(id)) {
-							_allParseBusinesses.put(id, businessItem);
-						}
-
-					} catch (ParseException e) {
-						Log.e(TAG, "Exception: " + e.getMessage());
-					}
-				}
-			}
-			_businessesCardAdapter.notifyDataSetChanged();
-			DisplayMode newDisplayMode = _allBusinesses.isEmpty()? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;
-			_businessesCardListView.setDisplayMode(newDisplayMode);
-		}
+		new PopulateFavouritesBusinessesTask().execute();
 		return view;
 	}
-
 
 	@Override
 	protected int getFragmentLayoutId() {
@@ -136,6 +87,99 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 	public void onTextChanged(CharSequence s, int start, int before	, int count) {
 		Log.i(TAG, "onTextChanged");
 		_businessesCardAdapter.getFilter().filter(s);
+	}
+	
+	private class PopulateFavouritesBusinessesTask extends AsyncTask<Void, Void, Void>
+	{
+		@Override
+		protected void onPreExecute() 
+		{
+			super.onPreExecute();
+			_businessesCardListView.setDisplayMode(DisplayMode.LOADING_VIEW);
+		}
+		
+		@Override
+		protected Void doInBackground(Void... params) 
+		{
+			@SuppressWarnings("unchecked")
+			ArrayList<ParseObject> favouriteBusinesses = (ArrayList<ParseObject>) Customer.getCurrentCustomer().get(Customer.Keys.FAVOURITES);
+			
+			if (favouriteBusinesses == null) 
+			{
+				return null;
+			}
+			
+			for (ParseObject parseObject : favouriteBusinesses) {
+				if (parseObject instanceof com.gling.bookmeup.business.Business) 
+				{
+					com.gling.bookmeup.business.Business businessItem = (com.gling.bookmeup.business.Business) parseObject;
+					try 
+					{
+						ParseObject businessObject = businessItem.fetchIfNeeded();
+						businessItem = (com.gling.bookmeup.business.Business) businessObject;
+
+						Business currentBusiness = new Business(businessItem);
+						Card businessCard = currentBusiness.toCard(getActivity());
+						businessCard.setOnClickListener(new OnCardClickListener() 
+						{
+
+							@Override
+							public void onClick(Card businessCard, View arg1) 
+							{
+								if (!_allParseBusinesses.containsKey(businessCard.getId())) 
+								{
+									Log.i(TAG, "Business Dialog - could not find business");
+									Crouton.showText(getActivity(), "Could not find business", Style.ALERT);
+									return;
+								}
+								com.gling.bookmeup.business.Business business = _allParseBusinesses.get(businessCard.getId());
+								Log.i(TAG, "Business Dialog - " + business.getName());
+								CustomerChooseBusinessDialogs dialog = new CustomerChooseBusinessDialogs();
+								dialog.createBusinessProfileDialog(business, getActivity(), getResources(), Customer.getCurrentCustomer());
+							}
+						});
+
+						if (!_allBusinesses.containsKey(currentBusiness._id)) 
+						{						
+							_filteredBusinesses.add(businessCard);
+							_allBusinesses.put(currentBusiness._id, currentBusiness);
+						}
+
+						String id = businessItem.getObjectId();
+						if (!_allParseBusinesses.containsKey(id)) 
+						{
+							_allParseBusinesses.put(id, businessItem);
+						}
+					} 
+					catch (ParseException e) 
+					{
+						Log.e(TAG, "Exception: " + e.getMessage());
+					}
+				}
+				
+				publishProgress();
+			}
+			
+			return null;
+		}
+		
+		@Override
+		protected void onProgressUpdate(Void... values) 
+		{
+			super.onProgressUpdate(values);
+			if (!_allBusinesses.isEmpty())
+			{
+				_businessesCardListView.setDisplayMode(DisplayMode.LIST_VIEW);
+			}
+			
+			_businessesCardAdapter.notifyDataSetChanged();
+		}
+		
+		protected void onPostExecute(Void result) 
+		{
+			DisplayMode newDisplayMode = _allBusinesses.isEmpty()? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;
+			_businessesCardListView.setDisplayMode(newDisplayMode);
+		};
 	}
 
 	private static class Business {
@@ -218,6 +262,5 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 		}
 
 	}
-
 }
 
