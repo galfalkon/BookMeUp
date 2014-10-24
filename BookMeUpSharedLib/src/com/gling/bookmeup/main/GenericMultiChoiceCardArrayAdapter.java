@@ -21,7 +21,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.gling.bookmeup.R;
+import com.gling.bookmeup.sharedlib.R;
 
 public abstract class GenericMultiChoiceCardArrayAdapter<T> extends CardArrayMultiChoiceAdapter
 {
