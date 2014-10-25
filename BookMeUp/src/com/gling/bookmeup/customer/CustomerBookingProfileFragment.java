@@ -12,10 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.main.BookMeUpApplication;
 import com.gling.bookmeup.main.OnClickListenerFragment;
-import com.gling.bookmeup.main.ParseHelper;
+import com.gling.bookmeup.sharedlib.parse.Business;
+import com.gling.bookmeup.sharedlib.parse.ParseHelper;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;

@@ -1,6 +1,7 @@
 package com.gling.bookmeup.customer;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.sharedlib.parse.Customer;
 
 import android.app.Activity;
 import android.content.Intent;

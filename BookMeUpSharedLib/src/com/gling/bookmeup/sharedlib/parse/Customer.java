@@ -1,4 +1,4 @@
-package com.gling.bookmeup.customer;
+package com.gling.bookmeup.sharedlib.parse;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;

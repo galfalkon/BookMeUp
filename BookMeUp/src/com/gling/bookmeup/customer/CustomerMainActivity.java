@@ -9,8 +9,9 @@ import android.view.MenuItem;
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.login.LoginMainActivity;
 import com.gling.bookmeup.main.NavigationDrawerActivity;
-import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.PushUtils;
+import com.gling.bookmeup.sharedlib.parse.Customer;
+import com.gling.bookmeup.sharedlib.parse.ParseHelper;
 import com.parse.ParseUser;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;

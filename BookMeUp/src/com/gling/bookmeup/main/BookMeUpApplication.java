@@ -1,5 +1,8 @@
 package com.gling.bookmeup.main;
 
+import com.gling.bookmeup.login.SplashScreenActivity;
+import com.gling.bookmeup.sharedlib.parse.ParseHelper;
+
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
@@ -16,7 +19,7 @@ public class BookMeUpApplication extends Application {
 		super.onCreate();
 		
 		mContext = this;
-		ParseHelper.initialize(this);
+		ParseHelper.initialize(this, SplashScreenActivity.class);
 	}
 	
 	public static Context getContext(){

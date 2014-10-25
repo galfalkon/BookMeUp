@@ -24,9 +24,10 @@ import android.widget.ListView;
 
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.OnClickListenerFragment;
-import com.gling.bookmeup.main.ParseHelper.Booking;
 import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
 import com.gling.bookmeup.main.views.CardListViewWrapperView;
+import com.gling.bookmeup.sharedlib.parse.Customer;
+import com.gling.bookmeup.sharedlib.parse.ParseHelper.Booking;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -38,7 +39,7 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 	private static final String TAG = "CustomerHistoryFragment";
 	
 	private HashMap<String, Business> _allBusinesses;
-	private HashMap<String, com.gling.bookmeup.business.Business> _allParseBusinesses;
+	private HashMap<String, com.gling.bookmeup.sharedlib.parse.Business> _allParseBusinesses;
 	private BusinessCardArrayAdapter _businessesCardAdapter;
 	private List<Card> _filteredBusinesses;
 	
@@ -50,7 +51,7 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 		Log.i(TAG, "onCreateView");
 
 		_allBusinesses = new HashMap<String, Business>();
-		_allParseBusinesses = new HashMap<String, com.gling.bookmeup.business.Business>();
+		_allParseBusinesses = new HashMap<String, com.gling.bookmeup.sharedlib.parse.Business>();
 		_filteredBusinesses = new ArrayList<Card>();
 		_businessesCardAdapter = new BusinessCardArrayAdapter(getActivity(), _filteredBusinesses);
 		
@@ -80,7 +81,7 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 					return;
 				}
 				for (Booking bookingParseObject : objects) {
-					com.gling.bookmeup.business.Business businessItem = (com.gling.bookmeup.business.Business) 
+					com.gling.bookmeup.sharedlib.parse.Business businessItem = (com.gling.bookmeup.sharedlib.parse.Business) 
 							bookingParseObject.get(Booking.Keys.BUSINESS_POINTER);
 					
 					Business currentBusiness = new Business(businessItem);
@@ -94,7 +95,7 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 								Crouton.showText(getActivity(), "Could not find business", Style.ALERT);
 								return;
 							}
-							com.gling.bookmeup.business.Business business = _allParseBusinesses.get(businessCard.getId());
+							com.gling.bookmeup.sharedlib.parse.Business business = _allParseBusinesses.get(businessCard.getId());
 							Log.i(TAG, "Business Dialog - " + business.getName());
 							CustomerChooseBusinessDialogs dialog = new CustomerChooseBusinessDialogs();
 							dialog.createBusinessProfileDialog(business, getActivity(), getResources(), Customer.getCurrentCustomer());
@@ -152,7 +153,7 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 	private static class Business {
 		public final String _id, _businessName;
 		
-		public Business(com.gling.bookmeup.business.Business business) {
+		public Business(com.gling.bookmeup.sharedlib.parse.Business business) {
 			_id = business.getObjectId();
 			_businessName = business.getName();
 		}

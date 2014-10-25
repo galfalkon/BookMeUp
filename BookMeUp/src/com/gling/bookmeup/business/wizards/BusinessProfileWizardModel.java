@@ -4,8 +4,8 @@ import java.util.List;
 
 import android.content.Context;
 
-import com.gling.bookmeup.business.Business;
-import com.gling.bookmeup.main.ParseHelper.Category;
+import com.gling.bookmeup.sharedlib.parse.Business;
+import com.gling.bookmeup.sharedlib.parse.ParseHelper.Category;
 import com.tech.freak.wizardpager.model.AbstractWizardModel;
 import com.tech.freak.wizardpager.model.PageList;
 import com.tech.freak.wizardpager.model.SingleFixedChoicePage;

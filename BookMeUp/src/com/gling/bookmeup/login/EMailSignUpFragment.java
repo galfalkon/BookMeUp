@@ -14,7 +14,7 @@ import android.widget.EditText;
 import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.FragmentsFlowManager;
 import com.gling.bookmeup.main.OnClickListenerFragment;
-import com.gling.bookmeup.main.ParseHelper;
+import com.gling.bookmeup.sharedlib.parse.ParseHelper;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseUser;

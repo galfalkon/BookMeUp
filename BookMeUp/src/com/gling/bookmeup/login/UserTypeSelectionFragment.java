@@ -8,14 +8,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessMainActivity;
 import com.gling.bookmeup.business.wizards.BusinessProfileWizardActivity;
-import com.gling.bookmeup.customer.Customer;
 import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.gling.bookmeup.customer.CustomerProfileCreationActivity;
 import com.gling.bookmeup.main.OnClickListenerFragment;
-import com.gling.bookmeup.main.ParseHelper;
+import com.gling.bookmeup.sharedlib.parse.Business;
+import com.gling.bookmeup.sharedlib.parse.Customer;
+import com.gling.bookmeup.sharedlib.parse.ParseHelper;
 import com.parse.ParseUser;
 
 public class UserTypeSelectionFragment extends OnClickListenerFragment implements OnClickListener 

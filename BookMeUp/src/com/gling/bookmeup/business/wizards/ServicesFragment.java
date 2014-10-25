@@ -23,14 +23,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.business.Business;
-import com.gling.bookmeup.business.Service;
 import com.gling.bookmeup.main.GenericCardArrayAdapter;
 import com.gling.bookmeup.main.ICardGenerator;
 import com.gling.bookmeup.main.IObservableList;
 import com.gling.bookmeup.main.ObservableArrayList;
 import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
 import com.gling.bookmeup.main.views.CardListViewWrapperView;
+import com.gling.bookmeup.sharedlib.parse.Business;
+import com.gling.bookmeup.sharedlib.parse.Service;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.SaveCallback;

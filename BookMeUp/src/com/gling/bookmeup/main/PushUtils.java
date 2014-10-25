@@ -10,11 +10,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessMainActivity;
-import com.gling.bookmeup.customer.Customer;
 import com.gling.bookmeup.customer.CustomerMainActivity;
-import com.gling.bookmeup.main.ParseHelper.Booking;
+import com.gling.bookmeup.sharedlib.parse.Business;
+import com.gling.bookmeup.sharedlib.parse.Customer;
+import com.gling.bookmeup.sharedlib.parse.ParseHelper;
+import com.gling.bookmeup.sharedlib.parse.ParseHelper.Booking;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;

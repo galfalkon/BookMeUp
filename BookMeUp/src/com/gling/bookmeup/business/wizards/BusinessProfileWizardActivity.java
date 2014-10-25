@@ -21,9 +21,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.business.BusinessMainActivity;
-import com.gling.bookmeup.main.ParseHelper.Category;
+import com.gling.bookmeup.sharedlib.parse.Business;
+import com.gling.bookmeup.sharedlib.parse.ParseHelper.Category;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.tech.freak.wizardpager.model.AbstractWizardModel;

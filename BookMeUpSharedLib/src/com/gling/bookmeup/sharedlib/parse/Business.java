@@ -1,6 +1,6 @@
-package com.gling.bookmeup.business;
+package com.gling.bookmeup.sharedlib.parse;
 
-import com.gling.bookmeup.main.ParseHelper.Category;
+import com.gling.bookmeup.sharedlib.parse.ParseHelper.Category;
 import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;

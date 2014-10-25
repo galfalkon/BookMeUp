@@ -23,14 +23,14 @@ import android.widget.Filter;
 import android.widget.ViewSwitcher;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.customer.cards.CardThumbnailRoundCorners;
 import com.gling.bookmeup.customer.cards.CategoryCard;
 import com.gling.bookmeup.main.OnClickListenerFragment;
-import com.gling.bookmeup.main.ParseHelper.Category;
 import com.gling.bookmeup.main.views.BaseGridViewWrapperView.DisplayMode;
 import com.gling.bookmeup.main.views.CardGridViewWrapperView;
 import com.gling.bookmeup.main.views.CardListViewWrapperView;
+import com.gling.bookmeup.sharedlib.parse.Business;
+import com.gling.bookmeup.sharedlib.parse.ParseHelper.Category;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
