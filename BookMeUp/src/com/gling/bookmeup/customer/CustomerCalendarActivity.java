@@ -26,6 +26,7 @@ public class CustomerCalendarActivity extends FragmentActivity {
 	private static final String TAG = "CustomerCalendarActivity";
 	
 	public static final String BUSINESS_ID_EXTRA = "BusinessIdExtra";
+	public static final String SERVICE_ID_EXTRA = "ServiceIdExtra";
 
 	private static final int DAYS_MARGIN = 30;
 
