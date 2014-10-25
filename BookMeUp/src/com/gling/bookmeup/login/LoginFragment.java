@@ -11,7 +11,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.main.FragmentsFlowManager;
+import com.gling.bookmeup.main.FragmentsManagerUtils;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -55,11 +55,11 @@ public class LoginFragment extends OnClickListenerFragment {
         case R.id.login_btnLoginWithEMail:
             Log.i(TAG, "btnLoginWithEMail clicked");
             // TODO popup if someone is already logged in
-            FragmentsFlowManager.goToNextFragment(getActivity(), R.id.login_container, v.getId());
+            FragmentsManagerUtils.goToNextFragment(getActivity(), R.id.login_container, new EMailLoginFragment());
             break;
         case R.id.login_btnSignUp:
             Log.i(TAG, "btnSignUp clicked");
-            FragmentsFlowManager.goToNextFragment(getActivity(), R.id.login_container, v.getId());
+            FragmentsManagerUtils.goToNextFragment(getActivity(), R.id.login_container, new EMailSignUpFragment());
             break;
         }
     }

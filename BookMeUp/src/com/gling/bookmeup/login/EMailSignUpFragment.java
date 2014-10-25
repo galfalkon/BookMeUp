@@ -12,7 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.main.FragmentsFlowManager;
+import com.gling.bookmeup.main.FragmentsManagerUtils;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper;
 import com.parse.ParseException;
@@ -95,7 +95,7 @@ public class EMailSignUpFragment extends OnClickListenerFragment {
                 });
 
                 Crouton.showText(getActivity(),"Please verify your Email address", Style.CONFIRM);
-                FragmentsFlowManager.goToNextFragment(getActivity(), R.id.login_container, viewClickedId);
+                FragmentsManagerUtils.goToNextFragment(getActivity(), R.id.login_container, new EMailLoginFragment());
             }
         });
     }

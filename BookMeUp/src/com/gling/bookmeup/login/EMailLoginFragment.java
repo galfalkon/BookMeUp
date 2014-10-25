@@ -20,7 +20,7 @@ import com.gling.bookmeup.R;
 import com.gling.bookmeup.business.BusinessMainActivity;
 import com.gling.bookmeup.business.wizards.BusinessProfileWizardActivity;
 import com.gling.bookmeup.customer.CustomerMainActivity;
-import com.gling.bookmeup.main.FragmentsFlowManager;
+import com.gling.bookmeup.main.FragmentsManagerUtils;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.sharedlib.parse.Business;
 import com.gling.bookmeup.sharedlib.parse.Customer;
@@ -201,8 +201,7 @@ public class EMailLoginFragment extends OnClickListenerFragment {
                 } else if (user.getParseObject(User.Keys.BUSINESS_POINTER) != null
                         && user.getParseObject(User.Keys.CUSTOMER_POINTER) != null) {
                 	progressDialog.dismiss();
-                    FragmentsFlowManager.goToNextFragment(getActivity(), R.id.login_container,
-                            R.id.email_login_btnLogin);
+                    FragmentsManagerUtils.goToNextFragment(getActivity(), R.id.login_container, new UserTypeSelectionFragment());
                 } else if (user.getParseObject(User.Keys.BUSINESS_POINTER) != null) {
                 	ParseHelper.fetchBusiness(new GetCallback<Business>() {
 						
@@ -229,8 +228,7 @@ public class EMailLoginFragment extends OnClickListenerFragment {
                     startActivity(intent);
                 } else {
                 	progressDialog.dismiss();
-                    FragmentsFlowManager.goToNextFragment(getActivity(), R.id.login_container,
-                            R.id.email_login_btnLogin);
+                    FragmentsManagerUtils.goToNextFragment(getActivity(), R.id.login_container, new UserTypeSelectionFragment());
                 }
             }
         });
