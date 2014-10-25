@@ -6,6 +6,7 @@ import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import it.gmariotti.cardslib.library.internal.CardGridArrayAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
@@ -54,15 +55,16 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
 	private CardListViewWrapperView _allBusinessesListView;
 	private BusinessCardArrayAdapter _allBusinessesAdapter;
 //	private GenericCardArrayAdapter<Business> _allBusinessesAdapter;
-	private List<Business> _allBusinesses;
 //	private List<Business> _allBusinesses;
+	private HashMap<String, Business> _allBusinesses;
 	private List<Card> _filteredBusinesses;
 	
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        _allBusinesses = new ArrayList<Business>();
+//        _allBusinesses = new ArrayList<Business>();
+        _allBusinesses = new HashMap<String, Business>();
         _filteredBusinesses = new ArrayList<Card>();
 //        _allBusinessesAdapter = new GenericCardArrayAdapter<Business>(getActivity(), _allBusinesses, new AllBusinessesCardGenerator());
         _allBusinessesAdapter = new BusinessCardArrayAdapter(getActivity(), _filteredBusinesses);
@@ -196,7 +198,8 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
                 
                 for (Business business: objects)
                 {
-                	_allBusinesses.add(business);
+//                	_allBusinesses.add(business);
+                	_allBusinesses.put(business.getObjectId(), business);
                 }
                 updateBusinessesDisplayMode();
             }
@@ -296,7 +299,7 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
 			if ((constraint == null) && (categoryId == null)) {
 				showCategoriesView();
 			} else {
-				for (Business business : _allBusinesses) {
+				for (Business business : _allBusinesses.values()) {
 					if (doesSetisfyConstraint(business, constraint) &&
 							doesSetisfyCategory(business, categoryId)) {
 						final Card card = businessToCard(business, getActivity());
@@ -308,6 +311,12 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
 //								Intent intent = new Intent(getActivity(), CustomerCalendarActivity.class);
 //								intent.putExtra(CustomerCalendarActivity.BUSINESS_ID_EXTRA, card.getId());
 //								startActivity(intent);
+								
+								Activity activity = getActivity();
+								if (activity instanceof CustomerMainActivity) {
+									CustomerMainActivity customerActivity = (CustomerMainActivity)activity;
+									customerActivity.setChosenBusiness(_allBusinesses.get(card.getId()));
+								}
 								
 								Fragment fragment = new CustomerBookingProfileFragment();
 								getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
@@ -342,9 +351,13 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
     private static Card businessToCard(Business business, Activity activity) {
     	Card card = new Card(activity);
     	card.setTitle(business.getName());
-    	card.setBackgroundResourceId(android.R.color.holo_orange_dark);
-        CardThumbnailRoundCorners thumb = new CardThumbnailRoundCorners(activity, business.getImageFile().getUrl());
-        card.addCardThumbnail(thumb);
+//    	card.setBackgroundResourceId(android.R.color.holo_orange_dark);
+    	if (business.getImageFile() != null) {
+    		CardThumbnailRoundCorners thumb = new CardThumbnailRoundCorners(activity, business.getImageFile().getUrl());
+    		card.addCardThumbnail(thumb);
+    	} else {
+    		//TODO
+    	}
     	card.setId(business.getObjectId());
     	return card;
     }

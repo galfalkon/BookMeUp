@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.business.Business;
 import com.gling.bookmeup.login.LoginMainActivity;
 import com.gling.bookmeup.main.NavigationDrawerActivity;
 import com.gling.bookmeup.main.ParseHelper;
@@ -20,9 +21,18 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 	private static final String TAG = "CustomerMainActivity";
 	
 	private CustomerAllBusinessesFragment _fragment = null;
+	private Business _chosenBusiness = null;
 	
 	public void setAllFragment(CustomerAllBusinessesFragment fragment) {
 		this._fragment = fragment;
+	}
+	
+	public void setChosenBusiness(Business business) {
+		this._chosenBusiness = business;
+	}
+	
+	public Business getChosenBusiness() {
+		return this._chosenBusiness;
 	}
 	
 	@Override

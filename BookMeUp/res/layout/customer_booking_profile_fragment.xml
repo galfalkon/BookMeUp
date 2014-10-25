@@ -3,9 +3,10 @@
     style="@style/WizardPageContainer"
     android:orientation="vertical">
 
+    <!-- 
     <ScrollView android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"> -->
         
         <LinearLayout android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,7 +40,13 @@
             
         </LinearLayout>
         
-    </ScrollView>
+        <!-- 
+    </ScrollView> -->
+    
+    <com.gling.bookmeup.main.views.CardListViewWrapperView
+        android:id="@+id/customer_booking_profile_list_listViewServices"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>
 
