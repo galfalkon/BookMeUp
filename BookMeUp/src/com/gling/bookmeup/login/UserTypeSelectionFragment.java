@@ -36,18 +36,8 @@ public class UserTypeSelectionFragment extends OnClickListenerFragment implement
         case R.id.user_type_selection_btnBusiness:
             Log.i(TAG, "btnBusiness clicked");
             
-            Business currentBusiness = Business.getCurrentBusiness(); 
-            if (currentBusiness != null)
-            {
-            	if (TextUtils.isEmpty(currentBusiness.getName())) 
-            	{
-            		startActivity(BusinessProfileWizardActivity.class);
-				} else 
-				{
-					startActivity(BusinessMainActivity.class);
-				}
-            }
-            else
+            Business currentBusiness = Business.getCurrentBusiness();
+            if (currentBusiness == null)
             {
             	currentBusiness = new Business();
             	Business.setCurrentBusiness(currentBusiness);
@@ -55,42 +45,46 @@ public class UserTypeSelectionFragment extends OnClickListenerFragment implement
             	
                 currentUser.put(ParseHelper.User.Keys.BUSINESS_POINTER, currentBusiness);
                 currentUser.saveInBackground();
-
-                startActivity(BusinessProfileWizardActivity.class);
             }
+            
+            if (TextUtils.isEmpty(currentBusiness.getName())) 
+        	{
+        		startActivity(BusinessProfileWizardActivity.class);
+			}
+            else 
+			{
+				startActivity(BusinessMainActivity.class);
+			}
             
             break;
         case R.id.user_type_selection_btnCustomer:
             Log.i(TAG, "btnCustomer clicked");
             
             Customer currentCustomer = Customer.getCurrentCustomer();
-            if (currentCustomer != null) 
+            if (currentCustomer == null)
             {
-            	if (TextUtils.isEmpty(currentCustomer.getPhoneNumber())) 
-            	{
-            		startActivity(CustomerProfileCreationActivity.class);
-				} else 
-				{
-					startActivity(CustomerMainActivity.class);
-				}
-            }
-            else
-            {
-            	Customer customer = new Customer();
+            	currentCustomer = new Customer();
             	Customer.setCurrentCustomer(currentCustomer);
-            	customer.saveInBackground();
+            	currentCustomer.saveInBackground();
             	
-            	currentUser.put(ParseHelper.User.Keys.CUSTOMER_POINTER, customer);
+            	currentUser.put(ParseHelper.User.Keys.CUSTOMER_POINTER, currentCustomer);
             	currentUser.saveInBackground();
-            	
-            	startActivity(CustomerProfileCreationActivity.class);
             }
+            
+            if (TextUtils.isEmpty(currentCustomer.getPhoneNumber())) 
+        	{
+        		startActivity(CustomerProfileCreationActivity.class);
+			}
+            else 
+			{
+				startActivity(CustomerMainActivity.class);
+			}
             
             break;
         }
     }
     
-    public void startActivity(Class<? extends Activity> activity)
+    private void startActivity(Class<? extends Activity> activity)
     {
     	startActivity(new Intent(getActivity(), activity));
     }
