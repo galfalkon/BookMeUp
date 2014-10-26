@@ -1,4 +1,4 @@
-package com.gling.bookmeup.login;
+package com.gling.bookmeup.sharedlib.login;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -10,9 +10,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
-import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.FragmentsManagerUtils;
 import com.gling.bookmeup.main.OnClickListenerFragment;
+import com.gling.bookmeup.sharedlib.R;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -23,8 +23,7 @@ public class LoginFragment extends OnClickListenerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
-        view
-        .findViewById(R.id.login_txtContact)
+        view.findViewById(R.id.login_txtContact)
         .setOnClickListener(new OnClickListener() {
             
             @Override

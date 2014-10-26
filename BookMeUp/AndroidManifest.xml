@@ -62,7 +62,7 @@
         </receiver>
 
         <activity
-            android:name="com.gling.bookmeup.login.SplashScreenActivity"
+            android:name="com.gling.bookmeup.sharedlib.login.SplashScreenActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.BookMeUp_SplashScreen" >
@@ -73,7 +73,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.gling.bookmeup.login.LoginMainActivity"
+            android:name="com.gling.bookmeup.sharedlib.login.LoginMainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.BookMeUp_LoginScreen" >
         </activity>

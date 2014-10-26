@@ -1,4 +1,4 @@
-package com.gling.bookmeup.login;
+package com.gling.bookmeup.sharedlib.login;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -16,12 +16,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
-import com.gling.bookmeup.R;
-import com.gling.bookmeup.business.BusinessMainActivity;
-import com.gling.bookmeup.business.wizards.BusinessProfileWizardActivity;
-import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.gling.bookmeup.main.FragmentsManagerUtils;
 import com.gling.bookmeup.main.OnClickListenerFragment;
+import com.gling.bookmeup.sharedlib.R;
 import com.gling.bookmeup.sharedlib.parse.Business;
 import com.gling.bookmeup.sharedlib.parse.Customer;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper;
@@ -58,10 +55,8 @@ public class EMailLoginFragment extends OnClickListenerFragment {
     }
 
     @Override
-    public void onClick(View v) {
-        final int viewClickedId = v.getId();
-
-        switch (viewClickedId) {
+    public void onClick(View view) {
+        switch (view.getId()) {
         case R.id.email_login_btnLogin:
             handleLoginReuest();
             break;

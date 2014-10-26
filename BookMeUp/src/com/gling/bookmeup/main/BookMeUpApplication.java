@@ -1,6 +1,6 @@
 package com.gling.bookmeup.main;
 
-import com.gling.bookmeup.login.SplashScreenActivity;
+import com.gling.bookmeup.sharedlib.login.SplashScreenActivity;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper;
 
 import android.app.Application;

@@ -1,4 +1,4 @@
-package com.gling.bookmeup.login;
+package com.gling.bookmeup.sharedlib.login;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.FragmentsManagerUtils;
 import com.gling.bookmeup.main.OnClickListenerFragment;
+import com.gling.bookmeup.sharedlib.R;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;

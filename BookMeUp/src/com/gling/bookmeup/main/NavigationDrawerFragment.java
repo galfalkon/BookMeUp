@@ -22,7 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.gling.bookmeup.R;
-import com.gling.bookmeup.login.LoginMainActivity;
+import com.gling.bookmeup.sharedlib.login.LoginMainActivity;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper;
 
 /**
