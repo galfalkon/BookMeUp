@@ -25,7 +25,7 @@ public class LoginMainActivity extends Activity {
             return;
         }
 
-        getFragmentManager().beginTransaction().add(R.id.login_container, new LoginFragment()).commit();
+        getFragmentManager().beginTransaction().add(R.id.login_container, new LoginMainFragment()).commit();
     }
     
     @Override

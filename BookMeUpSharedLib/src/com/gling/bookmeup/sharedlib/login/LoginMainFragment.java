@@ -17,7 +17,7 @@ import com.gling.bookmeup.sharedlib.R;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-public class LoginFragment extends OnClickListenerFragment {
+public class LoginMainFragment extends OnClickListenerFragment {
     private static final String TAG = "LoginFragment";
 
     @Override
