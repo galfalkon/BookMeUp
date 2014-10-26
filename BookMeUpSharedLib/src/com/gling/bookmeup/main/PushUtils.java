@@ -5,13 +5,10 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.gling.bookmeup.business.BusinessMainActivity;
-import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.gling.bookmeup.sharedlib.parse.Business;
 import com.gling.bookmeup.sharedlib.parse.Customer;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper;
@@ -34,19 +31,17 @@ public class PushUtils {
 	
 	public static enum PushNotificationType 
 	{
-		MESSAGE_FROM_BUSINESS("com.gling.bookmeup.main.intent.MESSAGE_FROM_BUSINESS", CustomerMainActivity.class),
-		OFFER_FROM_BUSINESS("com.gling.bookmeup.main.intent.OFFER_FROM_BUSINESS", CustomerMainActivity.class),
-		BOOKING_APPROVED("com.gling.bookmeup.main.intent.BOOKING_APPROVED", CustomerMainActivity.class),
-		BOOKING_CANCELED("com.gling.bookmeup.main.intent.BOOKING_CANCELED", CustomerMainActivity.class),
+		MESSAGE_FROM_BUSINESS("com.gling.bookmeup.main.intent.MESSAGE_FROM_BUSINESS"),
+		OFFER_FROM_BUSINESS("com.gling.bookmeup.main.intent.OFFER_FROM_BUSINESS"),
+		BOOKING_APPROVED("com.gling.bookmeup.main.intent.BOOKING_APPROVED"),
+		BOOKING_CANCELED("com.gling.bookmeup.main.intent.BOOKING_CANCELED"),
 		
-		NEW_BOOKING_REQUEST("com.gling.bookmeup.main.intent.NEW_BOOKING_REQUEST", BusinessMainActivity.class);
+		NEW_BOOKING_REQUEST("com.gling.bookmeup.main.intent.NEW_BOOKING_REQUEST");
 		
 		private final String _action;
-		public final Class<? extends Activity> _activity;
-		private PushNotificationType(String action, Class<? extends Activity> activity)
+		private PushNotificationType(String action)
 		{
 			_action = action;
-			_activity = activity;
 		}
 		
 		public void putIntoIntent(Intent intent)
