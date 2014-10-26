@@ -1,7 +1,5 @@
 package com.gling.bookmeup.login;
 
-import java.util.List;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,7 +24,6 @@ import com.gling.bookmeup.main.ParseHelper;
 import com.gling.bookmeup.main.ParseHelper.Category;
 import com.gling.bookmeup.main.ParseHelper.User;
 import com.gling.bookmeup.main.PushUtils;
-import com.parse.FindCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -95,15 +92,11 @@ public class SplashScreenActivity extends Activity {
 
     private void fetchBusinessCategories() {
         ParseQuery<Category> query = ParseQuery.getQuery(Category.CLASS_NAME);
-        query.findInBackground(new FindCallback<Category>() {
-            public void done(List<Category> categories, ParseException e) {
-                if (e == null) {
-                    Category.setCategories(categories);
-                } else {
-                    Log.e(TAG, "Error: " + e.getMessage());
-                }
-            }
-        });
+        try {
+            Category.setCategories(query.find());
+        } catch (ParseException e) {
+            Log.e(TAG, "Error: " + e.getMessage());
+        }
     }
 
     private boolean isNetworkAvailable() {
