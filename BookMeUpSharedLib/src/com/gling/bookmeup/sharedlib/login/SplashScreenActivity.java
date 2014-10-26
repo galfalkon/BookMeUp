@@ -54,7 +54,7 @@ public abstract class SplashScreenActivity extends Activity {
         }
         
         fetchBusinessCategories();
-        startActivity(goToNextActivity());
+        goToNextActivity();
     }
     
     private void showNoInternetDialog()
