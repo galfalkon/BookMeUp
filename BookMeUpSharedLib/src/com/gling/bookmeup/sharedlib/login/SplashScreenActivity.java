@@ -24,16 +24,14 @@ public abstract class SplashScreenActivity extends Activity {
 
     private static final String TAG = "SplashScreenActivity";
 
-    private static final String EXTRA_PUSH_NOTIFICATION_DATA = "com.parse.Data";
-
-    private Activity mContext;
+    protected static final String EXTRA_PUSH_NOTIFICATION_DATA = "com.parse.Data";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, "onCreate");
-        mContext = this;
+    	Log.i(TAG, "onCreate");
+    	
+    	super.onCreate(savedInstanceState);
 
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.login_splash_screen_activity);
 
         // Track application opens
