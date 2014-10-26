@@ -9,12 +9,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.gling.bookmeup.R;
+import com.gling.bookmeup.main.ParseHelper.Booking;
 
 public class CustomerCalendarBookingCard extends Card {
 	private final String _service, _time, _status;
 	private final int _statusColor;
+	private Booking _booking;
 
-	public CustomerCalendarBookingCard(Context context, String title,
+	public CustomerCalendarBookingCard(Booking booking, Context context, String title,
 			String service, String time, String status, int statusColor, String expand) {
 		super(context, R.layout.customer_calendar_booking_card);
 		
@@ -22,6 +24,7 @@ public class CustomerCalendarBookingCard extends Card {
 		_time = time;
 		_status = status;
 		_statusColor = statusColor;
+		_booking = booking;
 		
 		CardHeader cardHeader = new CardHeader(context);
 		cardHeader.setTitle(title);
@@ -57,5 +60,9 @@ public class CustomerCalendarBookingCard extends Card {
 				.findViewById(R.id.customer_calendar_booking_card_status);
 		status.setTextColor(_statusColor);
 		status.setText(_status);
+	}
+	
+	public Booking getBooking() {
+		return _booking;
 	}
 }

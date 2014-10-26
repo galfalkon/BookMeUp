@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
@@ -95,9 +97,18 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 								return;
 							}
 							com.gling.bookmeup.business.Business business = _allParseBusinesses.get(businessCard.getId());
-							Log.i(TAG, "Business Dialog - " + business.getName());
-							CustomerChooseBusinessDialogs dialog = new CustomerChooseBusinessDialogs();
-							dialog.createBusinessProfileDialog(business, getActivity(), getResources(), Customer.getCurrentCustomer());
+//							Log.i(TAG, "Business Dialog - " + business.getName());
+//							CustomerChooseBusinessDialogs dialog = new CustomerChooseBusinessDialogs();
+//							dialog.createBusinessProfileDialog(business, getActivity(), getResources(), Customer.getCurrentCustomer());
+							
+							Activity activity = getActivity();
+							if (activity instanceof CustomerMainActivity) {
+								CustomerMainActivity customerActivity = (CustomerMainActivity)activity;
+								customerActivity.setChosenBusiness(business);
+							}
+							
+							Fragment fragment = new CustomerBookingProfileFragment();
+							getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
 						}
 					});
 					

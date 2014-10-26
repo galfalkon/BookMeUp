@@ -307,11 +307,6 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
 						card.setOnClickListener(new OnCardClickListener() {
 							@Override
 							public void onClick(Card arg0, View arg1) {
-								//TODO: card on click
-//								Intent intent = new Intent(getActivity(), CustomerCalendarActivity.class);
-//								intent.putExtra(CustomerCalendarActivity.BUSINESS_ID_EXTRA, card.getId());
-//								startActivity(intent);
-								
 								Activity activity = getActivity();
 								if (activity instanceof CustomerMainActivity) {
 									CustomerMainActivity customerActivity = (CustomerMainActivity)activity;

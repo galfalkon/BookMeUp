@@ -1,6 +1,7 @@
 package com.gling.bookmeup.customer;
 
 import it.gmariotti.cardslib.library.internal.Card;
+import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,6 +9,8 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -25,11 +28,14 @@ import com.gling.bookmeup.main.ICardGenerator;
 import com.gling.bookmeup.main.IObservableList;
 import com.gling.bookmeup.main.ObservableArrayList;
 import com.gling.bookmeup.main.ParseHelper.Booking;
+import com.gling.bookmeup.main.PushUtils;
+import com.gling.bookmeup.main.Utils;
 import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
 import com.gling.bookmeup.main.views.CardListViewWrapperView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.SendCallback;
 
 public class CustomerCalendarFragment extends Fragment {
 
@@ -85,6 +91,7 @@ public class CustomerCalendarFragment extends Fragment {
 			CustomerCalendarActivity calendarActivity = (CustomerCalendarActivity)activity;
 			String businessId = calendarActivity.getStringExtra(CustomerCalendarActivity.BUSINESS_ID_EXTRA);
 			final String serviceId = calendarActivity.getStringExtra(CustomerCalendarActivity.SERVICE_ID_EXTRA);
+			final Customer currentCustomer = Customer.getCurrentCustomer();
 			if (businessId != null) {
 				ParseQuery<Business> businessQuery = new ParseQuery<Business>(Business.CLASS_NAME);
 				businessQuery.whereEqualTo(Business.Keys.ID, businessId);
@@ -97,7 +104,7 @@ public class CustomerCalendarFragment extends Fragment {
 							Log.e(TAG, "problem");
 							return;
 						}
-						Business business = objects.get(0);
+						final Business business = objects.get(0);
 
 						ParseQuery<Booking> query = new ParseQuery<Booking>(Booking.CLASS_NAME);
 						query.whereEqualTo(Booking.Keys.BUSINESS_POINTER, business);
@@ -128,7 +135,7 @@ public class CustomerCalendarFragment extends Fragment {
 									int duration = booking.getServiceDuration();
 									DateTime endTime = startTime.plusMinutes(duration);
 									Date endDate = endTime.toDate();
-									_datedBooked.add(new DatedBooking(startDate, endDate, booking));
+									_datedBooked.add(new DatedBooking(startDate, endDate));
 								}
 								
 								
@@ -161,15 +168,15 @@ public class CustomerCalendarFragment extends Fragment {
 											
 											if (!conflicted) {
 												//create new booking
-//												business
-//												Customer.getCurrentCustomer();
-//												service
-//												status pending
 												Booking booking = new Booking();
-//												booking.set
+												booking.setBusiness(business);
+												booking.setCustomer(currentCustomer);
+												booking.setDate(startHour.toDate());
+												booking.setService(service);
+												booking.setStatus(Booking.Status.PENDING);
 												
 												//add to _possibleBookings
-												
+												_possibleBookings.add(booking);
 											}
 											
 											startHour = endHour;
@@ -218,27 +225,79 @@ public class CustomerCalendarFragment extends Fragment {
 				break;
 			}
 
-			return new CustomerCalendarBookingCard(
+			Card card = new CustomerCalendarBookingCard(
+					booking,
 					getActivity(), 
 					booking.getCustomer().getName(),
 					booking.getServiceName(), 
 					Constants.TIME_FORMAT.format(booking.getDate()), 
 					status, 
 					statusColor,
-					"Last updated: " + Constants.DATE_FORMAT.format(booking.getUpdatedAt()));
+					null);
+			
+			card.setId(booking.getDate().toString());
+			
+			card.setOnClickListener(new OnCardClickListener() {
+				
+				@Override
+				public void onClick(Card card, View arg1) {
+					if (card instanceof CustomerCalendarBookingCard) {
+						CustomerCalendarBookingCard bookingCard = (CustomerCalendarBookingCard) card;
+						final Booking bookingToSave = bookingCard.getBooking();
+
+						AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			            builder.setTitle(R.string.customer_booking_title);
+			            builder.setMessage("Book an appointment for: " + bookingToSave.getServiceName() + 
+			            					" at: " + Constants.DATE_FORMAT.format(bookingToSave.getDate()) + "?");
+			            
+			            //TODO
+//			            bookingToSave.getBusiness().getName()
+						
+						// Set up the buttons
+			            builder.setPositiveButton(R.string.customer_booking_ok_button, new DialogInterface.OnClickListener() {
+//						builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() { 
+						    @Override
+						    public void onClick(DialogInterface dialog, int which) {
+						    	Log.i(TAG, "Sending booking to parse & business");
+						    	try {
+						    		bookingToSave.save();
+						    		SendCallback callback = new SendCallback() {
+						    			
+						    			@Override
+						    			public void done(ParseException e) {
+						    				
+						    			}
+						    		};
+						    		PushUtils.notifyBusinessAboutBookingRequest(bookingToSave.getBusiness().getObjectId(), 
+						    				bookingToSave.getCustomer().getName(), callback);
+						    	} catch (ParseException e1) {
+						    		Log.e(TAG, "Problem saving the booking");
+						    	}
+						    	
+						    }
+						});
+						builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+						    @Override
+						    public void onClick(DialogInterface dialog, int which) {
+						        dialog.cancel();
+						    }
+						});
+						builder.show();
+					}
+				}
+			});
+			
+			return card;
 		}
 	}
 	
 	private class DatedBooking {
 		private Date _startDate = null;
 		private Date _endDate = null;
-		private Booking _booking = null;
 		
-		
-		public DatedBooking(Date startDate, Date endDate, Booking booking) {
+		public DatedBooking(Date startDate, Date endDate) {
 			_startDate = startDate;
 			_endDate = endDate;
-			_booking = booking;
 		}
 		
 		public Date getStartDate() {
@@ -247,10 +306,6 @@ public class CustomerCalendarFragment extends Fragment {
 		
 		public Date getEndDate() {
 			return _endDate;
-		}
-		
-		public Booking getBooking() {
-			return _booking;
 		}
 		
 	}
