@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 
-import com.gling.bookmeup.R;
+import com.gling.bookmeup.sharedlib.R;
 
 public abstract class NavigationDrawerActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
