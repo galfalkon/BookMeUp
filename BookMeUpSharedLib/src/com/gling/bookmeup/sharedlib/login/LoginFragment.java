@@ -50,16 +50,17 @@ public class LoginFragment extends OnClickListenerFragment {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-        case R.id.login_btnLoginWithEMail:
-            Log.i(TAG, "btnLoginWithEMail clicked");
-            // TODO popup if someone is already logged in
+        int id = v.getId();
+		if (id == R.id.login_btnLoginWithEMail) 
+		{
+			Log.i(TAG, "btnLoginWithEMail clicked");
+			// TODO popup if someone is already logged in
             FragmentsManagerUtils.goToNextFragment(getActivity(), R.id.login_container, new EMailLoginFragment());
-            break;
-        case R.id.login_btnSignUp:
-            Log.i(TAG, "btnSignUp clicked");
-            FragmentsManagerUtils.goToNextFragment(getActivity(), R.id.login_container, new EMailSignUpFragment());
-            break;
-        }
+		} 
+		else if (id == R.id.login_btnSignUp) 
+		{
+			Log.i(TAG, "btnSignUp clicked");
+			FragmentsManagerUtils.goToNextFragment(getActivity(), R.id.login_container, new EMailSignUpFragment());
+		}
     }
 }

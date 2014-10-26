@@ -52,15 +52,16 @@ public class EMailSignUpFragment extends OnClickListenerFragment {
     public void onClick(View v) {
         final int viewClickedId = v.getId();
 
-        switch (viewClickedId) {
-        case R.id.email_signup_btnSignUp:
-            if (!validateInput()) {
+        if (viewClickedId == R.id.email_signup_btnSignUp) 
+        {
+			if (!validateInput()) 
+			{
                 return;
             }
-            break;
-        default:
-            return;
-        }
+		} else 
+		{
+			return;
+		}
 
         final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Signing up...");
 

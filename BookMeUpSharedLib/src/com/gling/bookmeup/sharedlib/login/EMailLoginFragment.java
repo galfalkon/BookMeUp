@@ -56,14 +56,15 @@ public class EMailLoginFragment extends OnClickListenerFragment {
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-        case R.id.email_login_btnLogin:
-            handleLoginReuest();
-            break;
-        case R.id.email_login_txtForgotPassword:
-            handleForgotPassword();
-            break;
-        }
+        int id = view.getId();
+		if (id == R.id.email_login_btnLogin) 
+		{
+			handleLoginReuest();
+		} 
+		else if (id == R.id.email_login_txtForgotPassword) 
+		{
+			handleForgotPassword();
+		}
     }
 
     private void handleForgotPassword() {
