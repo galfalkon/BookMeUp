@@ -1,14 +1,13 @@
 package com.gling.bookmeup.customer.cards;
 
 import it.gmariotti.cardslib.library.internal.CardThumbnail;
-
-import com.gling.bookmeup.R;
-import com.gling.bookmeup.main.drawable.RoundCornersDrawable;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.view.View;
+
+import com.gling.bookmeup.main.drawable.RoundCornersDrawable;
+import com.gling.bookmeup.sharedlib.R;
 
 public class CardThumbnailRoundCorners extends CardThumbnail {
 

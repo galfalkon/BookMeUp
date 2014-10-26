@@ -1,8 +1,5 @@
 package com.gling.bookmeup.customer;
 
-import com.gling.bookmeup.R;
-import com.gling.bookmeup.sharedlib.parse.Customer;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+
+import com.gling.bookmeup.sharedlib.parse.Customer;
 
 public class CustomerProfileCreationActivity extends Activity implements OnClickListener, TextWatcher, OnEditorActionListener 
 {

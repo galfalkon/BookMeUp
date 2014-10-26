@@ -19,7 +19,6 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.DatePicker;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.gling.bookmeup.R;
 
 public class CustomerCalendarActivity extends FragmentActivity {
 

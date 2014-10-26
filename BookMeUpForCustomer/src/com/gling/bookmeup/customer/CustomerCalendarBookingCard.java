@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.gling.bookmeup.R;
-
 public class CustomerCalendarBookingCard extends Card {
 	private final String _service, _time, _status;
 	private final int _statusColor;

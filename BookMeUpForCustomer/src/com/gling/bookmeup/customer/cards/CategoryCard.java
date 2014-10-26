@@ -6,11 +6,11 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
 import com.devsmart.android.ui.HorizontalListView;
-import com.gling.bookmeup.R;
+import com.gling.bookmeup.sharedlib.R;
 import com.gling.bookmeup.sharedlib.parse.Business;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper.Category;
 import com.parse.ParseFile;

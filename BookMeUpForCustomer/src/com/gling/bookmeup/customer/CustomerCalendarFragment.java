@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.Constants;
 import com.gling.bookmeup.main.GenericCardArrayAdapter;
 import com.gling.bookmeup.main.ICardGenerator;

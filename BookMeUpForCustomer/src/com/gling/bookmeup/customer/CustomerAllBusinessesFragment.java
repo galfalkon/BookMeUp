@@ -23,7 +23,6 @@ import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ViewSwitcher;
 
-import com.gling.bookmeup.R;
 import com.gling.bookmeup.customer.cards.CardThumbnailRoundCorners;
 import com.gling.bookmeup.customer.cards.CategoryCard;
 import com.gling.bookmeup.main.OnClickListenerFragment;

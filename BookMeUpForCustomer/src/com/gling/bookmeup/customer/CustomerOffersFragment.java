@@ -13,15 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.gling.bookmeup.R;
 import com.gling.bookmeup.main.Constants;
 import com.gling.bookmeup.main.GenericCardArrayAdapter;
 import com.gling.bookmeup.main.ICardGenerator;
 import com.gling.bookmeup.main.IObservableList;
 import com.gling.bookmeup.main.ObservableArrayList;
 import com.gling.bookmeup.main.OnClickListenerFragment;
-import com.gling.bookmeup.main.views.CardListViewWrapperView;
 import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
+import com.gling.bookmeup.main.views.CardListViewWrapperView;
 import com.gling.bookmeup.sharedlib.parse.Customer;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper.Offer;
