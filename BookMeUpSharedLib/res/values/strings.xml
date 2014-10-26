@@ -1,9 +1,187 @@
 <resources>
-
-    <string name="app_name">BookMeUpSharedLib</string>
+    <string name="app_name">Book Me Up!</string>
 
     <!-- Contextual action bar -->
     <string name="contextual_action_bar_btnSelectAll">Select All</string>
     
     <string name="default_no_items_in_list_text">No items</string>
+    
+    <string name="action_settings">Settings</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="try_again">Try Again</string>
+
+    <!-- Login screen -->
+    <string name="login_btnLoginWithGoogleText">Login with Google</string>
+    <string name="login_btnLoginWithFacebookText">Login with Facebook</string>
+    <string name="login_btnLoginWithEMailText">Log in</string>
+    <string name="login_btnSignUpText">Sign up</string>
+    <string name="login_action_feedback">Send Feedback</string>
+    <string name="email_login_btnLogin">Log in</string>
+    <string name="login_txtContact">Contact us</string>
+    <string name="email_signup_btnSignUp">Sign up</string>
+    <string name="login_forgot_password">Forgot password</string>
+
+    <!-- User type selection -->
+    <string name="user_type_selection_btnCustomerText">I\'m a Customer</string>
+    <string name="user_type_selection_btnBusinessText">I\'m a Business</string>
+
+    <!-- email signup -->
+    <string name="email_signup_btnContinueText">Continue</string>
+    <string name="email_signup_edtUserNameHint">User name</string>
+    <string name="email_signup_edtEmailHint">Email</string>
+    <string name="email_signup_edtEmailVerificationHint">Email verification</string>
+    <string name="email_signup_edtPasswordHint">Password</string>
+    <string name="email_signup_edtPasswordVerificationHint">Password verification</string>
+
+    <!-- email login -->
+    <string name="email_login_btnContinueText">Continue</string>
+    <string name="email_login_edtUserNameHint">User name</string>
+    <string name="email_login_edtPasswordHint">Password</string>
+    <string name="email_login_txtForgotPasswordText">Forgot Your Password?</string>
+    <string name="email_login_reset_password_dialog_title">Reset password</string>
+    <string name="email_login_reset_password_dialog_toast_message_on_success">You will receive an email shortly that will allow you to reset your password</string>
+    <string name="email_login_reset_password_dialog_email_hint">Your email address...</string>
+    <string name="email_login_reset_password_dialog_invalid_login_toast_message">Invalid email address</string>
+
+    <!-- Business Activity -->
+    <string name="business_activity_title">BookMeUp! - For Business</string>
+    <string name="business_activity_title_section_calendar">Calendar</string>
+    <string-array name="business_navigation_drawer_items">
+        <item>Bookings</item>
+        <item>Customers</item>
+        <item>Offers</item>
+    </string-array>
+
+    <!-- Customer Activity -->
+    <string name="customer_main_activity_title">BookMeUp! - For Customers</string>
+    <string name="customer_profile_creation_activity_title">Customer Profile Configuration</string>
+    <string-array name="customer_navigation_drawer_items">
+        <item>All Businesses</item>
+        <item>History</item>
+        <item>Favourites</item>
+        <item>My Bookings</item>
+        <item>Offers</item>
+    </string-array>
+
+    <!-- Customer main screen -->
+    <string name="customer_main_screen_btnBarbersText">Barbers</string>
+    <string name="customer_main_screen_btnCosmeticsText">Cosmetics</string>
+    <string name="customer_main_screen_btnDentistsText">Dentists</string>
+    <string name="customer_main_screen_btnGaragesText">Garages</string>
+
+    <!-- Customer All Businesses -->
+    <string name="customer_all_businesses_list_search_edtSearchHint">Search for...</string>
+    <string name="customer_business_list_search_edtSearchHint">Search for...</string>
+    <string name="logout">Logout</string>
+    <string name="customer_all_businesses_list_all_header">All Businesses</string>
+    <string name="customer_all_businesses_list_by_type_header">Businesses By Type</string>
+    <string name="customer_all_businesses_list_no_businesses">No businesses</string>
+    <string name="customer_all_businesses_list_no_businesses_by_type">No businesses exists at this type</string>
+
+    <!-- Customer History -->
+	<string name="customer_history_business_list_search_edtSearchHint">Search for...</string>
+
+    <!-- Customer Favourite -->
+    <string name="customer_favourites_business_list_search_edtSearchHint">Search for...</string>
+
+    <!-- Customer Business Profile -->
+    <string name="customer_business_profile_btnNextTxt">Next</string>
+    <string name="customer_business_profile_btnCancelTxt">Cancel</string>
+    <string name="customer_business_profile_opening_hours">Opening Hours:</string>
+    <string name="customer_business_profile_description">"Description: "</string>
+    <string name="favourites_icon">favourites icon</string>
+    
+    <!-- Customer Choose Services -->
+    <string name="customer_choose_services_btnScheduleTxt">Schedule</string>
+    <string name="customer_choose_services_btnCancelTxt">Cancel</string>
+    
+    <!-- Customer My Bookings -->
+    <string name="customer_my_bookings_no_bookings">No bookings</string>
+    <string name="customer_my_bookings_booking_approved">Approved</string>
+    <string name="customer_my_bookings_booking_canceled">Canceled</string>
+    <string name="customer_my_bookings_booking_pending_for_approval">Pending for approval</string>
+    <string name="customer_my_bookings_status_tag">"Status: "</string>
+
+    <!-- Customer Calendar -->
+    <string name="customer_calendar">Calendar</string>
+    <string name="title_activity_customer_calendar">Calendar</string>
+
+    <!-- Customer offer list -->
+    <string name="customer_offer_list_no_offers">No offers</string>
+    
+    <!-- Business profile creation -->
+    <string name="business_profile_creation_edtName">Business name</string>
+    <string name="business_profile_creation_edtDescriptionHint">Business description</string>
+    <string name="business_profile_creation_edtOpeningHoursHint">Opening Hours</string>
+    <string name="business_profile_creation_imgProfilePicutureDescription">Profile Picture</string>
+    <string name="business_profile_creation_lstServices">Services</string>
+    <string name="business_profile_creation_btnSaveProfile">Save Profile</string>
+    <string name="action_business_profile_edit">Business</string>
+    <string name="business_profile_creation_btnUploadImage">Upload</string>
+    <string name="business_profile_creation_txtPreviewImage">Image</string>
+    <string name="business_profile_creation_txtServices">Services</string>
+    <string name="services_list_header_btnAdd">Add</string>
+
+    <!-- Business customer list -->
+    <string name="business_customer_list_edtSearchHint">Search customer</string>
+    <string name="business_customer_list_btnFilterBySpendings">Spendings</string>
+    <string name="business_customer_list_btnFilterByLastVisit">Last visit</string>
+    <string name="business_customer_list_btnSendMessage">Send message</string>
+    <string name="business_customer_list_btnSendOffer">Send offer</string>
+    <string name="business_customer_list_send_message_dialog_btnSend">Send</string>
+    <string name="business_customer_list_send_message_dialog_edtMessageHint">Type in your message...\n(Up to 60 characters)</string>
+    <string name="business_customer_list_no_customers">No customers</string>
+    <string name="business_customer_list_spendings_filter_dialog_edtSpendingsHint">Please enter limit</string>
+    <string name="business_customer_list_spendings_filter_dialog_title">Filter customer by total spendings in the last X weeks</string>
+    <string name="business_customer_list_send_offer_dialog_title">Offer specification</string>
+    <string name="business_customer_list_send_offer_dialog_txtDiscount">Discount (%)</string>
+    <string name="business_customer_list_send_offer_dialog_txtDuration">Duration (Weeks)</string>
+
+    <!-- Business bookings list -->
+    <string name="business_bookings_list_pending_header">Pending</string>
+    <string name="business_bookings_list_approved_header">Approved</string>
+    <string name="business_bookings_list_pending_click_dialog">Approve booking?</string>
+    <string name="business_bookings_list_approved_click_dialog">Cancel booking?</string>
+    <string name="business_bookings_list_no_pending_bookings">No pending bookings</string>
+    <string name="business_bookings_list_no_approved_bookings">No approved bookings</string>
+    <string name="business_booking_list_approved_mutlichoice_action_bar_menu_cancel">Cancel</string>
+    <string name="business_booking_list_pending_mutlichoice_action_bar_menu_approve">Approve</string>
+    
+    <!-- Business offer list -->
+    <string name="business_offer_list_no_offers">No offers</string>
+
+    <!-- Shared prefs -->
+    <string name="preference_file_key">com.gling.bookmeup</string>
+    <string name="shared_businessid">saved_businessId</string>
+    <string name="shared_customerid">shared_customerId</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="business_activity_title_section_profile_edit">Profile Edit</string>
+    <string name="title_activity_profile_edit">ProfileEditActivity</string>
+
+    <!-- Business calendar -->
+    <string name="title_activity_business_calendar">Calendar</string>
+
+    <!-- Errors -->
+    <string name="error_required_field">This field is required</string>
+    <string name="error_no_internet_connection">This app requires an active internet connection\nPlease check your internet connection or try again later</string>
+    
+    <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    
+    <string name="title_activity_business_profile_wizard">Business Profile Wizard</string>
+    <string name="business_profile_wizard_previous">Previous</string>
+    <string name="business_profile_wizard_next">Next</string>
+    <string name="progress_dialog_please_wait">Please wait...</string>
+    <string name="progress_dialog_saving_profile">Saving your profile..</string>
+    
+    <!-- Customer profile creation -->
+    <string name="customer_profile_creation_txtWelcome">Welcome to BookMeUp!</string>
+    <string name="customer_profile_creation_txtSubtitle">You\'ve just made your first step of making your life a lot more easier!</string>
+    <string name="customer_profile_creation_txtPhoneNumberRequest">Please insert your phone number so that businesses you visit can contact you.</string>
+    <string name="customer_profile_creation_btnDone">Done</string>
+    <string name="customer_profile_creation_edtPhoneNumber_hint">Phone number</string>
+    <string name="customer_profile_creation_edtPhoneNumberError">Invalid phone number</string>
 </resources>
