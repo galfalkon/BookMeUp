@@ -96,7 +96,7 @@ public class EMailSignUpFragment extends OnClickListenerFragment {
                 });
 
                 Crouton.showText(getActivity(),"Please verify your Email address", Style.CONFIRM);
-                FragmentsManagerUtils.goToNextFragment(getActivity(), R.id.login_container, new EMailLoginFragment());
+                FragmentsManagerUtils.goToNextFragment(getActivity(), R.id.login_container, ((LoginMainActivity)getActivity()).getEmailLoginFragmentInstance());
             }
         });
     }

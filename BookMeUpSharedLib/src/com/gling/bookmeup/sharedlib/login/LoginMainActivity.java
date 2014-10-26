@@ -1,6 +1,7 @@
 package com.gling.bookmeup.sharedlib.login;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -8,7 +9,7 @@ import com.gling.bookmeup.sharedlib.R;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 
-public class LoginMainActivity extends Activity {
+public abstract class LoginMainActivity extends Activity {
 
     private static final String TAG = "LoginActivity";
 
@@ -34,4 +35,6 @@ public class LoginMainActivity extends Activity {
     	Crouton.cancelAllCroutons();
     	super.onDestroy();
     }
+    
+    public abstract Fragment getEmailLoginFragmentInstance();
 }
