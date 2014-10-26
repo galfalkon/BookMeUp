@@ -18,18 +18,23 @@ import android.widget.ViewFlipper;
 import com.gling.bookmeup.sharedlib.R;
 
 /**
- * A view that wraps a {@link ListView} that allows showing 'loading' and 'no items' indications.
- * The 'no items' text can be customized by setting the {@link R.attr#emptyListText} attribute. If this attributes isn't set,
- * the default text is {@link R.string#default_no_items_in_list_text}
+ * A view that wraps a {@link ListView} that allows showing 'loading' and 'no
+ * items' indications. The 'no items' text can be customized by setting the
+ * {@link R.attr#emptyListText} attribute. If this attributes isn't set, the
+ * default text is {@link R.string#default_no_items_in_list_text}
+ * 
  * @author Gal Falkon
- *
- * @param <T> The type of the list view to be wrapped (e.g. {@link ListView}, {@link CardListView}) 
+ * 
+ * @param <T>
+ *            The type of the list view to be wrapped (e.g. {@link ListView},
+ *            {@link CardListView})
  */
-public abstract class BaseListViewWrapperView<T extends ListView> extends ViewFlipper 
+public abstract class BaseListViewWrapperView<T extends ListView> extends
+		ViewFlipper
 {
 	private static final String TAG = "BaseListViewWrapperView";
-	
-	public static enum DisplayMode 
+
+	public static enum DisplayMode
 	{
 		LIST_VIEW, LOADING_VIEW, NO_ITEMS_VIEW;
 	}
@@ -38,54 +43,61 @@ public abstract class BaseListViewWrapperView<T extends ListView> extends ViewFl
 	private final ProgressBar _progressBar;
 	private final String _noItemsText;
 	private final TextView _noItemsView;
-	
-	public BaseListViewWrapperView(Context context, AttributeSet attrs, T listView) 
+
+	public BaseListViewWrapperView(Context context, AttributeSet attrs,
+			T listView)
 	{
 		super(context, attrs);
 
-		TypedArray attributes = context.getTheme().obtainStyledAttributes(attrs, R.styleable.BaseListViewWrapperView, 0, 0);
+		TypedArray attributes = context.getTheme().obtainStyledAttributes(
+				attrs, R.styleable.BaseListViewWrapperView, 0, 0);
 		try
 		{
-			if (attributes.hasValue(R.styleable.BaseListViewWrapperView_emptyListText))
+			if (attributes
+					.hasValue(R.styleable.BaseListViewWrapperView_emptyListText))
 			{
-				_noItemsText = attributes.getString(R.styleable.BaseListViewWrapperView_emptyListText);
-			}
-			else
+				_noItemsText = attributes
+						.getString(R.styleable.BaseListViewWrapperView_emptyListText);
+			} else
 			{
-				_noItemsText = getResources().getString(R.string.default_no_items_in_list_text);
+				_noItemsText = getResources().getString(
+						R.string.default_no_items_in_list_text);
 			}
-			
-		}
-		finally
+
+		} finally
 		{
 			attributes.recycle();
 		}
-		
+
 		_listView = listView;
 		addView(_listView);
-		
+
 		_progressBar = new ProgressBar(context);
-		FrameLayout.LayoutParams progressBarLayoutParams = new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		FrameLayout.LayoutParams progressBarLayoutParams = new FrameLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		progressBarLayoutParams.gravity = Gravity.CENTER;
 		_progressBar.setLayoutParams(progressBarLayoutParams);
 		addView(_progressBar);
 
-		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		_noItemsView = (TextView)layoutInflater.inflate(R.layout.empty_list_view, (ViewGroup) getParent());
+		LayoutInflater layoutInflater = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		_noItemsView = (TextView) layoutInflater.inflate(
+				R.layout.empty_list_view, (ViewGroup) getParent());
 		_noItemsView.setText(_noItemsText);
-		FrameLayout.LayoutParams noItemsViewLayoutParams = new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		FrameLayout.LayoutParams noItemsViewLayoutParams = new FrameLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		noItemsViewLayoutParams.gravity = Gravity.CENTER;
 		_noItemsView.setLayoutParams(noItemsViewLayoutParams);
 		addView(_noItemsView);
 	}
-	
+
 	public void setAdapter(ListAdapter listAdapter)
 	{
 		Log.i(TAG, "setAdapter");
-		
+
 		_listView.setAdapter(listAdapter);
 	}
-	
+
 	public DisplayMode getDisplayMode()
 	{
 		switch (getDisplayedChild())
@@ -99,16 +111,16 @@ public abstract class BaseListViewWrapperView<T extends ListView> extends ViewFl
 			return DisplayMode.NO_ITEMS_VIEW;
 		}
 	}
-	
+
 	public void setDisplayMode(DisplayMode mode)
 	{
 		Log.i(TAG, String.format("setDisplayMode(%s)", mode.toString()));
-		
+
 		if (mode == getDisplayMode())
 		{
 			return;
 		}
-		
+
 		switch (mode)
 		{
 		case LIST_VIEW:

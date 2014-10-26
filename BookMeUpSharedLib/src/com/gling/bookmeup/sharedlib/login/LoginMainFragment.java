@@ -17,50 +17,67 @@ import com.gling.bookmeup.sharedlib.R;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-public class LoginMainFragment extends OnClickListenerFragment {
-    private static final String TAG = "LoginFragment";
+public class LoginMainFragment extends OnClickListenerFragment
+{
+	private static final String TAG = "LoginFragment";
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-        view.findViewById(R.id.login_txtContact)
-        .setOnClickListener(new OnClickListener() {
-            
-            @Override
-            public void onClick(View v) {
-                Intent localIntent = new Intent("android.intent.action.SENDTO");
-                localIntent.setType("message/rfc822");
-                localIntent.setData(Uri.parse("mailto:support@bookmeup.com"));
-                localIntent.putExtra("android.intent.extra.SUBJECT", "Feedback for Android BookMeUp! App");
-                localIntent.putExtra("android.intent.extra.TEXT", "Dear BookMeUp!,\n\n");
-                try {
-                    startActivity(Intent.createChooser(localIntent, "Send mail..."));
-                } catch (ActivityNotFoundException localActivityNotFoundException) {
-                	Crouton.showText(getActivity(), "There are no email clients installed", Style.ALERT);
-                }
-            }
-        });
-        return view;
-    }
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState)
+	{
+		View view = super.onCreateView(inflater, container, savedInstanceState);
+		view.findViewById(R.id.login_txtContact).setOnClickListener(
+				new OnClickListener()
+				{
 
-    @Override
-    protected int getFragmentLayoutId() {
-        return R.layout.login_main_fragment;
-    }
+					@Override
+					public void onClick(View v)
+					{
+						Intent localIntent = new Intent(
+								"android.intent.action.SENDTO");
+						localIntent.setType("message/rfc822");
+						localIntent.setData(Uri
+								.parse("mailto:support@bookmeup.com"));
+						localIntent.putExtra("android.intent.extra.SUBJECT",
+								"Feedback for Android BookMeUp! App");
+						localIntent.putExtra("android.intent.extra.TEXT",
+								"Dear BookMeUp!,\n\n");
+						try
+						{
+							startActivity(Intent.createChooser(localIntent,
+									"Send mail..."));
+						} catch (ActivityNotFoundException localActivityNotFoundException)
+						{
+							Crouton.showText(getActivity(),
+									"There are no email clients installed",
+									Style.ALERT);
+						}
+					}
+				});
+		return view;
+	}
 
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-		if (id == R.id.login_btnLoginWithEMail) 
+	@Override
+	protected int getFragmentLayoutId()
+	{
+		return R.layout.login_main_fragment;
+	}
+
+	@Override
+	public void onClick(View v)
+	{
+		int id = v.getId();
+		if (id == R.id.login_btnLoginWithEMail)
 		{
 			Log.i(TAG, "btnLoginWithEMail clicked");
 			// TODO popup if someone is already logged in
-            FragmentsManagerUtils.goToNextFragment(getActivity(), R.id.login_container, new EMailLoginFragment());
-		} 
-		else if (id == R.id.login_btnSignUp) 
+			FragmentsManagerUtils.goToNextFragment(getActivity(),
+					R.id.login_container, new EMailLoginFragment());
+		} else if (id == R.id.login_btnSignUp)
 		{
 			Log.i(TAG, "btnSignUp clicked");
-			FragmentsManagerUtils.goToNextFragment(getActivity(), R.id.login_container, new EMailSignUpFragment());
+			FragmentsManagerUtils.goToNextFragment(getActivity(),
+					R.id.login_container, new EMailSignUpFragment());
 		}
-    }
+	}
 }

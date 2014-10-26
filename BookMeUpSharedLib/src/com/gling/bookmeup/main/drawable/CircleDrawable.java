@@ -33,86 +33,100 @@ import android.graphics.drawable.Drawable;
  * Image with rounded corners
  * <p/>
  * You can find the original source here:
- * http://www.curious-creature.org/2012/12/11/android-recipe-1-image-with-rounded-corners/
- *
+ * http://www.curious-creature.org/2012/12
+ * /11/android-recipe-1-image-with-rounded-corners/
+ * 
  * @author Gabriele Mariotti (gabri.mariotti@gmail.com)
  */
-public class CircleDrawable extends Drawable {
+public class CircleDrawable extends Drawable
+{
 
-    private final BitmapShader mBitmapShader;
-    private final Paint mPaint;
-    private Paint mWhitePaint;
-    int circleCenterX;
-    int circleCenterY;
-    int mRadus;
-    private boolean mUseStroke = false;
-    private int mStrokePadding = 0;
+	private final BitmapShader mBitmapShader;
+	private final Paint mPaint;
+	private Paint mWhitePaint;
+	int circleCenterX;
+	int circleCenterY;
+	int mRadus;
+	private boolean mUseStroke = false;
+	private int mStrokePadding = 0;
 
-    public CircleDrawable(Bitmap bitmap) {
+	public CircleDrawable(Bitmap bitmap)
+	{
 
-        mBitmapShader = new BitmapShader(bitmap,
-                Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+		mBitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP,
+				Shader.TileMode.CLAMP);
 
-        mPaint = new Paint();
-        mPaint.setAntiAlias(true);
-        mPaint.setShader(mBitmapShader);
+		mPaint = new Paint();
+		mPaint.setAntiAlias(true);
+		mPaint.setShader(mBitmapShader);
 
-    }
+	}
 
-    public CircleDrawable(Bitmap bitmap, boolean mUseStroke) {
-        this(bitmap);
+	public CircleDrawable(Bitmap bitmap, boolean mUseStroke)
+	{
+		this(bitmap);
 
-        if (mUseStroke) {
-            this.mUseStroke = true;
-            mStrokePadding = 4;
-            mWhitePaint = new Paint();
-            mWhitePaint.setStyle(Paint.Style.FILL_AND_STROKE);
-            mWhitePaint.setStrokeWidth(0.75f);
-            mWhitePaint.setColor(Color.WHITE);
-        }
-    }
+		if (mUseStroke)
+		{
+			this.mUseStroke = true;
+			mStrokePadding = 4;
+			mWhitePaint = new Paint();
+			mWhitePaint.setStyle(Paint.Style.FILL_AND_STROKE);
+			mWhitePaint.setStrokeWidth(0.75f);
+			mWhitePaint.setColor(Color.WHITE);
+		}
+	}
 
-    @Override
-    protected void onBoundsChange(Rect bounds) {
-        super.onBoundsChange(bounds);
-        circleCenterX = bounds.width() / 2;
-        circleCenterY = bounds.height() / 2;
+	@Override
+	protected void onBoundsChange(Rect bounds)
+	{
+		super.onBoundsChange(bounds);
+		circleCenterX = bounds.width() / 2;
+		circleCenterY = bounds.height() / 2;
 
-        if (bounds.width() >= bounds.height())
-            mRadus = bounds.width() / 2;
-        else
-            mRadus = bounds.height() / 2;
-    }
+		if (bounds.width() >= bounds.height())
+			mRadus = bounds.width() / 2;
+		else
+			mRadus = bounds.height() / 2;
+	}
 
-    @Override
-    public void draw(Canvas canvas) {
-        if (mUseStroke) {
-            canvas.drawCircle(circleCenterX, circleCenterY, mRadus, mWhitePaint);
-        }
-        canvas.drawCircle(circleCenterX, circleCenterY, mRadus - mStrokePadding, mPaint);
-    }
+	@Override
+	public void draw(Canvas canvas)
+	{
+		if (mUseStroke)
+		{
+			canvas.drawCircle(circleCenterX, circleCenterY, mRadus, mWhitePaint);
+		}
+		canvas.drawCircle(circleCenterX, circleCenterY,
+				mRadus - mStrokePadding, mPaint);
+	}
 
-    @Override
-    public int getOpacity() {
-        return PixelFormat.TRANSLUCENT;
-    }
+	@Override
+	public int getOpacity()
+	{
+		return PixelFormat.TRANSLUCENT;
+	}
 
-    @Override
-    public void setAlpha(int alpha) {
-        mPaint.setAlpha(alpha);
-    }
+	@Override
+	public void setAlpha(int alpha)
+	{
+		mPaint.setAlpha(alpha);
+	}
 
-    @Override
-    public void setColorFilter(ColorFilter cf) {
-        mPaint.setColorFilter(cf);
-    }
+	@Override
+	public void setColorFilter(ColorFilter cf)
+	{
+		mPaint.setColorFilter(cf);
+	}
 
-    public boolean ismUseStroke() {
-        return mUseStroke;
-    }
+	public boolean ismUseStroke()
+	{
+		return mUseStroke;
+	}
 
-    public void setmUseStroke(boolean mUseStroke) {
-        this.mUseStroke = mUseStroke;
-    }
+	public void setmUseStroke(boolean mUseStroke)
+	{
+		this.mUseStroke = mUseStroke;
+	}
 
 }

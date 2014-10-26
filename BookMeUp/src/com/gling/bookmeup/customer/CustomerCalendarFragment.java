@@ -68,28 +68,36 @@ public class CustomerCalendarFragment extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.business_calendar_fragment, container, false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.business_calendar_fragment,
+				container, false);
 
 		_datedBooked = new ArrayList<CustomerCalendarFragment.DatedBooking>();
-		
+
 		_alreadyBooked = new ObservableArrayList<Booking>();
 		_possibleBookings = new ObservableArrayList<Booking>();
-		_bookingsCardAdapter = new GenericCardArrayAdapter<Booking>(getActivity(), _possibleBookings, new BookingCardGenerator());
+		_bookingsCardAdapter = new GenericCardArrayAdapter<Booking>(
+				getActivity(), _possibleBookings, new BookingCardGenerator());
 
-		_bookingsListViewWrapperView = (CardListViewWrapperView) view.findViewById(R.id.business_calendar_cardListViewWrapper);
+		_bookingsListViewWrapperView = (CardListViewWrapperView) view
+				.findViewById(R.id.business_calendar_cardListViewWrapper);
 		_bookingsListViewWrapperView.setAdapter(_bookingsCardAdapter);
 
 		FragmentActivity activity = getActivity();
 		if (activity instanceof CustomerCalendarActivity) {
-			CustomerCalendarActivity calendarActivity = (CustomerCalendarActivity)activity;
-			String businessId = calendarActivity.getStringExtra(CustomerCalendarActivity.BUSINESS_ID_EXTRA);
-			final String serviceId = calendarActivity.getStringExtra(CustomerCalendarActivity.SERVICE_ID_EXTRA);
+			CustomerCalendarActivity calendarActivity = (CustomerCalendarActivity) activity;
+			String businessId = calendarActivity
+					.getStringExtra(CustomerCalendarActivity.BUSINESS_ID_EXTRA);
+			final String serviceId = calendarActivity
+					.getStringExtra(CustomerCalendarActivity.SERVICE_ID_EXTRA);
 			if (businessId != null) {
-				ParseQuery<Business> businessQuery = new ParseQuery<Business>(Business.CLASS_NAME);
+				ParseQuery<Business> businessQuery = new ParseQuery<Business>(
+						Business.CLASS_NAME);
 				businessQuery.whereEqualTo(Business.Keys.ID, businessId);
 
-				_bookingsListViewWrapperView.setDisplayMode(DisplayMode.LOADING_VIEW);
+				_bookingsListViewWrapperView
+						.setDisplayMode(DisplayMode.LOADING_VIEW);
 				businessQuery.findInBackground(new FindCallback<Business>() {
 					@Override
 					public void done(List<Business> objects, ParseException e) {
@@ -99,88 +107,118 @@ public class CustomerCalendarFragment extends Fragment {
 						}
 						Business business = objects.get(0);
 
-						ParseQuery<Booking> query = new ParseQuery<Booking>(Booking.CLASS_NAME);
-						query.whereEqualTo(Booking.Keys.BUSINESS_POINTER, business);
-						query.whereGreaterThanOrEqualTo(Booking.Keys.DATE, _date.toDate());
-						query.whereLessThan(Booking.Keys.DATE, _date.plusDays(1).toDate());
+						ParseQuery<Booking> query = new ParseQuery<Booking>(
+								Booking.CLASS_NAME);
+						query.whereEqualTo(Booking.Keys.BUSINESS_POINTER,
+								business);
+						query.whereGreaterThanOrEqualTo(Booking.Keys.DATE,
+								_date.toDate());
+						query.whereLessThan(Booking.Keys.DATE, _date
+								.plusDays(1).toDate());
 						query.orderByAscending(Booking.Keys.DATE);
-//						query.include(Booking.Keys.CUSTOMER_POINTER);
+						// query.include(Booking.Keys.CUSTOMER_POINTER);
 						query.include(Booking.Keys.SERVICE_POINTER);
 
-//						_bookingsListViewWrapperView.setDisplayMode(DisplayMode.LOADING_VIEW);
-						query.findInBackground(new FindCallback<Booking>() 
-								{
+						// _bookingsListViewWrapperView.setDisplayMode(DisplayMode.LOADING_VIEW);
+						query.findInBackground(new FindCallback<Booking>() {
 							@Override
-							public void done(List<Booking> retrievedBookings, ParseException e) 
-							{
-								Log.i(TAG, "bookingsQuery.findInBackground done");
-								if (e != null)
-								{
+							public void done(List<Booking> retrievedBookings,
+									ParseException e) {
+								Log.i(TAG,
+										"bookingsQuery.findInBackground done");
+								if (e != null) {
 									Log.e(TAG, "Exception: " + e.getMessage());
 									return;
 								}
 
-								for (Booking booking : retrievedBookings)
-								{
+								for (Booking booking : retrievedBookings) {
 									_alreadyBooked.add(booking);
 									Date startDate = booking.getDate();
 									DateTime startTime = new DateTime(startDate);
 									int duration = booking.getServiceDuration();
-									DateTime endTime = startTime.plusMinutes(duration);
+									DateTime endTime = startTime
+											.plusMinutes(duration);
 									Date endDate = endTime.toDate();
-									_datedBooked.add(new DatedBooking(startDate, endDate, booking));
+									_datedBooked.add(new DatedBooking(
+											startDate, endDate, booking));
 								}
-								
-								ParseQuery<Service> serviceQuery = new ParseQuery<Service>(Service.CLASS_NAME);
-								serviceQuery.whereEqualTo(Business.Keys.ID, serviceId);
-								serviceQuery.findInBackground(new FindCallback<Service>() {
-									@Override
-									public void done(List<Service> objects, ParseException e) {
 
-										if (objects.size() != 1) {
-											Log.e(TAG, "problem");
-											return;
-										}
-										Service service = objects.get(0);
-										int duration = service.getDuration();
-										
-										DateTime startHour = _date.plusHours(8);
-										DateTime endHour = startHour.plusMinutes(duration);
-										while (endHour.getHourOfDay() < 20) {
-											boolean conflicted = false;
-											for (DatedBooking booked : _datedBooked) {
-												if ((startHour.toDate().before(booked.getStartDate()) &&
-														endHour.toDate().after(booked.getStartDate())) || 
-														(startHour.toDate().before(booked.getEndDate()) &&
-														startHour.toDate().after(booked.getStartDate()))) {
-													Log.i(TAG, startHour.toDate().toString() + " is conflicted");
-													conflicted = true;
+								ParseQuery<Service> serviceQuery = new ParseQuery<Service>(
+										Service.CLASS_NAME);
+								serviceQuery.whereEqualTo(Business.Keys.ID,
+										serviceId);
+								serviceQuery
+										.findInBackground(new FindCallback<Service>() {
+											@Override
+											public void done(
+													List<Service> objects,
+													ParseException e) {
+
+												if (objects.size() != 1) {
+													Log.e(TAG, "problem");
+													return;
 												}
+												Service service = objects
+														.get(0);
+												int duration = service
+														.getDuration();
+
+												DateTime startHour = _date
+														.plusHours(8);
+												DateTime endHour = startHour
+														.plusMinutes(duration);
+												while (endHour.getHourOfDay() < 20) {
+													boolean conflicted = false;
+													for (DatedBooking booked : _datedBooked) {
+														if ((startHour
+																.toDate()
+																.before(booked
+																		.getStartDate()) && endHour
+																.toDate()
+																.after(booked
+																		.getStartDate()))
+																|| (startHour
+																		.toDate()
+																		.before(booked
+																				.getEndDate()) && startHour
+																		.toDate()
+																		.after(booked
+																				.getStartDate()))) {
+															Log.i(TAG,
+																	startHour
+																			.toDate()
+																			.toString()
+																			+ " is conflicted");
+															conflicted = true;
+														}
+													}
+
+													if (!conflicted) {
+														// create new booking
+														// business
+														// Customer.getCurrentCustomer();
+														// service
+														// status pending
+														Booking booking = new Booking();
+														// booking.set
+
+														// add to
+														// _possibleBookings
+
+													}
+
+													startHour = endHour;
+													endHour = startHour
+															.plusMinutes(duration);
+												}
+
+												DisplayMode newDisplayMode = _possibleBookings
+														.isEmpty() ? DisplayMode.NO_ITEMS_VIEW
+														: DisplayMode.LIST_VIEW;
+												_bookingsListViewWrapperView
+														.setDisplayMode(newDisplayMode);
 											}
-											
-											if (!conflicted) {
-												//create new booking
-//												business
-//												Customer.getCurrentCustomer();
-//												service
-//												status pending
-												Booking booking = new Booking();
-//												booking.set
-												
-												//add to _possibleBookings
-												
-											}
-											
-											startHour = endHour;
-											endHour = startHour.plusMinutes(duration);
-										}
-										
-										
-										DisplayMode newDisplayMode = _possibleBookings.isEmpty() ? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;
-										_bookingsListViewWrapperView.setDisplayMode(newDisplayMode);
-									}
-								});
-								
+										});
 
 							}
 						});
@@ -189,69 +227,65 @@ public class CustomerCalendarFragment extends Fragment {
 			}
 		}
 
-
 		return view;
 	}
 
-	private class BookingCardGenerator implements ICardGenerator<Booking>
-	{
+	private class BookingCardGenerator implements ICardGenerator<Booking> {
 		@Override
-		public Card generateCard(Booking booking) 
-		{
+		public Card generateCard(Booking booking) {
 			String status;
 			int statusColor;
-			switch (booking.getStatus())
-			{
+			switch (booking.getStatus()) {
 			case Booking.Status.PENDING:
 				status = getString(R.string.customer_my_bookings_booking_pending_for_approval);
-				statusColor = getResources().getColor(android.R.color.holo_purple);
+				statusColor = getResources().getColor(
+						android.R.color.holo_purple);
 				break;
 			case Booking.Status.APPROVED:
 				status = getString(R.string.customer_my_bookings_booking_approved);
-				statusColor = getResources().getColor(android.R.color.holo_green_light);
+				statusColor = getResources().getColor(
+						android.R.color.holo_green_light);
 				break;
 			case Booking.Status.CANCELED:
 			default:
 				status = getString(R.string.customer_my_bookings_booking_canceled);
-				statusColor = getResources().getColor(android.R.color.holo_red_light);
+				statusColor = getResources().getColor(
+						android.R.color.holo_red_light);
 				break;
 			}
 
-			return new CustomerCalendarBookingCard(
-					getActivity(), 
-					booking.getCustomer().getName(),
-					booking.getServiceName(), 
-					Constants.TIME_FORMAT.format(booking.getDate()), 
-					status, 
-					statusColor,
-					"Last updated: " + Constants.DATE_FORMAT.format(booking.getUpdatedAt()));
+			return new CustomerCalendarBookingCard(getActivity(), booking
+					.getCustomer().getName(), booking.getServiceName(),
+					Constants.TIME_FORMAT.format(booking.getDate()), status,
+					statusColor, "Last updated: "
+							+ Constants.DATE_FORMAT.format(booking
+									.getUpdatedAt()));
 		}
 	}
-	
+
 	private class DatedBooking {
 		private Date _startDate = null;
 		private Date _endDate = null;
 		private Booking _booking = null;
-		
-		
+
 		public DatedBooking(Date startDate, Date endDate, Booking booking) {
 			_startDate = startDate;
 			_endDate = endDate;
 			_booking = booking;
 		}
-		
+
 		public Date getStartDate() {
 			return _startDate;
 		}
-		
+
 		public Date getEndDate() {
 			return _endDate;
 		}
-		
+
 		public Booking getBooking() {
 			return _booking;
 		}
-		
+
 	}
 
 }

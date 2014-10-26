@@ -31,5 +31,5 @@ public class PhoneOpeningHoursPage extends Page {
 		dest.add(new ReviewItem("Opening hours", mData
 				.getString(OPENING_HOURS_DATA_KEY), getKey(), -1));
 	}
-	
+
 }

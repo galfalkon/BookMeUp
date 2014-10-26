@@ -15,32 +15,33 @@ public class BusinessCalendarBookingCard extends Card {
 	private final int _statusColor;
 
 	public BusinessCalendarBookingCard(Context context, String title,
-			String service, String time, String status, int statusColor, String expand) {
+			String service, String time, String status, int statusColor,
+			String expand) {
 		super(context, R.layout.business_calendar_booking_card);
-		
+
 		_service = service;
 		_time = time;
 		_status = status;
 		_statusColor = statusColor;
-		
+
 		CardHeader cardHeader = new CardHeader(context);
 		cardHeader.setTitle(title);
-		
+
 		if (expand != null) {
 			cardHeader.setButtonExpandVisible(true);
 			CardExpand cardExpand = new CardExpand(context);
 			cardExpand.setTitle(expand);
 			addCardExpand(cardExpand);
-			
+
 			setOnClickListener(new OnCardClickListener() {
-				
+
 				@Override
 				public void onClick(Card card, View view) {
 					doToogleExpand();
 				}
 			});
 		}
-		
+
 		addCardHeader(cardHeader);
 	}
 

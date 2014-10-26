@@ -35,74 +35,84 @@ import android.graphics.drawable.Drawable;
 
 /**
  * Image with rounded corners
- *
+ * 
  * You can find the original source here:
- * http://www.curious-creature.org/2012/12/11/android-recipe-1-image-with-rounded-corners/
- *
+ * http://www.curious-creature.org/2012/12
+ * /11/android-recipe-1-image-with-rounded-corners/
+ * 
  * @author Gabriele Mariotti (gabri.mariotti@gmail.com)
  */
-public class RoundCornersDrawable extends Drawable {
+public class RoundCornersDrawable extends Drawable
+{
 
-    private static final boolean USE_VIGNETTE = true;
+	private static final boolean USE_VIGNETTE = true;
 
-    private final float mCornerRadius;
-    private final RectF mRect = new RectF();
-    private final BitmapShader mBitmapShader;
-    private final Paint mPaint;
-    private final int mMargin;
+	private final float mCornerRadius;
+	private final RectF mRect = new RectF();
+	private final BitmapShader mBitmapShader;
+	private final Paint mPaint;
+	private final int mMargin;
 
-    public RoundCornersDrawable(Bitmap bitmap, float cornerRadius, int margin) {
-        mCornerRadius = cornerRadius;
+	public RoundCornersDrawable(Bitmap bitmap, float cornerRadius, int margin)
+	{
+		mCornerRadius = cornerRadius;
 
-        mBitmapShader = new BitmapShader(bitmap,
-                Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+		mBitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP,
+				Shader.TileMode.CLAMP);
 
-        mPaint = new Paint();
-        mPaint.setAntiAlias(true);
-        mPaint.setShader(mBitmapShader);
+		mPaint = new Paint();
+		mPaint.setAntiAlias(true);
+		mPaint.setShader(mBitmapShader);
 
-        mMargin = margin;
-    }
+		mMargin = margin;
+	}
 
-    @Override
-    protected void onBoundsChange(Rect bounds) {
-        super.onBoundsChange(bounds);
-        mRect.set(mMargin, mMargin, bounds.width() - mMargin, bounds.height() - mMargin);
+	@Override
+	protected void onBoundsChange(Rect bounds)
+	{
+		super.onBoundsChange(bounds);
+		mRect.set(mMargin, mMargin, bounds.width() - mMargin, bounds.height()
+				- mMargin);
 
-        if (USE_VIGNETTE) {
-            RadialGradient vignette = new RadialGradient(
-                    mRect.centerX(), mRect.centerY() * 1.0f / 0.7f, mRect.centerX() * 1.3f,
-                    new int[] { 0, 0, 0x7f000000 }, new float[] { 0.0f, 0.7f, 1.0f },
-                    Shader.TileMode.CLAMP);
+		if (USE_VIGNETTE)
+		{
+			RadialGradient vignette = new RadialGradient(mRect.centerX(),
+					mRect.centerY() * 1.0f / 0.7f, mRect.centerX() * 1.3f,
+					new int[]
+					{ 0, 0, 0x7f000000 }, new float[]
+					{ 0.0f, 0.7f, 1.0f }, Shader.TileMode.CLAMP);
 
-            Matrix oval = new Matrix();
-            oval.setScale(1.0f, 0.7f);
-            vignette.setLocalMatrix(oval);
+			Matrix oval = new Matrix();
+			oval.setScale(1.0f, 0.7f);
+			vignette.setLocalMatrix(oval);
 
-            mPaint.setShader(
-                    new ComposeShader(mBitmapShader, vignette, PorterDuff.Mode.SRC_OVER));
-        }
-    }
+			mPaint.setShader(new ComposeShader(mBitmapShader, vignette,
+					PorterDuff.Mode.SRC_OVER));
+		}
+	}
 
-    @Override
-    public void draw(Canvas canvas) {
-        canvas.drawRoundRect(mRect, mCornerRadius, mCornerRadius, mPaint);
-    }
+	@Override
+	public void draw(Canvas canvas)
+	{
+		canvas.drawRoundRect(mRect, mCornerRadius, mCornerRadius, mPaint);
+	}
 
-    @Override
-    public int getOpacity() {
-        return PixelFormat.TRANSLUCENT;
-    }
+	@Override
+	public int getOpacity()
+	{
+		return PixelFormat.TRANSLUCENT;
+	}
 
-    @Override
-    public void setAlpha(int alpha) {
-        mPaint.setAlpha(alpha);
-    }
+	@Override
+	public void setAlpha(int alpha)
+	{
+		mPaint.setAlpha(alpha);
+	}
 
-    @Override
-    public void setColorFilter(ColorFilter cf) {
-        mPaint.setColorFilter(cf);
-    }
-
+	@Override
+	public void setColorFilter(ColorFilter cf)
+	{
+		mPaint.setColorFilter(cf);
+	}
 
 }

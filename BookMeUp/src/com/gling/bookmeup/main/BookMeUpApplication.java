@@ -11,18 +11,18 @@ public class BookMeUpApplication extends Application {
 
 	private static final String TAG = "BookMeUpApplication";
 	private static Context mContext;
-	
+
 	@Override
 	public void onCreate() {
 		Log.i(TAG, "onCreate");
-		
+
 		super.onCreate();
-		
+
 		mContext = this;
 		ParseHelper.initialize(this, SplashScreenActivity.class);
 	}
-	
-	public static Context getContext(){
-        return mContext;
-    }
+
+	public static Context getContext() {
+		return mContext;
+	}
 }

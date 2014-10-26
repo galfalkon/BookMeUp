@@ -29,114 +29,114 @@ import com.parse.ParseQuery;
 
 public class BusinessCalendarFragment extends Fragment {
 
-    private static final String TAG = "BusinessCalendarFragment";
-    private static final String ARG_DATE = "business_calendar_fragment_date";
+	private static final String TAG = "BusinessCalendarFragment";
+	private static final String ARG_DATE = "business_calendar_fragment_date";
 
-    private DateTime _date;
+	private DateTime _date;
 
-    private IObservableList<Booking> _bookings;
-    private GenericCardArrayAdapter<Booking> _bookingsCardAdapter;
-    private CardListViewWrapperView _bookingsListViewWrapperView;
-    
-    /**
-     * Returns a new instance of this fragment for the given date.
-     */
-    public static BusinessCalendarFragment newInstance(DateTime dateTime) {
-        BusinessCalendarFragment fragment = new BusinessCalendarFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(ARG_DATE, dateTime);
-        fragment.setArguments(args);
-        return fragment;
-    }
+	private IObservableList<Booking> _bookings;
+	private GenericCardArrayAdapter<Booking> _bookingsCardAdapter;
+	private CardListViewWrapperView _bookingsListViewWrapperView;
 
-    public BusinessCalendarFragment() {
+	/**
+	 * Returns a new instance of this fragment for the given date.
+	 */
+	public static BusinessCalendarFragment newInstance(DateTime dateTime) {
+		BusinessCalendarFragment fragment = new BusinessCalendarFragment();
+		Bundle args = new Bundle();
+		args.putSerializable(ARG_DATE, dateTime);
+		fragment.setArguments(args);
+		return fragment;
+	}
 
-    }
+	public BusinessCalendarFragment() {
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, "onCreate");
-        super.onCreate(savedInstanceState);
-        
-        _date = (DateTime) getArguments().getSerializable(ARG_DATE);
-    }
-    
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.business_calendar_fragment, container, false);
-        
-        _bookings = new ObservableArrayList<Booking>();
-		_bookingsCardAdapter = new GenericCardArrayAdapter<Booking>(getActivity(), _bookings, new BookingCardGenerator());
-		
-		_bookingsListViewWrapperView = (CardListViewWrapperView) view.findViewById(R.id.business_calendar_cardListViewWrapper);
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		Log.i(TAG, "onCreate");
+		super.onCreate(savedInstanceState);
+
+		_date = (DateTime) getArguments().getSerializable(ARG_DATE);
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.business_calendar_fragment,
+				container, false);
+
+		_bookings = new ObservableArrayList<Booking>();
+		_bookingsCardAdapter = new GenericCardArrayAdapter<Booking>(
+				getActivity(), _bookings, new BookingCardGenerator());
+
+		_bookingsListViewWrapperView = (CardListViewWrapperView) view
+				.findViewById(R.id.business_calendar_cardListViewWrapper);
 		_bookingsListViewWrapperView.setAdapter(_bookingsCardAdapter);
 
 		ParseQuery<Booking> query = new ParseQuery<Booking>(Booking.CLASS_NAME);
-        query.whereEqualTo(Booking.Keys.BUSINESS_POINTER, Business.getCurrentBusiness());
-        query.whereGreaterThanOrEqualTo(Booking.Keys.DATE, _date.toDate());
-        query.whereLessThan(Booking.Keys.DATE, _date.plusDays(1).toDate());
-        query.orderByAscending(Booking.Keys.DATE);
-        query.include(Booking.Keys.CUSTOMER_POINTER);
-        query.include(Booking.Keys.SERVICE_POINTER);
-		
+		query.whereEqualTo(Booking.Keys.BUSINESS_POINTER,
+				Business.getCurrentBusiness());
+		query.whereGreaterThanOrEqualTo(Booking.Keys.DATE, _date.toDate());
+		query.whereLessThan(Booking.Keys.DATE, _date.plusDays(1).toDate());
+		query.orderByAscending(Booking.Keys.DATE);
+		query.include(Booking.Keys.CUSTOMER_POINTER);
+		query.include(Booking.Keys.SERVICE_POINTER);
+
 		_bookingsListViewWrapperView.setDisplayMode(DisplayMode.LOADING_VIEW);
-		query.findInBackground(new FindCallback<Booking>() 
-		{
+		query.findInBackground(new FindCallback<Booking>() {
 			@Override
-			public void done(List<Booking> retrievedBookings, ParseException e) 
-			{
+			public void done(List<Booking> retrievedBookings, ParseException e) {
 				Log.i(TAG, "bookingsQuery.findInBackground done");
-				if (e != null)
-				{
+				if (e != null) {
 					Log.e(TAG, "Exception: " + e.getMessage());
 					return;
 				}
-				
-				for (Booking booking : retrievedBookings)
-				{
+
+				for (Booking booking : retrievedBookings) {
 					_bookings.add(booking);
 				}
-				
-				DisplayMode newDisplayMode = _bookings.isEmpty() ? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;
+
+				DisplayMode newDisplayMode = _bookings.isEmpty() ? DisplayMode.NO_ITEMS_VIEW
+						: DisplayMode.LIST_VIEW;
 				_bookingsListViewWrapperView.setDisplayMode(newDisplayMode);
 			}
 		});
 
-        return view;
-    }
-    
-    private class BookingCardGenerator implements ICardGenerator<Booking>
-	{
+		return view;
+	}
+
+	private class BookingCardGenerator implements ICardGenerator<Booking> {
 		@Override
-		public Card generateCard(Booking booking) 
-		{
+		public Card generateCard(Booking booking) {
 			String status;
 			int statusColor;
-			switch (booking.getStatus())
-			{
+			switch (booking.getStatus()) {
 			case Booking.Status.PENDING:
 				status = getString(R.string.customer_my_bookings_booking_pending_for_approval);
-				statusColor = getResources().getColor(android.R.color.holo_purple);
+				statusColor = getResources().getColor(
+						android.R.color.holo_purple);
 				break;
 			case Booking.Status.APPROVED:
 				status = getString(R.string.customer_my_bookings_booking_approved);
-				statusColor = getResources().getColor(android.R.color.holo_green_light);
+				statusColor = getResources().getColor(
+						android.R.color.holo_green_light);
 				break;
 			case Booking.Status.CANCELED:
 			default:
 				status = getString(R.string.customer_my_bookings_booking_canceled);
-				statusColor = getResources().getColor(android.R.color.holo_red_light);
+				statusColor = getResources().getColor(
+						android.R.color.holo_red_light);
 				break;
 			}
-			
-			return new BusinessCalendarBookingCard(
-					getActivity(), 
-					booking.getCustomer().getName(),
-					booking.getServiceName(), 
-					Constants.TIME_FORMAT.format(booking.getDate()), 
-					status, 
-					statusColor,
-					"Last updated: " + Constants.DATE_FORMAT.format(booking.getUpdatedAt()));
+
+			return new BusinessCalendarBookingCard(getActivity(), booking
+					.getCustomer().getName(), booking.getServiceName(),
+					Constants.TIME_FORMAT.format(booking.getDate()), status,
+					statusColor, "Last updated: "
+							+ Constants.DATE_FORMAT.format(booking
+									.getUpdatedAt()));
 		}
 	}
 

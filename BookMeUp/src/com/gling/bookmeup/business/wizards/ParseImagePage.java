@@ -23,10 +23,9 @@ public class ParseImagePage extends Page {
 		mData.putString(SIMPLE_DATA_KEY, value);
 		return this;
 	}
-	
+
 	@Override
 	public void getReviewItems(ArrayList<ReviewItem> dest) {
-		dest.add(new ReviewItem(getTitle(),
-				"Review", getKey(), -1));
+		dest.add(new ReviewItem(getTitle(), "Review", getKey(), -1));
 	}
 }

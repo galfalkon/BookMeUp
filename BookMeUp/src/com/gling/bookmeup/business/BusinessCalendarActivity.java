@@ -61,22 +61,22 @@ public class BusinessCalendarActivity extends FragmentActivity {
 
 		// set pager to current date
 		_viewPager.setCurrentItem(DAYS_MARGIN);
-		
+
 		// get the scroll offset of the central (today) tab
 		_scrollCenter = 0;
-		ViewTreeObserver vto = _tabs.getViewTreeObserver(); 
+		ViewTreeObserver vto = _tabs.getViewTreeObserver();
 		vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-		    @SuppressWarnings("deprecation")
+			@SuppressWarnings("deprecation")
 			@Override
-		    public void onGlobalLayout() {
-		    	_scrollCenter = _tabs.getScrollX();
-		        ViewTreeObserver obs = _tabs.getViewTreeObserver();
-		        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-		            obs.removeOnGlobalLayoutListener(this);
-		        } else {
-		            obs.removeGlobalOnLayoutListener(this);
-		        }
-		    }
+			public void onGlobalLayout() {
+				_scrollCenter = _tabs.getScrollX();
+				ViewTreeObserver obs = _tabs.getViewTreeObserver();
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+					obs.removeOnGlobalLayoutListener(this);
+				} else {
+					obs.removeGlobalOnLayoutListener(this);
+				}
+			}
 		});
 	}
 
@@ -96,7 +96,7 @@ public class BusinessCalendarActivity extends FragmentActivity {
 				_viewPager.setAdapter(_sectionsPagerAdapter);
 				_tabs.setViewPager(_viewPager);
 			} else {
-				_tabs.smoothScrollTo(_scrollCenter, 0);	
+				_tabs.smoothScrollTo(_scrollCenter, 0);
 			}
 			_viewPager.setCurrentItem(DAYS_MARGIN, true);
 			return true;
@@ -124,7 +124,7 @@ public class BusinessCalendarActivity extends FragmentActivity {
 							_viewPager.setAdapter(_sectionsPagerAdapter);
 							_tabs.setViewPager(_viewPager);
 						} else {
-							_tabs.smoothScrollTo(_scrollCenter, 0);				
+							_tabs.smoothScrollTo(_scrollCenter, 0);
 						}
 						_viewPager.setCurrentItem(DAYS_MARGIN, true);
 					}
