@@ -1,15 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Book Me Up!</string>
 
-    <!-- Contextual action bar -->
-    <string name="contextual_action_bar_btnSelectAll">Select All</string>
-    
-    <string name="default_no_items_in_list_text">No items</string>
-    
+    <string name="app_name">Book Me Up!</string>
     <string name="action_settings">Settings</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="try_again">Try Again</string>
+    
+     <!-- Contextual action bar -->
+    <string name="contextual_action_bar_btnSelectAll">Select All</string>
+    
+    <string name="default_no_items_in_list_text">No items</string>
 
     <!-- Login screen -->
     <string name="login_btnLoginWithGoogleText">Login with Google</string>
@@ -184,4 +185,5 @@
     <string name="customer_profile_creation_btnDone">Done</string>
     <string name="customer_profile_creation_edtPhoneNumber_hint">Phone number</string>
     <string name="customer_profile_creation_edtPhoneNumberError">Invalid phone number</string>
+
 </resources>

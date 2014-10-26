@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="BookMeUp_Widgets" parent="@style/_BookMeUp_Widgets" />
+
+    <style name="_BookMeUp_Widgets" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:editTextBackground">@drawable/bookmeup_widgets_edit_text_holo_light</item>
+        <item name="android:textColorHighlight">#ff0099cc</item>
+        <item name="android:textSelectHandleLeft">@drawable/bookmeup_widgets_text_select_handle_left</item>
+        <item name="android:textSelectHandleRight">@drawable/bookmeup_widgets_text_select_handle_right</item>
+        <item name="android:textSelectHandle">@drawable/bookmeup_widgets_text_select_handle_middle</item>
+        <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewBookMeUp_Widgets</item>
+        <item name="android:listChoiceIndicatorMultiple">@drawable/bookmeup_widgets_btn_check_holo_light</item>
+        <item name="android:listChoiceIndicatorSingle">@drawable/bookmeup_widgets_btn_radio_holo_light</item>
+        <item name="android:buttonStyle">@style/ButtonBookMeUp_Widgets</item>
+        <item name="android:imageButtonStyle">@style/ImageButtonBookMeUp_Widgets</item>
+        <item name="android:dropDownSpinnerStyle">@style/SpinnerBookMeUp_Widgets</item>
+        <item name="android:progressBarStyleHorizontal">@style/ProgressBarBookMeUp_Widgets</item>
+        <item name="android:seekBarStyle">@style/SeekBarBookMeUp_Widgets</item>
+        <item name="android:ratingBarStyle">@style/RatingBarBookMeUp_Widgets</item>
+        <item name="android:ratingBarStyleIndicator">@style/RatingBarBigBookMeUp_Widgets</item>
+        <item name="android:ratingBarStyleSmall">@style/RatingBarSmallBookMeUp_Widgets</item>
+        <item name="android:buttonStyleToggle">@style/ToggleBookMeUp_Widgets</item>
+        <item name="android:listChoiceBackgroundIndicator">@drawable/bookmeup_widgets_list_selector_holo_light</item>
+        <item name="android:activatedBackgroundIndicator">@drawable/bookmeup_widgets_activated_background_holo_light</item>
+        <item name="android:fastScrollThumbDrawable">@drawable/bookmeup_widgets_fastscroll_thumb_holo</item>
+        <item name="android:windowBackground">@drawable/background</item>
+    </style>
+
+</resources>
