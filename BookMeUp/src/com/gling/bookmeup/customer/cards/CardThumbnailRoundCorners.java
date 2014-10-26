@@ -12,29 +12,28 @@ import android.view.View;
 
 public class CardThumbnailRoundCorners extends CardThumbnail {
 
-	private static final int CORNER_RADIUS = 12;
+    private static final int CORNER_RADIUS = 12;
 
-	public CardThumbnailRoundCorners(Context context, String url) {
-		super(context);
+    public CardThumbnailRoundCorners(Context context, String url) {
+        super(context);
 
-		setUrlResource(url);
-		setErrorResource(R.drawable.ic_ic_error_loading);
-	}
+        setUrlResource(url);
+        setErrorResource(R.drawable.ic_ic_error_loading);
+    }
 
-	@Override
-	public boolean applyBitmap(View imageView, Bitmap bitmap) {
+    @Override
+    public boolean applyBitmap(View imageView, Bitmap bitmap) {
 
-		float density = getContext().getResources().getDisplayMetrics().density;
-		int cornerRadius = (int) (CORNER_RADIUS * density + 0.5f);
-		int margin = 0;
+        float density = getContext().getResources().getDisplayMetrics().density;
+        int cornerRadius = (int) (CORNER_RADIUS * density + 0.5f);
+        int margin = 0;
 
-		RoundCornersDrawable round = new RoundCornersDrawable(bitmap,
-				cornerRadius, margin);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-			imageView.setBackground(round);
-		} else {
-			imageView.setBackgroundDrawable(round);
-		}
-		return true;
-	}
+        RoundCornersDrawable round = new RoundCornersDrawable(bitmap, cornerRadius, margin);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            imageView.setBackground(round);
+        } else {
+            imageView.setBackgroundDrawable(round);
+        }
+        return true;
+    }
 }

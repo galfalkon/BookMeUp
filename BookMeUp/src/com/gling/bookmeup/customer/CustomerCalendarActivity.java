@@ -24,7 +24,7 @@ import com.gling.bookmeup.R;
 public class CustomerCalendarActivity extends FragmentActivity {
 
 	private static final String TAG = "CustomerCalendarActivity";
-
+	
 	public static final String BUSINESS_ID_EXTRA = "BusinessIdExtra";
 	public static final String SERVICE_ID_EXTRA = "ServiceIdExtra";
 
@@ -64,25 +64,25 @@ public class CustomerCalendarActivity extends FragmentActivity {
 
 		// set pager to current date
 		_viewPager.setCurrentItem(DAYS_MARGIN);
-
+		
 		// get the scroll offset of the central (today) tab
 		_scrollCenter = 0;
-		ViewTreeObserver vto = _tabs.getViewTreeObserver();
+		ViewTreeObserver vto = _tabs.getViewTreeObserver(); 
 		vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-			@SuppressWarnings("deprecation")
+		    @SuppressWarnings("deprecation")
 			@Override
-			public void onGlobalLayout() {
-				_scrollCenter = _tabs.getScrollX();
-				ViewTreeObserver obs = _tabs.getViewTreeObserver();
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-					obs.removeOnGlobalLayoutListener(this);
-				} else {
-					obs.removeGlobalOnLayoutListener(this);
-				}
-			}
+		    public void onGlobalLayout() {
+		    	_scrollCenter = _tabs.getScrollX();
+		        ViewTreeObserver obs = _tabs.getViewTreeObserver();
+		        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+		            obs.removeOnGlobalLayoutListener(this);
+		        } else {
+		            obs.removeGlobalOnLayoutListener(this);
+		        }
+		    }
 		});
 	}
-
+	
 	public String getStringExtra(String extraName) {
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
@@ -108,7 +108,7 @@ public class CustomerCalendarActivity extends FragmentActivity {
 				_tabs.setViewPager(_viewPager);
 				_viewPager.setCurrentItem(DAYS_MARGIN, true);
 			} else {
-				_tabs.smoothScrollTo(_scrollCenter, 0);
+				_tabs.smoothScrollTo(_scrollCenter, 0);				
 			}
 			return true;
 		case R.id.customer_calendar_action_pick:
@@ -136,7 +136,7 @@ public class CustomerCalendarActivity extends FragmentActivity {
 							_tabs.setViewPager(_viewPager);
 							_viewPager.setCurrentItem(DAYS_MARGIN, true);
 						} else {
-							_tabs.smoothScrollTo(_scrollCenter, 0);
+							_tabs.smoothScrollTo(_scrollCenter, 0);				
 						}
 					}
 				}, _today.getYear(), _today.getMonthOfYear() - 1,

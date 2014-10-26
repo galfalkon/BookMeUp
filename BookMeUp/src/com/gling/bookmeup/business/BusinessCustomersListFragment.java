@@ -57,52 +57,45 @@ import com.parse.SendCallback;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-public class BusinessCustomersListFragment extends OnClickListenerFragment
-		implements TextWatcher {
+public class BusinessCustomersListFragment  extends OnClickListenerFragment implements TextWatcher {
 	private static final String TAG = "BusinessCustomersListFragment";
 
-	private IObservableList<CustomerForBusiness> _allCustomers,
-			_filteredCustomers;
+	private IObservableList<CustomerForBusiness> _allCustomers, _filteredCustomers;
 	private CustomerCardArrayMultiChoiceAdapter _customerCardsAdapter;
-
+	
 	private CardListViewWrapperView _customerCardListView;
-
+	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.i(TAG, "onCreateView");
 
 		_allCustomers = new ObservableArrayList<CustomerForBusiness>();
 		_filteredCustomers = new ObservableArrayList<CustomerForBusiness>();
-
-		_customerCardsAdapter = new CustomerCardArrayMultiChoiceAdapter(
-				_filteredCustomers, new CustomerCardGenerator(),
-				R.menu.business_customer_list_mutlichoice);
-
+		
+		_customerCardsAdapter = new CustomerCardArrayMultiChoiceAdapter(_filteredCustomers, new CustomerCardGenerator(), R.menu.business_customer_list_mutlichoice);
+		
 		View view = super.onCreateView(inflater, container, savedInstanceState);
-		_customerCardListView = (CardListViewWrapperView) view
-				.findViewById(R.id.business_customer_list_listViewCustomers);
+		_customerCardListView = (CardListViewWrapperView) view.findViewById(R.id.business_customer_list_listViewCustomers);
 		_customerCardListView.setAdapter(_customerCardsAdapter);
-		_customerCardListView
-				.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-
-		EditText edtSearch = (EditText) view
-				.findViewById(R.id.business_customer_list_edtSearch);
+		_customerCardListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		
+		EditText edtSearch = (EditText)view.findViewById(R.id.business_customer_list_edtSearch);
 		edtSearch.addTextChangedListener(this);
-
+		
 		/*
 		 * Build a query that represents bookings with the following properties:
-		 * For this business Later than the selected date Before today Were
-		 * approved
+		 * 		For this business
+		 * 		Later than the selected date
+		 * 		Before today
+		 *		Were approved
 		 */
-		ParseQuery<Booking> query = new ParseQuery<Booking>(Booking.CLASS_NAME)
-				.whereEqualTo(Booking.Keys.BUSINESS_POINTER,
-						Business.getCurrentBusiness())
-				.whereLessThan(Booking.Keys.DATE, new Date())
-				.whereEqualTo(Booking.Keys.STATUS, Booking.Status.APPROVED);
+		ParseQuery<Booking> query = new ParseQuery<Booking>(Booking.CLASS_NAME).
+				whereEqualTo(Booking.Keys.BUSINESS_POINTER, Business.getCurrentBusiness()).
+				whereLessThan(Booking.Keys.DATE, new Date()).
+				whereEqualTo(Booking.Keys.STATUS, Booking.Status.APPROVED);
 		query.include(Booking.Keys.CUSTOMER_POINTER);
 		query.include(Booking.Keys.SERVICE_POINTER);
-
+		
 		_customerCardListView.setDisplayMode(DisplayMode.LOADING_VIEW);
 		query.findInBackground(new FindCallback<Booking>() {
 			@Override
@@ -111,40 +104,40 @@ public class BusinessCustomersListFragment extends OnClickListenerFragment
 					Log.e(TAG, "Exception: " + e.getMessage());
 					return;
 				}
-
+				
 				for (Booking bookingParseObject : objects) {
-					CustomerForBusiness currentCustomer = new CustomerForBusiness(
-							bookingParseObject);
-					int indexOfCustomer = _allCustomers
-							.indexOf(currentCustomer);
-					if (indexOfCustomer == -1) {
+					CustomerForBusiness currentCustomer = new CustomerForBusiness(bookingParseObject);
+					int indexOfCustomer = _allCustomers.indexOf(currentCustomer);
+					if (indexOfCustomer == -1)
+					{
 						_allCustomers.add(currentCustomer);
-					} else {
-						_allCustomers.get(indexOfCustomer).notifyBooking(
-								bookingParseObject);
+					}
+					else
+					{
+						_allCustomers.get(indexOfCustomer).notifyBooking(bookingParseObject);
 					}
 				}
-
+				
 				_filteredCustomers.addAll(_allCustomers);
 				_customerCardsAdapter.notifyDataSetChanged();
-
-				DisplayMode newDisplayMode = _allCustomers.isEmpty() ? DisplayMode.NO_ITEMS_VIEW
-						: DisplayMode.LIST_VIEW;
+				
+				DisplayMode newDisplayMode = _allCustomers.isEmpty()? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;  
 				_customerCardListView.setDisplayMode(newDisplayMode);
 			}
 		});
-
+		
 		return view;
 	}
-
+	
 	@Override
 	protected int getFragmentLayoutId() {
 		return R.layout.business_customer_list_fragment;
 	}
-
+	
 	@Override
 	public void onClick(View v) {
-		switch (v.getId()) {
+		switch (v.getId())
+		{
 		case R.id.business_customer_list_btnFilterBySpendings:
 			Log.i(TAG, "btnFilterBySpending clicked");
 			handleSpendingsFilter();
@@ -162,235 +155,184 @@ public class BusinessCustomersListFragment extends OnClickListenerFragment
 	}
 
 	@Override
-	public void beforeTextChanged(CharSequence s, int start, int count,
-			int after) {
-		Log.i(TAG, "beforeTextChanged");
+	public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+		Log.i(TAG, "beforeTextChanged");		
 	}
 
 	@Override
-	public void onTextChanged(CharSequence s, int start, int before, int count) {
+	public void onTextChanged(CharSequence s, int start, int before	, int count) {
 		Log.i(TAG, "onTextChanged");
 		_customerCardsAdapter.getFilter().filter(s);
 	}
-
+	
 	private void handleLastVisitFilter() {
 		Log.i(TAG, "handleSpendingFilter");
-
+		
 		Calendar today = Calendar.getInstance();
-		// TODO: We should implement our own DatePickerDialog because this
-		// implementation is always localized (According to the localization
-		// device's preferences)
-		DatePickerDialog datePickerDialog = new DatePickerDialog(
-				getActivity(),
-				new OnDateSetListener() {
-					@Override
-					public void onDateSet(DatePicker view, int year,
-							int monthOfYear, int dayOfMonth) {
-						Log.i(TAG, "Date selected");
-
-						// Get a Date instance that represents the date that was
-						// selected by the user
-						GregorianCalendar selectedDateCalendar = new GregorianCalendar(
-								year, monthOfYear, dayOfMonth);
-						Date selectedDate = selectedDateCalendar.getTime();
-
-						_customerCardsAdapter._customersFilter
-								.filterByLastVisit(selectedDate);
-					}
-				}, today.get(Calendar.YEAR), today.get(Calendar.MONTH),
-				today.get(Calendar.DATE));
+		// TODO: We should implement our own DatePickerDialog because this implementation is always localized (According to the localization device's preferences)
+		DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new OnDateSetListener() {
+			@Override
+			public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+				Log.i(TAG, "Date selected");
+				
+				// Get a Date instance that represents the date that was selected by the user
+				GregorianCalendar selectedDateCalendar = new GregorianCalendar(year, monthOfYear, dayOfMonth);
+				Date selectedDate = selectedDateCalendar.getTime();
+				
+				_customerCardsAdapter._customersFilter.filterByLastVisit(selectedDate);
+			}
+		}, today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DATE));
 		datePickerDialog.show();
 	}
-
+	
 	private void handleSpendingsFilter() {
 		Log.i(TAG, "handleSpendingsFilter");
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
 		LayoutInflater inflater = getActivity().getLayoutInflater();
-		final View view = inflater.inflate(
-				R.layout.business_customer_list_spendings_filter_dialog, null);
+		final View view = inflater.inflate(R.layout.business_customer_list_spendings_filter_dialog, null);
 		builder.setView(view);
-
+		
 		builder.setTitle(R.string.business_customer_list_spendings_filter_dialog_title);
-
+		
 		// Set up the buttons
-		builder.setPositiveButton(R.string.ok,
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						Log.i(TAG, "Filtering by total spendings");
-						String spendingLimitInput = ((TextView) view
-								.findViewById(R.id.business_customer_list_spendings_filter_dialog_edtSpendings))
-								.getText().toString();
-						if (spendingLimitInput.isEmpty()) {
-							Crouton.showText(getActivity(),
-									"Invalid spendings limit", Style.ALERT);
-							return;
-						}
-						int spendingsLimit = Integer
-								.parseInt(spendingLimitInput);
-
-						_customerCardsAdapter._customersFilter
-								.filterBySpendings(spendingsLimit);
-					}
-				});
-		builder.setNegativeButton(R.string.cancel,
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
-					}
-				});
+		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() { 
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		    	Log.i(TAG, "Filtering by total spendings");
+		    	String spendingLimitInput = ((TextView)view.findViewById(R.id.business_customer_list_spendings_filter_dialog_edtSpendings)).getText().toString();
+		    	if (spendingLimitInput.isEmpty()) {
+		    		Crouton.showText(getActivity(), "Invalid spendings limit", Style.ALERT);
+		    		return;
+		    	}
+		    	int spendingsLimit = Integer.parseInt(spendingLimitInput);
+		    	
+		    	_customerCardsAdapter._customersFilter.filterBySpendings(spendingsLimit);
+		    }
+		});
+		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		        dialog.cancel();
+		    }
+		});
 		builder.show();
 	}
-
+	
 	private void handleSendMessageToSelectedClients() {
 		Log.i(TAG, "handleSendMessageToSelectedClients");
-
-		List<CustomerForBusiness> selectedCustomers = _customerCardsAdapter
-				.getSelectedItems();
+		
+		List<CustomerForBusiness> selectedCustomers = _customerCardsAdapter.getSelectedItems();
 		if (selectedCustomers.isEmpty()) {
-			Crouton.showText(getActivity(),
-					"Please select customers from the list", Style.ALERT);
+			Crouton.showText(getActivity(), "Please select customers from the list", Style.ALERT);
 			return;
 		}
-
+		
 		final List<String> selectedCustomerIds = new ArrayList<String>();
-		for (CustomerForBusiness customer : selectedCustomers) {
+		for (CustomerForBusiness customer : selectedCustomers)
+		{
 			selectedCustomerIds.add(customer._id);
 		}
-
+		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
 		LayoutInflater inflater = getActivity().getLayoutInflater();
-		final View view = inflater.inflate(
-				R.layout.business_customer_list_send_message_dialog, null);
+		final View view = inflater.inflate(R.layout.business_customer_list_send_message_dialog, null);
 		builder.setView(view);
-
+		
 		// Set up the buttons
-		builder.setPositiveButton(
-				R.string.business_customer_list_send_message_dialog_btnSend,
-				new DialogInterface.OnClickListener() {
+		builder.setPositiveButton(R.string.business_customer_list_send_message_dialog_btnSend, new DialogInterface.OnClickListener() { 
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		    	Log.i(TAG, "Sending message to selected clients");
+		    	String message = ((TextView)view.findViewById(R.id.business_client_list_send_message_dialog_edtMessage)).getText().toString();
+		    	
+		    	PushUtils.sendMessageToCustomers(Business.getCurrentBusiness().getObjectId(), Business.getCurrentBusiness().getName(), selectedCustomerIds, message, new SendCallback() {
 					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						Log.i(TAG, "Sending message to selected clients");
-						String message = ((TextView) view
-								.findViewById(R.id.business_client_list_send_message_dialog_edtMessage))
-								.getText().toString();
-
-						PushUtils.sendMessageToCustomers(Business
-								.getCurrentBusiness().getObjectId(), Business
-								.getCurrentBusiness().getName(),
-								selectedCustomerIds, message,
-								new SendCallback() {
-									@Override
-									public void done(ParseException e) {
-										Log.i(TAG,
-												"sendMessageToCustomers done");
-
-										if (e != null) {
-											Log.e(TAG,
-													"Exception: "
-															+ e.getMessage());
-											return;
-										}
-									}
-								});
+					public void done(ParseException e) {
+						Log.i(TAG, "sendMessageToCustomers done");
+						
+						if (e != null) {
+							Log.e(TAG, "Exception: " + e.getMessage());
+							return;
+						}
 					}
 				});
-		builder.setNegativeButton(R.string.cancel,
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
-					}
-				});
+		    }
+		});
+		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		        dialog.cancel();
+		    }
+		});
 		builder.show();
 	}
-
+	
 	private void handleSendOfferToSelectedClients() {
 		Log.i(TAG, "handleSendOfferToSelectedClients");
-
-		List<CustomerForBusiness> selectedCustomers = _customerCardsAdapter
-				.getSelectedItems();
+		
+		List<CustomerForBusiness> selectedCustomers = _customerCardsAdapter.getSelectedItems();
 		if (selectedCustomers.isEmpty()) {
-			Crouton.showText(getActivity(),
-					"Please select customers from the list", Style.ALERT);
+			Crouton.showText(getActivity(), "Please select customers from the list", Style.ALERT);
 			return;
 		}
-
+		
 		final List<String> selectedCustomerIds = new ArrayList<String>();
-		for (CustomerForBusiness customer : selectedCustomers) {
+		for (CustomerForBusiness customer : selectedCustomers)
+		{
 			selectedCustomerIds.add(customer._id);
 		}
-
+		
 		LayoutInflater inflater = getActivity().getLayoutInflater();
-		final View view = inflater.inflate(
-				R.layout.business_customer_list_send_offer_dialog, null);
-
+		final View view = inflater.inflate(R.layout.business_customer_list_send_offer_dialog , null);
+		
 		// TODO: Put the possible discount in an int array resource.
-		Integer[] validDiscounts = { 5, 10, 15, 20 };
-		SpinnerAdapter discountSpinnerAdapter = new ArrayAdapter<Integer>(
-				getActivity(), android.R.layout.simple_spinner_item,
-				validDiscounts);
-		final Spinner discountSpinner = (Spinner) view
-				.findViewById(R.id.business_customer_list_send_offer_dialog_spinnerDiscount);
-		discountSpinner.setAdapter(discountSpinnerAdapter);
-
-		Integer[] validDurations = { 1, 2, 3, 4 };
-		SpinnerAdapter durationSpinnerAdapter = new ArrayAdapter<Integer>(
-				getActivity(), android.R.layout.simple_spinner_item,
-				validDurations);
-		final Spinner durationSpinner = (Spinner) view
-				.findViewById(R.id.business_customer_list_send_offer_dialog_spinnerDuration);
-		durationSpinner.setAdapter(durationSpinnerAdapter);
-
-		// Build an alert dialog
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		Integer[] validDiscounts = {5, 10, 15, 20};
+    	SpinnerAdapter discountSpinnerAdapter = new ArrayAdapter<Integer>(getActivity(), android.R.layout.simple_spinner_item, validDiscounts);
+    	final Spinner discountSpinner = (Spinner)view.findViewById(R.id.business_customer_list_send_offer_dialog_spinnerDiscount);
+    	discountSpinner.setAdapter(discountSpinnerAdapter);
+    	
+    	Integer[] validDurations = {1, 2, 3, 4};
+    	SpinnerAdapter durationSpinnerAdapter = new ArrayAdapter<Integer>(getActivity(), android.R.layout.simple_spinner_item, validDurations);
+    	final Spinner durationSpinner = (Spinner)view.findViewById(R.id.business_customer_list_send_offer_dialog_spinnerDuration);
+    	durationSpinner.setAdapter(durationSpinnerAdapter);
+    	
+    	// Build an alert dialog
+    	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setView(view);
 		builder.setTitle(R.string.business_customer_list_send_offer_dialog_title);
-		builder.setPositiveButton(
-				R.string.business_customer_list_send_message_dialog_btnSend,
-				new DialogInterface.OnClickListener() {
+		builder.setPositiveButton(R.string.business_customer_list_send_message_dialog_btnSend, new DialogInterface.OnClickListener() { 
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		    	Log.i(TAG, "Sending offer to selected clients");
+
+		    	final int discount = (Integer) discountSpinner.getSelectedItem();
+		    	final int duration = (Integer) durationSpinner.getSelectedItem();
+		    	PushUtils.sendOfferToCustomers(Business.getCurrentBusiness().getObjectId(), Business.getCurrentBusiness().getName(), selectedCustomerIds, discount, duration, new SendCallback() {
+					
 					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						Log.i(TAG, "Sending offer to selected clients");
+					public void done(ParseException e) {
+						Log.i(TAG, "sendOfferToCustomers done");
 
-						final int discount = (Integer) discountSpinner
-								.getSelectedItem();
-						final int duration = (Integer) durationSpinner
-								.getSelectedItem();
-						PushUtils.sendOfferToCustomers(Business
-								.getCurrentBusiness().getObjectId(), Business
-								.getCurrentBusiness().getName(),
-								selectedCustomerIds, discount, duration,
-								new SendCallback() {
-
-									@Override
-									public void done(ParseException e) {
-										Log.i(TAG, "sendOfferToCustomers done");
-
-										if (e != null) {
-											Log.e(TAG,
-													"Exception: "
-															+ e.getMessage());
-											return;
-										}
-									}
-								});
+						if (e != null) {
+							Log.e(TAG, "Exception: " + e.getMessage());
+							return;
+						}
 					}
 				});
-		builder.setNegativeButton(R.string.cancel,
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
-					}
-				});
+		    }
+		});
+		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		        dialog.cancel();
+		    }
+		});
 		builder.show();
 	}
-
+	
 	private static class CustomerForBusiness {
 		public final String _id, _customerName, _phoneNumber;
 		public Date _lastVisit;
@@ -407,27 +349,25 @@ public class BusinessCustomersListFragment extends OnClickListenerFragment
 			_lastVisit = booking.getDate();
 			_totalSpendings = booking.getServicePrice();
 		}
-
+		
 		/*
-		 * Notifies the Client instance about another booking. This function
-		 * will summarize the total spending of the client, set the date of his
-		 * last visit etc.
+		 * Notifies the Client instance about another booking.
+		 * This function will summarize the total spending of the client, set the date of his last visit etc.
 		 */
 		public void notifyBooking(Booking booking) {
 			Log.i(TAG, "notifyBooking");
-
-			ParseObject customerParseObject = booking
-					.getParseObject(Booking.Keys.CUSTOMER_POINTER);
+			
+			ParseObject customerParseObject = booking.getParseObject(Booking.Keys.CUSTOMER_POINTER);
 			if (!_id.equals(customerParseObject.getObjectId())) {
 				// TODO: Handle error
 				return;
 			}
-
+			
 			Date bookingDate = booking.getDate(Booking.Keys.DATE);
 			if (bookingDate.after(_lastVisit)) {
 				_lastVisit = bookingDate;
 			}
-
+			
 			_totalSpendings += booking.getServicePrice();
 		}
 
@@ -435,135 +375,130 @@ public class BusinessCustomersListFragment extends OnClickListenerFragment
 		public String toString() {
 			return _customerName;
 		}
-
+		
 		@Override
 		public boolean equals(Object other) {
-			return !(other instanceof CustomerForBusiness)
-					|| (_id.equals(((CustomerForBusiness) other)._id));
+			return !(other instanceof CustomerForBusiness) || (_id.equals(((CustomerForBusiness)other)._id)); 
 		}
 	}
-
+	
 	private class CustomersFilter extends Filter {
 		/*
-		 * Optional Should be null if the user doesn't want to filter by the
-		 * date of the last visit.
+		 *  Optional
+		 *  Should be null if the user doesn't want to filter by the date of the last visit.
 		 */
 		private Date _dateOfLastVisit;
-
+		
 		/*
-		 * Optional Should be null if the user doesn't want to filter by total
-		 * spendings.
+		 *  Optional
+		 *  Should be null if the user doesn't want to filter by total spendings.
 		 */
 		private Integer _spendingsLimit;
-
+		
 		@Override
 		protected FilterResults performFiltering(CharSequence constraint) {
 			Log.i(TAG, "performFiltering(" + constraint + ")");
-
+			
 			FilterResults results = new FilterResults();
-
+			
 			_filteredCustomers.clear();
 			for (CustomerForBusiness customer : _allCustomers) {
-				if (doesSetisfyLastVisitFilter(customer)
-						&& doestSetisfySpendingsFilter(customer)
-						&& doesSetisfyConstraint(customer, constraint)) {
+				if (doesSetisfyLastVisitFilter(customer) &&
+						doestSetisfySpendingsFilter(customer) &&
+						doesSetisfyConstraint(customer, constraint)) {
 					_filteredCustomers.add(customer);
 				}
 			}
-
+			
 			results.values = _filteredCustomers;
 			results.count = _filteredCustomers.size();
-
+			
 			return results;
 		}
 
 		@Override
-		protected void publishResults(CharSequence constraint,
-				FilterResults results) {
+		protected void publishResults(CharSequence constraint, FilterResults results) {
 			Log.i(TAG, "publicResults. results.count = " + results.count);
 			_customerCardsAdapter.notifyDataSetChanged();
 		}
-
+		
 		private void filterByLastVisit(Date date) {
 			_dateOfLastVisit = date;
 			filter(null);
 		}
-
+		
 		private void filterBySpendings(int spendingsLimit) {
 			Log.i(TAG, "filterBySpendings. Limit = " + spendingsLimit);
-
+			
 			_spendingsLimit = spendingsLimit;
 			filter(null);
 		}
-
+		
 		private void unfilterByLastVisit() {
 			_dateOfLastVisit = null;
 		}
-
+		
 		private boolean doesSetisfyLastVisitFilter(CustomerForBusiness customer) {
-			return (_dateOfLastVisit == null)
-					|| customer._lastVisit.after(_dateOfLastVisit);
+			return (_dateOfLastVisit == null) || customer._lastVisit.after(_dateOfLastVisit);
 		}
-
+		
 		private boolean doestSetisfySpendingsFilter(CustomerForBusiness customer) {
-			Log.i(TAG, "doestSetisfySpendingsFilter. customer spendings = "
-					+ customer._totalSpendings + ", limit = " + _spendingsLimit);
-			return (_spendingsLimit == null)
-					|| (customer._totalSpendings >= _spendingsLimit);
+			Log.i(TAG, "doestSetisfySpendingsFilter. customer spendings = " + customer._totalSpendings + ", limit = " + _spendingsLimit);
+			return (_spendingsLimit == null) || (customer._totalSpendings >= _spendingsLimit);
 		}
-
-		private boolean doesSetisfyConstraint(CustomerForBusiness customer,
-				CharSequence constraint) {
-			return (constraint == null)
-					|| customer._customerName.toLowerCase().contains(
-							constraint.toString().toLowerCase());
+		
+		private boolean doesSetisfyConstraint(CustomerForBusiness customer, CharSequence constraint) {
+			return (constraint == null) || customer._customerName.toLowerCase().contains(constraint.toString().toLowerCase());
 		}
 	}
-
-	public class CustomerCardArrayMultiChoiceAdapter extends
-			GenericMultiChoiceCardArrayAdapter<CustomerForBusiness> {
-
+	
+	public class CustomerCardArrayMultiChoiceAdapter extends GenericMultiChoiceCardArrayAdapter<CustomerForBusiness> {
+		
 		private CustomersFilter _customersFilter;
-
-		public CustomerCardArrayMultiChoiceAdapter(
-				IObservableList<CustomerForBusiness> items,
-				ICardGenerator<CustomerForBusiness> cardFactory, int menuRes) {
+		
+		public CustomerCardArrayMultiChoiceAdapter(IObservableList<CustomerForBusiness> items, ICardGenerator<CustomerForBusiness> cardFactory, int menuRes) 
+		{
 			super(getActivity(), items, cardFactory, menuRes);
 			_customersFilter = new CustomersFilter();
 		}
 
-		@Override
-		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-			switch (item.getItemId()) {
-			case R.id.busienss_customer_list_action_bar_menu_send_offer:
-				handleSendOfferToSelectedClients();
-				mode.finish();
-				return true;
-			}
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        	switch (item.getItemId())
+        	{
+        	case R.id.busienss_customer_list_action_bar_menu_send_offer:
+        		handleSendOfferToSelectedClients();
+        		mode.finish();
+        		return true;
+        	}
+        	
+        	return false;
+        }
 
-			return false;
-		}
-
+        @Override
+        public Filter getFilter() {
+        	return _customersFilter;
+        }
+    }
+	
+	private class CustomerCardGenerator implements ICardGenerator<CustomerForBusiness>
+	{
 		@Override
-		public Filter getFilter() {
-			return _customersFilter;
-		}
-	}
-
-	private class CustomerCardGenerator implements
-			ICardGenerator<CustomerForBusiness> {
-		@Override
-		public Card generateCard(CustomerForBusiness customer) {
+		public Card generateCard(CustomerForBusiness customer) 
+		{
 			CardHeader header = new CardHeader(getActivity());
 			header.setTitle(customer._customerName);
-
+			
 			final String phoneNumber = customer._phoneNumber;
-			if (phoneNumber != null) {
+			if (phoneNumber != null)
+			{
 				header.setOtherButtonDrawable(R.drawable.btn_action_call);
 				header.setOtherButtonVisible(true);
-				header.setOtherButtonClickListener(new OnClickCardHeaderOtherButtonListener() {
+				header.setOtherButtonClickListener(new OnClickCardHeaderOtherButtonListener() 
+				{
 					@Override
-					public void onButtonItemClick(Card card, View view) {
+					public void onButtonItemClick(Card card, View view) 
+					{
 						Log.i(TAG, "btn_action_call clicked");
 						Intent callIntent = new Intent(Intent.ACTION_CALL);
 						callIntent.setData(Uri.parse("tel:" + phoneNumber));
@@ -574,17 +509,19 @@ public class BusinessCustomersListFragment extends OnClickListenerFragment
 
 			Card card = new Card(getActivity());
 			card.addCardHeader(header);
-			card.setTitle("Total spendings: " + customer._totalSpendings
-					+ " NIS\n" + "Last visit: "
-					+ Constants.DATE_FORMAT.format(customer._lastVisit));
+			card.setTitle(
+					"Total spendings: " + customer._totalSpendings + " NIS\n" +
+					"Last visit: " + Constants.DATE_FORMAT.format(customer._lastVisit));
 			card.setId(customer._id);
-			card.setOnLongClickListener(new OnLongCardClickListener() {
+			card.setOnLongClickListener(new OnLongCardClickListener() 
+			{
 				@Override
-				public boolean onLongClick(Card card, View view) {
+				public boolean onLongClick(Card card, View view) 
+				{
 					return _customerCardsAdapter.startActionMode(getActivity());
 				}
 			});
-
+			
 			return card;
 		}
 	}

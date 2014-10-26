@@ -8,32 +8,30 @@ import com.gling.bookmeup.sharedlib.R;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 
-public class LoginMainActivity extends Activity
-{
+public class LoginMainActivity extends Activity {
 
-	private static final String TAG = "LoginActivity";
+    private static final String TAG = "LoginActivity";
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		Log.i(TAG, "onCreate");
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) 
+    {
+    	Log.i(TAG, "onCreate");
+    	super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.login_main_activity);
+        setContentView(R.layout.login_main_activity);
 
-		if (savedInstanceState != null)
-		{
-			return;
-		}
+        if (savedInstanceState != null) 
+        {
+            return;
+        }
 
-		getFragmentManager().beginTransaction()
-				.add(R.id.login_container, new LoginMainFragment()).commit();
-	}
-
-	@Override
-	protected void onDestroy()
-	{
-		Crouton.cancelAllCroutons();
-		super.onDestroy();
-	}
+        getFragmentManager().beginTransaction().add(R.id.login_container, new LoginMainFragment()).commit();
+    }
+    
+    @Override
+    protected void onDestroy() 
+    {
+    	Crouton.cancelAllCroutons();
+    	super.onDestroy();
+    }
 }

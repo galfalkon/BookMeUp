@@ -19,41 +19,39 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 
 public class BusinessMainActivity extends NavigationDrawerActivity {
 	private static final String TAG = "BusinessMainActivity";
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.i(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
-
-		if (Business.getCurrentBusiness() == null) {
+		
+		if (Business.getCurrentBusiness() == null)
+		{
 			ParseUser.logOut();
-			Intent intent = new Intent(getApplicationContext(),
-					LoginMainActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-					| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+			Intent intent = new Intent(getApplicationContext(), LoginMainActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 			startActivity(intent);
 		}
-
-		PushUtils.PushNotificationType pushType = PushUtils.PushNotificationType
-				.getFromIntent(getIntent());
-		if (pushType != null) {
-			Log.i(TAG, pushType.toString());
-			switch (pushType) {
-			case NEW_BOOKING_REQUEST:
-				onNavigationDrawerItemSelected(0);
-				break;
-			default:
-				Log.e(TAG, "Invalid push type");
-			}
-		}
+		
+		PushUtils.PushNotificationType pushType = PushUtils.PushNotificationType.getFromIntent(getIntent());
+  		if (pushType != null) {
+  			Log.i(TAG, pushType.toString());
+  			switch (pushType) {
+  			case NEW_BOOKING_REQUEST:
+  				onNavigationDrawerItemSelected(0);
+  				break;
+  			default:
+  				Log.e(TAG, "Invalid push type");
+  			}
+  		}
 	}
-
+	
 	@Override
 	protected void onDestroy() {
 		Crouton.cancelAllCroutons();
 		super.onDestroy();
 	}
-
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent;
@@ -71,7 +69,7 @@ public class BusinessMainActivity extends NavigationDrawerActivity {
 			return true;
 		case R.id.business_action_logout:
 			// TODO extract to session manager class
-			ParseHelper.logOut();
+		    ParseHelper.logOut();
 			intent = new Intent(this, LoginMainActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
 					| Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -81,11 +79,10 @@ public class BusinessMainActivity extends NavigationDrawerActivity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-
+	
 	@Override
 	public String[] getSectionTitles() {
-		return getResources().getStringArray(
-				R.array.business_navigation_drawer_items);
+		return getResources().getStringArray(R.array.business_navigation_drawer_items);
 	}
 
 	@Override

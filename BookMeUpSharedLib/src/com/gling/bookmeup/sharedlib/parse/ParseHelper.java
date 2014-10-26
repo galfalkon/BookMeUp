@@ -21,47 +21,38 @@ import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.PushService;
 
-public class ParseHelper
-{
+public class ParseHelper {
 	private static final String TAG = "ParseHelper";
 	private static final String PARSE_APPLICATION_ID = "0Uye8FHMnsklraYbqnMDxtg0rbQRKEqZSVO6BHPa";
 	private static final String PARSE_CLIENT_KEY = "5dB8I0UZWFaTtYpE3OUn7CWwPzxYxe2yBqE7uhS3";
-
-	public static boolean isUserLoggedIn()
-	{
-		return (ParseUser.getCurrentUser() != null);
+	
+	public static boolean isUserLoggedIn() {
+	    return (ParseUser.getCurrentUser() != null);
 	}
-
-	public static boolean isEmailVerified()
-	{
-		return ParseUser.getCurrentUser().getBoolean("emailVerified");
+	
+	public static boolean isEmailVerified() {
+	    return ParseUser.getCurrentUser().getBoolean("emailVerified");
 	}
-
-	public static void logOut()
-	{
-		Business.setCurrentBusiness(null);
-		Customer.setCurrentCustomer(null);
-		ParseUser.logOut();
-		Log.i(TAG, "Logged out");
+	
+	public static void logOut() {
+	    Business.setCurrentBusiness(null);
+	    Customer.setCurrentCustomer(null);
+	    ParseUser.logOut();
+	    Log.i(TAG, "Logged out");
 	}
-
-	public static void fetchBusiness(GetCallback<Business> callback)
-	{
+	
+	public static void fetchBusiness(GetCallback<Business> callback) {
 		// TODO null checks on getCurrentUser()
 		ParseUser.getCurrentUser().getParseObject(User.Keys.BUSINESS_POINTER)
 				.fetchIfNeededInBackground(callback);
 	}
-
-	public static void fetchCustomer(GetCallback<Customer> callback)
-	{
+	
+	public static void fetchCustomer(GetCallback<Customer> callback) {
 		// TODO null checks on getCurrentUser()
-		ParseUser.getCurrentUser().getParseObject(User.Keys.CUSTOMER_POINTER)
-				.fetchIfNeededInBackground(callback);
+		ParseUser.getCurrentUser().getParseObject(User.Keys.CUSTOMER_POINTER).fetchIfNeededInBackground(callback);
 	}
 
-	public static void initialize(Context context,
-			Class<? extends Activity> pushNotificationHandlerActivity)
-	{
+	public static void initialize(Context context, Class<? extends Activity> pushNotificationHandlerActivity) {
 		Log.i(TAG, "Initializing Parse");
 
 		// Register ParseObject subclasses
@@ -76,8 +67,7 @@ public class ParseHelper
 
 		// Configure parse push service
 		Log.i(TAG, "Configuring parse push service");
-		PushService.setDefaultPushCallback(context,
-				pushNotificationHandlerActivity);
+		PushService.setDefaultPushCallback(context, pushNotificationHandlerActivity);
 
 		ParseInstallation installation = ParseInstallation
 				.getCurrentInstallation();
@@ -85,34 +75,30 @@ public class ParseHelper
 				Secure.ANDROID_ID);
 		// http://stackoverflow.com/questions/23815445/at-least-one-id-field-installationid-devicetoken-must-be-specified-in-this-op
 		// TODO un-comment
-		// installation.put("UniqueId", androidId);
-		// installation.saveInBackground(new SaveCallback() {
-		// @Override
-		// public void done(ParseException e) {
-		// if (e != null) {
-		// Log.e(TAG, e.getMessage());
-		// }
-		// }
-		// });
+//		installation.put("UniqueId", androidId);
+//		installation.saveInBackground(new SaveCallback() {
+//			@Override
+//			public void done(ParseException e) {
+//				if (e != null) {
+//					Log.e(TAG, e.getMessage());
+//				}
+//			}
+//		});
 	}
 
-	public static class Installation
-	{
+	public static class Installation {
 		public static final String CLASS_NAME = "Installation";
 
-		public static class Keys
-		{
+		public static class Keys {
 			public static final String ID = "objectId";
 			public static final String USER_POINTER = "userPointer";
 		}
 	}
-
-	public static class User
-	{
+	
+	public static class User {
 		public static final String CLASS_NAME = "User";
 
-		public static class Keys
-		{
+		public static class Keys {
 			public static final String ID = "objectId";
 			public static final String BUSINESS_POINTER = "businessPointer";
 			public static final String CUSTOMER_POINTER = "customerPointer";
@@ -121,55 +107,46 @@ public class ParseHelper
 
 	// for saving business categories in shared prefs
 	public final static String BUSINESS_CATEGORIES = "business_categories";
-
+	
 	@ParseClassName(Category.CLASS_NAME)
-	public static class Category extends ParseObject
-	{
+	public static class Category extends ParseObject {
 		public static final String CLASS_NAME = "Category";
 
-		public static class Keys
-		{
+		public static class Keys {
 			public static final String ID = "objectId";
 			public static final String NAME = "name";
 			public static final String IMAGE = "image";
 		}
-
+		
 		private static List<Category> _categories;
-
-		public static void setCategories(List<Category> categories)
-		{
-			_categories = categories;
-		}
-
-		public static List<Category> getCategories()
-		{
-			return _categories;
-		}
-
-		public String getName()
-		{
+	    
+	    public static void setCategories(List<Category> categories) {
+	        _categories = categories;
+	    }
+	    
+	    public static List<Category> getCategories() {
+	        return _categories;
+	    }
+		
+		public String getName() {
 			return getString(Keys.NAME);
 		}
-
-		public ParseFile getImageFile()
-		{
+		
+		public ParseFile getImageFile() {
 			return getParseFile(Keys.IMAGE);
 		}
-
-		public void setImageFile(ParseFile image)
-		{
-			put(Keys.IMAGE, image);
-		}
+		
+		public void setImageFile(ParseFile image) {
+	        put(Keys.IMAGE, image);
+	    }
 	}
 
 	@ParseClassName(Booking.CLASS_NAME)
-	public static class Booking extends ParseObject
-	{
+	public static class Booking extends ParseObject {
 
 		public static final String CLASS_NAME = "Booking";
 
-		public static class Keys
-		{
+		public static class Keys {
 			public static final String ID = "objectId";
 			public static final String CUSTOMER_POINTER = "customerPointer";
 			public static final String BUSINESS_POINTER = "businessPointer";
@@ -178,107 +155,87 @@ public class ParseHelper
 			public static final String STATUS = "status";
 		}
 
-		public static class Status
-		{
+		public static class Status {
 			public static final int PENDING = 0;
 			public static final int APPROVED = 1;
 			public static final int CANCELED = 2;
 		}
-
-		public Booking()
-		{
+		
+		public Booking() {
 			// Do not modify the ParseObject
 		}
 
-		public Date getDate()
-		{
+		public Date getDate() {
 			return getDate(Keys.DATE);
 		}
-
-		public void setDate(Date date)
-		{
+		
+		public void setDate(Date date) {
 			put(Keys.DATE, date);
 		}
 
-		public int getStatus()
-		{
+		public int getStatus() {
 			return getInt(Keys.STATUS);
 		}
 
-		public void setStatus(int status)
-		{
+		public void setStatus(int status) {
 			put(Keys.STATUS, status);
 		}
 
-		public Customer getCustomer()
-		{
+		public Customer getCustomer() {
 			Log.v(TAG, "getCustomer");
-
-			try
-			{
+			
+			try {
 				return getParseObject(Keys.CUSTOMER_POINTER).fetchIfNeeded();
-			} catch (ParseException e)
-			{
+			} catch (ParseException e) {
 				Log.e(TAG, "Exception: " + e.getMessage());
 				return null;
 			}
 		}
-
-		public void setCustomer(Customer customer)
-		{
+		
+		public void setCustomer(Customer customer) {
 			put(Keys.CUSTOMER_POINTER, customer);
 		}
-
-		public Business getBusiness()
-		{
+		
+		public Business getBusiness() {
 			Log.v(TAG, "getBusiness");
-
-			try
-			{
+			
+			try {
 				return getParseObject(Keys.BUSINESS_POINTER).fetchIfNeeded();
-			} catch (ParseException e)
-			{
+			} catch (ParseException e) {
 				Log.e(TAG, "Exception: " + e.getMessage());
 				return null;
 			}
 		}
-
-		public void setBusiness(Business business)
-		{
+		
+		public void setBusiness(Business business) {
 			put(Keys.BUSINESS_POINTER, business);
 		}
-
-		public String getServiceName()
-		{
+		
+		public String getServiceName() {
 			return getParseObject(Keys.SERVICE_POINTER).getString(
 					Service.Keys.NAME);
 		}
 
-		public int getServicePrice()
-		{
+		public int getServicePrice() {
 			return getParseObject(Keys.SERVICE_POINTER).getInt(
 					Service.Keys.PRICE);
 		}
-
-		public int getServiceDuration()
-		{
+		
+		public int getServiceDuration() {
 			return getParseObject(Keys.SERVICE_POINTER).getInt(
 					Service.Keys.DURATION);
 		}
-
-		public void setService(Service service)
-		{
+		
+		public void setService(Service service) {
 			put(Keys.SERVICE_POINTER, service);
 		}
 	}
-
+	
 	@ParseClassName(Offer.CLASS_NAME)
-	public static class Offer extends ParseObject
-	{
+	public static class Offer extends ParseObject {
 		public static final String CLASS_NAME = "Offer";
-
-		public static class Keys
-		{
+		
+		public static class Keys {
 			public static final String ID = "objectId";
 			public static final String CREATION_DATE = "createdAt";
 			public static final String BUSINESS_POINTER = "businessPointer";
@@ -287,60 +244,49 @@ public class ParseHelper
 			public static final String DURATION = "duration";
 			public static final String EXPIRATION_DATE = "expirationData";
 		}
-
-		public Offer()
-		{
+		
+		public Offer() {
 			// Do not modify the ParseObject
 		}
-
-		public Offer(String businessId, List<String> customerIds, int discount,
-				int durationInWeeks)
-		{
+		
+		public Offer(String businessId, List<String> customerIds, int discount, int durationInWeeks) {
 			this();
-			put(Keys.BUSINESS_POINTER,
-					ParseObject.createWithoutData(Business.class, businessId));
-
+			put(Keys.BUSINESS_POINTER, ParseObject.createWithoutData(Business.class, businessId));
+			
 			ParseRelation<ParseObject> customersRelation = getRelation(Keys.CUSTOMER_POINTERS);
 			for (String customerId : customerIds)
 			{
-				customersRelation.add(Customer.createWithoutData(
-						Customer.class, customerId));
+				customersRelation.add(Customer.createWithoutData(Customer.class, customerId));
 			}
-
+			
 			put(Keys.DISCOUNT, discount);
-
+			
 			Calendar calendar = Calendar.getInstance();
-			calendar.add(Calendar.WEEK_OF_YEAR, durationInWeeks);
+    		calendar.add(Calendar.WEEK_OF_YEAR, durationInWeeks);
 			put(Keys.EXPIRATION_DATE, calendar.getTime());
 		}
-
-		public int getDiscount()
-		{
+		
+		public int getDiscount() {
 			return getInt(Keys.DISCOUNT);
 		}
-
-		public int getDuration()
-		{
+		
+		public int getDuration() {
 			return getInt(Keys.DURATION);
 		}
-
-		public Date getExpirationData()
-		{
+		
+		public Date getExpirationData() {
 			return getDate(Keys.EXPIRATION_DATE);
 		}
-
-		public String getBusinessName()
-		{
+		
+		public String getBusinessName() {
 			ParseObject business = getParseObject(Keys.BUSINESS_POINTER);
-			try
-			{
+			try {
 				business.fetchIfNeeded();
-			} catch (ParseException e)
-			{
+			} catch (ParseException e) {
 				Log.e(TAG, "Exception: " + e.getMessage());
 				return null;
 			}
-
+			
 			return business.getString(Business.Keys.NAME);
 		}
 	}

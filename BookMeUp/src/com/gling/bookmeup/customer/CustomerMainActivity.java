@@ -20,22 +20,22 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class CustomerMainActivity extends NavigationDrawerActivity {
 	private static final String TAG = "CustomerMainActivity";
-
+	
 	private CustomerAllBusinessesFragment _fragment = null;
 	private Business _chosenBusiness = null;
-
+	
 	public void setAllFragment(CustomerAllBusinessesFragment fragment) {
 		this._fragment = fragment;
 	}
-
+	
 	public void setChosenBusiness(Business business) {
 		this._chosenBusiness = business;
 	}
-
+	
 	public Business getChosenBusiness() {
 		return this._chosenBusiness;
 	}
-
+	
 	@Override
 	public void onBackPressed() {
 		Log.i(TAG, "onBackPressed");
@@ -45,29 +45,29 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 			_fragment.clearAll();
 		}
 	}
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.i(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 
-		if (Customer.getCurrentCustomer() == null) {
+		if (Customer.getCurrentCustomer() == null)
+		{
 			Log.e(TAG, "No current customer");
-
+			
 			ParseUser.logOut();
 			Intent intent = new Intent(getApplicationContext(),
 					LoginMainActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-					| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 			startActivity(intent);
 			return;
 		}
-
+		
 		PushUtils.PushNotificationType pushType = PushUtils.PushNotificationType
 				.getFromIntent(getIntent());
 		if (pushType != null) {
 			Log.i(TAG, String.format("pushType = %s", pushType.toString()));
-
+			
 			switch (pushType) {
 			case MESSAGE_FROM_BUSINESS:
 				Crouton.showText(this, "Not implemented", Style.ALERT);
@@ -84,13 +84,13 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 			}
 		}
 	}
-
+	
 	@Override
 	protected void onDestroy() {
 		Crouton.cancelAllCroutons();
 		super.onDestroy();
 	}
-
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
@@ -109,11 +109,10 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-
+	
 	@Override
 	public String[] getSectionTitles() {
-		return getResources().getStringArray(
-				R.array.customer_navigation_drawer_items);
+		return getResources().getStringArray(R.array.customer_navigation_drawer_items);
 	}
 
 	@Override

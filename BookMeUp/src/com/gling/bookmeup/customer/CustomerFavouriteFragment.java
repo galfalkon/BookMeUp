@@ -33,8 +33,7 @@ import com.parse.ParseObject;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-public class CustomerFavouriteFragment extends OnClickListenerFragment
-		implements TextWatcher {
+public class CustomerFavouriteFragment extends OnClickListenerFragment implements TextWatcher {
 	private static final String TAG = "CustomerMainActivity";
 
 	private HashMap<String, Business> _allBusinesses;
@@ -42,7 +41,7 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment
 	private BusinessCardArrayAdapter _businessesCardAdapter;
 	private List<Card> _filteredBusinesses;
 
-	private CardListViewWrapperView _businessesCardListView;
+	private CardListViewWrapperView _businessesCardListView; 
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,18 +51,14 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment
 		_allBusinesses = new HashMap<String, Business>();
 		_allParseBusinesses = new HashMap<String, com.gling.bookmeup.sharedlib.parse.Business>();
 		_filteredBusinesses = new ArrayList<Card>();
-		_businessesCardAdapter = new BusinessCardArrayAdapter(getActivity(),
-				_filteredBusinesses);
+		_businessesCardAdapter = new BusinessCardArrayAdapter(getActivity(), _filteredBusinesses);
 
 		View view = super.onCreateView(inflater, container, savedInstanceState);
-		_businessesCardListView = (CardListViewWrapperView) view
-				.findViewById(R.id.customer_favourites_business_list_listViewBusinesses);
+		_businessesCardListView = (CardListViewWrapperView) view.findViewById(R.id.customer_favourites_business_list_listViewBusinesses);
 		_businessesCardListView.setAdapter(_businessesCardAdapter);
-		_businessesCardListView
-				.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		_businessesCardListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 
-		EditText edtSearch = (EditText) view
-				.findViewById(R.id.customer_favourites_business_list_edtSearch);
+		EditText edtSearch = (EditText)view.findViewById(R.id.customer_favourites_business_list_edtSearch);
 		edtSearch.addTextChangedListener(this);
 
 		new PopulateFavouritesBusinessesTask().execute();
@@ -85,108 +80,105 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment
 	}
 
 	@Override
-	public void beforeTextChanged(CharSequence s, int start, int count,
-			int after) {
-		Log.i(TAG, "beforeTextChanged");
+	public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+		Log.i(TAG, "beforeTextChanged");		
 	}
 
 	@Override
-	public void onTextChanged(CharSequence s, int start, int before, int count) {
+	public void onTextChanged(CharSequence s, int start, int before	, int count) {
 		Log.i(TAG, "onTextChanged");
 		_businessesCardAdapter.getFilter().filter(s);
 	}
-
-	private class PopulateFavouritesBusinessesTask extends
-			AsyncTask<Void, Void, Void> {
+	
+	private class PopulateFavouritesBusinessesTask extends AsyncTask<Void, Void, Void>
+	{
 		@Override
-		protected void onPreExecute() {
+		protected void onPreExecute() 
+		{
 			super.onPreExecute();
 			_businessesCardListView.setDisplayMode(DisplayMode.LOADING_VIEW);
 		}
-
+		
 		@Override
-		protected Void doInBackground(Void... params) {
+		protected Void doInBackground(Void... params) 
+		{
 			@SuppressWarnings("unchecked")
-			ArrayList<ParseObject> favouriteBusinesses = (ArrayList<ParseObject>) Customer
-					.getCurrentCustomer().get(Customer.Keys.FAVOURITES);
-
-			if (favouriteBusinesses == null) {
+			ArrayList<ParseObject> favouriteBusinesses = (ArrayList<ParseObject>) Customer.getCurrentCustomer().get(Customer.Keys.FAVOURITES);
+			
+			if (favouriteBusinesses == null) 
+			{
 				return null;
 			}
-
+			
 			for (ParseObject parseObject : favouriteBusinesses) {
-				if (parseObject instanceof com.gling.bookmeup.sharedlib.parse.Business) {
+				if (parseObject instanceof com.gling.bookmeup.sharedlib.parse.Business) 
+				{
 					com.gling.bookmeup.sharedlib.parse.Business businessItem = (com.gling.bookmeup.sharedlib.parse.Business) parseObject;
-					try {
-						ParseObject businessObject = businessItem
-								.fetchIfNeeded();
+					try 
+					{
+						ParseObject businessObject = businessItem.fetchIfNeeded();
 						businessItem = (com.gling.bookmeup.sharedlib.parse.Business) businessObject;
 
 						Business currentBusiness = new Business(businessItem);
-						Card businessCard = currentBusiness
-								.toCard(getActivity());
-						businessCard
-								.setOnClickListener(new OnCardClickListener() {
+						Card businessCard = currentBusiness.toCard(getActivity());
+						businessCard.setOnClickListener(new OnCardClickListener() 
+						{
 
-									@Override
-									public void onClick(Card businessCard,
-											View arg1) {
-										if (!_allParseBusinesses
-												.containsKey(businessCard
-														.getId())) {
-											Log.i(TAG,
-													"Business Dialog - could not find business");
-											Crouton.showText(getActivity(),
-													"Could not find business",
-													Style.ALERT);
-											return;
-										}
-										com.gling.bookmeup.sharedlib.parse.Business business = _allParseBusinesses
-												.get(businessCard.getId());
-										Log.i(TAG, "Business Dialog - "
-												+ business.getName());
-										CustomerChooseBusinessDialogs dialog = new CustomerChooseBusinessDialogs();
-										dialog.createBusinessProfileDialog(
-												business, getActivity(),
-												getResources(),
-												Customer.getCurrentCustomer());
-									}
-								});
+							@Override
+							public void onClick(Card businessCard, View arg1) 
+							{
+								if (!_allParseBusinesses.containsKey(businessCard.getId())) 
+								{
+									Log.i(TAG, "Business Dialog - could not find business");
+									Crouton.showText(getActivity(), "Could not find business", Style.ALERT);
+									return;
+								}
+								com.gling.bookmeup.sharedlib.parse.Business business = _allParseBusinesses.get(businessCard.getId());
+								Log.i(TAG, "Business Dialog - " + business.getName());
+								CustomerChooseBusinessDialogs dialog = new CustomerChooseBusinessDialogs();
+								dialog.createBusinessProfileDialog(business, getActivity(), getResources(), Customer.getCurrentCustomer());
+							}
+						});
 
-						if (!_allBusinesses.containsKey(currentBusiness._id)) {
+						if (!_allBusinesses.containsKey(currentBusiness._id)) 
+						{						
 							_filteredBusinesses.add(businessCard);
-							_allBusinesses.put(currentBusiness._id,
-									currentBusiness);
+							_allBusinesses.put(currentBusiness._id, currentBusiness);
 						}
 
 						String id = businessItem.getObjectId();
-						if (!_allParseBusinesses.containsKey(id)) {
+						if (!_allParseBusinesses.containsKey(id)) 
+						{
 							_allParseBusinesses.put(id, businessItem);
 						}
-					} catch (ParseException e) {
+					} 
+					catch (ParseException e) 
+					{
 						Log.e(TAG, "Exception: " + e.getMessage());
 					}
 				}
-
+				
 				publishProgress();
 			}
-
+			
 			return null;
 		}
-
+		
 		@Override
-		protected void onProgressUpdate(Void... values) {
+		protected void onProgressUpdate(Void... values) 
+		{
 			super.onProgressUpdate(values);
-			if (!_allBusinesses.isEmpty()) {
+			if (!_allBusinesses.isEmpty())
+			{
 				_businessesCardListView.setDisplayMode(DisplayMode.LIST_VIEW);
 			}
-
+			
 			_businessesCardAdapter.notifyDataSetChanged();
 		}
-
-		protected void onPostExecute(Void result) {
-			DisplayMode newDisplayMode = _allBusinesses.isEmpty() ? DisplayMode.NO_ITEMS_VIEW
-					: DisplayMode.LIST_VIEW;
+		
+		protected void onPostExecute(Void result) 
+		{
+			DisplayMode newDisplayMode = _allBusinesses.isEmpty()? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;
 			_businessesCardListView.setDisplayMode(newDisplayMode);
 		};
 	}
@@ -206,8 +198,7 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment
 
 		@Override
 		public boolean equals(Object other) {
-			return !(other instanceof Business)
-					|| (_id.equals(((Business) other)._id));
+			return !(other instanceof Business) || (_id.equals(((Business)other)._id)); 
 		}
 
 		public Card toCard(Context context) {
@@ -245,22 +236,17 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment
 		}
 
 		@Override
-		protected void publishResults(CharSequence constraint,
-				FilterResults results) {
+		protected void publishResults(CharSequence constraint, FilterResults results) {
 			Log.i(TAG, "publicResults");
 			_businessesCardAdapter.notifyDataSetChanged();
 		}
 
-		private boolean doesSetisfyConstraint(Business business,
-				CharSequence constraint) {
-			return (constraint == null)
-					|| business._businessName.toLowerCase().contains(
-							constraint.toString().toLowerCase());
+		private boolean doesSetisfyConstraint(Business business, CharSequence constraint) {
+			return (constraint == null) || business._businessName.toLowerCase().contains(constraint.toString().toLowerCase());
 		}
 	}
 
-	private class BusinessCardArrayAdapter extends CardArrayAdapter {// CardArrayMultiChoiceAdapter
-																		// {
+	private class BusinessCardArrayAdapter extends CardArrayAdapter {//CardArrayMultiChoiceAdapter {
 
 		private BusinessFilter _businessFilter;
 
@@ -278,3 +264,4 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment
 
 	}
 }
+

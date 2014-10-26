@@ -37,219 +37,205 @@ import com.parse.SaveCallback;
 import com.tech.freak.wizardpager.ui.PageFragmentCallbacks;
 
 public class ServicesFragment extends Fragment {
-	private static final String TAG = "ServicesFragment";
-	private static final String ARG_KEY = "key";
+    private static final String TAG = "ServicesFragment";
+    private static final String ARG_KEY = "key";
 
-	private PageFragmentCallbacks mCallbacks;
-	private String mKey;
-	private ServicesPage mPage;
+    private PageFragmentCallbacks mCallbacks;
+    private String mKey;
+    private ServicesPage mPage;
 
-	private IObservableList<Service> _services;
-	private GenericCardArrayAdapter<Service> _servicesCardAdapter;
-	private CardListViewWrapperView _servicesListViewWrapperView;
-	private SwipeDismissAnimation _dismissAnimation;
+    private IObservableList<Service> _services;
+    private GenericCardArrayAdapter<Service> _servicesCardAdapter;
+    private CardListViewWrapperView _servicesListViewWrapperView;
+    private SwipeDismissAnimation _dismissAnimation;
 
-	private Card _addServiceCard;
+    private Card _addServiceCard;
 
-	public static ServicesFragment create(String key) {
-		Bundle args = new Bundle();
-		args.putString(ARG_KEY, key);
+    public static ServicesFragment create(String key) {
+        Bundle args = new Bundle();
+        args.putString(ARG_KEY, key);
 
-		ServicesFragment fragment = new ServicesFragment();
-		fragment.setArguments(args);
-		return fragment;
-	}
+        ServicesFragment fragment = new ServicesFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
-	public ServicesFragment() {
-	}
+    public ServicesFragment() {
+    }
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		Bundle args = getArguments();
-		mKey = args.getString(ARG_KEY);
-		mPage = (ServicesPage) mCallbacks.onGetPage(mKey);
-	}
+        Bundle args = getArguments();
+        mKey = args.getString(ARG_KEY);
+        mPage = (ServicesPage) mCallbacks.onGetPage(mKey);
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(
-				R.layout.business_profile_wizard_services_fragment, container,
-				false);
-		((TextView) rootView.findViewById(android.R.id.title)).setText(mPage
-				.getTitle());
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.business_profile_wizard_services_fragment,
+                                         container,
+                                         false);
+        ((TextView) rootView.findViewById(android.R.id.title)).setText(mPage.getTitle());
 
-		_addServiceCard = new Card(getActivity());
+        _addServiceCard = new Card(getActivity());
 
-		CardHeader header = new CardHeader(getActivity());
-		header.setOtherButtonDrawable(R.drawable.card_menu_button_other);
-		header.setOtherButtonVisible(true);
-		header.setTitle("Add a service");
-		header.setOtherButtonClickListener(new CardHeader.OnClickCardHeaderOtherButtonListener() {
-			@Override
-			public void onButtonItemClick(Card card, View view) {
-				card.doToogleExpand();
-			}
-		});
-		_addServiceCard.addCardHeader(header);
+        CardHeader header = new CardHeader(getActivity());
+        header.setOtherButtonDrawable(R.drawable.card_menu_button_other);
+        header.setOtherButtonVisible(true);
+        header.setTitle("Add a service");
+        header.setOtherButtonClickListener(new CardHeader.OnClickCardHeaderOtherButtonListener() {
+            @Override
+            public void onButtonItemClick(Card card, View view) {
+                card.doToogleExpand();
+            }
+        });
+        _addServiceCard.addCardHeader(header);
 
-		AddServiceExpand expand = new AddServiceExpand(getActivity());
-		_addServiceCard.addCardExpand(expand);
+        AddServiceExpand expand = new AddServiceExpand(getActivity());
+        _addServiceCard.addCardExpand(expand);
 
-		CardView addServiceCardView = (CardView) rootView
-				.findViewById(R.id.business_profile_wizard_add_service_card);
-		ViewToClickToExpand viewToClickToExpand = ViewToClickToExpand.builder()
-				.setupView(addServiceCardView);
-		_addServiceCard.setViewToClickToExpand(viewToClickToExpand);
+        CardView addServiceCardView = (CardView) rootView
+                                                         .findViewById(R.id.business_profile_wizard_add_service_card);
+        ViewToClickToExpand viewToClickToExpand = ViewToClickToExpand.builder()
+                                                                     .setupView(addServiceCardView);
+        _addServiceCard.setViewToClickToExpand(viewToClickToExpand);
 
-		addServiceCardView.setCard(_addServiceCard);
+        addServiceCardView.setCard(_addServiceCard);
 
-		/**** services list ****/
+        /**** services list ****/
 
-		_services = new ObservableArrayList<Service>();
-		_servicesCardAdapter = new GenericCardArrayAdapter<Service>(
-				getActivity(), _services, new ServicesCardGenerator());
+        _services = new ObservableArrayList<Service>();
+        _servicesCardAdapter = new GenericCardArrayAdapter<Service>(getActivity(), _services,
+                new ServicesCardGenerator());
 
-		_dismissAnimation = (SwipeDismissAnimation) new SwipeDismissAnimation(
-				getActivity()).setup(_servicesCardAdapter);
+        _dismissAnimation = (SwipeDismissAnimation) new SwipeDismissAnimation(getActivity())
+                                                                                            .setup(_servicesCardAdapter);
 
-		_servicesListViewWrapperView = (CardListViewWrapperView) rootView
-				.findViewById(R.id.business_profile_wizard_services_cardListViewWrapper);
-		_servicesListViewWrapperView.setAdapter(_servicesCardAdapter);
+        _servicesListViewWrapperView = (CardListViewWrapperView) rootView
+                                                                         .findViewById(R.id.business_profile_wizard_services_cardListViewWrapper);
+        _servicesListViewWrapperView.setAdapter(_servicesCardAdapter);
 
-		_servicesListViewWrapperView.setDisplayMode(DisplayMode.LOADING_VIEW);
+        _servicesListViewWrapperView.setDisplayMode(DisplayMode.LOADING_VIEW);
 
-		// TODO maybe fetch services in splash screen?
-		Business.getCurrentBusiness().getServicesQuery()
-				.findInBackground(new FindCallback<Service>() {
-					@Override
-					public void done(List<Service> services, ParseException e) {
-						Log.i(TAG, "Done querying services, # services: "
-								+ services.size());
-						if (e != null) {
-							Log.e(TAG, "Exception: " + e.getMessage());
-							return;
-						}
+        // TODO maybe fetch services in splash screen?
+        Business.getCurrentBusiness()
+                .getServicesQuery()
+                .findInBackground(new FindCallback<Service>() {
+                    @Override
+                    public void done(List<Service> services, ParseException e) {
+                        Log.i(TAG, "Done querying services, # services: " + services.size());
+                        if (e != null) {
+                            Log.e(TAG, "Exception: " + e.getMessage());
+                            return;
+                        }
 
-						for (Service service : services) {
-							_services.add(service);
-						}
+                        for (Service service : services) {
+                            _services.add(service);
+                        }
 
-						DisplayMode newDisplayMode = _services.isEmpty() ? DisplayMode.NO_ITEMS_VIEW
-								: DisplayMode.LIST_VIEW;
-						_servicesListViewWrapperView
-								.setDisplayMode(newDisplayMode);
-					}
-				});
+                        DisplayMode newDisplayMode = _services.isEmpty() ? DisplayMode.NO_ITEMS_VIEW
+                                : DisplayMode.LIST_VIEW;
+                        _servicesListViewWrapperView.setDisplayMode(newDisplayMode);
+                    }
+                });
 
-		return rootView;
-	}
+        return rootView;
+    }
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
 
-		if (!(activity instanceof PageFragmentCallbacks)) {
-			throw new ClassCastException(
-					"Activity must implement PageFragmentCallbacks");
-		}
+        if (!(activity instanceof PageFragmentCallbacks)) {
+            throw new ClassCastException("Activity must implement PageFragmentCallbacks");
+        }
 
-		mCallbacks = (PageFragmentCallbacks) activity;
-	}
+        mCallbacks = (PageFragmentCallbacks) activity;
+    }
 
-	@Override
-	public void onDetach() {
-		super.onDetach();
-		mCallbacks = null;
-	}
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
 
-	private class AddServiceExpand extends CardExpand {
+    private class AddServiceExpand extends CardExpand {
 
-		public AddServiceExpand(Context context) {
-			super(context,
-					R.layout.business_profile_wizard_add_service_card_expand);
-		}
+        public AddServiceExpand(Context context) {
+            super(context, R.layout.business_profile_wizard_add_service_card_expand);
+        }
 
-		@Override
-		public void setupInnerViewElements(ViewGroup parent, final View view) {
-			super.setupInnerViewElements(parent, view);
+        @Override
+        public void setupInnerViewElements(ViewGroup parent, final View view) {
+            super.setupInnerViewElements(parent, view);
 
-			Button btnAddService = (Button) view
-					.findViewById(R.id.business_profile_wizard_services_btnAddService);
-			btnAddService.setOnClickListener(new OnClickListener() {
+            Button btnAddService = (Button) view
+                                                .findViewById(R.id.business_profile_wizard_services_btnAddService);
+            btnAddService.setOnClickListener(new OnClickListener() {
 
-				@Override
-				public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
 
-					_servicesListViewWrapperView
-							.setDisplayMode(DisplayMode.LOADING_VIEW);
+                    _servicesListViewWrapperView.setDisplayMode(DisplayMode.LOADING_VIEW);
 
-					final EditText edtName = (EditText) view
-							.findViewById(R.id.business_profile_wizard_services_edtName);
-					final EditText edtPrice = (EditText) view
-							.findViewById(R.id.business_profile_wizard_services_edtPrice);
-					final EditText edtDuration = (EditText) view
-							.findViewById(R.id.business_profile_wizard_services_edtDuration);
+                    final EditText edtName = (EditText) view
+                                                            .findViewById(R.id.business_profile_wizard_services_edtName);
+                    final EditText edtPrice = (EditText) view
+                                                             .findViewById(R.id.business_profile_wizard_services_edtPrice);
+                    final EditText edtDuration = (EditText) view
+                                                                .findViewById(R.id.business_profile_wizard_services_edtDuration);
 
-					final Service service = new Service();
-					service.setBusiness(Business.getCurrentBusiness())
-							.setName(edtName.getText().toString())
-							.setPrice(
-									Integer.valueOf(edtPrice.getText()
-											.toString()))
-							.setDuration(
-									Integer.valueOf(edtDuration.getText()
-											.toString()));
+                    final Service service = new Service();
+                    service.setBusiness(Business.getCurrentBusiness())
+                           .setName(edtName.getText().toString())
+                           .setPrice(Integer.valueOf(edtPrice.getText().toString()))
+                           .setDuration(Integer.valueOf(edtDuration.getText().toString()));
 
-					service.saveInBackground(new SaveCallback() {
+                    service.saveInBackground(new SaveCallback() {
 
-						@Override
-						public void done(ParseException e) {
-							if (e != null) {
-								Log.e(TAG,
-										"saving service failed "
-												+ e.getMessage());
-								// TODO crouton
-								return;
-							}
-							// TODO prepend the service so it appears on the top
-							// of the list
-							_services.add(0, service);
+                        @Override
+                        public void done(ParseException e) {
+                            if (e != null) {
+                                Log.e(TAG, "saving service failed " + e.getMessage());
+                                // TODO crouton
+                                return;
+                            }
+                            // TODO prepend the service so it appears on the top
+                            // of the list
+                            _services.add(0, service);
 
-							_addServiceCard.doToogleExpand();
-							edtName.setText("");
-							edtPrice.setText("");
-							edtDuration.setText("");
+                            _addServiceCard.doToogleExpand();
+                            edtName.setText("");
+                            edtPrice.setText("");
+                            edtDuration.setText("");
 
-							_servicesListViewWrapperView
-									.setDisplayMode(DisplayMode.LIST_VIEW);
-						}
-					});
-				}
-			});
-		}
-	}
+                            _servicesListViewWrapperView.setDisplayMode(DisplayMode.LIST_VIEW);
+                        }
+                    });
+                }
+            });
+        }
+    }
 
-	// TODO maybe pass the service to the card in the constructor, and do all
-	// the logic there
-	private class ServicesCardGenerator implements ICardGenerator<Service> {
-		@Override
-		public Card generateCard(final Service service) {
+    // TODO maybe pass the service to the card in the constructor, and do all
+    // the logic there
+    private class ServicesCardGenerator implements ICardGenerator<Service> {
+        @Override
+        public Card generateCard(final Service service) {
 
-			CardHeader.OnClickCardHeaderOtherButtonListener dissmissCallback = new CardHeader.OnClickCardHeaderOtherButtonListener() {
-				@Override
-				public void onButtonItemClick(Card card, View view) {
-					_dismissAnimation.animateDismiss(card);
-					// TODO show an "undo" crouton
-					service.deleteInBackground();
-				}
-			};
+            CardHeader.OnClickCardHeaderOtherButtonListener dissmissCallback = new CardHeader.OnClickCardHeaderOtherButtonListener() {
+                @Override
+                public void onButtonItemClick(Card card, View view) {
+                    _dismissAnimation.animateDismiss(card);
+                    // TODO show an "undo" crouton
+                    service.deleteInBackground();
+                }
+            };
 
-			return new BusinessProfileWizardServiceCard(getActivity(),
-					service.getName(), service.getPrice(),
-					service.getDuration(), dissmissCallback);
-		}
-	}
+            return new BusinessProfileWizardServiceCard(getActivity(), service.getName(),
+                    service.getPrice(), service.getDuration(), dissmissCallback);
+        }
+    }
 }

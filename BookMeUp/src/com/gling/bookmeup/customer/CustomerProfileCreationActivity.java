@@ -18,60 +18,68 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-public class CustomerProfileCreationActivity extends Activity implements
-		OnClickListener, TextWatcher, OnEditorActionListener {
+public class CustomerProfileCreationActivity extends Activity implements OnClickListener, TextWatcher, OnEditorActionListener 
+{
 	private static final String TAG = "CustomerProfileCreationActivity";
-
+	
 	private EditText _edtPhoneNumber;
 	private Button _btnDone;
-
+	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) 
+	{
 		Log.i(TAG, "onCreate");
-
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.customer_profile_creation_activity);
-
+		
 		_edtPhoneNumber = (EditText) findViewById(R.id.customer_profile_creation_edtPhoneNumber);
 		_edtPhoneNumber.addTextChangedListener(this);
 		_edtPhoneNumber.setOnEditorActionListener(this);
 		_edtPhoneNumber.requestFocus();
-
-		_btnDone = (Button) findViewById(R.id.customer_profile_creation_btnDone);
+		
+		_btnDone = (Button)findViewById(R.id.customer_profile_creation_btnDone);
 		_btnDone.setOnClickListener(this);
 	}
 
 	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
+	public void onClick(View v) 
+	{
+		switch (v.getId())
+		{
 		case R.id.customer_profile_creation_btnDone:
 			handleDoneClick();
 			break;
 		}
 	}
-
+	
 	@Override
-	public void afterTextChanged(Editable s) {
+	public void afterTextChanged(Editable s) 
+	{
 		_btnDone.setEnabled(!s.toString().isEmpty());
 	}
 
 	@Override
-	public void beforeTextChanged(CharSequence s, int start, int count,
-			int after) {
+	public void beforeTextChanged(CharSequence s, int start, int count, int after) 
+	{
 	}
 
 	@Override
-	public void onTextChanged(CharSequence s, int start, int before, int count) {
+	public void onTextChanged(CharSequence s, int start, int before, int count) 
+	{
 	}
-
-	private boolean validatePhoneNumber() {
+	
+	private boolean validatePhoneNumber()
+	{
 		String phoneNumber = _edtPhoneNumber.getText().toString();
 		return (phoneNumber.length() >= 10 && phoneNumber.length() <= 13);
 	}
 
 	@Override
-	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-		switch (actionId) {
+	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) 
+	{
+		switch (actionId)
+		{
 		case EditorInfo.IME_ACTION_DONE:
 			handleDoneClick();
 			return true;
@@ -79,17 +87,19 @@ public class CustomerProfileCreationActivity extends Activity implements
 			return false;
 		}
 	}
-
-	private void handleDoneClick() {
-		if (validatePhoneNumber()) {
+	
+	private void handleDoneClick()
+	{
+		if (validatePhoneNumber())
+		{
 			Customer currentCustomer = Customer.getCurrentCustomer();
-			currentCustomer
-					.setPhoneNumber(_edtPhoneNumber.getText().toString());
+			currentCustomer.setPhoneNumber(_edtPhoneNumber.getText().toString());
 			currentCustomer.saveInBackground();
 			startActivity(new Intent(this, CustomerMainActivity.class));
-		} else {
-			_edtPhoneNumber
-					.setError(getString(R.string.customer_profile_creation_edtPhoneNumberError));
+		}
+		else
+		{
+			_edtPhoneNumber.setError(getString(R.string.customer_profile_creation_edtPhoneNumberError));
 		}
 	}
 }
