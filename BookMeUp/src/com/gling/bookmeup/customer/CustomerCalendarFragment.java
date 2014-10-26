@@ -2,6 +2,8 @@ package com.gling.bookmeup.customer;
 
 import it.gmariotti.cardslib.library.internal.Card;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -24,6 +26,7 @@ import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
 import com.gling.bookmeup.main.views.CardListViewWrapperView;
 import com.gling.bookmeup.sharedlib.parse.Business;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper.Booking;
+import com.gling.bookmeup.sharedlib.parse.Service;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -35,7 +38,9 @@ public class CustomerCalendarFragment extends Fragment {
 
 	private DateTime _date;
 
-	IObservableList<Booking> _bookings;
+	IObservableList<Booking> _alreadyBooked;
+	IObservableList<Booking> _possibleBookings;
+	ArrayList<DatedBooking> _datedBooked;
 	GenericCardArrayAdapter<Booking> _bookingsCardAdapter;
 	CardListViewWrapperView _bookingsListViewWrapperView;
 
@@ -66,8 +71,11 @@ public class CustomerCalendarFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.business_calendar_fragment, container, false);
 
-		_bookings = new ObservableArrayList<Booking>();
-		_bookingsCardAdapter = new GenericCardArrayAdapter<Booking>(getActivity(), _bookings, new BookingCardGenerator());
+		_datedBooked = new ArrayList<CustomerCalendarFragment.DatedBooking>();
+		
+		_alreadyBooked = new ObservableArrayList<Booking>();
+		_possibleBookings = new ObservableArrayList<Booking>();
+		_bookingsCardAdapter = new GenericCardArrayAdapter<Booking>(getActivity(), _possibleBookings, new BookingCardGenerator());
 
 		_bookingsListViewWrapperView = (CardListViewWrapperView) view.findViewById(R.id.business_calendar_cardListViewWrapper);
 		_bookingsListViewWrapperView.setAdapter(_bookingsCardAdapter);
@@ -76,6 +84,7 @@ public class CustomerCalendarFragment extends Fragment {
 		if (activity instanceof CustomerCalendarActivity) {
 			CustomerCalendarActivity calendarActivity = (CustomerCalendarActivity)activity;
 			String businessId = calendarActivity.getStringExtra(CustomerCalendarActivity.BUSINESS_ID_EXTRA);
+			final String serviceId = calendarActivity.getStringExtra(CustomerCalendarActivity.SERVICE_ID_EXTRA);
 			if (businessId != null) {
 				ParseQuery<Business> businessQuery = new ParseQuery<Business>(Business.CLASS_NAME);
 				businessQuery.whereEqualTo(Business.Keys.ID, businessId);
@@ -95,10 +104,10 @@ public class CustomerCalendarFragment extends Fragment {
 						query.whereGreaterThanOrEqualTo(Booking.Keys.DATE, _date.toDate());
 						query.whereLessThan(Booking.Keys.DATE, _date.plusDays(1).toDate());
 						query.orderByAscending(Booking.Keys.DATE);
-						query.include(Booking.Keys.CUSTOMER_POINTER);
+//						query.include(Booking.Keys.CUSTOMER_POINTER);
 						query.include(Booking.Keys.SERVICE_POINTER);
 
-						_bookingsListViewWrapperView.setDisplayMode(DisplayMode.LOADING_VIEW);
+//						_bookingsListViewWrapperView.setDisplayMode(DisplayMode.LOADING_VIEW);
 						query.findInBackground(new FindCallback<Booking>() 
 								{
 							@Override
@@ -113,11 +122,66 @@ public class CustomerCalendarFragment extends Fragment {
 
 								for (Booking booking : retrievedBookings)
 								{
-									_bookings.add(booking);
+									_alreadyBooked.add(booking);
+									Date startDate = booking.getDate();
+									DateTime startTime = new DateTime(startDate);
+									int duration = booking.getServiceDuration();
+									DateTime endTime = startTime.plusMinutes(duration);
+									Date endDate = endTime.toDate();
+									_datedBooked.add(new DatedBooking(startDate, endDate, booking));
 								}
+								
+								ParseQuery<Service> serviceQuery = new ParseQuery<Service>(Service.CLASS_NAME);
+								serviceQuery.whereEqualTo(Business.Keys.ID, serviceId);
+								serviceQuery.findInBackground(new FindCallback<Service>() {
+									@Override
+									public void done(List<Service> objects, ParseException e) {
 
-								DisplayMode newDisplayMode = _bookings.isEmpty() ? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;
-								_bookingsListViewWrapperView.setDisplayMode(newDisplayMode);
+										if (objects.size() != 1) {
+											Log.e(TAG, "problem");
+											return;
+										}
+										Service service = objects.get(0);
+										int duration = service.getDuration();
+										
+										DateTime startHour = _date.plusHours(8);
+										DateTime endHour = startHour.plusMinutes(duration);
+										while (endHour.getHourOfDay() < 20) {
+											boolean conflicted = false;
+											for (DatedBooking booked : _datedBooked) {
+												if ((startHour.toDate().before(booked.getStartDate()) &&
+														endHour.toDate().after(booked.getStartDate())) || 
+														(startHour.toDate().before(booked.getEndDate()) &&
+														startHour.toDate().after(booked.getStartDate()))) {
+													Log.i(TAG, startHour.toDate().toString() + " is conflicted");
+													conflicted = true;
+												}
+											}
+											
+											if (!conflicted) {
+												//create new booking
+//												business
+//												Customer.getCurrentCustomer();
+//												service
+//												status pending
+												Booking booking = new Booking();
+//												booking.set
+												
+												//add to _possibleBookings
+												
+											}
+											
+											startHour = endHour;
+											endHour = startHour.plusMinutes(duration);
+										}
+										
+										
+										DisplayMode newDisplayMode = _possibleBookings.isEmpty() ? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;
+										_bookingsListViewWrapperView.setDisplayMode(newDisplayMode);
+									}
+								});
+								
+
 							}
 						});
 					}
@@ -162,6 +226,32 @@ public class CustomerCalendarFragment extends Fragment {
 					statusColor,
 					"Last updated: " + Constants.DATE_FORMAT.format(booking.getUpdatedAt()));
 		}
+	}
+	
+	private class DatedBooking {
+		private Date _startDate = null;
+		private Date _endDate = null;
+		private Booking _booking = null;
+		
+		
+		public DatedBooking(Date startDate, Date endDate, Booking booking) {
+			_startDate = startDate;
+			_endDate = endDate;
+			_booking = booking;
+		}
+		
+		public Date getStartDate() {
+			return _startDate;
+		}
+		
+		public Date getEndDate() {
+			return _endDate;
+		}
+		
+		public Booking getBooking() {
+			return _booking;
+		}
+		
 	}
 
 }

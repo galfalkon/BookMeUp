@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.inputmethodservice.Keyboard.Key;
 import android.provider.Settings.Secure;
 import android.util.Log;
 
@@ -167,6 +168,10 @@ public class ParseHelper {
 		public Date getDate() {
 			return getDate(Keys.DATE);
 		}
+		
+		public void setDate(Date date) {
+			put(Keys.DATE, date);
+		}
 
 		public int getStatus() {
 			return getInt(Keys.STATUS);
@@ -187,6 +192,10 @@ public class ParseHelper {
 			}
 		}
 		
+		public void setCustomer(Customer customer) {
+			put(Keys.CUSTOMER_POINTER, customer);
+		}
+		
 		public Business getBusiness() {
 			Log.v(TAG, "getBusiness");
 			
@@ -198,6 +207,10 @@ public class ParseHelper {
 			}
 		}
 		
+		public void setBusiness(Business business) {
+			put(Keys.BUSINESS_POINTER, business);
+		}
+		
 		public String getServiceName() {
 			return getParseObject(Keys.SERVICE_POINTER).getString(
 					Service.Keys.NAME);
@@ -206,6 +219,15 @@ public class ParseHelper {
 		public int getServicePrice() {
 			return getParseObject(Keys.SERVICE_POINTER).getInt(
 					Service.Keys.PRICE);
+		}
+		
+		public int getServiceDuration() {
+			return getParseObject(Keys.SERVICE_POINTER).getInt(
+					Service.Keys.DURATION);
+		}
+		
+		public void setService(Service service) {
+			put(Keys.SERVICE_POINTER, service);
 		}
 	}
 	
