@@ -14,16 +14,14 @@ import com.gling.bookmeup.sharedlib.parse.ParseHelper.User;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
-import com.parse.RefreshCallback;
 
 public class BusinessSplashScreenActivity extends SplashScreenActivity
 {
 	private static final String TAG = "BusinessSplashScreenActivity";
 
 	@Override
-	protected Intent getIntentForNextActivity()
+	protected void goToNextActivity()
 	{
-		final Intent intent;
 		if (ParseHelper.isUserLoggedIn())
 		{
 			ParseUser user = ParseUser.getCurrentUser();
@@ -31,6 +29,9 @@ public class BusinessSplashScreenActivity extends SplashScreenActivity
 
 			try
 			{
+				// Refresh user
+				user.refresh();
+				
 				// Fetch current business
 				ParseObject businessParseObject = user.getParseObject(User.Keys.BUSINESS_POINTER);
 				if (businessParseObject != null)
@@ -48,20 +49,21 @@ public class BusinessSplashScreenActivity extends SplashScreenActivity
 			catch (ParseException e)
 			{
 				Log.e(TAG, "Exception: " + e.getMessage());
-				return new Intent(this, BusinessLoginMainActivity.class);
+				startActivity(new Intent(this, BusinessLoginMainActivity.class));
 			}
 
 			// Handle push notification if needed
 			Bundle extras = getIntent().getExtras();
 			if ((extras != null) && extras.containsKey(EXTRA_PUSH_NOTIFICATION_DATA))
 			{
-				return handlePushNotification();
+				handlePushNotification();
+				return;
 			}
 
 			if (!ParseHelper.isEmailVerified())
 			{
 				Log.i(TAG, "User '" + user.getUsername() + "' mail is not verified");
-				intent = new Intent(this, BusinessLoginMainActivity.class);
+				startActivity(new Intent(this, BusinessLoginMainActivity.class));
 			}
 			else if (Business.getCurrentBusiness() != null)
 			{
@@ -69,37 +71,23 @@ public class BusinessSplashScreenActivity extends SplashScreenActivity
 
 				if (TextUtils.isEmpty(Business.getCurrentBusiness().getName()))
 				{
-					intent = new Intent(this, BusinessLoginMainActivity.class);
+					startActivity(new Intent(this, BusinessLoginMainActivity.class));
 				}
 				else
 				{
-					intent = new Intent(this, BusinessMainActivity.class);
+					startActivity(new Intent(this, BusinessMainActivity.class));
 				}
 			}
-			user.refreshInBackground(new RefreshCallback()
-			{
-				@Override
-				public void done(ParseObject object, ParseException e)
-				{
-					if (e != null)
-					{
-						Log.e(TAG, e.getMessage());
-					}
-					startActivity(intent);
-				}
-			});
 		}
 		else
 		{
-			intent = new Intent(this, BusinessLoginMainActivity.class);
-			startActivity(intent);
+			startActivity(new Intent(this, BusinessLoginMainActivity.class));
 		}
-		return null;
 	}
-
+	
 	@Override
-	protected Intent handlePushNotification()
+	protected void handlePushNotification()
 	{
-		return null;
+		// TODO
 	}
 }

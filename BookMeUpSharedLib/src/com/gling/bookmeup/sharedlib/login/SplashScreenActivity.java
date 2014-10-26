@@ -54,7 +54,7 @@ public abstract class SplashScreenActivity extends Activity {
         }
         
         fetchBusinessCategories();
-        startActivity(getIntentForNextActivity());
+        startActivity(goToNextActivity());
     }
     
     private void showNoInternetDialog()
@@ -99,8 +99,8 @@ public abstract class SplashScreenActivity extends Activity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
     
-    protected abstract Intent getIntentForNextActivity();
-    protected abstract Intent handlePushNotification();
+    protected abstract void goToNextActivity();
+    protected abstract void handlePushNotification();
 
 //    private void goToNextActivity() {
 //        final Intent intent;
