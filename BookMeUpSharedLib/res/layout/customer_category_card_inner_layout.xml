@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="150dp"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/list_card_padding_bottom"
+    android:paddingLeft="@dimen/card_header_simple_title_margin_left"
+    android:paddingRight="@dimen/card_header_simple_title_margin_right"
+    android:paddingTop="@dimen/list_card_padding_bottom" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/list_card_padding_bottom"
+        android:text="View all"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <com.devsmart.android.ui.HorizontalListView
+        android:id="@+id/customer_category_card_list_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
