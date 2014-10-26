@@ -1,13 +1,13 @@
 package com.gling.bookmeup.business.wizards;
 
+import java.util.ArrayList;
+
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
 import com.tech.freak.wizardpager.model.ModelCallbacks;
 import com.tech.freak.wizardpager.model.Page;
 import com.tech.freak.wizardpager.model.ReviewItem;
-
-import java.util.ArrayList;
 
 /**
  * A page asking for a name and a description.

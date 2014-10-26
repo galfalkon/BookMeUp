@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.gling.bookmeup.R;
+import com.gling.bookmeup.sharedlib.R;
 
 public class BusinessProfileWizardServiceCard extends Card {
 	private final int _price;

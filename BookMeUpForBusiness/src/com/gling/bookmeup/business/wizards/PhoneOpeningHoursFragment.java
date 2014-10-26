@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
-import com.gling.bookmeup.R;
+import com.gling.bookmeup.sharedlib.R;
 import com.gling.bookmeup.sharedlib.parse.Business;
 import com.tech.freak.wizardpager.ui.PageFragmentCallbacks;
 

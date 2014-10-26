@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+	<item 
+	    android:id="@+id/busienss_customer_list_action_bar_menu_send_offer"
+	    android:title="@string/business_customer_list_btnSendOffer" />
+</menu>

@@ -18,9 +18,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.gling.bookmeup.R;
-import com.gling.bookmeup.main.BookMeUpApplication;
 import com.gling.bookmeup.main.Utils;
+import com.gling.bookmeup.sharedlib.R;
 import com.gling.bookmeup.sharedlib.parse.Business;
 import com.parse.ParseFile;
 import com.parse.ParseImageView;
@@ -85,7 +84,7 @@ public class ParseImageFragment extends Fragment {
 
         imageView = (ParseImageView) rootView.findViewById(R.id.parseImageView);
 
-        imageView.setPlaceholder(BookMeUpApplication.getContext()
+        imageView.setPlaceholder(getActivity().getApplicationContext()
                                                     .getResources()
                                                     .getDrawable(R.drawable.ic_person));
 

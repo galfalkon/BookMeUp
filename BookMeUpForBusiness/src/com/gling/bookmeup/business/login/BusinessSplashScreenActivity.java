@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.gling.bookmeup.business.BusinessMainActivity;
 import com.gling.bookmeup.sharedlib.login.SplashScreenActivity;
 import com.gling.bookmeup.sharedlib.parse.Business;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper;
