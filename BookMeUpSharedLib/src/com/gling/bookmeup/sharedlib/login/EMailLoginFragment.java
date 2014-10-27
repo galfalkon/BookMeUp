@@ -3,7 +3,6 @@ package com.gling.bookmeup.sharedlib.login;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -16,18 +15,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
-import com.gling.bookmeup.main.FragmentsManagerUtils;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.sharedlib.R;
-import com.gling.bookmeup.sharedlib.parse.Business;
-import com.gling.bookmeup.sharedlib.parse.Customer;
-import com.gling.bookmeup.sharedlib.parse.ParseHelper;
-import com.gling.bookmeup.sharedlib.parse.ParseHelper.Category;
-import com.gling.bookmeup.sharedlib.parse.ParseHelper.User;
-import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.RequestPasswordResetCallback;
 
