@@ -1,11 +1,15 @@
 package com.gling.bookmeup.business.login;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.gling.bookmeup.business.BusinessMainActivity;
+import com.gling.bookmeup.main.PushUtils;
 import com.gling.bookmeup.sharedlib.login.SplashScreenActivity;
 import com.gling.bookmeup.sharedlib.parse.Business;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper;
@@ -88,6 +92,22 @@ public class BusinessSplashScreenActivity extends SplashScreenActivity
 	@Override
 	protected void handlePushNotification()
 	{
-		// TODO
+		try
+		{
+			JSONObject json = new JSONObject(getIntent().getExtras().getString(EXTRA_PUSH_NOTIFICATION_DATA));
+			String action = json.getString("action");
+			Log.i(TAG, "Push action: " + action);
+
+			PushUtils.PushNotificationType pushType = PushUtils.PushNotificationType.valueOfAction(action);
+			// TODO: Check if activity is already running
+			Intent intent = new Intent(getApplicationContext(), BusinessMainActivity.class);
+			pushType.putIntoIntent(intent);
+			startActivity(intent);
+		}
+		catch (JSONException e)
+		{
+			Log.e(TAG, "Exception: " + e.getMessage());
+			return;
+		}
 	}
 }
