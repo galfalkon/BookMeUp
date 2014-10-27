@@ -188,8 +188,11 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
     private void updatePendingBookingsTitleAndDisplayMode()
     {
     	// Update title
-    	_btnPending.setText(String.format("%s (%d)",getString(R.string.business_bookings_list_pending_header), _pendingBookings.size()));
-
+    	if (isAdded()) {
+    		_btnPending.setText(String.format("%s (%d)",getString(R.string.business_bookings_list_pending_header), _pendingBookings.size()));
+    	}
+    	
+    	
     	// Update display mode
     	DisplayMode newDisplayMode = _pendingBookings.isEmpty()? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;
     	_pendingBookingsListView.setDisplayMode(newDisplayMode);
@@ -198,7 +201,9 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
     private void updateApprovedBookingsTitleAndDisplayMode()
     {
     	// Update title
-    	_btnApproved.setText(String.format("%s (%d)",getString(R.string.business_bookings_list_approved_header), _approvedBookings.size()));
+    	if (isAdded()) {
+    		_btnApproved.setText(String.format("%s (%d)",getString(R.string.business_bookings_list_approved_header), _approvedBookings.size()));
+    	}
     	
     	// Update display mode
     	DisplayMode newDisplayMode = _approvedBookings.isEmpty()? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;

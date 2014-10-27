@@ -71,6 +71,10 @@
     <string name="customer_main_screen_btnDentistsText">Dentists</string>
     <string name="customer_main_screen_btnGaragesText">Garages</string>
 
+    <!-- Book Up Appointment -->
+    <string name="customer_booking_title">Book Up An Appointment</string>
+    <string name="customer_booking_ok_button">Book Me Up!!</string>
+    
     <!-- Customer All Businesses -->
     <string name="customer_all_businesses_list_search_edtSearchHint">Search for...</string>
     <string name="customer_business_list_search_edtSearchHint">Search for...</string>
