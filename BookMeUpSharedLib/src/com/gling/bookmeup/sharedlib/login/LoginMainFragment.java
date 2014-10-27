@@ -60,7 +60,7 @@ public class LoginMainFragment extends OnClickListenerFragment {
 		else if (id == R.id.login_btnSignUp) 
 		{
 			Log.i(TAG, "btnSignUp clicked");
-			FragmentsManagerUtils.goToNextFragment(getActivity(), R.id.login_container, new EMailSignUpFragment());
+			FragmentsManagerUtils.goToNextFragment(getActivity(), R.id.login_container, ((LoginMainActivity)getActivity()).getEmailSignUpFragmentInstance());
 		}
     }
 }

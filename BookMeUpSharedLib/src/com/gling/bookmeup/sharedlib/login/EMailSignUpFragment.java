@@ -24,7 +24,7 @@ import com.parse.SignUpCallback;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-public class EMailSignUpFragment extends OnClickListenerFragment {
+public abstract class EMailSignUpFragment extends OnClickListenerFragment {
 
     private static final String TAG = "EMailSignUpFragment";
 
@@ -95,11 +95,15 @@ public class EMailSignUpFragment extends OnClickListenerFragment {
                     }
                 });
 
+                createUserDataAfterSignup(user);
+                
                 Crouton.showText(getActivity(),"Please verify your Email address", Style.CONFIRM);
                 FragmentsManagerUtils.goToNextFragment(getActivity(), R.id.login_container, ((LoginMainActivity)getActivity()).getEmailLoginFragmentInstance());
             }
         });
     }
+    
+    protected abstract void createUserDataAfterSignup(ParseUser user);
 
     private boolean validateInput() {
 

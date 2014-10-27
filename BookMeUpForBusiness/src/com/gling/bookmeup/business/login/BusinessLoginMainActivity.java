@@ -11,4 +11,10 @@ public class BusinessLoginMainActivity extends LoginMainActivity
 	{
 		return new BusinessEMailLoginFragment();
 	}
+
+	@Override
+	public Fragment getEmailSignUpFragmentInstance()
+	{
+		return new BusinessEmailSignUpFragment();
+	}
 }

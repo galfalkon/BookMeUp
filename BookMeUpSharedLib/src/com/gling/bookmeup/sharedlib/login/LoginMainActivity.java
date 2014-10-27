@@ -37,4 +37,5 @@ public abstract class LoginMainActivity extends Activity {
     }
     
     public abstract Fragment getEmailLoginFragmentInstance();
+    public abstract Fragment getEmailSignUpFragmentInstance();
 }
