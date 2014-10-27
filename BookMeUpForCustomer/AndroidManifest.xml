@@ -7,11 +7,92 @@
         android:minSdkVersion="16"
         android:targetSdkVersion="19" />
 
+    <!-- For parse data and push services -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <!-- For business image upload -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- General permissions -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <permission
+        android:name="com.gling.bookmeup.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.gling.bookmeup.permission.C2D_MESSAGE" />
+
     <application
+        android:name="com.gling.bookmeup.customer.BookMeUpForCustomerApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:logo="@drawable/ic_launcher_bevel"
+        android:theme="@style/Theme.Bookmeup_ActionBar" >
+        <service android:name="com.parse.PushService" />
+
+        <!-- For Parse push services -->
+        <receiver android:name="com.parse.ParseBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.parse.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="com.gling.bookmeup" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="com.gling.bookmeup.customer.login.CustomerSplashScreenActivity"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.BookMeUp_SplashScreen" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.gling.bookmeup.customer.login.CustomerLoginMainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.BookMeUp_LoginScreen" >
+        </activity>
+        <activity
+            android:name="com.gling.bookmeup.customer.CustomerMainActivity"
+            android:label="@string/customer_main_activity_title" >
+        </activity>
+        <activity
+            android:name="com.gling.bookmeup.customer.CustomerProfileCreationActivity"
+            android:label="@string/customer_profile_creation_activity_title"
+            android:noHistory="true"
+            android:windowSoftInputMode="adjustResize|stateVisible" />
+        <activity
+            android:name="com.gling.bookmeup.customer.CustomerCalendarActivity"
+            android:label="@string/title_activity_customer_calendar" >
+        </activity>
+        <activity
+            android:name="com.gling.bookmeup.main.NavigationDrawerActivity"
+            android:label="@string/title_activity_navigation_drawer" >
+        </activity>
     </application>
 
 </manifest>
