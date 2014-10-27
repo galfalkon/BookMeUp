@@ -70,9 +70,8 @@ public class BusinessMainActivity extends NavigationDrawerActivity {
 		case R.id.business_action_logout:
 			// TODO extract to session manager class
 		    ParseHelper.logOut();
-			intent = new Intent(this, LoginMainActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-					| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+			intent = new Intent(this, BusinessLoginMainActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 			startActivity(intent);
 			return true;
 		default:
