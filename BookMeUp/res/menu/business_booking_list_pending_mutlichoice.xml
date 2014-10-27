@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-	<item 
-	    android:id="@+id/business_booking_list_pending_mutlichoice_action_bar_menu_approve"
-	    android:title="@string/business_booking_list_pending_mutlichoice_action_bar_menu_approve" />
-</menu>
