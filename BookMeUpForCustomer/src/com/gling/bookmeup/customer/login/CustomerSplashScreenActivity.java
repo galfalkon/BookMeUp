@@ -74,7 +74,7 @@ public class CustomerSplashScreenActivity extends SplashScreenActivity
 		}
 		else 
 		{
-			startActivity(new Intent(this, LoginMainActivity.class));
+			startActivity(new Intent(this, CustomerLoginMainActivity.class));
 		}
 	}
 	
