@@ -1,11 +1,13 @@
 package com.gling.bookmeup.customer;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.gling.bookmeup.customer.login.CustomerLoginMainActivity;
 import com.gling.bookmeup.main.NavigationDrawerActivity;
 import com.gling.bookmeup.main.PushUtils;
 import com.gling.bookmeup.sharedlib.login.LoginMainActivity;
@@ -136,5 +138,11 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 	@Override
 	public int getMenuId() {
 		return R.menu.customer;
+	}
+	
+	@Override
+	public Class<? extends LoginMainActivity> getLoginMainActivity() 
+	{
+		return CustomerLoginMainActivity.class;
 	}
 }

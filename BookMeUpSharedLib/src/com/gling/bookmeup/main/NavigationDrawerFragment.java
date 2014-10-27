@@ -248,7 +248,7 @@ public class NavigationDrawerFragment extends Fragment {
 
         if (item.getItemId() == R.id.action_logout) {
             ParseHelper.logOut();
-            Intent intent = new Intent(getActivity(), LoginMainActivity.class);
+            Intent intent = new Intent(getActivity(), ((NavigationDrawerActivity)getActivity()).getLoginMainActivity());
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                     | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.gling.bookmeup.business.login.BusinessLoginMainActivity;
 import com.gling.bookmeup.business.wizards.BusinessProfileWizardActivity;
 import com.gling.bookmeup.main.NavigationDrawerActivity;
 import com.gling.bookmeup.main.PushUtils;
@@ -102,5 +103,11 @@ public class BusinessMainActivity extends NavigationDrawerActivity {
 	@Override
 	public int getMenuId() {
 		return R.menu.business;
+	}
+	
+	@Override
+	public Class<? extends LoginMainActivity> getLoginMainActivity()
+	{
+		return BusinessLoginMainActivity.class;
 	}
 }
