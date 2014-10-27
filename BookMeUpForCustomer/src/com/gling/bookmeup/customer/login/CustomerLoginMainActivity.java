@@ -9,6 +9,6 @@ public class CustomerLoginMainActivity extends LoginMainActivity
 	@Override
 	public Fragment getEmailLoginFragmentInstance()
 	{
-		return null;
+		return new CustomerEMailLoginFragment();
 	}
 }
