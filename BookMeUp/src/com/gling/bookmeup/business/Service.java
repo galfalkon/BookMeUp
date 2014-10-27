@@ -18,6 +18,10 @@ public class Service extends ParseObject {
     public Service() {
         // A default constructor is required.
     }
+    
+    public Business getBusiness() {
+    	return (Business) getParseObject(Keys.BUSINESS);
+    }
  
     public Service setBusiness(Business business) {
         put(Keys.BUSINESS, business);

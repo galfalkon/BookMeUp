@@ -20,6 +20,8 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 public class CustomerMainActivity extends NavigationDrawerActivity {
 	private static final String TAG = "CustomerMainActivity";
 	
+	public static final String GO_TO_BOOKING_EXTRA = "Go_To_Booking";
+	
 	private CustomerAllBusinessesFragment _fragment = null;
 	private Business _chosenBusiness = null;
 	
@@ -80,6 +82,14 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 				break;
 			default:
 				Log.e(TAG, "Invalid push type");
+			}
+		}
+		
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			Boolean goToBooking = extras.getBoolean(GO_TO_BOOKING_EXTRA);
+			if (goToBooking) {
+				onNavigationDrawerItemSelected(3);
 			}
 		}
 	}

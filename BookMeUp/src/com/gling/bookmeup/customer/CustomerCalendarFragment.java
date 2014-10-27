@@ -11,6 +11,7 @@ import org.joda.time.DateTime;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -29,7 +30,6 @@ import com.gling.bookmeup.main.IObservableList;
 import com.gling.bookmeup.main.ObservableArrayList;
 import com.gling.bookmeup.main.ParseHelper.Booking;
 import com.gling.bookmeup.main.PushUtils;
-import com.gling.bookmeup.main.Utils;
 import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
 import com.gling.bookmeup.main.views.CardListViewWrapperView;
 import com.parse.FindCallback;
@@ -250,12 +250,8 @@ public class CustomerCalendarFragment extends Fragment {
 			            builder.setMessage("Book an appointment for: " + bookingToSave.getServiceName() + 
 			            					" at: " + Constants.DATE_FORMAT.format(bookingToSave.getDate()) + "?");
 			            
-			            //TODO
-//			            bookingToSave.getBusiness().getName()
-						
 						// Set up the buttons
 			            builder.setPositiveButton(R.string.customer_booking_ok_button, new DialogInterface.OnClickListener() {
-//						builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() { 
 						    @Override
 						    public void onClick(DialogInterface dialog, int which) {
 						    	Log.i(TAG, "Sending booking to parse & business");
@@ -265,7 +261,9 @@ public class CustomerCalendarFragment extends Fragment {
 						    			
 						    			@Override
 						    			public void done(ParseException e) {
-						    				
+						    				Intent intent = new Intent(getActivity(), CustomerMainActivity.class);
+											intent.putExtra(CustomerMainActivity.GO_TO_BOOKING_EXTRA, true);
+											startActivity(intent);
 						    			}
 						    		};
 						    		PushUtils.notifyBusinessAboutBookingRequest(bookingToSave.getBusiness().getObjectId(), 
