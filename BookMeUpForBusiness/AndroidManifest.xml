@@ -74,7 +74,8 @@
         <activity
             android:name="com.gling.bookmeup.business.login.BusinessLoginMainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.BookMeUp_LoginScreen" >
+            android:theme="@style/Theme.BookMeUp_LoginScreen"
+            android:noHistory="true" >
         </activity>
         <activity
             android:name="com.gling.bookmeup.business.BusinessMainActivity"
