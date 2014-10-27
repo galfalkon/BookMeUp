@@ -139,12 +139,11 @@ public abstract class EMailLoginFragment extends OnClickListenerFragment {
         
         Log.i(TAG, "Showing a progress dialog");
         final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Logging in...");
-
         ParseUser.logInInBackground(userName, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
+            	progressDialog.dismiss();
                 if (e != null) {
-                    progressDialog.dismiss();
                     Log.i(TAG, "Login failed: " + e.toString());
                     Crouton.showText(getActivity(), "Login failed: " + e.getMessage(), Style.ALERT);
                     return;
@@ -152,7 +151,6 @@ public abstract class EMailLoginFragment extends OnClickListenerFragment {
 
                 Log.i(TAG, "User '" + user.getUsername() + "' logged in");
                 handleSuccessfulLogin(user);
-                
             }
         });
 //                try 
