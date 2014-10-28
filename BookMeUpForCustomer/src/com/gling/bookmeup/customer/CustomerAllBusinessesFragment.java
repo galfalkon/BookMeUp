@@ -197,8 +197,10 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
                 
                 for (Business business: objects)
                 {
+                	if ((business.getName() != null) && (business.getCategory() != null)) {
+                		_allBusinesses.put(business.getObjectId(), business);
+                	}
 //                	_allBusinesses.add(business);
-                	_allBusinesses.put(business.getObjectId(), business);
                 }
                 updateBusinessesDisplayMode();
             }
