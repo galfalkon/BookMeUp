@@ -1,6 +1,7 @@
 package com.gling.bookmeup.customer.login;
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.gling.bookmeup.customer.CustomerMainActivity;
@@ -19,8 +20,10 @@ public class CustomerEMailLoginFragment extends EMailLoginFragment {
 	private static final String TAG = "CustomerEMailLoginFragment";
 	
 	@Override
-	protected void handleSuccessfulLogin(ParseUser user) {
-		try {
+	protected void handleSuccessfulLogin(ParseUser user) 
+	{
+		try 
+		{
 			// Fetch current customer
 			Log.i(TAG, "Fetching current customer");
 			ParseObject customerParseObject = user .getParseObject(User.Keys.CUSTOMER_POINTER);
@@ -37,9 +40,16 @@ public class CustomerEMailLoginFragment extends EMailLoginFragment {
 		if (!user.getBoolean("emailVerified")) {
 			Log.i(TAG, "User hasn't verified Email address");
 			Crouton.showText(getActivity(), "Please verifiy your Email address", Style.ALERT);
-		} else if (user.getParseObject(User.Keys.CUSTOMER_POINTER) != null) {
-			Intent intent = new Intent(getActivity(), CustomerMainActivity.class);
-			startActivity(intent);
+		} else if (user.getParseObject(User.Keys.CUSTOMER_POINTER) != null) 
+		{
+			if (TextUtils.isEmpty(Customer.getCurrentCustomer().getName()))
+			{
+				startActivity(new Intent(getActivity(), CustomerProfileCreationActivity.class));
+			}
+			else
+			{
+				startActivity(new Intent(getActivity(), CustomerMainActivity.class));
+			}
 		}
 	}
 }

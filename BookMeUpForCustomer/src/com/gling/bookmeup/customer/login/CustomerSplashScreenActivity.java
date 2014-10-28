@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.gling.bookmeup.customer.CustomerMainActivity;
@@ -64,11 +65,18 @@ public class CustomerSplashScreenActivity extends SplashScreenActivity
 			else if (Customer.getCurrentCustomer() != null) 
 			{
 				Log.i(TAG, "User '" + user.getUsername() + "' is associated with a customer");
-				startActivity(new Intent(this, CustomerMainActivity.class));
+				if (TextUtils.isEmpty(Customer.getCurrentCustomer().getName()))
+				{
+					startActivity(new Intent(this, CustomerProfileCreationActivity.class));
+				}
+				else
+				{
+					startActivity(new Intent(this, CustomerMainActivity.class));
+				}
 			}
 			else 
 			{
-				Log.i(TAG, "User '" + user.getUsername() + "' is not associated with a business or a customer");
+				Log.i(TAG, "User '" + user.getUsername() + "' is not associated with a customer");
 				startActivity(new Intent(this, CustomerLoginMainActivity.class));
 			}
 		}
