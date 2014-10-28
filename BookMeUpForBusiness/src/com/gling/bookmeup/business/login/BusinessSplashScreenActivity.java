@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.gling.bookmeup.business.BusinessMainActivity;
+import com.gling.bookmeup.business.wizards.BusinessProfileWizardActivity;
 import com.gling.bookmeup.main.PushUtils;
 import com.gling.bookmeup.sharedlib.login.SplashScreenActivity;
 import com.gling.bookmeup.sharedlib.parse.Business;
@@ -75,7 +76,7 @@ public class BusinessSplashScreenActivity extends SplashScreenActivity
 
 				if (TextUtils.isEmpty(Business.getCurrentBusiness().getName()))
 				{
-					startActivity(new Intent(this, BusinessLoginMainActivity.class));
+					startActivity(new Intent(this, BusinessProfileWizardActivity.class));
 				}
 				else
 				{
