@@ -30,8 +30,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="@string/customer_profile_creation_txtPhoneNumberRequest" />
+            android:text="@string/customer_profile_creation_txtContactDetailsrRequest" />
 
+        <EditText
+            android:id="@+id/customer_profile_creation_edtName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/customer_profile_creation_edtName_hint"
+            android:imeOptions="actionNext"
+            android:maxLength="15"
+            android:inputType="text" />
+        
         <EditText
             android:id="@+id/customer_profile_creation_edtPhoneNumber"
             android:layout_width="match_parent"
@@ -40,6 +49,7 @@
             android:imeOptions="actionDone"
             android:maxLength="13"
             android:inputType="phone" />
+        
     </LinearLayout>
 
     <Button

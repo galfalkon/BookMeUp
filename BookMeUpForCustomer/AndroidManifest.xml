@@ -84,8 +84,7 @@
         <activity
             android:name="com.gling.bookmeup.customer.login.CustomerProfileCreationActivity"
             android:label="@string/customer_profile_creation_activity_title"
-            android:noHistory="true"
-            android:windowSoftInputMode="adjustResize|stateVisible" />
+            android:noHistory="true" />
         <activity
             android:name="com.gling.bookmeup.customer.CustomerCalendarActivity"
             android:label="@string/title_activity_customer_calendar" >

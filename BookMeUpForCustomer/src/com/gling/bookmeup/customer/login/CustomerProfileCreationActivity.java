@@ -17,16 +17,13 @@ import android.widget.TextView.OnEditorActionListener;
 
 import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.gling.bookmeup.customer.R;
-import com.gling.bookmeup.customer.R.id;
-import com.gling.bookmeup.customer.R.layout;
-import com.gling.bookmeup.customer.R.string;
 import com.gling.bookmeup.sharedlib.parse.Customer;
 
 public class CustomerProfileCreationActivity extends Activity implements OnClickListener, TextWatcher, OnEditorActionListener 
 {
 	private static final String TAG = "CustomerProfileCreationActivity";
 	
-	private EditText _edtPhoneNumber;
+	private EditText _edtName, _edtPhoneNumber;
 	private Button _btnDone;
 	
 	@Override
@@ -37,10 +34,13 @@ public class CustomerProfileCreationActivity extends Activity implements OnClick
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.customer_profile_creation_activity);
 		
+		_edtName = (EditText)findViewById(R.id.customer_profile_creation_edtName);
+		_edtName.requestFocus();
+		_edtName.addTextChangedListener(this);
+		
 		_edtPhoneNumber = (EditText) findViewById(R.id.customer_profile_creation_edtPhoneNumber);
 		_edtPhoneNumber.addTextChangedListener(this);
 		_edtPhoneNumber.setOnEditorActionListener(this);
-		_edtPhoneNumber.requestFocus();
 		
 		_btnDone = (Button)findViewById(R.id.customer_profile_creation_btnDone);
 		_btnDone.setOnClickListener(this);
@@ -60,7 +60,7 @@ public class CustomerProfileCreationActivity extends Activity implements OnClick
 	@Override
 	public void afterTextChanged(Editable s) 
 	{
-		_btnDone.setEnabled(!s.toString().isEmpty());
+		_btnDone.setEnabled(!_edtName.getText().toString().isEmpty() && !_edtPhoneNumber.getText().toString().isEmpty());
 	}
 
 	@Override
@@ -71,6 +71,12 @@ public class CustomerProfileCreationActivity extends Activity implements OnClick
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) 
 	{
+	}
+
+	private boolean validateName()
+	{
+		String name = _edtName.getText().toString();
+		return !name.isEmpty();
 	}
 	
 	private boolean validatePhoneNumber()
@@ -94,16 +100,20 @@ public class CustomerProfileCreationActivity extends Activity implements OnClick
 	
 	private void handleDoneClick()
 	{
-		if (validatePhoneNumber())
+		if (!validateName())
 		{
-			Customer currentCustomer = Customer.getCurrentCustomer();
-			currentCustomer.setPhoneNumber(_edtPhoneNumber.getText().toString());
-			currentCustomer.saveInBackground();
-			startActivity(new Intent(this, CustomerMainActivity.class));
+			_edtName.setError(getString(R.string.customer_profile_creation_edtNameError));
 		}
-		else
+		if (!validatePhoneNumber())
 		{
 			_edtPhoneNumber.setError(getString(R.string.customer_profile_creation_edtPhoneNumberError));
+			return;
 		}
+		
+		Customer currentCustomer = Customer.getCurrentCustomer();
+		currentCustomer.setName(_edtName.getText().toString());
+		currentCustomer.setPhoneNumber(_edtPhoneNumber.getText().toString());
+		currentCustomer.saveInBackground();
+		startActivity(new Intent(this, CustomerMainActivity.class));
 	}
 }

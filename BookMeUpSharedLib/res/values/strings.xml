@@ -185,9 +185,11 @@
     <!-- Customer profile creation -->
     <string name="customer_profile_creation_txtWelcome">Welcome to BookMeUp!</string>
     <string name="customer_profile_creation_txtSubtitle">You\'ve just made your first step of making your life a lot more easier!</string>
-    <string name="customer_profile_creation_txtPhoneNumberRequest">Please insert your phone number so that businesses you visit can contact you.</string>
+    <string name="customer_profile_creation_txtContactDetailsrRequest">Please enter your contact details so that businesses you visit can contact you.</string>
     <string name="customer_profile_creation_btnDone">Done</string>
     <string name="customer_profile_creation_edtPhoneNumber_hint">Phone number</string>
+    <string name="customer_profile_creation_edtName_hint">Full name</string>
     <string name="customer_profile_creation_edtPhoneNumberError">Invalid phone number</string>
+    <string name="customer_profile_creation_edtNameError">Invalid name</string>
 
 </resources>
