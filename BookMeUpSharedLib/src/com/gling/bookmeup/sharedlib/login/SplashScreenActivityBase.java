@@ -54,9 +54,26 @@ public abstract class SplashScreenActivityBase extends Activity {
             showNoInternetDialog();
             return;
         }
-        
-        fetchBusinessCategories();
-        goToNextActivity();
+    	
+    	new Thread()
+    	{
+    		public void run() 
+    		{
+    			try
+    			{
+    				// Fetch business categories
+        			ParseQuery<Category> query = ParseQuery.getQuery(Category.CLASS_NAME);
+        			List<Category> categories = query.find();
+        			Category.setCategories(categories);
+        			
+        			goToNextActivity();
+    			}
+    			catch (ParseException e)
+    			{
+    				Log.e(TAG, "Exception: " + e.getMessage());
+    			}
+    		}
+    	}.start();
     }
     
     private void showNoInternetDialog()
@@ -80,19 +97,6 @@ public abstract class SplashScreenActivityBase extends Activity {
             }
         });
         builder.create().show();
-    }
-
-    private void fetchBusinessCategories() {
-        ParseQuery<Category> query = ParseQuery.getQuery(Category.CLASS_NAME);
-        query.findInBackground(new FindCallback<Category>() {
-            public void done(List<Category> categories, ParseException e) {
-                if (e == null) {
-                    Category.setCategories(categories);
-                } else {
-                    Log.e(TAG, "Error: " + e.getMessage());
-                }
-            }
-        });
     }
 
     private boolean isNetworkAvailable() {
