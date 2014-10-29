@@ -10,7 +10,6 @@ import android.util.Log;
 
 import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.gling.bookmeup.main.PushUtils;
-import com.gling.bookmeup.sharedlib.login.LoginMainActivityBase;
 import com.gling.bookmeup.sharedlib.login.SplashScreenActivityBase;
 import com.gling.bookmeup.sharedlib.parse.Customer;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper;
@@ -19,69 +18,70 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+
 public class CustomerSplashScreenActivity extends SplashScreenActivityBase
 {
-	private static final String TAG = "BusinessSplashScreenActivity";
+	private static final String TAG = "CustomerSplashScreenActivity";
 
 	@Override
 	protected void goToNextActivity()
 	{
-		if (ParseHelper.isUserLoggedIn()) 
+		if (!ParseHelper.isUserLoggedIn())
 		{
-			ParseUser user = ParseUser.getCurrentUser();
-			Log.i(TAG, "User '" + user.getUsername() + "' is found to be logged in");
-
-			try {
-				// Refresh user
-				user.refresh();
-
-				// Fetch current customer
-				ParseObject customerParseObject = user
-						.getParseObject(User.Keys.CUSTOMER_POINTER);
-				if (customerParseObject != null) {
-					Log.i(TAG, "Fetching current customer");
-					Customer currentCustomer = customerParseObject
-							.fetchIfNeeded();
-					Customer.setCurrentCustomer(currentCustomer);
-				}
-			} catch (ParseException e) {
-				Log.e(TAG, "Exception: " + e.getMessage());
-				startActivity(new Intent(this, CustomerLoginMainActivity.class));
+			startActivity(new Intent(this, CustomerLoginMainActivity.class));
+			return;
+		}
+		
+		ParseUser user = ParseUser.getCurrentUser();
+		Log.i(TAG, "User '" + user.getUsername() + "' is found to be logged in");
+		if (!ParseHelper.isEmailVerified())
+		{
+			Log.i(TAG, "User '" + user.getUsername() + "' mail is not verified");
+			Crouton.showText(this, "Please verifiy your Email address", Style.ALERT);
+			startActivity(new Intent(this, CustomerLoginMainActivity.class));
+			return;
+		}
+		
+		try
+		{
+			// Refresh user
+			user.refresh();
+			
+			// Fetch current business
+			ParseObject customerParseObject = user.getParseObject(User.Keys.CUSTOMER_POINTER);
+			if (customerParseObject == null)
+			{
+				// TODO: Create Customer
+				Crouton.showText(this, "TODO: Create Customer (Current user isn't associated with a Customer instance)", Style.INFO);
 				return;
 			}
-
+			Log.i(TAG, "User '" + user.getUsername() + "' is associated with a customer");
+			
+			Customer currentCustomer = customerParseObject.fetchIfNeeded();
+			Customer.setCurrentCustomer(currentCustomer);
+			
 			// Handle push notification if needed
 			Bundle extras = getIntent().getExtras();
-			if ((extras != null) && extras.containsKey(EXTRA_PUSH_NOTIFICATION_DATA)) {
+			if ((extras != null) && extras.containsKey(EXTRA_PUSH_NOTIFICATION_DATA))
+			{
 				handlePushNotification();
 				return;
 			}
-
-			if (!ParseHelper.isEmailVerified()) 
+			
+			if (TextUtils.isEmpty(Customer.getCurrentCustomer().getName()))
 			{
-				Log.i(TAG, "User '" + user.getUsername() + "' mail is not verified");
-				startActivity(new Intent(this, CustomerLoginMainActivity.class));
+				startActivity(new Intent(this, CustomerProfileCreationActivity.class));
 			}
-			else if (Customer.getCurrentCustomer() != null) 
+			else
 			{
-				Log.i(TAG, "User '" + user.getUsername() + "' is associated with a customer");
-				if (TextUtils.isEmpty(Customer.getCurrentCustomer().getName()))
-				{
-					startActivity(new Intent(this, CustomerProfileCreationActivity.class));
-				}
-				else
-				{
-					startActivity(new Intent(this, CustomerMainActivity.class));
-				}
-			}
-			else 
-			{
-				Log.i(TAG, "User '" + user.getUsername() + "' is not associated with a customer");
-				startActivity(new Intent(this, CustomerLoginMainActivity.class));
+				startActivity(new Intent(this, CustomerMainActivity.class));
 			}
 		}
-		else 
+		catch (ParseException e)
 		{
+			Log.e(TAG, "Exception: " + e.getMessage());
 			startActivity(new Intent(this, CustomerLoginMainActivity.class));
 		}
 	}
