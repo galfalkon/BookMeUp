@@ -9,7 +9,7 @@ import com.gling.bookmeup.sharedlib.R;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 
-public abstract class LoginMainActivity extends Activity {
+public abstract class LoginMainActivityBase extends Activity {
 
     private static final String TAG = "LoginActivity";
 

@@ -19,7 +19,7 @@ import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
-public abstract class SplashScreenActivity extends Activity {
+public abstract class SplashScreenActivityBase extends Activity {
 
     private static final String TAG = "SplashScreenActivity";
 

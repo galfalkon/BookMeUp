@@ -9,7 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 
 import com.gling.bookmeup.sharedlib.R;
-import com.gling.bookmeup.sharedlib.login.LoginMainActivity;
+import com.gling.bookmeup.sharedlib.login.LoginMainActivityBase;
 
 public abstract class NavigationDrawerActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -27,7 +27,7 @@ public abstract class NavigationDrawerActivity extends Activity
     public abstract String[] getSectionTitles();
     protected abstract Fragment getSectionFragment(int position);
     public abstract int getMenuId();
-    public abstract Class<? extends LoginMainActivity> getLoginMainActivity();
+    public abstract Class<? extends LoginMainActivityBase> getLoginMainActivity();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

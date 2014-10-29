@@ -10,8 +10,8 @@ import android.util.Log;
 
 import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.gling.bookmeup.main.PushUtils;
-import com.gling.bookmeup.sharedlib.login.LoginMainActivity;
-import com.gling.bookmeup.sharedlib.login.SplashScreenActivity;
+import com.gling.bookmeup.sharedlib.login.LoginMainActivityBase;
+import com.gling.bookmeup.sharedlib.login.SplashScreenActivityBase;
 import com.gling.bookmeup.sharedlib.parse.Customer;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper.User;
@@ -19,7 +19,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
-public class CustomerSplashScreenActivity extends SplashScreenActivity
+public class CustomerSplashScreenActivity extends SplashScreenActivityBase
 {
 	private static final String TAG = "BusinessSplashScreenActivity";
 

@@ -25,9 +25,9 @@ import com.parse.RequestPasswordResetCallback;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-public abstract class EMailLoginFragment extends OnClickListenerFragment {
+public abstract class EMailLoginFragmentBase extends OnClickListenerFragment {
 
-    private static final String TAG = "EMailLoginFragment";
+    private static final String TAG = "EMailLoginFragmentBase";
 
     private EditText _edtUserName, _edtPassword;
 

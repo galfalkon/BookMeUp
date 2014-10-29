@@ -2,9 +2,9 @@ package com.gling.bookmeup.business.login;
 
 import android.app.Fragment;
 
-import com.gling.bookmeup.sharedlib.login.LoginMainActivity;
+import com.gling.bookmeup.sharedlib.login.LoginMainActivityBase;
 
-public class BusinessLoginMainActivity extends LoginMainActivity
+public class BusinessLoginMainActivity extends LoginMainActivityBase
 {
 	@Override
 	public Fragment getEmailLoginFragmentInstance()

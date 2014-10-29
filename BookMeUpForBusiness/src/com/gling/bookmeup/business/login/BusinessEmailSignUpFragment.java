@@ -1,11 +1,11 @@
 package com.gling.bookmeup.business.login;
 
-import com.gling.bookmeup.sharedlib.login.EMailSignUpFragment;
+import com.gling.bookmeup.sharedlib.login.EMailSignUpFragmentBase;
 import com.gling.bookmeup.sharedlib.parse.Business;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper;
 import com.parse.ParseUser;
 
-public class BusinessEmailSignUpFragment extends EMailSignUpFragment
+public class BusinessEmailSignUpFragment extends EMailSignUpFragmentBase
 {
 	@Override
 	protected void createUserDataAfterSignup(ParseUser user) 

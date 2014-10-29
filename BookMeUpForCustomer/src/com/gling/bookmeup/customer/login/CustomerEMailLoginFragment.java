@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.gling.bookmeup.customer.CustomerMainActivity;
-import com.gling.bookmeup.sharedlib.login.EMailLoginFragment;
+import com.gling.bookmeup.sharedlib.login.EMailLoginFragmentBase;
 import com.gling.bookmeup.sharedlib.parse.Customer;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper.User;
 import com.parse.ParseException;
@@ -15,7 +15,7 @@ import com.parse.ParseUser;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-public class CustomerEMailLoginFragment extends EMailLoginFragment {
+public class CustomerEMailLoginFragment extends EMailLoginFragmentBase {
 	
 	private static final String TAG = "CustomerEMailLoginFragment";
 	

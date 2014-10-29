@@ -55,12 +55,12 @@ public class LoginMainFragment extends OnClickListenerFragment {
 		{
 			Log.i(TAG, "btnLoginWithEMail clicked");
 			// TODO popup if someone is already logged in
-			FragmentsManagerUtils.goToNextFragment(getActivity(), R.id.login_container, ((LoginMainActivity)getActivity()).getEmailLoginFragmentInstance());
+			FragmentsManagerUtils.goToNextFragment(getActivity(), R.id.login_container, ((LoginMainActivityBase)getActivity()).getEmailLoginFragmentInstance());
 		}
 		else if (id == R.id.login_btnSignUp) 
 		{
 			Log.i(TAG, "btnSignUp clicked");
-			FragmentsManagerUtils.goToNextFragment(getActivity(), R.id.login_container, ((LoginMainActivity)getActivity()).getEmailSignUpFragmentInstance());
+			FragmentsManagerUtils.goToNextFragment(getActivity(), R.id.login_container, ((LoginMainActivityBase)getActivity()).getEmailSignUpFragmentInstance());
 		}
     }
 }

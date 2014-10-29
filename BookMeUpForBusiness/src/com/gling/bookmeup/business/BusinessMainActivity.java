@@ -10,7 +10,7 @@ import com.gling.bookmeup.business.login.BusinessLoginMainActivity;
 import com.gling.bookmeup.business.wizards.profile.BusinessProfileWizardActivity;
 import com.gling.bookmeup.main.NavigationDrawerActivity;
 import com.gling.bookmeup.main.PushUtils;
-import com.gling.bookmeup.sharedlib.login.LoginMainActivity;
+import com.gling.bookmeup.sharedlib.login.LoginMainActivityBase;
 import com.gling.bookmeup.sharedlib.parse.Business;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper;
 import com.parse.ParseUser;
@@ -28,7 +28,7 @@ public class BusinessMainActivity extends NavigationDrawerActivity {
 		if (Business.getCurrentBusiness() == null)
 		{
 			ParseUser.logOut();
-			Intent intent = new Intent(getApplicationContext(), LoginMainActivity.class);
+			Intent intent = new Intent(getApplicationContext(), LoginMainActivityBase.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 			startActivity(intent);
 		}
@@ -105,7 +105,7 @@ public class BusinessMainActivity extends NavigationDrawerActivity {
 	}
 	
 	@Override
-	public Class<? extends LoginMainActivity> getLoginMainActivity()
+	public Class<? extends LoginMainActivityBase> getLoginMainActivity()
 	{
 		return BusinessLoginMainActivity.class;
 	}

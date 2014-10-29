@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import com.gling.bookmeup.customer.login.CustomerLoginMainActivity;
 import com.gling.bookmeup.main.NavigationDrawerActivity;
 import com.gling.bookmeup.main.PushUtils;
-import com.gling.bookmeup.sharedlib.login.LoginMainActivity;
+import com.gling.bookmeup.sharedlib.login.LoginMainActivityBase;
 import com.gling.bookmeup.sharedlib.parse.Business;
 import com.gling.bookmeup.sharedlib.parse.Customer;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper;
@@ -60,7 +60,7 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 			
 			ParseUser.logOut();
 			Intent intent = new Intent(getApplicationContext(),
-					LoginMainActivity.class);
+					LoginMainActivityBase.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 			startActivity(intent);
 			return;
@@ -150,7 +150,7 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 	}
 	
 	@Override
-	public Class<? extends LoginMainActivity> getLoginMainActivity() 
+	public Class<? extends LoginMainActivityBase> getLoginMainActivity() 
 	{
 		return CustomerLoginMainActivity.class;
 	}
