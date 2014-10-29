@@ -134,25 +134,30 @@ public abstract class EMailLoginFragmentBase extends OnClickListenerFragment {
         	return;
         }
         
-        String userName = _edtUserName.getText().toString();
-        String password = _edtPassword.getText().toString();
+        final String userName = _edtUserName.getText().toString();
+        final String password = _edtPassword.getText().toString();
         
         Log.i(TAG, "Showing a progress dialog");
         final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Logging in...");
-        ParseUser.logInInBackground(userName, password, new LogInCallback() {
-            @Override
-            public void done(ParseUser user, ParseException e) {
-            	progressDialog.dismiss();
-                if (e != null) {
-                    Log.i(TAG, "Login failed: " + e.toString());
-                    Crouton.showText(getActivity(), "Login failed: " + e.getMessage(), Style.ALERT);
-                    return;
-                }
-
-                Log.i(TAG, "User '" + user.getUsername() + "' logged in");
-                handleSuccessfulLogin(user);
-            }
-        });
+        
+        new Thread()
+        {
+        	public void run() 
+        	{
+        		try
+				{
+					ParseUser user = ParseUser.logIn(userName, password);
+					Log.i(TAG, "User '" + user.getUsername() + "' logged in");
+					handleSuccessfulLogin(user);
+				}
+				catch (ParseException e)
+				{
+					Log.e(TAG, "Exception: " + e.getMessage());
+					Crouton.showText(getActivity(), "Login failed: " + e.getMessage(), Style.ALERT);
+				}
+        		progressDialog.dismiss();
+        	}
+        }.start();
     }
     
     private boolean validateInput()
