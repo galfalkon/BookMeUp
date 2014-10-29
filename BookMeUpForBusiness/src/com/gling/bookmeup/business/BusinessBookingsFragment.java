@@ -222,7 +222,7 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 	    	card.addCardHeader(cardHeader);
 	    	card.setTitle(
 	    			"Service: " + booking.getServiceName() + "\n" +
-	    			"Date: " + Constants.DATE_FORMAT.format(booking.getDate()));
+	    			"Date: " + Constants.DATE_TIME_FORMAT.format(booking.getDate()));
 
 	    	card.setOnLongClickListener(new OnLongCardClickListener() 
 	    	{
@@ -249,7 +249,7 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 	    	card.addCardHeader(cardHeader);
 	    	card.setTitle(
 	    			"Service: " + booking.getServiceName() + "\n" +
-	    			"Date: " + Constants.DATE_FORMAT.format(booking.getDate()));
+	    			"Date: " + Constants.DATE_TIME_FORMAT.format(booking.getDate()));
 
 	    	card.setOnLongClickListener(new OnLongCardClickListener() 
 	    	{

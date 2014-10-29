@@ -510,7 +510,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 			card.addCardHeader(header);
 			card.setTitle(
 					"Total spendings: " + customer._totalSpendings + " NIS\n" +
-					"Last visit: " + Constants.DATE_FORMAT.format(customer._lastVisit));
+					"Last visit: " + Constants.DATE_TIME_FORMAT.format(customer._lastVisit));
 			card.setId(customer._id);
 			card.setOnLongClickListener(new OnLongCardClickListener() 
 			{

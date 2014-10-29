@@ -9,7 +9,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.gling.bookmeup.business.BusinessMainActivity;
-import com.gling.bookmeup.business.wizards.BusinessProfileWizardActivity;
+import com.gling.bookmeup.business.wizards.profile.BusinessProfileWizardActivity;
 import com.gling.bookmeup.main.PushUtils;
 import com.gling.bookmeup.sharedlib.login.SplashScreenActivity;
 import com.gling.bookmeup.sharedlib.parse.Business;

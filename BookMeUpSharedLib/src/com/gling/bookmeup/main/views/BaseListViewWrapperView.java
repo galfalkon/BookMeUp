@@ -79,6 +79,10 @@ public abstract class BaseListViewWrapperView<T extends ListView> extends ViewFl
 		addView(_noItemsView);
 	}
 	
+	public ListView getListView() {
+        return _listView;
+    }
+	
 	public void setAdapter(ListAdapter listAdapter)
 	{
 		Log.i(TAG, "setAdapter");

@@ -96,9 +96,19 @@
             android:label="@string/title_activity_navigation_drawer" >
         </activity>
         <activity
-            android:name="com.gling.bookmeup.business.wizards.BusinessProfileWizardActivity"
+            android:name="com.gling.bookmeup.business.wizards.profile.BusinessProfileWizardActivity"
             android:label="@string/title_activity_business_profile_wizard" 
             android:windowSoftInputMode="adjustNothing">
+        </activity>
+        <activity
+            android:name="com.gling.bookmeup.business.wizards.booking.BusinessAddBookingWizardActivity"
+            android:label="@string/title_activity_business_wizard_add_booking"
+            android:parentActivityName="com.gling.bookmeup.business.BusinessCalendarActivity" >
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gling.bookmeup.business.BusinessCalendarActivity" />
         </activity>
     </application>
 

@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.gling.bookmeup.business.BusinessMainActivity;
-import com.gling.bookmeup.business.wizards.BusinessProfileWizardActivity;
+import com.gling.bookmeup.business.wizards.profile.BusinessProfileWizardActivity;
 import com.gling.bookmeup.main.FragmentsManagerUtils;
 import com.gling.bookmeup.sharedlib.R;
 import com.gling.bookmeup.sharedlib.login.EMailLoginFragment;

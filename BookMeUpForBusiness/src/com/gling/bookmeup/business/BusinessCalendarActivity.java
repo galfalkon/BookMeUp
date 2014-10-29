@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,11 +20,14 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.DatePicker;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.gling.bookmeup.business.wizards.booking.BusinessAddBookingWizardActivity;
 
 public class BusinessCalendarActivity extends FragmentActivity {
 
 	private static final String TAG = "BusinessCalendarActivity";
 
+	public static String EXTRA_DATE = "com.gling.bookmeup.buiness.EXTRA_DATE";
+	
 	private static final int DAYS_MARGIN = 30;
 
 	private DateTime _today;
@@ -102,12 +106,31 @@ public class BusinessCalendarActivity extends FragmentActivity {
 		case R.id.business_calendar_action_pick:
 			handleDatePicker();
 			return true;
+		case R.id.business_calendar_add_booking:
+            addBooking();
+            return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
-	private void handleDatePicker() {
+	private void addBooking() {
+	    Intent intent = new Intent(this, BusinessAddBookingWizardActivity.class);
+	    intent.putExtra(EXTRA_DATE, _sectionsPagerAdapter._anchorDate.plusDays(_viewPager.getCurrentItem() - DAYS_MARGIN));
+	    startActivityForResult(intent, 0);
+    }
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+	    if (requestCode == 0) {
+	        if (resultCode == RESULT_CANCELED) {
+	            _sectionsPagerAdapter.notifyDataSetChanged();
+	        }
+	    }
+	}
+
+    private void handleDatePicker() {
 		DatePickerDialog datePickerDialog = new DatePickerDialog(this,
 				new OnDateSetListener() {
 					@Override
@@ -180,6 +203,12 @@ public class BusinessCalendarActivity extends FragmentActivity {
 		@Override
 		public int getCount() {
 			return COUNT;
+		}
+		
+		//http://stackoverflow.com/questions/7263291/viewpager-pageradapter-not-updating-the-view/7287121#7287121
+		@Override
+		public int getItemPosition(Object object) {
+		    return POSITION_NONE;
 		}
 	}
 

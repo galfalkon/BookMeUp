@@ -91,7 +91,7 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 			cardHeader.setButtonExpandVisible(true);
 			
 			CardExpand cardExpand = new CardExpand(getActivity());
-			cardExpand.setTitle("Valid until " + Constants.DATE_FORMAT.format(offer.getExpirationData()));
+			cardExpand.setTitle("Valid until " + Constants.DATE_TIME_FORMAT.format(offer.getExpirationData()));
 			
 			Card card = new Card(getActivity());
 			card.addCardHeader(cardHeader);

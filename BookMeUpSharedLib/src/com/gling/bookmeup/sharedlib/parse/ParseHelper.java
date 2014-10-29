@@ -169,66 +169,71 @@ public class ParseHelper {
 			return getDate(Keys.DATE);
 		}
 		
-		public void setDate(Date date) {
-			put(Keys.DATE, date);
-		}
+		public Booking setDate(Date date) {
+            put(Keys.DATE, date);
+            return this;
+        }
 
-		public int getStatus() {
-			return getInt(Keys.STATUS);
-		}
+        public int getStatus() {
+            return getInt(Keys.STATUS);
+        }
 
-		public void setStatus(int status) {
-			put(Keys.STATUS, status);
-		}
+        public Booking setStatus(int status) {
+            put(Keys.STATUS, status);
+            return this;
+        }
 
-		public Customer getCustomer() {
-			Log.v(TAG, "getCustomer");
-			
-			try {
-				return getParseObject(Keys.CUSTOMER_POINTER).fetchIfNeeded();
-			} catch (ParseException e) {
-				Log.e(TAG, "Exception: " + e.getMessage());
-				return null;
-			}
-		}
-		
-		public void setCustomer(Customer customer) {
-			put(Keys.CUSTOMER_POINTER, customer);
-		}
-		
-		public Business getBusiness() {
-			Log.v(TAG, "getBusiness");
-			
-			try {
-				return getParseObject(Keys.BUSINESS_POINTER).fetchIfNeeded();
-			} catch (ParseException e) {
-				Log.e(TAG, "Exception: " + e.getMessage());
-				return null;
-			}
-		}
-		
-		public void setBusiness(Business business) {
-			put(Keys.BUSINESS_POINTER, business);
-		}
-		
-		public String getServiceName() {
-			return getParseObject(Keys.SERVICE_POINTER).getString(
-					Service.Keys.NAME);
-		}
+        public Customer getCustomer() {
+            Log.v(TAG, "getCustomer");
+            
+            try {
+                return getParseObject(Keys.CUSTOMER_POINTER).fetchIfNeeded();
+            } catch (ParseException e) {
+                Log.e(TAG, "Exception: " + e.getMessage());
+                return null;
+            }
+        }
+        
+        public Booking setCustomer(Customer customer) {
+            put(Keys.CUSTOMER_POINTER, customer);
+            return this;
+        }
+        
+        public Business getBusiness() {
+            Log.v(TAG, "getBusiness");
+            
+            try {
+                return getParseObject(Keys.BUSINESS_POINTER).fetchIfNeeded();
+            } catch (ParseException e) {
+                Log.e(TAG, "Exception: " + e.getMessage());
+                return null;
+            }
+        }
+        
+        public Booking setBusiness(Business business) {
+            put(Keys.BUSINESS_POINTER, business);
+            return this;
+        }
+        
+        public String getServiceName() {
+            return getParseObject(Keys.SERVICE_POINTER).getString(
+                    Service.Keys.NAME);
+        }
 
-		public int getServicePrice() {
-			return getParseObject(Keys.SERVICE_POINTER).getInt(
-					Service.Keys.PRICE);
-		}
-		
-		public int getServiceDuration() {
-			return getParseObject(Keys.SERVICE_POINTER).getInt(
-					Service.Keys.DURATION);
-		}
-		
-		public void setService(Service service) {
-			put(Keys.SERVICE_POINTER, service);
-		}
+        public int getServicePrice() {
+            return getParseObject(Keys.SERVICE_POINTER).getInt(
+                    Service.Keys.PRICE);
+        }
+        
+        public int getServiceDuration() {
+            return getParseObject(Keys.SERVICE_POINTER).getInt(
+                    Service.Keys.DURATION);
+        }
+        
+        public Booking setService(Service service) {
+            put(Keys.SERVICE_POINTER, service);
+            return this;
+        }
 	}
 	
 	@ParseClassName(Offer.CLASS_NAME)

@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.gling.bookmeup.business.login.BusinessLoginMainActivity;
-import com.gling.bookmeup.business.wizards.BusinessProfileWizardActivity;
+import com.gling.bookmeup.business.wizards.profile.BusinessProfileWizardActivity;
 import com.gling.bookmeup.main.NavigationDrawerActivity;
 import com.gling.bookmeup.main.PushUtils;
 import com.gling.bookmeup.sharedlib.login.LoginMainActivity;
