@@ -7,6 +7,7 @@ import android.util.Log;
 import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.gling.bookmeup.sharedlib.login.EMailLoginFragmentBase;
 import com.gling.bookmeup.sharedlib.parse.Customer;
+import com.gling.bookmeup.sharedlib.parse.ParseHelper;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper.User;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -36,9 +37,13 @@ public class CustomerEMailLoginFragment extends EMailLoginFragmentBase {
 			ParseObject customerParseObject = user .getParseObject(User.Keys.CUSTOMER_POINTER);
 			if (customerParseObject == null)
 			{
-				// TODO: Create Customer
-				Crouton.showText(getActivity(), "TODO: Create Customer (Current user isn't associated with a Customer instance)", Style.INFO);
-				return;
+				Customer customer = new Customer();
+				customer.save();
+				customer.setCurrentCustomer(customer);
+				
+				user.put(ParseHelper.User.Keys.CUSTOMER_POINTER, customer);
+				user.save();
+				customerParseObject = user .getParseObject(User.Keys.CUSTOMER_POINTER);
 			}
 			
 			Customer currentCustomer = customerParseObject.fetchIfNeeded();

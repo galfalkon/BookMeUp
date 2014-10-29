@@ -8,6 +8,7 @@ import com.gling.bookmeup.business.BusinessMainActivity;
 import com.gling.bookmeup.business.wizards.profile.BusinessProfileWizardActivity;
 import com.gling.bookmeup.sharedlib.login.EMailLoginFragmentBase;
 import com.gling.bookmeup.sharedlib.parse.Business;
+import com.gling.bookmeup.sharedlib.parse.ParseHelper;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper.Category;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper.User;
 import com.parse.ParseException;
@@ -38,9 +39,13 @@ public class BusinessEMailLoginFragment extends EMailLoginFragmentBase
 			ParseObject businessParseObject = user.getParseObject(User.Keys.BUSINESS_POINTER);
 			if (businessParseObject == null)
 			{
-				// TODO: Create Business
-				Crouton.showText(getActivity(), "TODO: Create Business (Current user isn't associated with a Business instance)", Style.INFO);
-				return;
+				Business business = new Business();
+				business.save();
+				Business.setCurrentBusiness(business);
+				
+				user.put(ParseHelper.User.Keys.BUSINESS_POINTER, business);
+				user.save();
+				businessParseObject = user.getParseObject(User.Keys.BUSINESS_POINTER);
 			}
 			
 			Business currentBusiness = businessParseObject.fetchIfNeeded();
