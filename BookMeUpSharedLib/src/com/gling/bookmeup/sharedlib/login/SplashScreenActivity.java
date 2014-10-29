@@ -25,6 +25,9 @@ public abstract class SplashScreenActivity extends Activity {
 
     protected static final String EXTRA_PUSH_NOTIFICATION_DATA = "com.parse.Data";
 
+    protected abstract void goToNextActivity();
+    protected abstract void handlePushNotification();
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	Log.i(TAG, "onCreate");
@@ -97,110 +100,4 @@ public abstract class SplashScreenActivity extends Activity {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
-    
-    protected abstract void goToNextActivity();
-    protected abstract void handlePushNotification();
-
-//    private void goToNextActivity() {
-//        final Intent intent;
-//
-//        if (ParseHelper.isUserLoggedIn()) {
-//            ParseUser user = ParseUser.getCurrentUser();
-//            Log.i(TAG, "User '" + user.getUsername() + "' is found to be logged in");
-//
-//            try {
-//                // Fetch current business
-//                ParseObject businessParseObject = user.getParseObject(User.Keys.BUSINESS_POINTER);
-//                if (businessParseObject != null) {
-//                    Log.i(TAG, "Fetching current business");
-//                    Business currentBusiness = businessParseObject.fetchIfNeeded();
-//                    Category category = currentBusiness.getCategory();
-//                    if (category != null) {
-//                        category.fetchIfNeeded();
-//                    }
-//                    Business.setCurrentBusiness(currentBusiness);
-//                }
-//
-//                // Fetch current customer
-//                ParseObject customerParseObject = user.getParseObject(User.Keys.CUSTOMER_POINTER);
-//                if (customerParseObject != null) {
-//                    Log.i(TAG, "Fetching current customer");
-//                    Customer currentCustomer = customerParseObject.fetchIfNeeded();
-//                    Customer.setCurrentCustomer(currentCustomer);
-//                }
-//            } catch (ParseException e) {
-//                Log.e(TAG, "Exception: " + e.getMessage());
-//                intent = new Intent(mContext, LoginMainActivity.class);
-//                startActivity(intent);
-//                return;
-//            }
-//
-//            // Handle push notification if needed
-//            Bundle extras = getIntent().getExtras();
-//            if ((extras != null) && extras.containsKey(EXTRA_PUSH_NOTIFICATION_DATA)) {
-//                handlePushNotification();
-//                return;
-//            }
-//
-//            if (!ParseHelper.isEmailVerified()) {
-//                Log.i(TAG, "User '" + user.getUsername() + "' mail is not verified");
-//                intent = new Intent(mContext, LoginMainActivity.class);
-//                intent.putExtra(EXTRA_MESSAGE,
-//                                "Please verify your Email address\nYour registered mail is: "
-//                                        + user.getEmail());
-//            } else if (Business.getCurrentBusiness() != null
-//                    && Customer.getCurrentCustomer() != null) {
-//                Log.i(TAG, "User '" + user.getUsername()
-//                        + "' is associated with both customer and business");
-//                intent = new Intent(mContext, LoginMainActivity.class);
-//                intent.putExtra(EXTRA_FIRST_FRAGMENT, "UserTypeSelectionFragment");
-//            } else if (Business.getCurrentBusiness() != null) {
-//                Log.i(TAG, "User '" + user.getUsername() + "' is associated with a business");
-//
-//                if (TextUtils.isEmpty(Business.getCurrentBusiness().getName())) {
-//                    intent = new Intent(mContext, LoginMainActivity.class);
-//                } else {
-//                    intent = new Intent(mContext, BusinessMainActivity.class);
-//                }
-//            } else if (Customer.getCurrentCustomer() != null) {
-//                Log.i(TAG, "User '" + user.getUsername() + "' is associated with a customer");
-//                intent = new Intent(mContext, CustomerMainActivity.class);
-//            } else {
-//                Log.i(TAG, "User '" + user.getUsername()
-//                        + "' is not associated with a business or a customer");
-//                intent = new Intent(mContext, LoginMainActivity.class);
-//            }
-//            user.refreshInBackground(new RefreshCallback() {
-//                @Override
-//                public void done(ParseObject object, ParseException e) {
-//                    if (e != null) {
-//                        Log.e(TAG, e.getMessage());
-//                    }
-//                    startActivity(intent);
-//                }
-//            });
-//        } else {
-//            intent = new Intent(mContext, LoginMainActivity.class);
-//            startActivity(intent);
-//        }
-//    }
-//    
-//    private void handlePushNotification() {
-//        try {
-//            JSONObject json = new JSONObject(getIntent().getExtras()
-//                                                        .getString(EXTRA_PUSH_NOTIFICATION_DATA));
-//            String action = json.getString("action");
-//            Log.i(TAG, "Push action: " + action);
-//
-//            PushUtils.PushNotificationType pushType = PushUtils.PushNotificationType
-//                                                                                    .valueOfAction(action);
-//            // TODO: Check if activity is already running
-//            Intent intent = new Intent(getApplicationContext(), pushType._activity);
-//            pushType.putIntoIntent(intent);
-//            startActivity(intent);
-//        } catch (JSONException e) {
-//            Log.e(TAG, "Exception: " + e.getMessage());
-//            return;
-//        }
-//    }
 }

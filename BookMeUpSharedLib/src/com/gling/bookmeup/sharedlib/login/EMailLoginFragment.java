@@ -31,6 +31,8 @@ public abstract class EMailLoginFragment extends OnClickListenerFragment {
 
     private EditText _edtUserName, _edtPassword;
 
+    protected abstract void handleSuccessfulLogin(ParseUser user);
+    
     public int getFragmentLayoutId() {
         return R.layout.login_email_fragment;
     }
@@ -122,8 +124,6 @@ public abstract class EMailLoginFragment extends OnClickListenerFragment {
             }
         });
     }
-
-    protected abstract void handleSuccessfulLogin(ParseUser user); 
     
     private void handleLoginReuest() {
         Log.i(TAG, "handleLoginReuest");
@@ -153,74 +153,6 @@ public abstract class EMailLoginFragment extends OnClickListenerFragment {
                 handleSuccessfulLogin(user);
             }
         });
-//                try 
-//    			{
-//    				// Fetch current business
-//    				Log.i(TAG, "Fetching current business");
-//    				ParseObject businessParseObject = user.getParseObject(User.Keys.BUSINESS_POINTER);
-//    				if (businessParseObject != null) 
-//    				{
-//    					Business currentBusiness = businessParseObject.fetchIfNeeded();
-//    					Category category = currentBusiness.getCategory();
-//                        if (category != null) {
-//                            category.fetchIfNeeded();
-//                        }
-//    					Business.setCurrentBusiness(currentBusiness);
-//    				}
-//    				
-//    				// Fetch current customer
-//    				Log.i(TAG, "Fetching current customer");
-//    				ParseObject customerParseObject = user.getParseObject(User.Keys.CUSTOMER_POINTER);
-//    				if (customerParseObject != null) 
-//    				{
-//    					Customer currentCustomer = customerParseObject.fetchIfNeeded();
-//    					Customer.setCurrentCustomer(currentCustomer);
-//    				}
-//    			} 
-//    			catch (ParseException e2) 
-//    			{
-//    				Log.e(TAG, "Exception: " + e2.getMessage());
-//    				Log.i(TAG, "Login failed: " + e.toString());
-//                    Crouton.showText(getActivity(), "Login failed: " + e.getMessage(), Style.ALERT);
-//                    return;
-//    			}
-//
-//                if (!user.getBoolean("emailVerified")) {
-//                	progressDialog.dismiss();
-//                    Log.i(TAG, "User hasn't verified Email address");
-//                    Crouton.showText(getActivity(), "Please verifiy your Email address", Style.ALERT);
-//                } else if (user.getParseObject(User.Keys.BUSINESS_POINTER) != null
-//                        && user.getParseObject(User.Keys.CUSTOMER_POINTER) != null) {
-//                	progressDialog.dismiss();
-//                    FragmentsManagerUtils.goToNextFragment(getActivity(), R.id.login_container, new UserTypeSelectionFragment());
-//                } else if (user.getParseObject(User.Keys.BUSINESS_POINTER) != null) {
-//                	ParseHelper.fetchBusiness(new GetCallback<Business>() {
-//						
-//						@Override
-//						public void done(Business business, ParseException e) {
-//							progressDialog.dismiss();
-//							if (e == null) {
-//								Intent intent;
-//								if (TextUtils.isEmpty(business.getName())) {
-//									intent = new Intent(getActivity(), BusinessProfileWizardActivity.class);
-//								} else {
-//									intent = new Intent(getActivity(), BusinessMainActivity.class);
-//								}
-//								startActivity(intent);
-//		                    } else {
-//		                        Crouton.showText(getActivity(), "Oops, we're having difficulties, please try again...", Style.ALERT);
-//		                        Log.i(TAG, "Business fetch failed: " + e.getMessage());
-//		                    }
-//						}
-//					});
-//                } else if (user.getParseObject(User.Keys.CUSTOMER_POINTER) != null) {
-//                	progressDialog.dismiss();
-//                    Intent intent = new Intent(getActivity(), CustomerMainActivity.class);
-//                    startActivity(intent);
-//                } else {
-//                	progressDialog.dismiss();
-//                    FragmentsManagerUtils.goToNextFragment(getActivity(), R.id.login_container, new UserTypeSelectionFragment());
-//                }
     }
     
     private boolean validateInput()

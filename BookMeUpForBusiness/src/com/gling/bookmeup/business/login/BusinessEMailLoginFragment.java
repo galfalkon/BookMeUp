@@ -6,11 +6,8 @@ import android.util.Log;
 
 import com.gling.bookmeup.business.BusinessMainActivity;
 import com.gling.bookmeup.business.wizards.profile.BusinessProfileWizardActivity;
-import com.gling.bookmeup.main.FragmentsManagerUtils;
-import com.gling.bookmeup.sharedlib.R;
 import com.gling.bookmeup.sharedlib.login.EMailLoginFragment;
 import com.gling.bookmeup.sharedlib.parse.Business;
-import com.gling.bookmeup.sharedlib.parse.Customer;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper.Category;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper.User;
