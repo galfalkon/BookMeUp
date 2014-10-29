@@ -20,6 +20,9 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+
 public class BusinessSplashScreenActivity extends SplashScreenActivityBase
 {
 	private static final String TAG = "BusinessSplashScreenActivity";
@@ -27,36 +30,45 @@ public class BusinessSplashScreenActivity extends SplashScreenActivityBase
 	@Override
 	protected void goToNextActivity()
 	{
-		if (ParseHelper.isUserLoggedIn())
+		if (!ParseHelper.isUserLoggedIn())
 		{
-			ParseUser user = ParseUser.getCurrentUser();
-			Log.i(TAG, "User '" + user.getUsername() + "' is found to be logged in");
-
-			try
+			startActivity(new Intent(this, BusinessLoginMainActivity.class));
+			return;
+		}
+		
+		ParseUser user = ParseUser.getCurrentUser();
+		Log.i(TAG, "User '" + user.getUsername() + "' is found to be logged in");
+		if (!ParseHelper.isEmailVerified())
+		{
+			Log.i(TAG, "User '" + user.getUsername() + "' mail is not verified");
+			Crouton.showText(this, "Please verifiy your Email address", Style.ALERT);
+			startActivity(new Intent(this, BusinessLoginMainActivity.class));
+			return;
+		}
+		
+		try
+		{
+			// Refresh user
+			user.refresh();
+			
+			// Fetch current business
+			ParseObject businessParseObject = user.getParseObject(User.Keys.BUSINESS_POINTER);
+			if (businessParseObject == null)
 			{
-				// Refresh user
-				user.refresh();
-				
-				// Fetch current business
-				ParseObject businessParseObject = user.getParseObject(User.Keys.BUSINESS_POINTER);
-				if (businessParseObject != null)
-				{
-					Log.i(TAG, "Fetching current business");
-					Business currentBusiness = businessParseObject.fetchIfNeeded();
-					Category category = currentBusiness.getCategory();
-					if (category != null)
-					{
-						category.fetchIfNeeded();
-					}
-					Business.setCurrentBusiness(currentBusiness);
-				}
+				// TODO: Create Business
+				Crouton.showText(this, "TODO: Create Business (Current user isn't associated with a Business instance)", Style.INFO);
+				return;
 			}
-			catch (ParseException e)
+			Log.i(TAG, "User '" + user.getUsername() + "' is associated with a business");
+			
+			Business currentBusiness = businessParseObject.fetchIfNeeded();
+			Category category = currentBusiness.getCategory();
+			if (category != null)
 			{
-				Log.e(TAG, "Exception: " + e.getMessage());
-				startActivity(new Intent(this, BusinessLoginMainActivity.class));
+				category.fetchIfNeeded();
 			}
-
+			Business.setCurrentBusiness(currentBusiness);
+			
 			// Handle push notification if needed
 			Bundle extras = getIntent().getExtras();
 			if ((extras != null) && extras.containsKey(EXTRA_PUSH_NOTIFICATION_DATA))
@@ -64,28 +76,19 @@ public class BusinessSplashScreenActivity extends SplashScreenActivityBase
 				handlePushNotification();
 				return;
 			}
-
-			if (!ParseHelper.isEmailVerified())
+			
+			if (TextUtils.isEmpty(Business.getCurrentBusiness().getName()))
 			{
-				Log.i(TAG, "User '" + user.getUsername() + "' mail is not verified");
-				startActivity(new Intent(this, BusinessLoginMainActivity.class));
+				startActivity(new Intent(this, BusinessProfileWizardActivity.class));
 			}
-			else if (Business.getCurrentBusiness() != null)
+			else
 			{
-				Log.i(TAG, "User '" + user.getUsername() + "' is associated with a business");
-
-				if (TextUtils.isEmpty(Business.getCurrentBusiness().getName()))
-				{
-					startActivity(new Intent(this, BusinessProfileWizardActivity.class));
-				}
-				else
-				{
-					startActivity(new Intent(this, BusinessMainActivity.class));
-				}
+				startActivity(new Intent(this, BusinessMainActivity.class));
 			}
 		}
-		else
+		catch (ParseException e)
 		{
+			Log.e(TAG, "Exception: " + e.getMessage());
 			startActivity(new Intent(this, BusinessLoginMainActivity.class));
 		}
 	}
