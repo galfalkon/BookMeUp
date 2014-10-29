@@ -22,26 +22,28 @@ public class CustomerEMailLoginFragment extends EMailLoginFragmentBase {
 	@Override
 	protected void handleSuccessfulLogin(ParseUser user) 
 	{
+		if (!user.getBoolean("emailVerified"))
+		{
+			Log.i(TAG, "User hasn't verified Email address");
+			Crouton.showText(getActivity(), "Please verifiy your Email address", Style.ALERT);
+			return;
+		}
+		
 		try 
 		{
 			// Fetch current customer
 			Log.i(TAG, "Fetching current customer");
 			ParseObject customerParseObject = user .getParseObject(User.Keys.CUSTOMER_POINTER);
-			if (customerParseObject != null) {
-				Customer currentCustomer = customerParseObject.fetchIfNeeded();
-				Customer.setCurrentCustomer(currentCustomer);
+			if (customerParseObject == null)
+			{
+				// TODO: Create Customer
+				Crouton.showText(getActivity(), "TODO: Create Customer (Current user isn't associated with a Customer instance)", Style.INFO);
+				return;
 			}
-		} catch (ParseException e) {
-			Log.i(TAG, "Exception: " + e.getMessage());
-			Crouton.showText(getActivity(), "Login failed: " + e.getMessage(), Style.ALERT);
-			return;
-		}
-
-		if (!user.getBoolean("emailVerified")) {
-			Log.i(TAG, "User hasn't verified Email address");
-			Crouton.showText(getActivity(), "Please verifiy your Email address", Style.ALERT);
-		} else if (user.getParseObject(User.Keys.CUSTOMER_POINTER) != null) 
-		{
+			
+			Customer currentCustomer = customerParseObject.fetchIfNeeded();
+			Customer.setCurrentCustomer(currentCustomer);
+			
 			if (TextUtils.isEmpty(Customer.getCurrentCustomer().getName()))
 			{
 				startActivity(new Intent(getActivity(), CustomerProfileCreationActivity.class));
@@ -50,6 +52,12 @@ public class CustomerEMailLoginFragment extends EMailLoginFragmentBase {
 			{
 				startActivity(new Intent(getActivity(), CustomerMainActivity.class));
 			}
+		} 
+		catch (ParseException e) 
+		{
+			Log.e(TAG, "Exception: " + e.getMessage());
+			Crouton.showText(getActivity(), "Login failed: " + e.getMessage(), Style.ALERT);
+			return;
 		}
 	}
 }

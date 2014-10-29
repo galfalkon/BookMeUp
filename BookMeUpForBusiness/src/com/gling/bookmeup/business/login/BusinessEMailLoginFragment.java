@@ -64,7 +64,7 @@ public class BusinessEMailLoginFragment extends EMailLoginFragmentBase
 		}
 		catch (ParseException e)
 		{
-			Log.i(TAG, "Exception: " + e.getMessage());
+			Log.e(TAG, "Exception: " + e.getMessage());
 			Crouton.showText(getActivity(), "Login failed: " + e.getMessage(), Style.ALERT);
 			return;
 		}
