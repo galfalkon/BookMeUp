@@ -2,85 +2,65 @@ package com.gling.bookmeup.customer.cards;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardHeader;
+import it.gmariotti.cardslib.library.internal.CardThumbnail;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.devsmart.android.ui.HorizontalListView;
 import com.gling.bookmeup.sharedlib.R;
 import com.gling.bookmeup.sharedlib.parse.Business;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper.Category;
-import com.parse.ParseFile;
-import com.parse.ParseImageView;
+import com.parse.CountCallback;
+import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.ParseQueryAdapter;
 
 public class CategoryCard extends Card {
 
-    private final static int BUSINESS_IMAGE_NUMBER = 10;
-
-    private BusinessImageAdapter _businessImageAdapter;
-    private HorizontalListView _listView;
-
+    public static final String TAG = "CategoryCard";
+    
+    private Category _category;
+    
     public CategoryCard(Context context, Category category) {
         super(context, R.layout.customer_category_card_inner_layout);
+        _category = category;
 
-        CardHeader header = new CardHeader(context);
-        header.setTitle(category.getName());
+        CardHeader header = new CardHeader(context,
+                R.layout.customer_category_card_header_inner_layout);
+        header.setTitle(_category.getName());
         addCardHeader(header);
-        _businessImageAdapter = new BusinessImageAdapter(context, category);
+
+        CardThumbnail thumb = new CardThumbnail(getContext());
+        thumb.setDrawableResource(R.drawable.ic_launcher);
+        addCardThumbnail(thumb);
     }
 
     @Override
-    public void setupInnerViewElements(ViewGroup parent, View view) {
-        _listView = (HorizontalListView) view.findViewById(R.id.customer_category_card_list_view);
-        _listView.setAdapter(_businessImageAdapter);
-        _listView.setOnItemClickListener(new OnItemClickListener() {
-
+    public void setupInnerViewElements(ViewGroup parent, final View view) {
+        ParseQuery<Business> query = new ParseQuery<Business>(Business.CLASS_NAME);
+        query.whereEqualTo(Business.Keys.CATEGORY, _category);
+        query.countInBackground(new CountCallback() {
+            
             @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                Toast.makeText(getContext(), "open booking wizard or something", Toast.LENGTH_LONG)
-                     .show();
+            public void done(int count, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "failed counting businesses with certain caregory");
+                    return;
+                }
+                
+                if (view != null) {
+                    TextView numBusinessesTxt = (TextView) view
+                            .findViewById(R.id.customer_category_card_num_businesses_txt);
+                    
+                    if (numBusinessesTxt != null) {
+                        numBusinessesTxt.setText(String.valueOf(count) + (count == 1 ? " Business" : " Businesses"));
+                    }
+                }
             }
         });
+        
+        
     }
 
-    private class BusinessImageAdapter extends ParseQueryAdapter<Business> {
-
-        public BusinessImageAdapter(Context context, final Category category) {
-            super(context, new ParseQueryAdapter.QueryFactory<Business>() {
-                public ParseQuery<Business> create() {
-                    ParseQuery<Business> query = new ParseQuery<Business>(Business.CLASS_NAME);
-                    query.whereEqualTo(Business.Keys.CATEGORY, category);
-                    query.whereExists(Business.Keys.IMAGE);
-                    // TODO order by some "popularity" property
-                    query.setLimit(BUSINESS_IMAGE_NUMBER);
-                    return query;
-                }
-            });
-        }
-
-        // Customize the layout by overriding getItemView
-        @Override
-        public View getItemView(Business business, View v, ViewGroup parent) {
-            if (v == null) {
-                v = View.inflate(getContext(), R.layout.customer_category_card_list_item, null);
-            }
-
-            super.getItemView(business, v, parent);
-
-            ParseImageView imageView = (ParseImageView) v
-                                                         .findViewById(R.id.customer_category_card_list_item);
-            ParseFile imageFile = business.getImageFile();
-            imageView.setPlaceholder(getContext().getResources().getDrawable(R.drawable.ic_person));
-            imageView.setParseFile(imageFile);
-            imageView.loadInBackground();
-
-            return v;
-        }
-
-    }
 }

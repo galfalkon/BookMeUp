@@ -5,11 +5,14 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/customer_category_card_num_businesses_txt"
+        android:id="@+id/card_header_inner_simple_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_gravity="center"
+        android:background="#53A93F"
+        android:fontFamily="sans-serif-condensed"
         android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/card_header_simple_title_text_size" />
 
 </LinearLayout>

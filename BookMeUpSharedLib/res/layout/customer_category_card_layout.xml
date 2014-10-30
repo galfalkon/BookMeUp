@@ -1,0 +1,48 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <!-- Card visible layout -->
+
+    <LinearLayout
+        android:id="@+id/card_main_layout"
+        style="@style/card.main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <it.gmariotti.cardslib.library.view.component.CardHeaderView
+            android:id="@+id/card_header_layout"
+            style="@style/card.header_outer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            card:card_header_layout_resourceID="@layout/customer_category_card_header_layout" />
+
+        <it.gmariotti.cardslib.library.view.component.CardThumbnailView
+            android:id="@+id/card_thumbnail_layout"
+            style="@style/card_thumbnail_outer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <!-- Main Content View -->
+
+        <FrameLayout
+            android:id="@+id/card_main_content_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="10dp" />
+    </LinearLayout>
+
+    <it.gmariotti.cardslib.library.view.component.CardShadowView
+        android:id="@+id/card_shadow_layout"
+        style="@style/card.shadow_outer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

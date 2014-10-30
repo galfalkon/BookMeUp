@@ -86,6 +86,7 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
         
         _allCategoriesView = (CardGridViewWrapperView) view.findViewById(R.id.customer_all_businesses_categoryGridView);
         _allCategoriesView.setAdapter(_categoryAdapter);
+        _categoryAdapter.setRowLayoutId(R.layout.customer_category_card_view);
         
         _viewSwitcher = (ViewSwitcher)view.findViewById(R.id.customer_all_businesses_viewSwitcher); 
         
