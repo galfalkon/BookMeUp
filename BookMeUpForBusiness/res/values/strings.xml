@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">BookMeUpForBusiness</string>
+    <string name="app_name">Book Me Up!</string>
     <string name="title_activity_business_wizard_add_booking">Add a booking</string>
     <string name="progress_dialog_booking_up">Booking Up...</string>
 
