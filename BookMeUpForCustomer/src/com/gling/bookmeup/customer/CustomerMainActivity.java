@@ -1,6 +1,5 @@
 package com.gling.bookmeup.customer;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -76,7 +75,7 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 				Crouton.showText(this, "Not implemented", Style.ALERT);
 				break;
 			case OFFER_FROM_BUSINESS:
-				Crouton.showText(this, "Not implemented", Style.ALERT);
+				onNavigationDrawerItemSelected(4);
 				break;
 			case BOOKING_APPROVED:
 			case BOOKING_CANCELED:
