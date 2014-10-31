@@ -3,6 +3,7 @@ package com.gling.bookmeup.customer;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,6 +44,11 @@ public class CustomerCalendarFragment extends Fragment {
 	private static final String ARG_DATE = "customer_calendar_fragment_date";
 
 	private DateTime _date;
+	
+	String _businessId = null;
+	String _serviceId = null;
+	Integer _offerDiscount = null;
+	Date _offerExpirationDate = null;
 
 	IObservableList<Booking> _alreadyBooked;
 	IObservableList<Booking> _possibleBookings;
@@ -71,6 +77,20 @@ public class CustomerCalendarFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 
 		_date = (DateTime) getArguments().getSerializable(ARG_DATE);
+		FragmentActivity activity = getActivity();
+		if (activity instanceof CustomerCalendarActivity) {
+			CustomerCalendarActivity calendarActivity = (CustomerCalendarActivity)activity;
+			_businessId = calendarActivity.getStringExtra(CustomerCalendarActivity.BUSINESS_ID_EXTRA);
+			_serviceId = calendarActivity.getStringExtra(CustomerCalendarActivity.SERVICE_ID_EXTRA);
+			Bundle extras = getActivity().getIntent().getExtras();
+			if (extras != null) {
+				_offerDiscount = extras.getInt(CustomerCalendarActivity.OFFER_DISCOUNT_EXTRA);
+				Serializable serializable = extras.getSerializable(CustomerCalendarActivity.OFFER_EXPIRATION_EXTRA);
+				if (serializable instanceof Date) {
+					_offerExpirationDate = (Date) serializable;
+				}
+			}
+		}
 	}
 
 	@Override
@@ -86,15 +106,15 @@ public class CustomerCalendarFragment extends Fragment {
 		_bookingsListViewWrapperView = (CardListViewWrapperView) view.findViewById(R.id.business_calendar_cardListViewWrapper);
 		_bookingsListViewWrapperView.setAdapter(_bookingsCardAdapter);
 
-		FragmentActivity activity = getActivity();
-		if (activity instanceof CustomerCalendarActivity) {
-			CustomerCalendarActivity calendarActivity = (CustomerCalendarActivity)activity;
-			String businessId = calendarActivity.getStringExtra(CustomerCalendarActivity.BUSINESS_ID_EXTRA);
-			final String serviceId = calendarActivity.getStringExtra(CustomerCalendarActivity.SERVICE_ID_EXTRA);
+//		FragmentActivity activity = getActivity();
+//		if (activity instanceof CustomerCalendarActivity) {
+//			CustomerCalendarActivity calendarActivity = (CustomerCalendarActivity)activity;
+//			String businessId = calendarActivity.getStringExtra(CustomerCalendarActivity.BUSINESS_ID_EXTRA);
+//			final String serviceId = calendarActivity.getStringExtra(CustomerCalendarActivity.SERVICE_ID_EXTRA);
 			final Customer currentCustomer = Customer.getCurrentCustomer();
-			if (businessId != null) {
+			if (_businessId != null) {
 				ParseQuery<Business> businessQuery = new ParseQuery<Business>(Business.CLASS_NAME);
-				businessQuery.whereEqualTo(Business.Keys.ID, businessId);
+				businessQuery.whereEqualTo(Business.Keys.ID, _businessId);
 
 				_bookingsListViewWrapperView.setDisplayMode(DisplayMode.LOADING_VIEW);
 				businessQuery.findInBackground(new FindCallback<Business>() {
@@ -139,7 +159,7 @@ public class CustomerCalendarFragment extends Fragment {
 								}
 								
 								ParseQuery<Service> serviceQuery = new ParseQuery<Service>(Service.CLASS_NAME);
-								serviceQuery.whereEqualTo(Business.Keys.ID, serviceId);
+								serviceQuery.whereEqualTo(Business.Keys.ID, _serviceId);
 								serviceQuery.findInBackground(new FindCallback<Service>() {
 									@Override
 									public void done(List<Service> objects, ParseException e) {
@@ -194,7 +214,7 @@ public class CustomerCalendarFragment extends Fragment {
 					}
 				});
 			}
-		}
+//		}
 
 
 		return view;

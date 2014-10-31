@@ -5,8 +5,11 @@ import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
 import it.gmariotti.cardslib.library.internal.CardExpand;
 import it.gmariotti.cardslib.library.internal.CardHeader;
 
+import java.util.Date;
 import java.util.List;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +24,7 @@ import com.gling.bookmeup.main.ObservableArrayList;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
 import com.gling.bookmeup.main.views.CardListViewWrapperView;
+import com.gling.bookmeup.sharedlib.parse.Business;
 import com.gling.bookmeup.sharedlib.parse.Customer;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper.Offer;
@@ -99,8 +103,10 @@ public class CustomerOffersFragment extends OnClickListenerFragment {
 			
 			CardExpand cardExpand = new CardExpand(getActivity());
 			cardExpand.setTitle("Valid until " + Constants.DATE_TIME_FORMAT.format(offer.getExpirationData()));
+			//TODO: move from expand to the card itself
 			
 			Card card = new Card(getActivity());
+			card.setId(offer.getObjectId());
 			card.addCardHeader(cardHeader);
 			card.setTitle(offer.getDiscount() + "% off @ " + offer.getBusinessName());
 			card.addCardExpand(cardExpand);
@@ -108,10 +114,30 @@ public class CustomerOffersFragment extends OnClickListenerFragment {
 			card.setOnClickListener(new OnCardClickListener() {
 				
 				@Override
-				public void onClick(Card arg0, View arg1) {					
-					Log.i(TAG, "onItemClick");
-					//TODO
-					Crouton.showText(getActivity(), "Should open a booking wizard\nNot implemented", Style.ALERT);
+				public void onClick(Card offerCard, View arg1) {					
+					Log.i(TAG, "offer was clicked");
+					String offerId = offerCard.getId();
+					for (Offer offer : _offers) {
+						if (offer.getObjectId().equals(offerId)) {
+							Business business = offer.getBusiness();
+							Activity activity = getActivity();
+							if (activity instanceof CustomerMainActivity) {
+								CustomerMainActivity customerActivity = (CustomerMainActivity)activity;
+								customerActivity.setChosenBusiness(business);
+							}
+							
+							Fragment fragment = new CustomerBookingProfileFragment();
+							Bundle bundle = new Bundle();
+							bundle.putSerializable(CustomerBookingProfileFragment.OFFER_EXPIRATION_DATE, offer.getExpirationData());
+							bundle.putInt(CustomerBookingProfileFragment.OFFER_DISCOUNT, offer.getDiscount());
+							fragment.setArguments(bundle);
+							getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+							return;
+						}
+					}
+					Log.i(TAG, "Business Dialog - could not find offer");
+					Crouton.showText(getActivity(), "Could not find offer", Style.ALERT);
+					return;
 				}
 			});
 			

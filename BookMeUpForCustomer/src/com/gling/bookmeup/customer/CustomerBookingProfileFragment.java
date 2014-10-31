@@ -4,7 +4,9 @@ import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.app.ActionBar;
@@ -38,7 +40,14 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 	private static final String TAG = "CustomerBookingProfileFragment";
 
 	private static final String TITLE = "Business Profile";
-
+	
+	public static final String OFFER_EXPIRATION_DATE = "offer expiration date";
+	public static final String OFFER_DISCOUNT = "offer discount";
+	
+	private Integer _offerDiscount = null;
+	private Serializable _offerExpirationSerializable = null;
+	private Date _offerExpirationDate = null;
+	
 	private CardListViewWrapperView _allServicesView;
 	private ServiceCardArrayAdapter _servicesAdapter;
 	private ArrayList<Card> _allCategoriesCards;
@@ -48,6 +57,14 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 		super.onCreate(savedInstanceState);
 		_allCategoriesCards = new ArrayList<Card>();
 		_servicesAdapter = new ServiceCardArrayAdapter(getActivity(), _allCategoriesCards);
+		Bundle arguments = getArguments();
+		if (arguments != null) {
+			_offerDiscount = arguments.getInt(OFFER_DISCOUNT);
+			_offerExpirationSerializable = arguments.getSerializable(OFFER_EXPIRATION_DATE);
+			if (_offerExpirationSerializable instanceof Date) {
+				_offerExpirationDate = (Date) _offerExpirationSerializable;
+			}
+		}
 	}
 
 	@Override
@@ -160,6 +177,12 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 							Intent intent = new Intent(getActivity(), CustomerCalendarActivity.class);
 							intent.putExtra(CustomerCalendarActivity.BUSINESS_ID_EXTRA, business.getObjectId());
 							intent.putExtra(CustomerCalendarActivity.SERVICE_ID_EXTRA, card.getId());
+							if (_offerDiscount != null) {
+								intent.putExtra(OFFER_DISCOUNT, _offerDiscount);
+							}
+							if (_offerExpirationSerializable != null) {
+								intent.putExtra(OFFER_EXPIRATION_DATE, _offerExpirationSerializable);
+							}
 							startActivity(intent);
 						}
 					});
@@ -173,10 +196,14 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 		});
 	}
 
-	private static Card serviceToCard(Service service, Activity activity) {
+	private Card serviceToCard(Service service, Activity activity) {
 		Card card = new Card(activity);
 		card.setTitle(service.getName());
 		card.setId(service.getObjectId());
+		//TODO pay attention to check if there is an offer discount to reduce it from the card
+		if (_offerDiscount != null && _offerExpirationDate != null) {			
+			Log.i(TAG, "There is an offer for discount of: " + _offerDiscount + "% until: " + _offerExpirationDate); 
+		}
 		return card;
 	}
 

@@ -272,5 +272,16 @@ public class ParseHelper {
 			
 			return business.getString(Business.Keys.NAME);
 		}
+		
+		public Business getBusiness() {
+			ParseObject business = getParseObject(Keys.BUSINESS_POINTER);
+			try {
+				business.fetchIfNeeded();
+			} catch (ParseException e) {
+				Log.e(TAG, "Exception: " + e.getMessage());
+				return null;
+			}
+			return (Business) business;
+		}
 	}
 }
