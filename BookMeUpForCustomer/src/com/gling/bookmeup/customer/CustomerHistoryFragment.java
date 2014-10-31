@@ -111,7 +111,6 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 							getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
 						}
 					});
-					
 					if (!_allBusinesses.containsKey(currentBusiness._id)) {						
 						_filteredBusinesses.add(businessCard);
 						_allBusinesses.put(currentBusiness._id, currentBusiness);
@@ -124,12 +123,12 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 					
 				}
 				
+				_businessesCardAdapter.notifyDataSetChanged();
+				DisplayMode newDisplayMode = _allBusinesses.isEmpty()? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;
+				_businessesCardListView.setDisplayMode(newDisplayMode);
 			}
 		});
 		
-		_businessesCardAdapter.notifyDataSetChanged();
-		DisplayMode newDisplayMode = _allBusinesses.isEmpty()? DisplayMode.NO_ITEMS_VIEW : DisplayMode.LIST_VIEW;
-		_businessesCardListView.setDisplayMode(newDisplayMode);
 		
 		return view;
 	}
