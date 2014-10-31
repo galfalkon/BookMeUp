@@ -417,6 +417,14 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		@Override
 		protected void publishResults(CharSequence constraint, FilterResults results) {
 			Log.i(TAG, "publicResults. results.count = " + results.count);
+			if (_filteredCustomers.isEmpty())
+			{
+				_customerCardListView.setDisplayMode(DisplayMode.NO_ITEMS_VIEW);
+			}
+			else
+			{
+				_customerCardListView.setDisplayMode(DisplayMode.LIST_VIEW);
+			}
 			_customerCardsAdapter.notifyDataSetChanged();
 		}
 		
