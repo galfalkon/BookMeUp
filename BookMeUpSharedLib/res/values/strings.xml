@@ -137,8 +137,8 @@
     <string name="business_customer_list_send_message_dialog_btnSend">Send</string>
     <string name="business_customer_list_send_message_dialog_edtMessageHint">Type in your message...\n(Up to 60 characters)</string>
     <string name="business_customer_list_no_customers">No customers</string>
-    <string name="business_customer_list_spendings_filter_dialog_edtSpendingsHint">Please enter limit</string>
-    <string name="business_customer_list_spendings_filter_dialog_title">Filter customers by total spendings</string>
+    <string name="business_customer_list_spendings_filter_dialog_edtSpendingsHint">Minimum spendings</string>
+    <string name="business_customer_list_spendings_filter_dialog_title">Filter by minimum spendings</string>
     <string name="business_customer_list_send_offer_dialog_title">Offer specification</string>
     <string name="business_customer_list_send_offer_dialog_txtDiscount">Discount (%)</string>
     <string name="business_customer_list_send_offer_dialog_txtDuration">Duration (Weeks)</string>
