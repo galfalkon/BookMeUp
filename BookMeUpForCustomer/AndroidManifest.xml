@@ -73,25 +73,29 @@
         </activity>
         <activity
             android:name="com.gling.bookmeup.customer.login.CustomerLoginMainActivity"
-            android:screenOrientation="portrait"
+			android:screenOrientation="portrait"
             android:theme="@style/Theme.BookMeUp_LoginScreen"
             android:noHistory="true" >
         </activity>
         <activity
             android:name="com.gling.bookmeup.customer.CustomerMainActivity"
+            android:screenOrientation="portrait"
             android:label="@string/customer_main_activity_title" >
         </activity>
         <activity
             android:name="com.gling.bookmeup.customer.login.CustomerProfileCreationActivity"
             android:label="@string/customer_profile_creation_activity_title"
+            android:screenOrientation="portrait"
             android:noHistory="true" />
         <activity
             android:name="com.gling.bookmeup.customer.CustomerCalendarActivity"
-            android:label="@string/title_activity_customer_calendar" >
+            android:label="@string/title_activity_customer_calendar" 
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="com.gling.bookmeup.main.NavigationDrawerActivity"
-            android:label="@string/title_activity_navigation_drawer" >
+            android:label="@string/title_activity_navigation_drawer"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 
