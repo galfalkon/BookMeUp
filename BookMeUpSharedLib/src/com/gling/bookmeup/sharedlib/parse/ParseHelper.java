@@ -4,8 +4,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
@@ -39,7 +37,7 @@ public class ParseHelper {
 	    
 	    // Clear User pointer in current installation
 	    ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-	    installation.put(Installation.Keys.USER_POINTER, JSONObject.NULL);
+	    installation.remove(Installation.Keys.USER_POINTER);
 	    installation.saveInBackground();
 	    
 	    ParseUser.logOut();
