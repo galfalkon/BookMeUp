@@ -72,11 +72,10 @@ public class ParseHelper {
 
 		ParseInstallation installation = ParseInstallation
 				.getCurrentInstallation();
-//		String androidId = Secure.getString(context.getContentResolver(),
-//				Secure.ANDROID_ID);
+		String androidId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
 		// http://stackoverflow.com/questions/23815445/at-least-one-id-field-installationid-devicetoken-must-be-specified-in-this-op
 		// TODO un-comment
-//		installation.put("UniqueId", androidId);
+		installation.put("UniqueId", androidId);
 		installation.saveInBackground(new SaveCallback() 
 		{
 			@Override
