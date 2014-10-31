@@ -24,6 +24,7 @@ import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
 import com.gling.bookmeup.main.views.CardListViewWrapperView;
 import com.gling.bookmeup.sharedlib.parse.Business;
+import com.gling.bookmeup.sharedlib.parse.ParseHelper.Category;
 import com.gling.bookmeup.sharedlib.parse.Service;
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
@@ -89,7 +90,14 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 			nameView.setText(business.getName());
 			
 			TextView categoryView = (TextView) view.findViewById(R.id.customer_booking_profile_businessCategoryText);
-			categoryView.setText(business.getCategory().getName());
+			Category category = business.getCategory();
+			try {
+				category.fetchIfNeeded();
+				categoryView.setText(category.getName());
+			} catch (ParseException e1) {
+				Log.e(TAG, "Exception: " + e1.getMessage());
+				categoryView.setText("Not Available");
+			}
 			
 			nameView.setTextSize(40);
 			categoryView.setTextSize(20);
