@@ -180,7 +180,7 @@
     <string name="business_profile_wizard_previous">Previous</string>
     <string name="business_profile_wizard_next">Next</string>
     <string name="progress_dialog_please_wait">Please wait...</string>
-    <string name="progress_dialog_saving_profile">Saving your profile..</string>
+    <string name="progress_dialog_saving_profile">Saving your profile...</string>
     
     <!-- Customer profile creation -->
     <string name="customer_profile_creation_txtWelcome">Welcome to BookMeUp!</string>

@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,7 +48,7 @@ public class ServiceFragment extends ListFragment {
         _key = args.getString(ARG_KEY);
         _page = (ServicePage) _callbacks.onGetPage(_key);
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_page, container, false);
@@ -58,16 +59,31 @@ public class ServiceFragment extends ListFragment {
         Business.getCurrentBusiness().getServices(new FindCallback<Service>() {
 
             @Override
-            public void done(List<Service> services, ParseException e) {
+            public void done(final List<Service> services, ParseException e) {
                 if (e != null) {
                     Log.e(TAG, "Exception: " + e.getMessage());
                     return;
                 }
-                
+
                 if (isAdded()) {
                     setListAdapter(new ServicesAdapter(getActivity(),
-                                                       android.R.layout.simple_list_item_single_choice, android.R.id.text1,
-                                                       services));
+                            android.R.layout.simple_list_item_single_choice, android.R.id.text1,
+                            services));
+                    // Pre-select currently selected item.
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            String selection = _page.getData().getString(ServicePage.SERVICE_ID);
+                            if (selection != null) {
+                                for (int i = 0; i < services.size(); i++) {
+                                    if (services.get(i).getObjectId().equals(selection)) {
+                                        listView.setItemChecked(i, true);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -97,10 +113,8 @@ public class ServiceFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         Service service = ((Service) getListAdapter().getItem(position));
-        _page.getData().putString(ServicePage.SERVICE_NAME,
-                                  service.getName());
-        _page.getData().putString(ServicePage.SERVICE_ID,
-                                  service.getObjectId());
+        _page.getData().putString(ServicePage.SERVICE_NAME, service.getName());
+        _page.getData().putString(ServicePage.SERVICE_ID, service.getObjectId());
         _page.notifyDataChanged();
     }
 
