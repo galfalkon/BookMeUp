@@ -3,11 +3,6 @@
     tools:context="com.gling.bookmeup.CustomerCalendarActivity" >
 
     <item
-        android:id="@+id/customer_calendar_add_booking"
-        android:title="Add a booking"
-        android:showAsAction="always"
-        android:icon="@android:drawable/ic_menu_add"/>
-    <item
         android:id="@+id/customer_calendar_action_today"
         android:title="Today"
         android:showAsAction="always"
