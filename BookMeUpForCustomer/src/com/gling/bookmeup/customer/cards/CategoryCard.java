@@ -23,10 +23,12 @@ public class CategoryCard extends Card {
     public static final String TAG = "CategoryCard";
 
     private Category _category;
+    private int _numBusinesses;
 
     public CategoryCard(Context context, Category category) {
         super(context, R.layout.customer_category_card_inner_layout);
         _category = category;
+        _numBusinesses = -1;
 
         CardHeader header = new CardHeader(context,
                 R.layout.customer_category_card_header_inner_layout);
@@ -49,25 +51,27 @@ public class CategoryCard extends Card {
     public void setupInnerViewElements(ViewGroup parent, final View view) {
         final TextView numBusinessesTxt = (TextView) view
                                                          .findViewById(R.id.customer_category_card_num_businesses_txt);
-        numBusinessesTxt.setText("");
+        if (_numBusinesses != -1) {
+            numBusinessesTxt.setText(String.valueOf(_numBusinesses)
+                    + (_numBusinesses == 1 ? " Business" : " Businesses"));
+        } else {
+            numBusinessesTxt.setText("");
+            ParseQuery<Business> query = new ParseQuery<Business>(Business.CLASS_NAME);
+            query.whereEqualTo(Business.Keys.CATEGORY, _category);
+            query.countInBackground(new CountCallback() {
 
-        ParseQuery<Business> query = new ParseQuery<Business>(Business.CLASS_NAME);
-        query.whereEqualTo(Business.Keys.CATEGORY, _category);
-        query.countInBackground(new CountCallback() {
-
-            @Override
-            public void done(int count, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "failed counting businesses with certain caregory");
-                    return;
+                @Override
+                public void done(int count, ParseException e) {
+                    if (e != null) {
+                        Log.e(TAG, "failed counting businesses with certain caregory");
+                        return;
+                    }
+                    _numBusinesses = count;
+                    numBusinessesTxt.setText(String.valueOf(_numBusinesses)
+                            + (_numBusinesses == 1 ? " Business" : " Businesses"));
                 }
-
-                if (numBusinessesTxt != null) {
-                    numBusinessesTxt.setText(String.valueOf(count)
-                            + (count == 1 ? " Business" : " Businesses"));
-                }
-            }
-        });
+            });
+        }
     }
 
     class CategoryCardThumbnail extends CardThumbnail {
