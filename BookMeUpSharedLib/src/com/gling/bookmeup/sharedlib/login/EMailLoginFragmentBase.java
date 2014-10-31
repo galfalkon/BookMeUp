@@ -17,8 +17,9 @@ import android.widget.FrameLayout;
 
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.sharedlib.R;
-import com.parse.LogInCallback;
+import com.gling.bookmeup.sharedlib.parse.ParseHelper;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 import com.parse.RequestPasswordResetCallback;
 
@@ -148,6 +149,11 @@ public abstract class EMailLoginFragmentBase extends OnClickListenerFragment {
 				{
 					ParseUser user = ParseUser.logIn(userName, password);
 					Log.i(TAG, "User '" + user.getUsername() + "' logged in");
+					
+					ParseInstallation currentInstallation = ParseInstallation.getCurrentInstallation();
+	                currentInstallation.put(ParseHelper.Installation.Keys.USER_POINTER, user);
+	                currentInstallation.save();
+	                
 					handleSuccessfulLogin(user);
 				}
 				catch (ParseException e)
