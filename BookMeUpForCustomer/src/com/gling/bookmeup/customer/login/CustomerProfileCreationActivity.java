@@ -1,5 +1,7 @@
 package com.gling.bookmeup.customer.login;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.widget.TextView.OnEditorActionListener;
 import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.gling.bookmeup.customer.R;
 import com.gling.bookmeup.sharedlib.parse.Customer;
+import com.parse.ParseObject;
 
 public class CustomerProfileCreationActivity extends Activity implements OnClickListener, TextWatcher, OnEditorActionListener 
 {
@@ -113,6 +116,7 @@ public class CustomerProfileCreationActivity extends Activity implements OnClick
 		Customer currentCustomer = Customer.getCurrentCustomer();
 		currentCustomer.setName(_edtName.getText().toString());
 		currentCustomer.setPhoneNumber(_edtPhoneNumber.getText().toString());
+		currentCustomer.setFavourites(new ArrayList<ParseObject>());
 		currentCustomer.saveInBackground();
 		startActivity(new Intent(this, CustomerMainActivity.class));
 	}

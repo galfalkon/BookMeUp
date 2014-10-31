@@ -1,5 +1,7 @@
 package com.gling.bookmeup.sharedlib.parse;
 
+import java.util.ArrayList;
+
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
@@ -45,5 +47,9 @@ public class Customer extends ParseObject {
     
     public void setPhoneNumber(String phoneNumber) {
     	put(Keys.PHONE_NUMBER, phoneNumber);
+    }
+    
+    public void setFavourites(ArrayList<ParseObject> favourites) {
+    	put(Keys.FAVOURITES, favourites);
     }
 }
