@@ -6,11 +6,9 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
-import android.inputmethodservice.Keyboard.Key;
 import android.provider.Settings.Secure;
 import android.util.Log;
 
-import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
@@ -42,17 +40,6 @@ public class ParseHelper {
 	    Log.i(TAG, "Logged out");
 	}
 	
-	public static void fetchBusiness(GetCallback<Business> callback) {
-		// TODO null checks on getCurrentUser()
-		ParseUser.getCurrentUser().getParseObject(User.Keys.BUSINESS_POINTER)
-				.fetchIfNeededInBackground(callback);
-	}
-	
-	public static void fetchCustomer(GetCallback<Customer> callback) {
-		// TODO null checks on getCurrentUser()
-		ParseUser.getCurrentUser().getParseObject(User.Keys.CUSTOMER_POINTER).fetchIfNeededInBackground(callback);
-	}
-
 	public static void initialize(Context context, Class<? extends Activity> pushNotificationHandlerActivity) {
 		Log.i(TAG, "Initializing Parse");
 
