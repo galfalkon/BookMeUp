@@ -105,8 +105,7 @@
         <activity
             android:name="com.gling.bookmeup.business.wizards.profile.BusinessProfileWizardActivity"
             android:label="@string/title_activity_business_profile_wizard"
-            android:screenOrientation="portrait" 
-            android:windowSoftInputMode="adjustNothing">
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="com.gling.bookmeup.business.wizards.booking.BusinessAddBookingWizardActivity"
