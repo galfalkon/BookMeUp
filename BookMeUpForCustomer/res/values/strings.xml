@@ -1,5 +1,7 @@
 <resources>
 
     <string name="app_name">Book Me Up!</string>
-
+    
+    <!-- My Bookings -->
+	<string name="customer_my_bookings_multichoice_cancel">Cancel</string>
 </resources>

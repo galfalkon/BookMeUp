@@ -2,6 +2,7 @@ package com.gling.bookmeup.customer;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
+import it.gmariotti.cardslib.library.internal.Card.OnLongCardClickListener;
 import it.gmariotti.cardslib.library.internal.CardExpand;
 import it.gmariotti.cardslib.library.internal.CardHeader;
 
@@ -10,12 +11,15 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.gling.bookmeup.main.Constants;
-import com.gling.bookmeup.main.GenericCardArrayAdapter;
+import com.gling.bookmeup.main.GenericMultiChoiceCardArrayAdapter;
 import com.gling.bookmeup.main.ICardGenerator;
 import com.gling.bookmeup.main.IObservableList;
 import com.gling.bookmeup.main.ObservableArrayList;
@@ -29,11 +33,14 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+
 public class CustomerMyBookingsFragment extends OnClickListenerFragment {
 	private static final String TAG = "CustomerMyBookingsFragment";
 	
 	IObservableList<Booking> _bookings;
-	GenericCardArrayAdapter<Booking> _bookingsCardAdapter;
+	GenericMultiChoiceCardArrayAdapter<Booking> _bookingsCardAdapter;
 	CardListViewWrapperView _bookingsListViewWrapperView;
 	
 	@Override
@@ -42,10 +49,11 @@ public class CustomerMyBookingsFragment extends OnClickListenerFragment {
 		View view = super.onCreateView(inflater, container, savedInstanceState);
 		
 		_bookings = new ObservableArrayList<Booking>();
-		_bookingsCardAdapter = new GenericCardArrayAdapter<Booking>(getActivity(), _bookings, new BookingCardGenerator());
+		_bookingsCardAdapter = new BookingMultiChoiceCardArrayAdapter(_bookings, new BookingCardGenerator(), R.menu.customer_my_bookings_mutlichoice);
 		
 		_bookingsListViewWrapperView = (CardListViewWrapperView) view.findViewById(R.id.customer_my_booking_listViewWrapper);
 		_bookingsListViewWrapperView.setAdapter(_bookingsCardAdapter);
+		_bookingsListViewWrapperView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 
 		ParseQuery<Booking> bookingsQuery = new ParseQuery<Booking>(Booking.CLASS_NAME)
 				.whereEqualTo(Booking.Keys.CUSTOMER_POINTER, Customer.getCurrentCustomer())
@@ -92,6 +100,12 @@ public class CustomerMyBookingsFragment extends OnClickListenerFragment {
 		return R.layout.customer_my_bookings_fragment;
 	}
 	
+	private void handleBookingsCancellation(List<Booking> bookingsToCancel) 
+	{
+		Log.i(TAG, "handleBookingsCancellation");
+		Crouton.showText(getActivity(), "Not implemented", Style.ALERT);
+	}
+	
 	private class BookingCardGenerator implements ICardGenerator<Booking>
 	{
 		@Override
@@ -136,8 +150,38 @@ public class CustomerMyBookingsFragment extends OnClickListenerFragment {
 					card.doToogleExpand();
 				}
 			});
+			card.setOnLongClickListener(new OnLongCardClickListener() 
+			{
+				@Override
+				public boolean onLongClick(Card card, View view) 
+				{
+					return _bookingsCardAdapter.startActionMode(getActivity());
+				}
+			});
 
 	    	return card;
+		}
+	}
+	
+	private class BookingMultiChoiceCardArrayAdapter extends GenericMultiChoiceCardArrayAdapter<Booking>
+	{
+		public BookingMultiChoiceCardArrayAdapter(IObservableList<Booking> items, ICardGenerator<Booking> cardFactory, int menuRes) 
+		{
+			super(getActivity(), items, cardFactory, menuRes);
+		}
+		
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) 
+		{
+			switch (item.getItemId())
+        	{
+        	case R.id.customer_my_bookings_multichoice_cancel:
+        		handleBookingsCancellation(getSelectedItems());
+        		mode.finish();
+        		return true;
+        	}
+        	
+        	return false;
 		}
 	}
 }
