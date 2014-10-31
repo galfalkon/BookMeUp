@@ -90,7 +90,6 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		 */
 		ParseQuery<Booking> query = new ParseQuery<Booking>(Booking.CLASS_NAME).
 				whereEqualTo(Booking.Keys.BUSINESS_POINTER, Business.getCurrentBusiness()).
-				whereLessThan(Booking.Keys.DATE, new Date()).
 				whereEqualTo(Booking.Keys.STATUS, Booking.Status.APPROVED);
 		query.include(Booking.Keys.CUSTOMER_POINTER);
 		query.include(Booking.Keys.SERVICE_POINTER);
