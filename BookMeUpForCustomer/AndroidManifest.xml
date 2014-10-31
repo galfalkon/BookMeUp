@@ -40,6 +40,10 @@
         android:label="@string/app_name"
         android:logo="@drawable/ic_launcher_bevel"
         android:theme="@style/Theme.Bookmeup_ActionBar" >
+        
+        <meta-data android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version" />
+        
         <service android:name="com.parse.PushService" />
 
         <!-- For Parse push services -->
