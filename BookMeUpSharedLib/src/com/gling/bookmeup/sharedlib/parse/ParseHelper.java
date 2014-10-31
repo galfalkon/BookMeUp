@@ -6,7 +6,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
-import android.provider.Settings.Secure;
 import android.util.Log;
 
 import com.parse.Parse;
@@ -18,7 +17,6 @@ import com.parse.ParseObject;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.PushService;
-import com.parse.SaveCallback;
 
 public class ParseHelper {
 	private static final String TAG = "ParseHelper";
@@ -57,21 +55,7 @@ public class ParseHelper {
 		Log.i(TAG, "Configuring parse push service");
 		PushService.setDefaultPushCallback(context, pushNotificationHandlerActivity);
 
-		ParseInstallation installation = ParseInstallation
-				.getCurrentInstallation();
-		String androidId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
-		// http://stackoverflow.com/questions/23815445/at-least-one-id-field-installationid-devicetoken-must-be-specified-in-this-op
-		// TODO un-comment
-		installation.put("UniqueId", androidId);
-		installation.saveInBackground(new SaveCallback() 
-		{
-			@Override
-			public void done(ParseException e) {
-				if (e != null) {
-					Log.e(TAG, e.getMessage());
-				}
-			}
-		});
+		ParseInstallation.getCurrentInstallation().saveInBackground();
 	}
 
 	public static class Installation {
