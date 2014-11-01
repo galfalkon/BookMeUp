@@ -13,10 +13,12 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,6 +80,12 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setTitle(TITLE);
 
+//		TextView servicesHeader = (TextView) view.findViewById(R.id.customer_booking_profile_services_header_textView);
+//		servicesHeader.setTextSize(13);
+//		servicesHeader.setTextColor(Color.BLACK);
+//		servicesHeader.setGravity(Gravity.CENTER);
+		
+		
 		_allServicesView = (CardListViewWrapperView) view.findViewById(R.id.customer_booking_profile_list_listViewServices);
 		_allServicesView.setAdapter(_servicesAdapter);
 
@@ -116,14 +124,24 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 				categoryView.setText("Not Available");
 			}
 			
-			nameView.setTextSize(40);
-			categoryView.setTextSize(20);
+			nameView.setTextSize(26);
+			categoryView.setTextSize(18);
+			
+			TextView descriptionView = (TextView) view.findViewById(R.id.customer_booking_profile_description_textView);
+			descriptionView.setText(business.getDescription());
+			
+			TextView phoneView = (TextView) view.findViewById(R.id.customer_booking_profile_phone_number_textView);
+			phoneView.setText(business.getPhoneNumber());
+			
+			TextView openingHoursView = (TextView) view.findViewById(R.id.customer_booking_profile_opening_hours_textView);
+			openingHoursView.setText(business.getOpeningHours());
+			
+//			titleIcon.setImageDrawable(resources.getDrawable(android.R.drawable.btn_star_big_on));
 
 			inflateListWithAllServices(business);
 		}
 
 
-		//customer_booking_profile_list_listViewServices
 
 		return view;
 	}

@@ -96,6 +96,12 @@
     <string name="customer_business_profile_opening_hours">Opening Hours:</string>
     <string name="customer_business_profile_description">"Description: "</string>
     <string name="favourites_icon">favourites icon</string>
+    <string name="customer_booking_profile_phone_header_text">Phone number:  </string>
+    <string name="customer_booking_profile_description_header_text">Description:   </string>
+    <string name="customer_booking_profile_favouritesDescription">Favourite</string>
+    <string name="customer_booking_profile_callDescription">Call Business</string>
+    <string name="customer_booking_profile_opening_hours_header_text">Opening Hours: </string>
+    <string name="customer_booking_profile_services_header_text">Services (click to choose)</string>
     
     <!-- Customer Choose Services -->
     <string name="customer_choose_services_btnScheduleTxt">Schedule</string>
