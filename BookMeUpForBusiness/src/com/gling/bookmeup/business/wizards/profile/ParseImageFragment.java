@@ -88,11 +88,13 @@ public class ParseImageFragment extends Fragment {
 
         byte[] scaledImage = mPage.getData().getByteArray(Page.SIMPLE_DATA_KEY);
         if (scaledImage != null) {
-            imageView.setImageBitmap(BitmapFactory.decodeByteArray(scaledImage,0,scaledImage.length) );
+            imageView.setImageBitmap(BitmapFactory.decodeByteArray(scaledImage,
+                                                                   0,
+                                                                   scaledImage.length));
         } else {
             imageView.setPlaceholder(getActivity().getApplicationContext()
-                                     .getResources()
-                                     .getDrawable(R.drawable.ic_person));
+                                                  .getResources()
+                                                  .getDrawable(R.drawable.ic_person));
             ParseFile imageFile = Business.getCurrentBusiness().getImageFile();
             if (imageFile != null) {
                 imageView.setParseFile(imageFile);
@@ -100,8 +102,23 @@ public class ParseImageFragment extends Fragment {
             }
         }
 
-        Button uploadImage = (Button) rootView.findViewById(R.id.business_profile_wizard_upload_image_btn);
-        uploadImage.setOnClickListener(new OnClickListener() {
+        Button clearImageBtn = (Button) rootView
+                                                .findViewById(R.id.business_profile_wizard_clear_image_btn);
+        clearImageBtn.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                imageView.setImageDrawable(getActivity().getApplicationContext()
+                                                        .getResources()
+                                                        .getDrawable(R.drawable.ic_person));
+                mPage.getData().putByteArray(Page.SIMPLE_DATA_KEY, null);
+                mPage.notifyDataChanged();
+            }
+        });
+
+        Button uploadImageBtn = (Button) rootView
+                                                 .findViewById(R.id.business_profile_wizard_upload_image_btn);
+        uploadImageBtn.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -179,14 +196,12 @@ public class ParseImageFragment extends Fragment {
         switch (requestCode) {
         case CAMERA_REQUEST_CODE:
             if (resultCode == Activity.RESULT_OK) {
-                imageView.setImageURI(mNewImageUri);
                 writeResult();
             }
             break;
         case GALLERY_REQUEST_CODE:
             if (resultCode == Activity.RESULT_OK && data != null) {
                 mNewImageUri = data.getData();
-                imageView.setImageURI(mNewImageUri);
                 writeResult();
             }
             break;
@@ -195,6 +210,7 @@ public class ParseImageFragment extends Fragment {
 
     private void writeResult() {
         byte[] scaledImage = Utils.getScaledImage(getActivity().getBaseContext(), mNewImageUri);
+        imageView.setImageBitmap(BitmapFactory.decodeByteArray(scaledImage, 0, scaledImage.length));
         mPage.getData().putByteArray(Page.SIMPLE_DATA_KEY, scaledImage);
         mPage.notifyDataChanged();
     }

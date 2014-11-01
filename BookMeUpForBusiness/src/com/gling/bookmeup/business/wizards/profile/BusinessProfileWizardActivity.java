@@ -107,6 +107,8 @@ public class BusinessProfileWizardActivity extends FragmentActivity implements
 
                 if (scaledImage != null) {
                     business.setImageFile(new ParseFile("business_image.jpg", scaledImage));
+                } else {
+                    business.remove(Business.Keys.IMAGE);
                 }
 
                 try {

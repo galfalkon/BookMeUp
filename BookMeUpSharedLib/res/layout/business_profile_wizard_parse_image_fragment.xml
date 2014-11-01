@@ -25,7 +25,7 @@
             <Button
                 android:id="@+id/business_profile_wizard_upload_image_btn"
                 style="?android:attr/buttonBarButtonStyle"
-                android:textColor="@color/text_light"
+                android:textColor="@color/review_green"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
