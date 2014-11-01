@@ -23,11 +23,13 @@ public class Utils {
         try {
             ContentResolver cr = context.getContentResolver();
             InputStream inputStream = cr.openInputStream(uri);
-            Bitmap businessImage = BitmapFactory.decodeStream(inputStream);
+            Bitmap scaledImage = BitmapFactory.decodeStream(inputStream);
 
+            int dstImageWidth = (scaledImage.getWidth() <= IMAGE_WIDTH) ? scaledImage.getWidth()
+                    : IMAGE_WIDTH;
             // Resize photo
-            businessImage = Bitmap.createScaledBitmap(businessImage, IMAGE_WIDTH, IMAGE_WIDTH
-                    * businessImage.getHeight() / businessImage.getWidth(), false);
+            scaledImage = Bitmap.createScaledBitmap(scaledImage, dstImageWidth, dstImageWidth
+                    * scaledImage.getHeight() / scaledImage.getWidth(), false);
 
             // Override Android default landscape orientation and save portrait
             // Matrix matrix = new Matrix();
@@ -38,12 +40,12 @@ public class Utils {
             // matrix, true);
 
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            businessImage.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            scaledImage.compress(Bitmap.CompressFormat.JPEG, 100, bos);
             data = bos.toByteArray();
         } catch (FileNotFoundException e) {
             Log.e(TAG, e.getMessage());
         }
-        
+
         return data;
     }
 }

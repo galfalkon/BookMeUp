@@ -2,21 +2,53 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/WizardPageContainer"
-    android:orientation="vertical"
-    tools:ignore="UseCompoundDrawables" >
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
 
     <TextView style="@style/WizardPageTitle" />
 
-    <FrameLayout
-        android:id="@+id/frameLayoutImageContainer"
-        style="@style/WizardPageImageContainer" >
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal" >
+
+        <LinearLayout
+            android:id="@+id/business_profile_wizard_upload_image_control"
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/business_profile_wizard_upload_image_btn"
+                style="?android:attr/buttonBarButtonStyle"
+                android:textColor="@color/text_light"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/business_profile_wizard_upload_new_image"
+                android:paddingRight="30dp" />
+
+            <Button
+                android:id="@+id/business_profile_wizard_clear_image_btn"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/ic_action_cancel" />
+
+        </LinearLayout>
 
         <com.parse.ParseImageView
             android:id="@+id/parseImageView"
-            style="@style/WizardPageImage"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </FrameLayout>
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/business_profile_wizard_upload_image_control"
+            android:layout_centerInParent="true"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside" />
+    </RelativeLayout>
 
 </LinearLayout>

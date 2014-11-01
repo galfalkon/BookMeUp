@@ -28,8 +28,8 @@ public class DatePage extends Page {
     @Override
     public void getReviewItems(ArrayList<ReviewItem> dest) {
         DateTime date = (DateTime) mData.getSerializable(SIMPLE_DATA_KEY);
-        dest.add(new ReviewItem("Date", Constants.DATE_FORMAT.format(date.toDate()), getKey(), -1).setWeight(1));
-        dest.add(new ReviewItem("Time", Constants.TIME_FORMAT.format(date.toDate()), getKey(), -1).setWeight(1));
+        dest.add(new ReviewItem("Date", Constants.DATE_FORMAT.format(date.toDate()), getKey(), 1));
+        dest.add(new ReviewItem("Time", Constants.TIME_FORMAT.format(date.toDate()), getKey(), 1));
     }
 
     @Override

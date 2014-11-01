@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -16,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.gling.bookmeup.main.Utils;
@@ -84,14 +86,13 @@ public class ParseImageFragment extends Fragment {
 
         imageView = (ParseImageView) rootView.findViewById(R.id.parseImageView);
 
-        imageView.setPlaceholder(getActivity().getApplicationContext()
-                                                    .getResources()
-                                                    .getDrawable(R.drawable.ic_person));
-
-        String imageUri = mPage.getData().getString(Page.SIMPLE_DATA_KEY);
-        if (!TextUtils.isEmpty(imageUri)) {
-            imageView.setImageURI(Uri.parse(imageUri));
+        byte[] scaledImage = mPage.getData().getByteArray(Page.SIMPLE_DATA_KEY);
+        if (scaledImage != null) {
+            imageView.setImageBitmap(BitmapFactory.decodeByteArray(scaledImage,0,scaledImage.length) );
         } else {
+            imageView.setPlaceholder(getActivity().getApplicationContext()
+                                     .getResources()
+                                     .getDrawable(R.drawable.ic_person));
             ParseFile imageFile = Business.getCurrentBusiness().getImageFile();
             if (imageFile != null) {
                 imageView.setParseFile(imageFile);
@@ -99,7 +100,8 @@ public class ParseImageFragment extends Fragment {
             }
         }
 
-        imageView.setOnClickListener(new OnClickListener() {
+        Button uploadImage = (Button) rootView.findViewById(R.id.business_profile_wizard_upload_image_btn);
+        uploadImage.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {

@@ -27,9 +27,9 @@ public class PhoneOpeningHoursPage extends Page {
 	@Override
 	public void getReviewItems(ArrayList<ReviewItem> dest) {
 		dest.add(new ReviewItem("Phone number",
-				mData.getString(PHONE_DATA_KEY), getKey(), -1));
+				mData.getString(PHONE_DATA_KEY), getKey(), 1));
 		dest.add(new ReviewItem("Opening hours", mData
-				.getString(OPENING_HOURS_DATA_KEY), getKey(), -1));
+				.getString(OPENING_HOURS_DATA_KEY), getKey(), 1));
 	}
 	
 }

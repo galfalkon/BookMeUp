@@ -1,5 +1,7 @@
 package com.tech.freak.wizardpager.model;
 
+import java.util.ArrayList;
+
 import android.support.v4.app.Fragment;
 import com.tech.freak.wizardpager.ui.ImageFragment;
 
@@ -18,4 +20,10 @@ public class ImagePage extends TextPage {
 		mData.putString(SIMPLE_DATA_KEY, value);
 		return this;
 	}
+	
+	@Override
+    public void getReviewItems(ArrayList<ReviewItem> dest) {
+        dest.add(new ReviewItem(getTitle(),
+                "Review", getKey(), 1));
+    }
 }

@@ -16,26 +16,28 @@
         android:id="@+id/business_profile_wizard_services_edtPrice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:digits="0123456789"
         android:hint="Price"
         android:imeOptions="actionNext"
-        android:inputType="numberSigned" />
+        android:inputType="numberDecimal" />
 
     <EditText
         android:id="@+id/business_profile_wizard_services_edtDuration"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:digits="0123456789"
         android:hint="Duration"
         android:imeOptions="actionDone"
-        android:inputType="numberSigned" />
+        android:inputType="numberDecimal" />
 
     <LinearLayout
         style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp"
         android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp" >
+        android:layout_marginRight="2dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal" >
 
         <Button
             android:id="@+id/business_profile_wizard_services_btnAddService"

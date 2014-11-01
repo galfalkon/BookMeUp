@@ -28,7 +28,7 @@ public class RegularCustomerPage extends Page {
 
     @Override
     public void getReviewItems(ArrayList<ReviewItem> dest) {
-        dest.add(new ReviewItem(getTitle(), mData.getString(CUSTOMER_NAME), getKey()).setWeight(1));
+        dest.add(new ReviewItem(getTitle(), mData.getString(CUSTOMER_NAME), getKey(), 1));
     }
 
     @Override

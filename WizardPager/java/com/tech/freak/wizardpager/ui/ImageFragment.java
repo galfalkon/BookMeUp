@@ -189,10 +189,9 @@ public class ImageFragment extends Fragment {
 		}
 	}
 
-	// Modified
 	private void writeResult() {
 		mPage.getData().putString(Page.SIMPLE_DATA_KEY,
-				(mNewImageUri != null) ? "Review" : null);
+				(mNewImageUri != null) ? mNewImageUri.toString() : null);
 		mPage.notifyDataChanged();
 	}
 

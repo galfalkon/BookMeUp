@@ -28,9 +28,9 @@ public class NameDescriptionPage extends Page {
 	@Override
 	public void getReviewItems(ArrayList<ReviewItem> dest) {
 		dest.add(new ReviewItem("Business name",
-				mData.getString(NAME_DATA_KEY), getKey(), -1));
+				mData.getString(NAME_DATA_KEY), getKey(), 1));
 		dest.add(new ReviewItem("Description", mData
-				.getString(DESCRIPTION_DATA_KEY), getKey(), -1));
+				.getString(DESCRIPTION_DATA_KEY), getKey(), 1));
 	}
 
 	@Override

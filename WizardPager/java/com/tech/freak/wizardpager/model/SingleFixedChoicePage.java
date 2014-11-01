@@ -48,7 +48,7 @@ public class SingleFixedChoicePage extends Page {
 
     @Override
     public void getReviewItems(ArrayList<ReviewItem> dest) {
-        dest.add(new ReviewItem(getTitle(), mData.getString(SIMPLE_DATA_KEY), getKey()));
+        dest.add(new ReviewItem(getTitle(), mData.getString(SIMPLE_DATA_KEY), getKey(), 1));
     }
 
     @Override
@@ -64,5 +64,13 @@ public class SingleFixedChoicePage extends Page {
     public SingleFixedChoicePage setValue(String value) {
         mData.putString(SIMPLE_DATA_KEY, value);
         return this;
+    }
+    
+    public void setWeight(int weight) {
+        ArrayList<ReviewItem> reviewItems = new ArrayList<ReviewItem>();
+        getReviewItems(reviewItems);
+        for(ReviewItem ri: reviewItems) {
+            ri.setWeight(weight);
+        }
     }
 }

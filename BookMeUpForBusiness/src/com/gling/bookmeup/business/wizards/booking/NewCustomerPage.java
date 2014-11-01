@@ -29,10 +29,9 @@ public class NewCustomerPage extends Page {
     @Override
     public void getReviewItems(ArrayList<ReviewItem> dest) {
         dest
-            .add(new ReviewItem("Customer name", mData.getString(CUSTOMER_NAME), getKey(), -1)
-                                                                                              .setWeight(1));
+            .add(new ReviewItem("Customer name", mData.getString(CUSTOMER_NAME), getKey(), 1)                                                                                              );
         dest.add(new ReviewItem("Phone Number", mData.getString(CUSTOMER_PHONE_NUMBER), getKey(),
-                -1).setWeight(1));
+                1));
     }
 
     @Override
