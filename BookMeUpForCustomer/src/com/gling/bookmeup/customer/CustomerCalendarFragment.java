@@ -13,13 +13,16 @@ import org.joda.time.DateTime;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.gling.bookmeup.main.Constants;
 import com.gling.bookmeup.main.GenericCardArrayAdapter;
@@ -104,6 +107,12 @@ public class CustomerCalendarFragment extends Fragment {
 		_bookingsCardAdapter = new GenericCardArrayAdapter<Booking>(getActivity(), _possibleBookings, new BookingCardGenerator());
 
 		_bookingsListViewWrapperView = (CardListViewWrapperView) view.findViewById(R.id.business_calendar_cardListViewWrapper);
+		TextView headerView = new TextView(getActivity().getApplicationContext());
+		headerView.setGravity(Gravity.CENTER);
+		headerView.setTextSize(18);
+		headerView.setTextColor(Color.BLACK);
+		headerView.setText(R.string.customer_calendar_choosing_instructions);
+		_bookingsListViewWrapperView.getListView().addHeaderView(headerView);
 		_bookingsListViewWrapperView.setAdapter(_bookingsCardAdapter);
 
 //		FragmentActivity activity = getActivity();
