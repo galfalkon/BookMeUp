@@ -13,21 +13,22 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
 import com.gling.bookmeup.main.views.CardListViewWrapperView;
 import com.gling.bookmeup.sharedlib.parse.Business;
+import com.gling.bookmeup.sharedlib.parse.Customer;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper.Category;
 import com.gling.bookmeup.sharedlib.parse.Service;
 import com.parse.FindCallback;
@@ -35,7 +36,11 @@ import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseImageView;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class CustomerBookingProfileFragment extends OnClickListenerFragment implements TextWatcher {
 
@@ -53,6 +58,8 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 	private CardListViewWrapperView _allServicesView;
 	private ServiceCardArrayAdapter _servicesAdapter;
 	private ArrayList<Card> _allCategoriesCards;
+	
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -79,23 +86,20 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setTitle(TITLE);
-
-//		TextView servicesHeader = (TextView) view.findViewById(R.id.customer_booking_profile_services_header_textView);
-//		servicesHeader.setTextSize(13);
-//		servicesHeader.setTextColor(Color.BLACK);
-//		servicesHeader.setGravity(Gravity.CENTER);
-		
 		
 		_allServicesView = (CardListViewWrapperView) view.findViewById(R.id.customer_booking_profile_list_listViewServices);
 		_allServicesView.setAdapter(_servicesAdapter);
-
-
+		
+		//business details views
 		Activity activity = getActivity();
 		if (activity instanceof CustomerMainActivity) {
 			CustomerMainActivity customerActivity = (CustomerMainActivity)activity;
 			Business business = customerActivity.getChosenBusiness();
-			ParseFile image = business.getImageFile();
+			
+			ImageView favouriteIcon = (ImageView) view.findViewById(R.id.customer_booking_profile_favouriteImageView);
+			handleFavouriteIcon(business, favouriteIcon);
 
+			ParseFile image = business.getImageFile();
 			final ParseImageView imageView = (ParseImageView) view.findViewById(R.id.customer_booking_profile_businessParseImageView);
 			imageView.setPlaceholder(getActivity().getApplicationContext().getResources().getDrawable(R.drawable.ic_person));
 			imageView.setParseFile(image);
@@ -169,6 +173,80 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before	, int count) {
 		Log.i(TAG, "onTextChanged");
+	}
+	
+	private void handleFavouriteIcon(final Business business, final ImageView favouriteIcon) {
+		final Customer currentCustomer = Customer.getCurrentCustomer();
+		boolean favourite = false;
+		@SuppressWarnings("unchecked")
+		ArrayList<ParseObject> favouriteBusinesses = (ArrayList<ParseObject>) currentCustomer.get(Customer.Keys.FAVOURITES);
+		for (ParseObject parseObject : favouriteBusinesses) {
+			if (parseObject instanceof Business) {
+				Business businessItem = (Business) parseObject;
+				if (business.getObjectId().equals(businessItem.getObjectId())) {
+					favourite = true;
+					favouriteIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_on));
+					break;
+				}
+			}
+		}
+		final boolean finalFavourite = favourite;
+		favouriteIcon.setOnClickListener(new OnClickListener() {
+
+			boolean clicked = finalFavourite;
+
+			@Override
+			public void onClick(View v) {
+				if (clicked) {
+					favouriteIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_off));
+					@SuppressWarnings("unchecked")
+					ArrayList<ParseObject> businesses = (ArrayList<ParseObject>) currentCustomer.get(Customer.Keys.FAVOURITES);
+					ArrayList<ParseObject> toRemove = new ArrayList<ParseObject>();
+					for (ParseObject parseObject : businesses) {
+						if (parseObject instanceof Business) {
+							Business businessItem = (Business) parseObject;
+							if (business.getObjectId().equals(businessItem.getObjectId())) {
+								toRemove.add(parseObject);
+							}
+						}
+					}
+					businesses.removeAll(toRemove);
+					currentCustomer.put(Customer.Keys.FAVOURITES, businesses);
+					currentCustomer.saveInBackground();
+					clicked = false;
+				} else {
+					@SuppressWarnings("unchecked")
+					ArrayList<ParseObject> businesses = (ArrayList<ParseObject>) currentCustomer.get(Customer.Keys.FAVOURITES);
+					if (businesses.size() < 10) {
+						favouriteIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_on));
+						boolean exists = false;
+						for (ParseObject parseObject : businesses) {
+							if (parseObject instanceof Business) {
+								Business businessItem = (Business) parseObject;
+								if (business.getObjectId().equals(businessItem.getObjectId())) {
+									exists = true;
+									break;
+								}
+							}
+						}
+						if (!exists) {
+							businesses.add(business);
+						}
+						currentCustomer.put(Customer.Keys.FAVOURITES, businesses);
+						currentCustomer.saveInBackground();
+						clicked = true;
+					} else {
+						getActivity().runOnUiThread(new Runnable() {
+	                        public void run() {
+	                            Crouton.showText(getActivity(),
+	                                             R.string.customer_booking_profile_to_much_favourites_error,
+	                                             Style.ALERT);
+	                        }
+	                    });
+					}
+				}
+			}
+		});
 	}
 
 	private void inflateListWithAllServices(final Business business) {

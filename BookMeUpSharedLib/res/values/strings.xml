@@ -102,6 +102,7 @@
     <string name="customer_booking_profile_callDescription">Call Business</string>
     <string name="customer_booking_profile_opening_hours_header_text">Opening Hours: </string>
     <string name="customer_booking_profile_services_header_text">Services (click to choose)</string>
+    <string name="customer_booking_profile_to_much_favourites_error">You already have too much favourites!</string>
     
     <!-- Customer Choose Services -->
     <string name="customer_choose_services_btnScheduleTxt">Schedule</string>
