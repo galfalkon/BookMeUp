@@ -22,12 +22,14 @@ public class BusinessAddBookingWizardModel extends AbstractWizardModel {
     protected PageList onNewRootPageList() {
         return new PageList(
                 new BranchPage(this, CUSTOMER_TYPE).addBranch(REGULAR_CUSTOMER,
-                                                                new RegularCustomerPage(this, REGULAR_CUSTOMER)
-                                                                                                .setRequired(true))
-                                                     .addBranch(NEW_CUSTOMER,
-                                                                new NewCustomerPage(this, NEW_CUSTOMER)
-                                                                                                .setRequired(true)),
-                new ServicePage(this, SERVICE).setRequired(true),
-                new DatePage(this, DATE).setRequired(true));
+                                                              new RegularCustomerPage(this,
+                                                                      REGULAR_CUSTOMER)
+                                                                                       .setRequired(true))
+                                                   .addBranch(NEW_CUSTOMER,
+                                                              new NewCustomerPage(this,
+                                                                      NEW_CUSTOMER)
+                                                                                   .setRequired(true))
+                                                   .setRequired(true), new ServicePage(this,
+                        SERVICE).setRequired(true), new DatePage(this, DATE).setRequired(true));
     }
 }

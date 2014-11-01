@@ -37,6 +37,10 @@ public class BusinessProfileWizardModel extends AbstractWizardModel {
             categoryName = category.getName();
         }
 
+        String phone = Business.getCurrentBusiness().getPhoneNumber();
+        String address = Business.getCurrentBusiness().getAddress();
+        String openingHours = Business.getCurrentBusiness().getOpeningHours();
+
         return new PageList(
 
         new NameDescriptionPage(this, GENERAL_INFO).setRequired(true),
@@ -45,7 +49,10 @@ public class BusinessProfileWizardModel extends AbstractWizardModel {
                                                  .setValue(categoryName)
                                                  .setRequired(true),
 
-        new PhoneOpeningHoursPage(this, DETAILS),
+        new PhoneAddressOpeningHoursPage(this, DETAILS).setPhone(phone)
+                                                       .setAddress(address)
+                                                       .setOpeningHours(openingHours)
+                                                       .setRequired(true),
 
         new ParseImagePage(this, IMAGE),
 

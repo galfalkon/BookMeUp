@@ -22,6 +22,17 @@
                 android:inputType="phone"
                 android:hint="Your business phone number"
                 android:layout_marginBottom="16dp" />
+            
+            <TextView style="@style/WizardFormLabel"
+                android:text="Address" />
+
+            <EditText android:id="@+id/business_profile_wizard_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:saveEnabled="false"
+                android:inputType="textPostalAddress"
+                android:hint="Your business address"
+                android:layout_marginBottom="16dp" />
 
             <TextView style="@style/WizardFormLabel"
                 android:text="Opening Hours" />

@@ -2,8 +2,8 @@ package com.gling.bookmeup.business.wizards.profile;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,7 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.gling.bookmeup.business.BusinessMainActivity;
-import com.gling.bookmeup.sharedlib.R;
+import com.gling.bookmeup.business.R;
 import com.gling.bookmeup.sharedlib.parse.Business;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper.Category;
 import com.parse.ParseException;
@@ -32,6 +32,9 @@ import com.tech.freak.wizardpager.model.Page;
 import com.tech.freak.wizardpager.ui.PageFragmentCallbacks;
 import com.tech.freak.wizardpager.ui.ReviewFragment;
 import com.tech.freak.wizardpager.ui.StepPagerStrip;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class BusinessProfileWizardActivity extends FragmentActivity implements
         PageFragmentCallbacks, ReviewFragment.Callbacks, ModelCallbacks {
@@ -54,7 +57,7 @@ public class BusinessProfileWizardActivity extends FragmentActivity implements
     private List<Page> _currentPageSequence;
     private StepPagerStrip _stepPagerStrip;
 
-    private Context _context;
+    private Activity _context;
 
     private void saveProfile() {
         final ProgressDialog progressDialog = ProgressDialog
@@ -92,14 +95,17 @@ public class BusinessProfileWizardActivity extends FragmentActivity implements
                 business
                         .setPhoneNumber(_wizardModel.findByKey(BusinessProfileWizardModel.DETAILS)
                                                     .getData()
-                                                    .getString(PhoneOpeningHoursPage.PHONE_DATA_KEY));
+                                                    .getString(PhoneAddressOpeningHoursPage.PHONE_DATA_KEY));
 
-                String openingHours = _wizardModel.findByKey(BusinessProfileWizardModel.DETAILS)
-                                                  .getData()
-                                                  .getString(PhoneOpeningHoursPage.OPENING_HOURS_DATA_KEY);
-                if (openingHours != null) {
-                    business.setOpeningHours(openingHours);
-                }
+                business
+                        .setAddress(_wizardModel.findByKey(BusinessProfileWizardModel.DETAILS)
+                                                .getData()
+                                                .getString(PhoneAddressOpeningHoursPage.ADDRESS_DATA_KEY));
+
+                business
+                        .setOpeningHours(_wizardModel.findByKey(BusinessProfileWizardModel.DETAILS)
+                                                     .getData()
+                                                     .getString(PhoneAddressOpeningHoursPage.OPENING_HOURS_DATA_KEY));
 
                 byte[] scaledImage = _wizardModel.findByKey(BusinessProfileWizardModel.IMAGE)
                                                  .getData()
@@ -118,8 +124,13 @@ public class BusinessProfileWizardActivity extends FragmentActivity implements
                     startActivity(intent);
                 } catch (ParseException e) {
                     Log.e(TAG, "Failed saving profile " + e.getMessage());
-                    // TODO what in this case?
-                    // TODO crouton
+                    _context.runOnUiThread(new Runnable() {
+                        public void run() {
+                            Crouton.showText(_context,
+                                             R.string.generic_exception_message,
+                                             Style.ALERT);
+                        }
+                    });
                 }
 
                 return null;
