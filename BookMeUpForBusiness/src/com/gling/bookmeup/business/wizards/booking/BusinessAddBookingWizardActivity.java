@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -35,6 +35,9 @@ import com.tech.freak.wizardpager.ui.PageFragmentCallbacks;
 import com.tech.freak.wizardpager.ui.ReviewFragment;
 import com.tech.freak.wizardpager.ui.StepPagerStrip;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+
 public class BusinessAddBookingWizardActivity extends FragmentActivity implements
         PageFragmentCallbacks, ReviewFragment.Callbacks, ModelCallbacks {
 
@@ -56,7 +59,7 @@ public class BusinessAddBookingWizardActivity extends FragmentActivity implement
     private List<Page> _currentPageSequence;
     private StepPagerStrip _stepPagerStrip;
 
-    private Context _context;
+    private Activity _context;
 
     private void addBooking() {
         final ProgressDialog progressDialog = ProgressDialog
@@ -67,17 +70,40 @@ public class BusinessAddBookingWizardActivity extends FragmentActivity implement
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                String customerName = _wizardModel.findByKey(BusinessAddBookingWizardModel.REGULAR_CUSTOMER)
+                String customerType = _wizardModel.findByKey(BusinessAddBookingWizardModel.CUSTOMER_TYPE)
                                                   .getData()
-                                                  .getString(RegularCustomerPage.CUSTOMER_NAME);
+                                                  .getString(Page.SIMPLE_DATA_KEY);
+
                 Customer customer = new Customer();
-                customer.setName(customerName);
+
+                if (customerType.equals(BusinessAddBookingWizardModel.REGULAR_CUSTOMER)) {
+                    String regularCustomerPageKey = BusinessAddBookingWizardModel.REGULAR_CUSTOMER
+                            + ":" + BusinessAddBookingWizardModel.REGULAR_CUSTOMER;
+                    String customerId = _wizardModel.findByKey(regularCustomerPageKey)
+                                                    .getData()
+                                                    .getString(RegularCustomerPage.CUSTOMER_ID);
+                    customer.setObjectId(customerId);
+                } else if (customerType.equals(BusinessAddBookingWizardModel.NEW_CUSTOMER)) {
+                    String newCustomerPageKey = BusinessAddBookingWizardModel.NEW_CUSTOMER + ":"
+                            + BusinessAddBookingWizardModel.NEW_CUSTOMER;
+                    String customerName = _wizardModel.findByKey(newCustomerPageKey)
+                                                      .getData()
+                                                      .getString(NewCustomerPage.CUSTOMER_NAME);
+                    String customerPhoneNumber = _wizardModel.findByKey(newCustomerPageKey)
+                                                             .getData()
+                                                             .getString(NewCustomerPage.CUSTOMER_PHONE_NUMBER);
+
+                    customer.setName(customerName);
+                    customer.setPhoneNumber(customerPhoneNumber);
+                } else {
+                    return null;
+                }
+
                 String serviceId = _wizardModel.findByKey(BusinessAddBookingWizardModel.SERVICE)
-                        .getData()
-                        .getString(ServicePage.SERVICE_ID);
+                                               .getData()
+                                               .getString(ServicePage.SERVICE_ID);
                 Service service = new Service();
                 service.setObjectId(serviceId);
-                
                 DateTime date = (DateTime) _wizardModel.findByKey(BusinessAddBookingWizardModel.DATE)
                                                        .getData()
                                                        .getSerializable(DatePage.SIMPLE_DATA_KEY);
@@ -91,16 +117,21 @@ public class BusinessAddBookingWizardActivity extends FragmentActivity implement
 
                 try {
                     booking.save();
-                    progressDialog.dismiss();
                     Intent returnIntent = new Intent();
                     setResult(RESULT_CANCELED, returnIntent);
                     finish();
                 } catch (ParseException e) {
                     Log.e(TAG, "Failed creating booking " + e.getMessage());
-                    // TODO what in this case?
-                    // TODO crouton
+                    _context.runOnUiThread(new Runnable() {
+                        public void run() {
+                            Crouton.showText(_context,
+                                             R.string.generic_exception_message,
+                                             Style.ALERT);
+                        }
+                    });
                 }
-
+                
+                progressDialog.dismiss();
                 return null;
             }
 
