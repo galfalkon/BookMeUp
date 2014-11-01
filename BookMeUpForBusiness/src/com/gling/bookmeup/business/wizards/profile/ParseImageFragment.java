@@ -3,6 +3,7 @@ package com.gling.bookmeup.business.wizards.profile;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -209,10 +210,15 @@ public class ParseImageFragment extends Fragment {
     }
 
     private void writeResult() {
+        ProgressDialog progressDialog = ProgressDialog
+                                                      .show(getActivity(),
+                                                            null,
+                                                            getString(R.string.progress_dialog_please_wait));
         byte[] scaledImage = Utils.getScaledImage(getActivity().getBaseContext(), mNewImageUri);
         imageView.setImageBitmap(BitmapFactory.decodeByteArray(scaledImage, 0, scaledImage.length));
         mPage.getData().putByteArray(Page.SIMPLE_DATA_KEY, scaledImage);
         mPage.notifyDataChanged();
+        progressDialog.dismiss();
     }
 
 }
