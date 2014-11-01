@@ -41,7 +41,6 @@ public class BusinessSplashScreenActivity extends SplashScreenActivityBase
 		if (!ParseHelper.isEmailVerified())
 		{
 			Log.i(TAG, "User '" + user.getUsername() + "' mail is not verified");
-			Crouton.showText(this, "Please verifiy your Email address", Style.ALERT);
 			startActivity(new Intent(this, BusinessLoginMainActivity.class));
 			return;
 		}

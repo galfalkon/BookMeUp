@@ -28,7 +28,7 @@ public class ParseHelper {
 	}
 	
 	public static boolean isEmailVerified() {
-	    return ParseUser.getCurrentUser().getBoolean("emailVerified");
+	    return ParseUser.getCurrentUser().getBoolean(User.Keys.EMAIL_VERIFIED);
 	}
 	
 	public static void logOut() {
@@ -78,6 +78,7 @@ public class ParseHelper {
 
 		public static class Keys {
 			public static final String ID = "objectId";
+			public static final String EMAIL_VERIFIED = "emailVerified";
 			public static final String BUSINESS_POINTER = "businessPointer";
 			public static final String CUSTOMER_POINTER = "customerPointer";
 		}

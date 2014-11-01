@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.gling.bookmeup.sharedlib.R;
+import com.gling.bookmeup.sharedlib.parse.ParseHelper;
+import com.parse.ParseUser;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public abstract class LoginMainActivityBase extends Activity {
 
@@ -24,6 +27,13 @@ public abstract class LoginMainActivityBase extends Activity {
         if (savedInstanceState != null) 
         {
             return;
+        }
+        
+        // Check if the user is logged in but hasn't verified his email address yet
+        ParseUser user = ParseUser.getCurrentUser();
+        if (user != null && !user.getBoolean(ParseHelper.User.Keys.EMAIL_VERIFIED))
+        {
+        	Crouton.showText(this, "Please verifiy your Email address", Style.INFO);
         }
 
         getFragmentManager().beginTransaction().add(R.id.login_container, new LoginMainFragment()).commit();
