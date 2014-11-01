@@ -516,6 +516,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 			
 			CardHeader header = new CardHeader(context);
 			header.setTitle(_customer._customerName);
+			addCardHeader(header);
 			
 			final String phoneNumber = _customer._phoneNumber;
 			if (phoneNumber != null)
@@ -535,10 +536,6 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 				});
 			}
 			
-			addCardHeader(header);
-			setTitle(
-					"Total spendings: " + customer._totalSpendings + " NIS\n" +
-					"Last visit: " + Constants.DATE_TIME_FORMAT.format(customer._lastVisit));
 			setId(customer._id);
 			setOnLongClickListener(onLongCardClickListener);
 		}
