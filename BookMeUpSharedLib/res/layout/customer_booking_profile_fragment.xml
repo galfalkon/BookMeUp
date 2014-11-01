@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/WizardPageContainer"
     android:orientation="vertical" >
-    
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
@@ -21,11 +21,11 @@
             android:layout_width="wrap_content"
             android:layout_height="120dp"
             android:layout_alignTop="@+id/customer_booking_profile_businessParseImageView"
-            android:layout_toRightOf="@id/customer_booking_profile_businessParseImageView"
             android:layout_marginLeft="3dp"
+            android:layout_toRightOf="@id/customer_booking_profile_businessParseImageView"
             android:gravity="center"
             android:orientation="vertical" >
-            
+
             <ImageView
                 android:id="@+id/customer_booking_profile_favouriteImageView"
                 android:layout_width="match_parent"
@@ -46,29 +46,18 @@
                 android:layout_height="wrap_content"
                 android:gravity="center" />
         </LinearLayout>
-
-        <!-- 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="120dp"
-            android:layout_alignParentRight="true"
-            android:layout_toRightOf="@id/customer_booking_profile_businessNameAndCategory"
-            android:gravity="center"
-            android:orientation="vertical" > -->
-
-            
     </RelativeLayout>
-    
+
     <View
-    android:layout_width="fill_parent"
-    android:layout_height="1dp"
-    android:background="@android:color/darker_gray"/>
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal" >
 
         <TextView
@@ -82,17 +71,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
-    
+
     <View
-    android:layout_width="fill_parent"
-    android:layout_height="1dp"
-    android:background="@android:color/darker_gray"/>
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal" >
 
         <TextView
@@ -105,32 +94,31 @@
 
         <TextView
             android:id="@+id/customer_booking_profile_phone_number_textView"
-            android:layout_gravity="center"
-            android:layout_toRightOf="@id/customer_booking_profile_phone_header_textView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_toRightOf="@id/customer_booking_profile_phone_header_textView" />
+
         <ImageView
-                android:id="@+id/customer_booking_profile_callImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/customer_booking_profile_callDescription"
-                android:scaleType="center"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/ic_action_call" />
-                 
+            android:id="@+id/customer_booking_profile_callImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:contentDescription="@string/customer_booking_profile_callDescription"
+            android:scaleType="center"
+            android:src="@drawable/ic_action_call" />
     </RelativeLayout>
-    
+
     <View
-    android:layout_width="fill_parent"
-    android:layout_height="1dp"
-    android:background="@android:color/darker_gray"/>
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal" >
 
         <TextView
@@ -144,23 +132,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
-    
+
     <View
-    android:layout_width="fill_parent"
-    android:layout_height="1dp"
-    android:background="@android:color/darker_gray"/>
-    
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
+
     <TextView
-            android:id="@+id/customer_booking_profile_services_header_textView"
-            style="@style/WizardFormLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/customer_booking_profile_services_header_text"/>
+        android:id="@+id/customer_booking_profile_services_header_textView"
+        style="@style/WizardFormLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/customer_booking_profile_services_header_text" />
 
     <com.gling.bookmeup.main.views.CardListViewWrapperView
         android:id="@+id/customer_booking_profile_list_listViewServices"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-    
+
 </LinearLayout>

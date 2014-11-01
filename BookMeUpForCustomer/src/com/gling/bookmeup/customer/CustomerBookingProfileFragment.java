@@ -13,14 +13,15 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -47,19 +48,19 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 	private static final String TAG = "CustomerBookingProfileFragment";
 
 	private static final String TITLE = "Business Profile";
-	
+
 	public static final String OFFER_EXPIRATION_DATE = "offer expiration date";
 	public static final String OFFER_DISCOUNT = "offer discount";
-	
+
 	private Integer _offerDiscount = null;
 	private Serializable _offerExpirationSerializable = null;
 	private Date _offerExpirationDate = null;
-	
+
 	private CardListViewWrapperView _allServicesView;
 	private ServiceCardArrayAdapter _servicesAdapter;
 	private ArrayList<Card> _allCategoriesCards;
-	
-	
+
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -86,18 +87,21 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setTitle(TITLE);
-		
+
 		_allServicesView = (CardListViewWrapperView) view.findViewById(R.id.customer_booking_profile_list_listViewServices);
 		_allServicesView.setAdapter(_servicesAdapter);
-		
+
 		//business details views
 		Activity activity = getActivity();
 		if (activity instanceof CustomerMainActivity) {
 			CustomerMainActivity customerActivity = (CustomerMainActivity)activity;
 			Business business = customerActivity.getChosenBusiness();
-			
+
 			ImageView favouriteIcon = (ImageView) view.findViewById(R.id.customer_booking_profile_favouriteImageView);
 			handleFavouriteIcon(business, favouriteIcon);
+
+			ImageView callBusinessView = (ImageView) view.findViewById(R.id.customer_booking_profile_callImageView);
+			handleCallIcon(business, callBusinessView);
 
 			ParseFile image = business.getImageFile();
 			final ParseImageView imageView = (ParseImageView) view.findViewById(R.id.customer_booking_profile_businessParseImageView);
@@ -114,10 +118,10 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 					Log.i(TAG, "Fetched business image");
 				}
 			});
-			
+
 			TextView nameView = (TextView) view.findViewById(R.id.customer_booking_profile_businessNameText);
 			nameView.setText(business.getName());
-			
+
 			TextView categoryView = (TextView) view.findViewById(R.id.customer_booking_profile_businessCategoryText);
 			Category category = business.getCategory();
 			try {
@@ -127,20 +131,20 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 				Log.e(TAG, "Exception: " + e1.getMessage());
 				categoryView.setText("Not Available");
 			}
-			
+
 			nameView.setTextSize(26);
 			categoryView.setTextSize(18);
-			
+
 			TextView descriptionView = (TextView) view.findViewById(R.id.customer_booking_profile_description_textView);
 			descriptionView.setText(business.getDescription());
-			
+
 			TextView phoneView = (TextView) view.findViewById(R.id.customer_booking_profile_phone_number_textView);
 			phoneView.setText(business.getPhoneNumber());
-			
+
 			TextView openingHoursView = (TextView) view.findViewById(R.id.customer_booking_profile_opening_hours_textView);
 			openingHoursView.setText(business.getOpeningHours());
-			
-//			titleIcon.setImageDrawable(resources.getDrawable(android.R.drawable.btn_star_big_on));
+
+			//			titleIcon.setImageDrawable(resources.getDrawable(android.R.drawable.btn_star_big_on));
 
 			inflateListWithAllServices(business);
 		}
@@ -174,7 +178,20 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 	public void onTextChanged(CharSequence s, int start, int before	, int count) {
 		Log.i(TAG, "onTextChanged");
 	}
-	
+
+	private void handleCallIcon(final Business business, final ImageView callBusinessView) {
+		callBusinessView.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Log.i(TAG, "call business button clicked");
+				Intent callIntent = new Intent(Intent.ACTION_CALL);
+				callIntent.setData(Uri.parse("tel:" + business.getPhoneNumber()));
+				getActivity().startActivity(callIntent);
+			}
+		});
+	}
+
 	private void handleFavouriteIcon(final Business business, final ImageView favouriteIcon) {
 		final Customer currentCustomer = Customer.getCurrentCustomer();
 		boolean favourite = false;
@@ -237,12 +254,12 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 						clicked = true;
 					} else {
 						getActivity().runOnUiThread(new Runnable() {
-	                        public void run() {
-	                            Crouton.showText(getActivity(),
-	                                             R.string.customer_booking_profile_to_much_favourites_error,
-	                                             Style.ALERT);
-	                        }
-	                    });
+							public void run() {
+								Crouton.showText(getActivity(),
+										R.string.customer_booking_profile_to_much_favourites_error,
+										Style.ALERT);
+							}
+						});
 					}
 				}
 			}
