@@ -14,6 +14,7 @@ import java.util.List;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -492,10 +493,31 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		@Override
 		public Card generateCard(CustomerForBusiness customer) 
 		{
-			CardHeader header = new CardHeader(getActivity());
-			header.setTitle(customer._customerName);
+			return new CustomerCard(getActivity(), customer, new OnLongCardClickListener() 
+			{
+				@Override
+				public boolean onLongClick(Card card, View view) 
+				{
+					return _customerCardsAdapter.startActionMode(getActivity());
+				}
+			});
+		}
+	}
+	
+	private static class CustomerCard extends Card
+	{
+		private final CustomerForBusiness _customer;
+		
+		public CustomerCard(final Context context, CustomerForBusiness customer, OnLongCardClickListener onLongCardClickListener) 
+		{
+			super(context, R.layout.business_customer_list_customer_card);
 			
-			final String phoneNumber = customer._phoneNumber;
+			_customer = customer;
+			
+			CardHeader header = new CardHeader(context);
+			header.setTitle(_customer._customerName);
+			
+			final String phoneNumber = _customer._phoneNumber;
 			if (phoneNumber != null)
 			{
 				header.setOtherButtonDrawable(R.drawable.btn_action_call);
@@ -508,27 +530,27 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 						Log.i(TAG, "btn_action_call clicked");
 						Intent callIntent = new Intent(Intent.ACTION_CALL);
 						callIntent.setData(Uri.parse("tel:" + phoneNumber));
-						startActivity(callIntent);
+						context.startActivity(callIntent);
 					}
 				});
 			}
-
-			Card card = new Card(getActivity());
-			card.addCardHeader(header);
-			card.setTitle(
+			
+			addCardHeader(header);
+			setTitle(
 					"Total spendings: " + customer._totalSpendings + " NIS\n" +
 					"Last visit: " + Constants.DATE_TIME_FORMAT.format(customer._lastVisit));
-			card.setId(customer._id);
-			card.setOnLongClickListener(new OnLongCardClickListener() 
-			{
-				@Override
-				public boolean onLongClick(Card card, View view) 
-				{
-					return _customerCardsAdapter.startActionMode(getActivity());
-				}
-			});
+			setId(customer._id);
+			setOnLongClickListener(onLongCardClickListener);
+		}
+		
+		@Override
+		public void setupInnerViewElements(ViewGroup parent, View view) 
+		{
+			TextView txtTotalSpendings = (TextView) view.findViewById(R.id.business_customer_list_customer_card_total_spendings);
+			txtTotalSpendings.setText(_customer._totalSpendings + " NIS");
 			
-			return card;
+			TextView txtLastVisit = (TextView) view.findViewById(R.id.business_customer_list_customer_card_last_visit);
+			txtLastVisit.setText(Constants.DATE_TIME_FORMAT.format(_customer._lastVisit));
 		}
 	}
 }

@@ -143,6 +143,8 @@
     <string name="business_customer_list_send_offer_dialog_title">Offer specification</string>
     <string name="business_customer_list_send_offer_dialog_txtDiscount">Discount (%)</string>
     <string name="business_customer_list_send_offer_dialog_txtDuration">Duration (Weeks)</string>
+    <string name="business_customer_list_customer_card_total_spendings">"total Spendings: "</string>
+    <string name="business_customer_list_customer_card_last_visit">"Last visit: "</string>
 
     <!-- Business bookings list -->
     <string name="business_bookings_list_pending_header">Pending</string>
