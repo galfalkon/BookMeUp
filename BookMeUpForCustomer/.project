@@ -3,6 +3,7 @@
 	<name>BookMeUpForCustomer</name>
 	<comment></comment>
 	<projects>
+		<project>BookMeUpSharedLib</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

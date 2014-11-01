@@ -3,6 +3,12 @@
 	<name>BookMeUpSharedLib</name>
 	<comment></comment>
 	<projects>
+		<project>android-support-v7-appcompat</project>
+		<project>cardslib</project>
+		<project>DevsmartAndroid</project>
+		<project>google-play-services_lib</project>
+		<project>PagerSlidingTabStrip</project>
+		<project>WizardPager</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
