@@ -67,9 +67,9 @@ public class BusinessAddBookingWizardActivity extends FragmentActivity implement
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                String customerName = _wizardModel.findByKey(BusinessAddBookingWizardModel.CUSTOMER)
+                String customerName = _wizardModel.findByKey(BusinessAddBookingWizardModel.REGULAR_CUSTOMER)
                                                   .getData()
-                                                  .getString(CustomerPage.CUSTOMER_NAME);
+                                                  .getString(RegularCustomerPage.CUSTOMER_NAME);
                 Customer customer = new Customer();
                 customer.setName(customerName);
                 String serviceId = _wizardModel.findByKey(BusinessAddBookingWizardModel.SERVICE)

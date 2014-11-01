@@ -25,7 +25,7 @@ public class ServicePage extends Page {
 
     @Override
     public void getReviewItems(ArrayList<ReviewItem> dest) {
-        dest.add(new ReviewItem(getTitle(), mData.getString(SERVICE_NAME), getKey()));
+        dest.add(new ReviewItem(getTitle(), mData.getString(SERVICE_NAME), getKey()).setWeight(1));
     }
 
     @Override

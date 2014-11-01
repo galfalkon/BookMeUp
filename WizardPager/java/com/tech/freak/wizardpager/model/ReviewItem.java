@@ -68,7 +68,8 @@ public class ReviewItem {
         return mWeight;
     }
 
-    public void setWeight(int weight) {
+    public ReviewItem setWeight(int weight) {
         mWeight = weight;
+        return this;
     }
 }

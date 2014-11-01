@@ -1,0 +1,29 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/WizardPageContainer"
+    android:orientation="vertical" >
+
+    <TextView style="@style/WizardPageTitle" />
+
+    <EditText
+        android:id="@+id/business_add_booking_wizard_customer_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:hint="Filter by name..."
+        android:inputType="textCapWords"
+        android:saveEnabled="false" />
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <com.gling.bookmeup.main.views.ListViewWrapperView
+            android:id="@+id/business_add_booking_wizard_customers_list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentTop="true"
+            android:paddingLeft="4dp" />
+    </RelativeLayout>
+
+</LinearLayout>

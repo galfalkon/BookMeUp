@@ -191,5 +191,6 @@
     <string name="customer_profile_creation_edtName_hint">Full name</string>
     <string name="customer_profile_creation_edtPhoneNumberError">Invalid phone number</string>
     <string name="customer_profile_creation_edtNameError">Invalid name</string>
+    <string name="wizard_field_required">Required</string>
 
 </resources>
