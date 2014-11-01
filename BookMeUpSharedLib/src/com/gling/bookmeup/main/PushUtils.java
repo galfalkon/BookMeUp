@@ -36,7 +36,8 @@ public class PushUtils {
 		BOOKING_APPROVED("com.gling.bookmeup.main.intent.BOOKING_APPROVED"),
 		BOOKING_CANCELED("com.gling.bookmeup.main.intent.BOOKING_CANCELED"),
 		
-		NEW_BOOKING_REQUEST("com.gling.bookmeup.main.intent.NEW_BOOKING_REQUEST");
+		NEW_BOOKING_REQUEST("com.gling.bookmeup.main.intent.NEW_BOOKING_REQUEST"),
+		BOOKING_CANCELLATION("com.gling.bookmeup.main.intent.BOOKING_CANCELLATION");
 		
 		private final String _action;
 		private PushNotificationType(String action)
@@ -130,6 +131,21 @@ public class PushUtils {
 		
 		String alert = "New booking request from " + customerName;
 		JSONObject data = generatePushData(alert, PushNotificationType.NEW_BOOKING_REQUEST);
+		if (data == null)
+		{
+			return;
+		}
+		
+		ParseQuery<ParseInstallation> installationQuery = generateInstallationQueryForBusinessId(businessId);
+		sendPushInBackground(installationQuery, data, callback);
+	}
+	
+	public static void notifyBusinessAboutBookingCancellation(String businessId, String customerName, SendCallback callback)
+	{
+		Log.i(TAG, "notifyBusinessAboutBookingCancellation");
+		
+		String alert = customerName + " canceled a booking";
+		JSONObject data = generatePushData(alert, PushNotificationType.BOOKING_CANCELLATION);
 		if (data == null)
 		{
 			return;

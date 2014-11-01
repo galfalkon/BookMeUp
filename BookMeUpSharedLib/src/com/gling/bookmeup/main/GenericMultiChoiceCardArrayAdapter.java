@@ -48,6 +48,12 @@ public abstract class GenericMultiChoiceCardArrayAdapter<T> extends CardArrayMul
 		_cardFactory = cardFactory;
 		_menuRes = menuRes;
 	}
+
+	public void refreshItem(int position)
+	{
+		_cards.remove(position);
+		_cards.add(_cardFactory.generateCard(_items.get(position)));
+	}
 	
 	@Override
 	public void remove(Card object) {

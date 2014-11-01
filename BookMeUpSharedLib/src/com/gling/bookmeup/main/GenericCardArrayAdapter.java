@@ -38,6 +38,12 @@ public class GenericCardArrayAdapter<T> extends CardArrayAdapter
 		_cardFactory = cardFactory;
 	}
 	
+	public void refreshItem(int position)
+	{
+		_cards.remove(position);
+		_cards.add(_cardFactory.generateCard(_items.get(position)));
+	}
+	
 	@Override
 	public void remove(Card object) {
 		_items.remove(_cards.indexOf(object));

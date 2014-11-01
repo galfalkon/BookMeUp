@@ -24,6 +24,7 @@ import com.gling.bookmeup.main.ICardGenerator;
 import com.gling.bookmeup.main.IObservableList;
 import com.gling.bookmeup.main.ObservableArrayList;
 import com.gling.bookmeup.main.OnClickListenerFragment;
+import com.gling.bookmeup.main.PushUtils;
 import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
 import com.gling.bookmeup.main.views.CardListViewWrapperView;
 import com.gling.bookmeup.sharedlib.parse.Customer;
@@ -32,9 +33,7 @@ import com.gling.bookmeup.sharedlib.parse.ParseHelper.Booking;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
+import com.parse.SendCallback;
 
 public class CustomerMyBookingsFragment extends OnClickListenerFragment {
 	private static final String TAG = "CustomerMyBookingsFragment";
@@ -103,7 +102,29 @@ public class CustomerMyBookingsFragment extends OnClickListenerFragment {
 	private void handleBookingsCancellation(List<Booking> bookingsToCancel) 
 	{
 		Log.i(TAG, "handleBookingsCancellation");
-		Crouton.showText(getActivity(), "Not implemented", Style.ALERT);
+		
+		for (Booking booking : bookingsToCancel)
+		{
+			booking.setStatus(Booking.Status.CANCELED);
+			booking.saveInBackground();
+			
+			PushUtils.notifyBusinessAboutBookingCancellation(booking.getBusiness().getObjectId(), booking.getCustomer().getName(), new SendCallback() 
+			{
+				@Override
+				public void done(ParseException e) 
+				{
+					Log.i(TAG, "notifyBusinessAboutBookingCancellation done");
+					if (e != null)
+					{
+						Log.e(TAG, "Exception: " + e.getMessage());
+					}
+				}
+			});
+
+			_bookingsCardAdapter.refreshItem(_bookings.indexOf(booking));
+		}
+		
+		_bookingsCardAdapter.notifyDataSetChanged();
 	}
 	
 	private class BookingCardGenerator implements ICardGenerator<Booking>
@@ -143,21 +164,26 @@ public class CustomerMyBookingsFragment extends OnClickListenerFragment {
 	    	card.addCardHeader(cardHeader);
 	    	card.addCardExpand(expand);
 			card.setTitle(cardTitle);
-			card.setOnClickListener(new OnCardClickListener() {
-				
+			card.setOnClickListener(new OnCardClickListener() 
+			{
 				@Override
-				public void onClick(Card card, View view) {
+				public void onClick(Card card, View view) 
+				{
 					card.doToogleExpand();
 				}
 			});
-			card.setOnLongClickListener(new OnLongCardClickListener() 
+			
+			if (booking.getStatus() != Booking.Status.CANCELED)
 			{
-				@Override
-				public boolean onLongClick(Card card, View view) 
+				card.setOnLongClickListener(new OnLongCardClickListener() 
 				{
-					return _bookingsCardAdapter.startActionMode(getActivity());
-				}
-			});
+					@Override
+					public boolean onLongClick(Card card, View view) 
+					{
+						return _bookingsCardAdapter.startActionMode(getActivity());
+					}
+				});
+			}
 
 	    	return card;
 		}

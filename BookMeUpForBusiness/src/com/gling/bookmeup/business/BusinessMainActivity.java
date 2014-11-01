@@ -38,6 +38,7 @@ public class BusinessMainActivity extends NavigationDrawerActivity {
   			Log.i(TAG, pushType.toString());
   			switch (pushType) {
   			case NEW_BOOKING_REQUEST:
+  			case BOOKING_CANCELLATION:
   				onNavigationDrawerItemSelected(0);
   				break;
   			default:
