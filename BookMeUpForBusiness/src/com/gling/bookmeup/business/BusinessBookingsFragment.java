@@ -7,6 +7,7 @@ import it.gmariotti.cardslib.library.internal.CardHeader;
 import java.util.Date;
 import java.util.List;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ActionMode;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.gling.bookmeup.main.Constants;
@@ -210,60 +212,6 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
     	_approvedBookingsListView.setDisplayMode(newDisplayMode);
     }
     
-    private class PendingBookingCardGenerator implements ICardGenerator<Booking>
-    {
-		@Override
-		public Card generateCard(final Booking booking) 
-		{
-			CardHeader cardHeader = new CardHeader(getActivity());
-	    	cardHeader.setTitle(booking.getCustomer().getName());
-	    	
-	    	Card card = new Card(getActivity());
-	    	card.addCardHeader(cardHeader);
-	    	card.setTitle(
-	    			"Service: " + booking.getServiceName() + "\n" +
-	    			"Date: " + Constants.DATE_TIME_FORMAT.format(booking.getDate()));
-
-	    	card.setOnLongClickListener(new OnLongCardClickListener() 
-	    	{
-				@Override
-				public boolean onLongClick(Card card, View view) 
-				{
-					return _pendingBookingsAdapter.startActionMode(getActivity());
-				}
-			});
-	    	
-	    	return card;
-		}
-    }
-    
-    private class ApprovedBookingCardGenerator implements ICardGenerator<Booking>
-    {
-		@Override
-		public Card generateCard(final Booking booking) 
-		{
-			CardHeader cardHeader = new CardHeader(getActivity());
-	    	cardHeader.setTitle(booking.getCustomer().getName());
-	    	
-	    	Card card = new Card(getActivity());
-	    	card.addCardHeader(cardHeader);
-	    	card.setTitle(
-	    			"Service: " + booking.getServiceName() + "\n" +
-	    			"Date: " + Constants.DATE_TIME_FORMAT.format(booking.getDate()));
-
-	    	card.setOnLongClickListener(new OnLongCardClickListener() 
-	    	{
-				@Override
-				public boolean onLongClick(Card card, View view) 
-				{
-					return _approvedBookingsAdapter.startActionMode(getActivity());
-				}
-			});
-	    	
-	    	return card;
-		}
-    }
-    
     private void handleApprovalOfSelectedBookings()
     {
     	Log.i(TAG, "handleApprovalOfSelectedBookings");
@@ -316,5 +264,66 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 				}
 			});
     	}
+    }
+    
+    private class PendingBookingCardGenerator implements ICardGenerator<Booking>
+    {
+    	@Override
+		public Card generateCard(final Booking booking) 
+		{
+			return new BookingCard(getActivity(), booking, new OnLongCardClickListener() 
+			{
+				@Override
+				public boolean onLongClick(Card card, View view) 
+				{
+					return _pendingBookingsAdapter.startActionMode(getActivity());
+				}
+			});
+		}
+    }
+    
+    private class ApprovedBookingCardGenerator implements ICardGenerator<Booking>
+    {
+		@Override
+		public Card generateCard(final Booking booking) 
+		{
+			return new BookingCard(getActivity(), booking, new OnLongCardClickListener() 
+			{
+				@Override
+				public boolean onLongClick(Card card, View view) 
+				{
+					return _approvedBookingsAdapter.startActionMode(getActivity());
+				}
+			});
+		}
+    }
+    
+    private static class BookingCard extends Card
+    {
+    	private final Booking _booking; 
+    	
+		public BookingCard(Context context, Booking booking, OnLongCardClickListener onLongClickListener) 
+		{
+			super(context, R.layout.business_booking_list_booking_card);
+			
+			_booking = booking;
+			
+			CardHeader cardHeader = new CardHeader(context);
+	    	cardHeader.setTitle(_booking.getCustomer().getName());
+	    	addCardHeader(cardHeader);
+	    	
+	    	setOnLongClickListener(onLongClickListener); 
+		}
+		
+		@Override
+		public void setupInnerViewElements(ViewGroup parent, View view) 
+		{
+			TextView txtService = (TextView) view.findViewById(R.id.business_booking_list_booking_card_service);
+			
+			txtService.setText(_booking.getServiceName());
+			
+			TextView txtTime = (TextView) view.findViewById(R.id.business_booking_list_booking_card_date);
+			txtTime.setText(Constants.DATE_TIME_FORMAT.format(_booking.getDate()));
+		}
     }
 }

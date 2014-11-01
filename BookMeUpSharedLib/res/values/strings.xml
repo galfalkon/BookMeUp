@@ -153,6 +153,8 @@
     <string name="business_bookings_list_no_approved_bookings">No approved bookings</string>
     <string name="business_booking_list_approved_mutlichoice_action_bar_menu_cancel">Cancel</string>
     <string name="business_booking_list_pending_mutlichoice_action_bar_menu_approve">Approve</string>
+    <string name="business_booking_list_booking_card_date">"Date: "</string>
+    <string name="business_booking_list_booking_card_service">"Service: "</string>
     
     <!-- Business offer list -->
     <string name="business_offer_list_no_offers">No offers</string>
