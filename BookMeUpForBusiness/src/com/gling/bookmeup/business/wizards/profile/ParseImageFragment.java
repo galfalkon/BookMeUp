@@ -117,6 +117,23 @@ public class ParseImageFragment extends Fragment {
             }
         });
 
+        Button rotateImageBtn = (Button) rootView
+                                                .findViewById(R.id.business_profile_wizard_rotate_image_btn);
+        rotateImageBtn.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                byte[] scaledImage = mPage.getData().getByteArray(Page.SIMPLE_DATA_KEY);
+                if (scaledImage == null) {
+                    return;
+                }
+                byte[] rotatedImage = Utils.getRotatedImage(scaledImage, -90);
+                imageView.setImageBitmap(BitmapFactory.decodeByteArray(rotatedImage, 0, rotatedImage.length));
+                mPage.getData().putByteArray(Page.SIMPLE_DATA_KEY, rotatedImage);
+                mPage.notifyDataChanged();
+            }
+        });
+
         Button uploadImageBtn = (Button) rootView
                                                  .findViewById(R.id.business_profile_wizard_upload_image_btn);
         uploadImageBtn.setOnClickListener(new OnClickListener() {

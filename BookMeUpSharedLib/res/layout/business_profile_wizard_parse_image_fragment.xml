@@ -25,20 +25,24 @@
             <Button
                 android:id="@+id/business_profile_wizard_upload_image_btn"
                 style="?android:attr/buttonBarButtonStyle"
-                android:textColor="@color/review_green"
-                android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/business_profile_wizard_upload_new_image"
-                android:paddingRight="30dp" />
+                android:drawableStart="@drawable/ic_action_camera" />
+
+            <Button
+                android:id="@+id/business_profile_wizard_rotate_image_btn"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_action_rotate_left"
+                android:paddingLeft="16dp" />
 
             <Button
                 android:id="@+id/business_profile_wizard_clear_image_btn"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/ic_action_cancel" />
-
+                android:drawableEnd="@drawable/ic_action_discard" />
         </LinearLayout>
 
         <com.parse.ParseImageView
