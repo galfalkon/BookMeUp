@@ -156,10 +156,17 @@ public abstract class EMailLoginFragmentBase extends OnClickListenerFragment {
 	                
 					handleSuccessfulLogin(user);
 				}
-				catch (ParseException e)
+				catch (final ParseException e)
 				{
 					Log.e(TAG, "Exception: " + e.getMessage());
-					Crouton.showText(getActivity(), "Login failed: " + e.getMessage(), Style.ALERT);
+					getActivity().runOnUiThread(new Runnable() 
+					{
+						@Override
+						public void run() 
+						{
+							Crouton.showText(getActivity(), "Login failed: " + e.getMessage(), Style.ALERT);
+						}
+					});
 				}
         		progressDialog.dismiss();
         	}
