@@ -30,7 +30,7 @@ public class LoginMainFragment extends OnClickListenerFragment {
             public void onClick(View v) {
                 Intent localIntent = new Intent("android.intent.action.SENDTO");
                 localIntent.setType("message/rfc822");
-                localIntent.setData(Uri.parse("mailto:support@bookmeup.com"));
+                localIntent.setData(Uri.parse(getString(R.string.mailto_support)));
                 localIntent.putExtra("android.intent.extra.SUBJECT", getActivity().getString(R.string.feedback_subject));
                 localIntent.putExtra("android.intent.extra.TEXT", getActivity().getString(R.string.feedback_text));
                 try {

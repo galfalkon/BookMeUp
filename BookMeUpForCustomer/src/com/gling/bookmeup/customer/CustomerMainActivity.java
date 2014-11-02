@@ -114,7 +114,7 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 		case R.id.customer_action_send_feedback:
             intent = new Intent("android.intent.action.SENDTO");
             intent.setType("message/rfc822");
-            intent.setData(Uri.parse("mailto:support@bookmeup.com"));
+            intent.setData(Uri.parse(getString(R.string.mailto_support)));
             intent.putExtra("android.intent.extra.SUBJECT", this.getString(R.string.feedback_subject));
             intent.putExtra("android.intent.extra.TEXT", this.getString(R.string.feedback_text));
             try {
