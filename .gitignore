@@ -95,3 +95,8 @@ local.properties
 
 # TeXlipse plugin
 .texlipse
+
+BookMeUpForBusiness/assets/crashlytics-build.properties
+BookMeUpForBusiness/res/values/com_crashlytics_export_strings.xml
+BookMeUpForCustomer/assets/crashlytics-build.properties
+BookMeUpForCustomer/res/values/com_crashlytics_export_strings.xml
