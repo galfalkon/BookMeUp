@@ -26,14 +26,6 @@
             android:gravity="center"
             android:orientation="vertical" >
 
-            <ImageView
-                android:id="@+id/customer_booking_profile_favouriteImageView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/customer_booking_profile_favouritesDescription"
-                android:scaleType="centerInside"
-                android:src="@android:drawable/btn_star_big_off" />
-
             <TextView
                 android:id="@+id/customer_booking_profile_businessNameText"
                 android:layout_width="match_parent"
@@ -45,6 +37,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center" />
+            
+            
+            <ImageView
+                android:id="@+id/customer_booking_profile_favouriteImageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/customer_booking_profile_favouritesDescription"
+                android:scaleType="centerInside"
+                android:src="@android:drawable/btn_star_big_off" />
+            
         </LinearLayout>
     </RelativeLayout>
 
