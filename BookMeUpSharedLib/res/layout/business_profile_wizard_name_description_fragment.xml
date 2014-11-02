@@ -21,7 +21,8 @@
                 android:saveEnabled="false"
                 android:inputType="textCapWords"
                 android:hint="e.g. Jaklin Cosmetics"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="16dp"
+                android:maxLength="15" />
 
             <TextView style="@style/WizardFormLabel"
                 android:text="Description" />
