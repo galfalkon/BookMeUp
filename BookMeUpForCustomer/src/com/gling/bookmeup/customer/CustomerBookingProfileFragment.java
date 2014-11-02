@@ -22,8 +22,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
@@ -60,7 +62,9 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 	private ServiceCardArrayAdapter _servicesAdapter;
 	private ArrayList<Card> _allCategoriesCards;
 
-
+	private Button _switchButton;
+	private ViewSwitcher _viewSwitcher;
+	private boolean _viewDetails = true;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -87,6 +91,10 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setTitle(TITLE);
+
+		_viewSwitcher = (ViewSwitcher)view.findViewById(R.id.customer_booking_profile_viewSwitcher);
+		
+		_switchButton = (Button)view.findViewById(R.id.customer_booking_profile_btnSwitchView);
 
 		_allServicesView = (CardListViewWrapperView) view.findViewById(R.id.customer_booking_profile_list_listViewServices);
 		_allServicesView.setAdapter(_servicesAdapter);
@@ -162,6 +170,37 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 
 	@Override
 	public void onClick(View v) {
+		switch (v.getId())
+		{
+		case R.id.customer_booking_profile_btnSwitchView:
+			Log.i(TAG, "switch view button clicked");
+			if (_viewDetails) {
+				showServicesView();
+				_viewDetails = false;
+				_switchButton.setText(R.string.customer_booking_profile_btnSwitchToDetailsText);
+			} else {
+				showDetailsView();
+				_viewDetails = true;
+				_switchButton.setText(R.string.customer_booking_profile_btnSwitchToServicesText);
+			}
+			break;
+		}
+	}
+
+	private void showDetailsView()
+	{
+		if (_viewSwitcher.getDisplayedChild() != 0)
+		{
+			_viewSwitcher.setDisplayedChild(0);
+		}
+	}
+
+	private void showServicesView()
+	{
+		if (_viewSwitcher.getDisplayedChild() != 1)
+		{
+			_viewSwitcher.setDisplayedChild(1);
+		}
 	}
 
 	@Override

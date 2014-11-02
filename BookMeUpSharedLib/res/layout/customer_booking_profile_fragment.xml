@@ -5,7 +5,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp" >
 
         <com.parse.ParseImageView
             android:id="@+id/customer_booking_profile_businessParseImageView"
@@ -37,8 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center" />
-            
-            
+
             <ImageView
                 android:id="@+id/customer_booking_profile_favouriteImageView"
                 android:layout_width="match_parent"
@@ -46,111 +46,125 @@
                 android:contentDescription="@string/customer_booking_profile_favouritesDescription"
                 android:scaleType="centerInside"
                 android:src="@android:drawable/btn_star_big_off" />
-            
         </LinearLayout>
     </RelativeLayout>
 
-    <View
+    <ViewSwitcher
+        android:id="@+id/customer_booking_profile_viewSwitcher"
         android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
+        android:layout_height="345dp"
+        android:layout_marginBottom="5dp"
+        android:inAnimation="@android:anim/slide_in_left"
+        android:outAnimation="@android:anim/slide_out_right" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal" >
+        <LinearLayout
+            android:id="@+id/customer_booking_profile_detailsView"
+            style="@style/WizardPageContainer"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
 
-        <TextView
-            style="@style/WizardFormLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/customer_booking_profile_description_header_text" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal" >
 
-        <TextView
-            android:id="@+id/customer_booking_profile_description_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+                <TextView
+                    style="@style/WizardFormLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/customer_booking_profile_description_header_text" />
 
-    <View
+                <TextView
+                    android:id="@+id/customer_booking_profile_description_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/customer_booking_profile_phone_header_textView"
+                    style="@style/WizardFormLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/customer_booking_profile_phone_header_text" />
+
+                <TextView
+                    android:id="@+id/customer_booking_profile_phone_number_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_toRightOf="@id/customer_booking_profile_phone_header_textView" />
+
+                <ImageView
+                    android:id="@+id/customer_booking_profile_callImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:contentDescription="@string/customer_booking_profile_callDescription"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_action_call" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/WizardFormLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/customer_booking_profile_opening_hours_header_text" />
+
+                <TextView
+                    android:id="@+id/customer_booking_profile_opening_hours_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/customer_booking_profile_servicesView"
+            style="@style/WizardPageContainer"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/customer_booking_profile_services_header_textView"
+                style="@style/WizardFormLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/customer_booking_profile_services_header_text" />
+
+            <com.gling.bookmeup.main.views.CardListViewWrapperView
+                android:id="@+id/customer_booking_profile_list_listViewServices"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </ViewSwitcher>
+
+    <Button
+        android:id="@+id/customer_booking_profile_btnSwitchView"
         android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:id="@+id/customer_booking_profile_phone_header_textView"
-            style="@style/WizardFormLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/customer_booking_profile_phone_header_text" />
-
-        <TextView
-            android:id="@+id/customer_booking_profile_phone_number_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_toRightOf="@id/customer_booking_profile_phone_header_textView" />
-
-        <ImageView
-            android:id="@+id/customer_booking_profile_callImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:contentDescription="@string/customer_booking_profile_callDescription"
-            android:scaleType="center"
-            android:src="@drawable/ic_action_call" />
-    </RelativeLayout>
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal" >
-
-        <TextView
-            style="@style/WizardFormLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/customer_booking_profile_opening_hours_header_text" />
-
-        <TextView
-            android:id="@+id/customer_booking_profile_opening_hours_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
-
-    <TextView
-        android:id="@+id/customer_booking_profile_services_header_textView"
-        style="@style/WizardFormLabel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/customer_booking_profile_services_header_text" />
-
-    <com.gling.bookmeup.main.views.CardListViewWrapperView
-        android:id="@+id/customer_booking_profile_list_listViewServices"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_marginBottom="10.0dip"
+        android:layout_marginLeft="15.0dip"
+        android:layout_marginRight="15.0dip"
+        android:text="@string/customer_booking_profile_btnSwitchToServicesText"
+        android:textSize="20.0sp" />
 
 </LinearLayout>

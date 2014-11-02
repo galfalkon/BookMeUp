@@ -184,7 +184,8 @@ public class CustomerCalendarFragment extends Fragment {
 										DateTime currentDate = new DateTime();
 										if ((currentDate.getYear() == _date.getYear()) &&
 												(currentDate.getMonthOfYear() == _date.getMonthOfYear()) &&
-												(currentDate.getDayOfMonth() == _date.getDayOfMonth())) {
+												(currentDate.getDayOfMonth() == _date.getDayOfMonth()) &&
+												(currentDate.getHourOfDay() > 8)) {
 											//fragment is at current date
 											DateTime nextRoundHour = new DateTime(currentDate.getYear(), currentDate.getMonthOfYear(),
 													currentDate.getDayOfMonth(), currentDate.getHourOfDay() + 1, 0);
