@@ -129,12 +129,12 @@ public class CustomerCalendarFragment extends Fragment {
 				businessQuery.findInBackground(new FindCallback<Business>() {
 					@Override
 					public void done(List<Business> objects, ParseException e) {
-						if (objects.size() != 1) {
+						if ((objects == null) || (objects.size() != 1)) {
 							Log.e(TAG, "problem");
 							return;
 						}
 						final Business business = objects.get(0);
-
+						
 						ParseQuery<Booking> query = new ParseQuery<Booking>(Booking.CLASS_NAME);
 						query.whereEqualTo(Booking.Keys.BUSINESS_POINTER, business);
 						query.whereGreaterThanOrEqualTo(Booking.Keys.DATE, _date.toDate());
@@ -181,6 +181,15 @@ public class CustomerCalendarFragment extends Fragment {
 										int duration = service.getDuration();
 										
 										DateTime startHour = _date.plusHours(8);
+										DateTime currentDate = new DateTime();
+										if ((currentDate.getYear() == _date.getYear()) &&
+												(currentDate.getMonthOfYear() == _date.getMonthOfYear()) &&
+												(currentDate.getDayOfMonth() == _date.getDayOfMonth())) {
+											//fragment is at current date
+											DateTime nextRoundHour = new DateTime(currentDate.getYear(), currentDate.getMonthOfYear(),
+													currentDate.getDayOfMonth(), currentDate.getHourOfDay() + 1, 0);
+											startHour = nextRoundHour;
+										}
 										DateTime endHour = startHour.plusMinutes(duration);
 										while (endHour.getHourOfDay() < 20) {
 											boolean conflicted = false;

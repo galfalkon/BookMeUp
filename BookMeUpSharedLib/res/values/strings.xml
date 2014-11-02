@@ -119,6 +119,7 @@
     <string name="customer_calendar">Calendar</string>
     <string name="customer_calendar_choosing_instructions">When do you want to book this service?</string>
     <string name="title_activity_customer_calendar">Calendar</string>
+    <string name="customer_calendar_past_date_picked_text_error">You cannot book an appointment before today!</string>
 
     <!-- Customer offer list -->
     <string name="customer_offer_list_no_offers">No offers</string>

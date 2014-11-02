@@ -2,6 +2,7 @@ package com.gling.bookmeup.customer;
 
 import org.joda.time.DateTime;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.os.Build;
@@ -20,6 +21,9 @@ import android.widget.DatePicker;
 
 import com.astuetz.PagerSlidingTabStrip;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+
 public class CustomerCalendarActivity extends FragmentActivity {
 
 	private static final String TAG = "CustomerCalendarActivity";
@@ -30,6 +34,7 @@ public class CustomerCalendarActivity extends FragmentActivity {
 	public static final String OFFER_EXPIRATION_EXTRA = "OfferExpirationExtra";
 
 	private static final int DAYS_MARGIN = 30;
+	private static final int START_DAY = 0;
 
 	private DateTime _today;
 
@@ -64,7 +69,7 @@ public class CustomerCalendarActivity extends FragmentActivity {
 		_tabs.setViewPager(_viewPager);
 
 		// set pager to current date
-		_viewPager.setCurrentItem(DAYS_MARGIN);
+		_viewPager.setCurrentItem(START_DAY);
 		
 		// get the scroll offset of the central (today) tab
 		_scrollCenter = 0;
@@ -107,7 +112,7 @@ public class CustomerCalendarActivity extends FragmentActivity {
 						getSupportFragmentManager(), _today);
 				_viewPager.setAdapter(_sectionsPagerAdapter);
 				_tabs.setViewPager(_viewPager);
-				_viewPager.setCurrentItem(DAYS_MARGIN, true);
+				_viewPager.setCurrentItem(START_DAY, true);
 			} else {
 				_tabs.smoothScrollTo(_scrollCenter, 0);				
 			}
@@ -121,6 +126,7 @@ public class CustomerCalendarActivity extends FragmentActivity {
 	}
 
 	private void handleDatePicker() {
+		final Activity thisActivity = this;
 		DatePickerDialog datePickerDialog = new DatePickerDialog(this,
 				new OnDateSetListener() {
 					@Override
@@ -128,6 +134,16 @@ public class CustomerCalendarActivity extends FragmentActivity {
 							int monthOfYear, int dayOfMonth) {
 						DateTime selectedDate = new DateTime(year,
 								monthOfYear + 1, dayOfMonth, 0, 0);
+						if (selectedDate.toDate().before(_today.toDate())) {
+							thisActivity.runOnUiThread(new Runnable() {
+								public void run() {
+									Crouton.showText(thisActivity,
+											R.string.customer_calendar_past_date_picked_text_error,
+											Style.ALERT);
+								}
+							});
+							return;
+						}
 						Log.i(TAG, "Date: " + selectedDate + " selected");
 						if (!_sectionsPagerAdapter.getAnchor().equals(
 								selectedDate)) {
@@ -135,7 +151,8 @@ public class CustomerCalendarActivity extends FragmentActivity {
 									getSupportFragmentManager(), selectedDate);
 							_viewPager.setAdapter(_sectionsPagerAdapter);
 							_tabs.setViewPager(_viewPager);
-							_viewPager.setCurrentItem(DAYS_MARGIN, true);
+//							_viewPager.setCurrentItem(DAYS_MARGIN, true);
+							_viewPager.setCurrentItem(START_DAY, true);
 						} else {
 							_tabs.smoothScrollTo(_scrollCenter, 0);				
 						}
@@ -150,7 +167,7 @@ public class CustomerCalendarActivity extends FragmentActivity {
 		private DateTime _anchorDate;
 		private final static String DATE_FORMAT = "E, dd MMM";
 
-		private final static int COUNT = DAYS_MARGIN * 2 + 1;
+		private final static int COUNT = DAYS_MARGIN + 1;
 		private String[] titles = new String[COUNT];
 
 		public CalendarPagerAdapter(FragmentManager fm, DateTime anchorDate) {
@@ -161,16 +178,12 @@ public class CustomerCalendarActivity extends FragmentActivity {
 
 		private void generateTitles() {
 
-			titles[DAYS_MARGIN] = _anchorDate.toString(DATE_FORMAT);
-			DateTime past = new DateTime(_anchorDate);
+			titles[START_DAY] = _anchorDate.toString(DATE_FORMAT);
 			DateTime future = new DateTime(_anchorDate);
 
 			for (int i = 1; i <= DAYS_MARGIN; i++) {
-				past = past.plusDays(-1);
-				titles[DAYS_MARGIN - i] = past.toString(DATE_FORMAT);
-
 				future = future.plusDays(1);
-				titles[DAYS_MARGIN + i] = future.toString(DATE_FORMAT);
+				titles[START_DAY + i] = future.toString(DATE_FORMAT);
 			}
 
 		}
@@ -186,8 +199,7 @@ public class CustomerCalendarActivity extends FragmentActivity {
 
 		@Override
 		public Fragment getItem(int position) {
-			return CustomerCalendarFragment.newInstance(_anchorDate.minusDays(
-					DAYS_MARGIN).plusDays(position));
+			return CustomerCalendarFragment.newInstance(_anchorDate.plusDays(position));
 		}
 
 		@Override
