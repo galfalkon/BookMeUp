@@ -39,6 +39,8 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 public class CustomerHistoryFragment extends OnClickListenerFragment implements TextWatcher {
 	private static final String TAG = "CustomerHistoryFragment";
 	
+	final private Fragment _thisFragment = this;
+	
 	private HashMap<String, Business> _allBusinesses;
 	private HashMap<String, com.gling.bookmeup.sharedlib.parse.Business> _allParseBusinesses;
 	private BusinessCardArrayAdapter _businessesCardAdapter;
@@ -105,6 +107,7 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 							if (activity instanceof CustomerMainActivity) {
 								CustomerMainActivity customerActivity = (CustomerMainActivity)activity;
 								customerActivity.setChosenBusiness(business);
+								customerActivity.setLastFragment(_thisFragment);
 							}
 							
 							Fragment fragment = new CustomerBookingProfileFragment();

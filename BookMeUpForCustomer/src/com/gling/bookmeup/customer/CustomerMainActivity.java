@@ -26,11 +26,12 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 	
 	public static final String GO_TO_BOOKING_EXTRA = "Go_To_Booking";
 	
-	private CustomerAllBusinessesFragment _fragment = null;
+	private CustomerAllBusinessesFragment _allBusinessFragment = null;
 	private Business _chosenBusiness = null;
+	private Integer _lastFragmentPosition = null;
 	
 	public void setAllFragment(CustomerAllBusinessesFragment fragment) {
-		this._fragment = fragment;
+		this._allBusinessFragment = fragment;
 	}
 	
 	public void setChosenBusiness(Business business) {
@@ -44,10 +45,13 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 	@Override
 	public void onBackPressed() {
 		Log.i(TAG, "onBackPressed");
-		if (_fragment == null) {
+		if (_lastFragmentPosition != null) {
+			onNavigationDrawerItemSelected(_lastFragmentPosition);
+			_lastFragmentPosition = null;
+		} else if (_allBusinessFragment == null) {
 			super.onBackPressed();
 		} else {
-			_fragment.clearAll();
+			_allBusinessFragment.clearAll();
 		}
 	}
 	
@@ -156,6 +160,20 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 		default:
 			Log.e(TAG, "trying to instantiate an unknown fragment");
 			return null;
+		}
+	}
+	
+	public void setLastFragment(Fragment fragment) {
+		if (fragment instanceof CustomerAllBusinessesFragment) {
+			_lastFragmentPosition = 0;
+		} else if(fragment instanceof CustomerHistoryFragment) {
+			_lastFragmentPosition = 1;
+		} else if(fragment instanceof CustomerFavouriteFragment) {
+			_lastFragmentPosition = 2;
+		} else if(fragment instanceof CustomerMyBookingsFragment) {
+			_lastFragmentPosition = 3;
+		} else if(fragment instanceof CustomerOffersFragment) {
+			_lastFragmentPosition = 4;
 		}
 	}
 

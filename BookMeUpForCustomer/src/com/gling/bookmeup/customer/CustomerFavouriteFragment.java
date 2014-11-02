@@ -36,6 +36,8 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class CustomerFavouriteFragment extends OnClickListenerFragment implements TextWatcher {
 	private static final String TAG = "CustomerMainActivity";
+	
+	final private Fragment _thisFragment = this;
 
 	private HashMap<String, Business> _allBusinesses;
 	private HashMap<String, com.gling.bookmeup.sharedlib.parse.Business> _allParseBusinesses;
@@ -143,6 +145,7 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 								if (activity instanceof CustomerMainActivity) {
 									CustomerMainActivity customerActivity = (CustomerMainActivity)activity;
 									customerActivity.setChosenBusiness(business);
+									customerActivity.setLastFragment(_thisFragment);
 //									customerActivity.setChosenBusiness(_allBusinesses.get(card.getId()));
 								}
 //								

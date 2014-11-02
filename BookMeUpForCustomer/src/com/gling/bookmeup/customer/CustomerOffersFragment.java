@@ -38,6 +38,8 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 public class CustomerOffersFragment extends OnClickListenerFragment {
 	private static final String TAG = "CustomerOffersFragment";
 	
+	final private Fragment _thisFragment = this;
+	
 	private GenericCardArrayAdapter<Offer> _offersAdapter;
 	private IObservableList<Offer> _offers;
 	
@@ -124,6 +126,7 @@ public class CustomerOffersFragment extends OnClickListenerFragment {
 							if (activity instanceof CustomerMainActivity) {
 								CustomerMainActivity customerActivity = (CustomerMainActivity)activity;
 								customerActivity.setChosenBusiness(business);
+								customerActivity.setLastFragment(_thisFragment);
 							}
 							
 							Fragment fragment = new CustomerBookingProfileFragment();

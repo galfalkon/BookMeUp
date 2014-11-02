@@ -39,6 +39,8 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
 
     private static final String TAG = "CustomerAllBusinessesFragment";
     
+    final private Fragment _thisFragment = this;
+    
     EditText _edtSearch;
     
     //category view
@@ -89,6 +91,12 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
         _categoryAdapter.setRowLayoutId(R.layout.customer_category_card_view);
         
         _viewSwitcher = (ViewSwitcher)view.findViewById(R.id.customer_all_businesses_viewSwitcher); 
+        
+        Activity activity = getActivity();
+        if (activity instanceof CustomerMainActivity) {
+        	CustomerMainActivity customerActivity = (CustomerMainActivity)activity;
+        	customerActivity.setAllFragment(null);
+        }
         
         inflateListWithAllCategories();
         inflateListWithAllBusinesses();
@@ -313,6 +321,7 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
 								if (activity instanceof CustomerMainActivity) {
 									CustomerMainActivity customerActivity = (CustomerMainActivity)activity;
 									customerActivity.setChosenBusiness(_allBusinesses.get(card.getId()));
+									customerActivity.setLastFragment(_thisFragment);
 								}
 								
 								Fragment fragment = new CustomerBookingProfileFragment();
