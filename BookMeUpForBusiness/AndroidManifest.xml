@@ -40,10 +40,10 @@
         android:label="@string/app_name"
         android:logo="@drawable/ic_launcher_bevel"
         android:theme="@style/Theme.Bookmeup_ActionBar" >
-        
-        <meta-data android:name="com.google.android.gms.version"
-        android:value="@integer/google_play_services_version" />
-        
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <service android:name="com.parse.PushService" />
 
         <!-- For Parse push services -->
@@ -77,20 +77,20 @@
         </activity>
         <activity
             android:name="com.gling.bookmeup.business.login.BusinessLoginMainActivity"
+            android:noHistory="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.BookMeUp_LoginScreen"
-            android:noHistory="true" >
+            android:theme="@style/Theme.BookMeUp_LoginScreen" >
         </activity>
         <activity
             android:name="com.gling.bookmeup.business.BusinessMainActivity"
-            android:label="@string/business_activity_title" 
-            android:screenOrientation="portrait">
+            android:label="@string/business_activity_title"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.gling.bookmeup.business.BusinessCalendarActivity"
             android:label="@string/title_activity_business_calendar"
-            android:screenOrientation="portrait"
-            android:parentActivityName="com.gling.bookmeup.business.BusinessMainActivity" >
+            android:parentActivityName="com.gling.bookmeup.business.BusinessMainActivity"
+            android:screenOrientation="portrait" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -99,25 +99,29 @@
         </activity>
         <activity
             android:name="com.gling.bookmeup.main.NavigationDrawerActivity"
-            android:label="@string/title_activity_navigation_drawer" 
-            android:screenOrientation="portrait">
+            android:label="@string/title_activity_navigation_drawer"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.gling.bookmeup.business.wizards.profile.BusinessProfileWizardActivity"
             android:label="@string/title_activity_business_profile_wizard"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.gling.bookmeup.business.wizards.booking.BusinessAddBookingWizardActivity"
             android:label="@string/title_activity_business_wizard_add_booking"
-            android:screenOrientation="portrait"
-            android:parentActivityName="com.gling.bookmeup.business.BusinessCalendarActivity" >
+            android:parentActivityName="com.gling.bookmeup.business.BusinessCalendarActivity"
+            android:screenOrientation="portrait" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.gling.bookmeup.business.BusinessCalendarActivity" />
         </activity>
+
+        <meta-data
+            android:name="com.crashlytics.ApiKey"
+            android:value="d4a420d2d609b2b1642caaf89b016067e43c4230" />
     </application>
 
 </manifest>

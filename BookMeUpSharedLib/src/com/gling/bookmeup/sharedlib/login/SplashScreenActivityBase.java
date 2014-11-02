@@ -14,7 +14,6 @@ import android.util.Log;
 
 import com.gling.bookmeup.sharedlib.R;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper.Category;
-import com.parse.FindCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -26,59 +25,53 @@ public abstract class SplashScreenActivityBase extends Activity {
     protected static final String EXTRA_PUSH_NOTIFICATION_DATA = "com.parse.Data";
 
     protected abstract void goToNextActivity();
+
     protected abstract void handlePushNotification();
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-    	Log.i(TAG, "onCreate");
-    	
-    	super.onCreate(savedInstanceState);
+        Log.i(TAG, "onCreate");
 
-        setContentView(R.layout.login_splash_screen_activity);
+        super.onCreate(savedInstanceState);
 
         // Track application opens
         ParseAnalytics.trackAppOpened(getIntent());
+
+        setContentView(R.layout.login_splash_screen_activity);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        
+
         goToNextActivityIfConnected();
     }
 
-    private void goToNextActivityIfConnected()
-    {
-    	if (!isNetworkAvailable()) {
+    private void goToNextActivityIfConnected() {
+        if (!isNetworkAvailable()) {
             Log.i(TAG, "No internet connection");
             showNoInternetDialog();
             return;
         }
-    	
-    	new Thread()
-    	{
-    		public void run() 
-    		{
-    			try
-    			{
-    				// Fetch business categories
-        			ParseQuery<Category> query = ParseQuery.getQuery(Category.CLASS_NAME);
-        			List<Category> categories = query.find();
-        			Category.setCategories(categories);
-        			
-        			goToNextActivity();
-    			}
-    			catch (ParseException e)
-    			{
-    				Log.e(TAG, "Exception: " + e.getMessage());
-    			}
-    		}
-    	}.start();
+
+        new Thread() {
+            public void run() {
+                try {
+                    // Fetch business categories
+                    ParseQuery<Category> query = ParseQuery.getQuery(Category.CLASS_NAME);
+                    List<Category> categories = query.find();
+                    Category.setCategories(categories);
+
+                    goToNextActivity();
+                } catch (ParseException e) {
+                    Log.e(TAG, "Exception: " + e.getMessage());
+                }
+            }
+        }.start();
     }
-    
-    private void showNoInternetDialog()
-    {
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+    private void showNoInternetDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.error_no_internet_connection);
         builder.setIconAttribute(android.R.attr.alertDialogIcon);
         builder.setPositiveButton(R.string.ok, new OnClickListener() {

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.gling.bookmeup.business.BusinessMainActivity;
 import com.gling.bookmeup.business.wizards.profile.BusinessProfileWizardActivity;
 import com.gling.bookmeup.main.PushUtils;
@@ -27,6 +28,12 @@ public class BusinessSplashScreenActivity extends SplashScreenActivityBase
 {
 	private static final String TAG = "BusinessSplashScreenActivity";
 
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+	    super.onCreate(savedInstanceState);
+	    Crashlytics.start(this);
+	}
+	
 	@Override
 	protected void goToNextActivity()
 	{
@@ -48,7 +55,7 @@ public class BusinessSplashScreenActivity extends SplashScreenActivityBase
 		try
 		{
 			// Refresh user
-			user.refresh();
+            user.refresh();
 			
 			// Fetch current business
 			ParseObject businessParseObject = user.getParseObject(User.Keys.BUSINESS_POINTER);
