@@ -1,7 +1,9 @@
 package com.gling.bookmeup.customer;
 
 import android.app.Fragment;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -9,6 +11,7 @@ import android.view.MenuItem;
 import com.gling.bookmeup.customer.login.CustomerLoginMainActivity;
 import com.gling.bookmeup.main.NavigationDrawerActivity;
 import com.gling.bookmeup.main.PushUtils;
+import com.gling.bookmeup.sharedlib.R;
 import com.gling.bookmeup.sharedlib.login.LoginMainActivityBase;
 import com.gling.bookmeup.sharedlib.parse.Business;
 import com.gling.bookmeup.sharedlib.parse.Customer;
@@ -106,11 +109,24 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
+	    Intent intent;
 		switch (item.getItemId()) {
+		case R.id.customer_action_send_feedback:
+            intent = new Intent("android.intent.action.SENDTO");
+            intent.setType("message/rfc822");
+            intent.setData(Uri.parse("mailto:support@bookmeup.com"));
+            intent.putExtra("android.intent.extra.SUBJECT", this.getString(R.string.feedback_subject));
+            intent.putExtra("android.intent.extra.TEXT", this.getString(R.string.feedback_text));
+            try {
+                startActivity(Intent.createChooser(intent, this.getString(R.string.send_feedback)));
+            } catch (ActivityNotFoundException localActivityNotFoundException) {
+                Crouton.showText(this, R.string.no_email_clients_installed, Style.ALERT);
+            }
+            return true;
 		case R.id.customer_action_logout:
 			// TODO extract to session manager class
 			ParseHelper.logOut();
-			Intent intent = new Intent(this, CustomerLoginMainActivity.class);
+			intent = new Intent(this, CustomerLoginMainActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 			startActivity(intent);
 			return true;

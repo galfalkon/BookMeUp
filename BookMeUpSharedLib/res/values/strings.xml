@@ -206,5 +206,9 @@
     <string name="customer_profile_creation_edtNameError">Invalid name</string>
     <string name="wizard_field_required">Required</string>
     <string name="business_profile_wizard_upload_new_image">Upload an image </string>
+    <string name="send_feedback">Send feedback</string>
+    <string name="feedback_subject">Feedback for Android BookMeUp! App</string>
+    <string name="feedback_text">Dear BookMeUp!,\n\n</string>
+    <string name="no_email_clients_installed">There are no email clients installed</string>
 
 </resources>

@@ -31,12 +31,12 @@ public class LoginMainFragment extends OnClickListenerFragment {
                 Intent localIntent = new Intent("android.intent.action.SENDTO");
                 localIntent.setType("message/rfc822");
                 localIntent.setData(Uri.parse("mailto:support@bookmeup.com"));
-                localIntent.putExtra("android.intent.extra.SUBJECT", "Feedback for Android BookMeUp! App");
-                localIntent.putExtra("android.intent.extra.TEXT", "Dear BookMeUp!,\n\n");
+                localIntent.putExtra("android.intent.extra.SUBJECT", getActivity().getString(R.string.feedback_subject));
+                localIntent.putExtra("android.intent.extra.TEXT", getActivity().getString(R.string.feedback_text));
                 try {
-                    startActivity(Intent.createChooser(localIntent, "Send mail..."));
+                    startActivity(Intent.createChooser(localIntent, getActivity().getString(R.string.send_feedback)));
                 } catch (ActivityNotFoundException localActivityNotFoundException) {
-                	Crouton.showText(getActivity(), "There are no email clients installed", Style.ALERT);
+                	Crouton.showText(getActivity(), R.string.no_email_clients_installed, Style.ALERT);
                 }
             }
         });

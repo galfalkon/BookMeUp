@@ -1,7 +1,9 @@
 package com.gling.bookmeup.business;
 
 import android.app.Fragment;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -10,12 +12,14 @@ import com.gling.bookmeup.business.login.BusinessLoginMainActivity;
 import com.gling.bookmeup.business.wizards.profile.BusinessProfileWizardActivity;
 import com.gling.bookmeup.main.NavigationDrawerActivity;
 import com.gling.bookmeup.main.PushUtils;
+import com.gling.bookmeup.sharedlib.R;
 import com.gling.bookmeup.sharedlib.login.LoginMainActivityBase;
 import com.gling.bookmeup.sharedlib.parse.Business;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper;
 import com.parse.ParseUser;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class BusinessMainActivity extends NavigationDrawerActivity {
 	private static final String TAG = "BusinessMainActivity";
@@ -68,6 +72,18 @@ public class BusinessMainActivity extends NavigationDrawerActivity {
 			intent = new Intent(this, BusinessCalendarActivity.class);
 			startActivity(intent);
 			return true;
+		case R.id.business_action_send_feedback:
+		    intent = new Intent("android.intent.action.SENDTO");
+		    intent.setType("message/rfc822");
+		    intent.setData(Uri.parse("mailto:support@bookmeup.com"));
+		    intent.putExtra("android.intent.extra.SUBJECT", this.getString(R.string.feedback_subject));
+		    intent.putExtra("android.intent.extra.TEXT", this.getString(R.string.feedback_text));
+            try {
+                startActivity(Intent.createChooser(intent, this.getString(R.string.send_feedback)));
+            } catch (ActivityNotFoundException localActivityNotFoundException) {
+                Crouton.showText(this, R.string.no_email_clients_installed, Style.ALERT);
+            }
+            return true;
 		case R.id.business_action_logout:
 			// TODO extract to session manager class
 		    ParseHelper.logOut();
