@@ -138,7 +138,7 @@
     <string name="services_list_header_btnAdd">Add</string>
 
     <!-- Business customer list -->
-    <string name="business_customer_list_edtSearchHint">Search customer</string>
+    <string name="business_customer_list_edtSearchHint">Search</string>
     <string name="business_customer_list_btnFilterBySpendings">Spendings</string>
     <string name="business_customer_list_btnFilterByLastVisit">Last visit</string>
     <string name="business_customer_list_btnSendMessage">Send message</string>
