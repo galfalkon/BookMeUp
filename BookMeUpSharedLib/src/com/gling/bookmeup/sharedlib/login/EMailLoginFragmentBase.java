@@ -8,12 +8,16 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.sharedlib.R;
@@ -26,7 +30,8 @@ import com.parse.RequestPasswordResetCallback;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-public abstract class EMailLoginFragmentBase extends OnClickListenerFragment {
+public abstract class EMailLoginFragmentBase extends OnClickListenerFragment implements OnEditorActionListener 
+{
 
     private static final String TAG = "EMailLoginFragmentBase";
 
@@ -42,8 +47,10 @@ public abstract class EMailLoginFragmentBase extends OnClickListenerFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        _edtPassword = (EditText) view.findViewById(R.id.email_login_edtPassword);
         _edtUserName = (EditText) view.findViewById(R.id.email_login_edtUserName);
+        _edtPassword = (EditText) view.findViewById(R.id.email_login_edtPassword);
+        
+        _edtPassword.setOnEditorActionListener(this);
 
         return view;
     }
@@ -60,6 +67,19 @@ public abstract class EMailLoginFragmentBase extends OnClickListenerFragment {
 			handleForgotPassword();
 		}
     }
+    
+    @Override
+	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) 
+	{
+		switch (actionId)
+		{
+		case EditorInfo.IME_ACTION_DONE:
+			handleLoginReuest();
+			return true;
+		default:
+			return false;
+		}
+	}
 
     private void handleForgotPassword() {
         Log.i(TAG, "handleForgotPassword");
