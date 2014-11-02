@@ -138,9 +138,7 @@
     <string name="services_list_header_btnAdd">Add</string>
 
     <!-- Business customer list -->
-    <string name="business_customer_list_edtSearchHint">Search customer</string>
-    <string name="business_customer_list_btnFilterBySpendings">Spendings</string>
-    <string name="business_customer_list_btnFilterByLastVisit">Last visit</string>
+    <string name="business_customer_list_edtSearchHint">Search</string>
     <string name="business_customer_list_btnSendMessage">Send message</string>
     <string name="business_customer_list_btnSendOffer">Send offer</string>
     <string name="business_customer_list_send_message_dialog_btnSend">Send</string>
@@ -153,6 +151,9 @@
     <string name="business_customer_list_send_offer_dialog_txtDuration">Duration (Weeks)</string>
     <string name="business_customer_list_customer_card_total_spendings">"Total spendings: "</string>
     <string name="business_customer_list_customer_card_last_visit">"Last visit: "</string>
+    <string name="business_customer_list_filterMenuTotalSpendings">Spendings</string>
+    <string name="business_customer_list_filterMenuLastVisit">Last visit</string>
+    <string name="business_customer_list_filterMenuClear">Clear</string>
 
     <!-- Business bookings list -->
     <string name="business_bookings_list_pending_header">Pending</string>

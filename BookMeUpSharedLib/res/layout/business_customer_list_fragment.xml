@@ -7,57 +7,51 @@
 
     <LinearLayout
         android:id="@+id/business_customer_list_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:orientation="horizontal" >
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:contentDescription="Search"
-            android:src="@drawable/ic_action_search" />
-
-        <EditText
-            android:id="@+id/business_customer_list_edtSearch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:cursorVisible="false"
-            android:hint="@string/business_customer_list_edtSearchHint"
-            android:maxLines="1" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/business_customer_list_filtersBar"
         style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/business_customer_list_header"
+        android:layout_alignParentRight="true"
         android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/business_customer_list_btnFilterBySpendings"
-            style="?android:attr/buttonBarButtonStyle"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/business_customer_list_btnFilterBySpendings" />
+            android:layout_gravity="center"
+            android:layout_weight="6"
+            android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/business_customer_list_btnFilterByLastVisit"
-            style="?android:attr/buttonBarButtonStyle"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:contentDescription="Search"
+                android:src="@drawable/ic_action_search" />
+
+            <EditText
+                android:id="@+id/business_customer_list_edtSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cursorVisible="false"
+                android:hint="@string/business_customer_list_edtSearchHint"
+                android:maxLines="1" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/business_customer_list_btnFilter"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:text="@string/business_customer_list_btnFilterByLastVisit" />
-    </LinearLayout>
+            android:background="@android:color/transparent"
+            android:contentDescription="Filter"
+            android:src="@drawable/business_customer_list_btn_filter_selector" />
+</LinearLayout>
 
     <com.gling.bookmeup.main.views.CardListViewWrapperView
         android:id="@+id/business_customer_list_listViewCustomers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/business_customer_list_filtersBar"
+        android:layout_below="@id/business_customer_list_header"
         bookmeup:emptyListText="@string/business_customer_list_no_customers" />
 
 </RelativeLayout>

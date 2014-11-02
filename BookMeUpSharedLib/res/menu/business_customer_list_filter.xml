@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/busienss_customer_list_filter_menu_spendings"
+        android:title="@string/business_customer_list_filterMenuTotalSpendings"/>
+    <item
+        android:id="@+id/busienss_customer_list_filter_menu_last_visit"
+        android:title="@string/business_customer_list_filterMenuLastVisit"/>
+    <item
+        android:id="@+id/busienss_customer_list_filter_menu_clear"
+        android:title="@string/business_customer_list_filterMenuClear"/>
+
+</menu>

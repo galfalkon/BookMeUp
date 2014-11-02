@@ -31,7 +31,10 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Filter;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.PopupMenu;
+import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -57,13 +60,18 @@ import com.parse.SendCallback;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-public class BusinessCustomersListFragment  extends OnClickListenerFragment implements TextWatcher {
+public class BusinessCustomersListFragment  extends OnClickListenerFragment implements TextWatcher, OnMenuItemClickListener
+{
 	private static final String TAG = "BusinessCustomersListFragment";
 
 	private IObservableList<CustomerForBusiness> _allCustomers, _filteredCustomers;
 	private CustomerCardArrayMultiChoiceAdapter _customerCardsAdapter;
 	
 	private CardListViewWrapperView _customerCardListView;
+
+	private EditText _edtSearch;
+	private PopupMenu _popupMenuFilter;
+	private ImageButton _imgViewBtnFilter;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -79,8 +87,15 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		_customerCardListView.setAdapter(_customerCardsAdapter);
 		_customerCardListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 		
-		EditText edtSearch = (EditText)view.findViewById(R.id.business_customer_list_edtSearch);
-		edtSearch.addTextChangedListener(this);
+		_edtSearch = (EditText)view.findViewById(R.id.business_customer_list_edtSearch);
+		_edtSearch.addTextChangedListener(this);
+		
+		_imgViewBtnFilter = (ImageButton) view.findViewById(R.id.business_customer_list_btnFilter);
+		_imgViewBtnFilter.setOnClickListener(this);
+		
+		_popupMenuFilter = new PopupMenu(getActivity(), _imgViewBtnFilter);
+		_popupMenuFilter.inflate(R.menu.business_customer_list_filter);
+		_popupMenuFilter.setOnMenuItemClickListener(this);
 		
 		/*
 		 * Build a query that represents bookings with the following properties:
@@ -137,13 +152,9 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 	public void onClick(View v) {
 		switch (v.getId())
 		{
-		case R.id.business_customer_list_btnFilterBySpendings:
-			Log.i(TAG, "btnFilterBySpending clicked");
-			handleSpendingsFilter();
-			break;
-		case R.id.business_customer_list_btnFilterByLastVisit:
-			Log.i(TAG, "btnFilterByLastVisit clicked");
-			handleLastVisitFilter();
+		case R.id.business_customer_list_btnFilter:
+			Log.i(TAG, "btnFilter clicked");
+			_popupMenuFilter.show();
 			break;
 		}
 	}
@@ -179,6 +190,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 				Date selectedDate = selectedDateCalendar.getTime();
 				
 				_customerCardsAdapter._customersFilter.filterByLastVisit(selectedDate);
+				_imgViewBtnFilter.setActivated(true);
 			}
 		}, today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DATE));
 		datePickerDialog.show();
@@ -208,6 +220,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		    	int spendingsLimit = Integer.parseInt(spendingLimitInput);
 		    	
 		    	_customerCardsAdapter._customersFilter.filterBySpendings(spendingsLimit);
+		    	_imgViewBtnFilter.setActivated(true);
 		    }
 		});
 		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -217,6 +230,13 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		    }
 		});
 		builder.show();
+	}
+	
+	private void handleClearFilter() 
+	{
+		_customerCardsAdapter._customersFilter.clearFilters();
+		_edtSearch.setText("");
+		_customerCardsAdapter.notifyDataSetChanged();
 	}
 	
 	private void handleSendMessageToSelectedClients() {
@@ -441,8 +461,12 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 			filter(null);
 		}
 		
-		private void unfilterByLastVisit() {
+		public void clearFilters()
+		{
 			_dateOfLastVisit = null;
+			_spendingsLimit = null;
+			
+			filter("");
 		}
 		
 		private boolean doesSetisfyLastVisitFilter(CustomerForBusiness customer) {
@@ -549,5 +573,29 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 			TextView txtLastVisit = (TextView) view.findViewById(R.id.business_customer_list_customer_card_last_visit);
 			txtLastVisit.setText(Constants.DATE_TIME_FORMAT.format(_customer._lastVisit));
 		}
+	}
+
+	@Override
+	public boolean onMenuItemClick(MenuItem item) 
+	{
+		Log.i(TAG, "onMenuItemClick");
+		
+		switch (item.getItemId())
+		{
+		case R.id.busienss_customer_list_filter_menu_spendings:
+			Log.i(TAG, "Spending filter selected");
+			handleSpendingsFilter();
+			break;
+		case R.id.busienss_customer_list_filter_menu_last_visit:
+			Log.i(TAG, "Last visit filter selected");
+			handleLastVisitFilter();
+			break;
+		case R.id.busienss_customer_list_filter_menu_clear:
+			Log.i(TAG, "Clear selected");
+			handleClearFilter();
+			_imgViewBtnFilter.setActivated(false);
+			break;
+		}
+		return false;
 	}
 }
