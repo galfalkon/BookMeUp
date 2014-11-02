@@ -172,6 +172,10 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before	, int count) {
 		Log.i(TAG, "onTextChanged");
+		
+		CustomersFilter filter = _customerCardsAdapter._customersFilter;
+		
+		_imgViewBtnFilter.setActivated(!s.toString().isEmpty() || filter._dateOfLastVisit != null || filter._spendingsLimit != null);
 		_customerCardsAdapter.getFilter().filter(s);
 	}
 	
