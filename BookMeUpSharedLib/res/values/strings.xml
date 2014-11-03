@@ -214,5 +214,6 @@
     <string name="feedback_text">Dear BookMeUp!,\n\n</string>
     <string name="no_email_clients_installed">There are no email clients installed</string>
     <string name="mailto_support">mailto:support@bookmeup.com</string>
+    <string name="verify_email_address">Please check your Email address</string>
     
 </resources>

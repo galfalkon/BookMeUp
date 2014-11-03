@@ -28,7 +28,7 @@ public class BusinessEMailLoginFragment extends EMailLoginFragmentBase
 		if (!user.getBoolean("emailVerified"))
 		{
 			Log.i(TAG, "User hasn't verified Email address");
-			Crouton.showText(getActivity(), "Please verifiy your Email address", Style.ALERT);
+			Crouton.showText(getActivity(), "Please check your Email address", Style.ALERT);
 			return;
 		}
 		

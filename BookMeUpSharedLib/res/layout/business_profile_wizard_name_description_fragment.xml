@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:saveEnabled="false"
                 android:inputType="textMultiLine"
-                android:hint="Optional" />
+                android:hint="@string/wizard_field_required" />
 
         </LinearLayout>
     </ScrollView>

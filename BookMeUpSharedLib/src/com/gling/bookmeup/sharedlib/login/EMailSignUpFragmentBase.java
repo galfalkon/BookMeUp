@@ -128,7 +128,7 @@ public abstract class EMailSignUpFragmentBase extends OnClickListenerFragment im
                 InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
                 
-                Crouton.showText(getActivity(),"Please verify your Email address", Style.CONFIRM);
+                Crouton.showText(getActivity(), R.string.verify_email_address, Style.CONFIRM);
                 FragmentsManagerUtils.goToNextFragment(getActivity(), R.id.login_container, ((LoginMainActivityBase)getActivity()).getEmailLoginFragmentInstance());
             }
         });

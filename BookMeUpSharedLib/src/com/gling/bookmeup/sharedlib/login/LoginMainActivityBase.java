@@ -33,7 +33,7 @@ public abstract class LoginMainActivityBase extends Activity {
         ParseUser user = ParseUser.getCurrentUser();
         if (user != null && !user.getBoolean(ParseHelper.User.Keys.EMAIL_VERIFIED))
         {
-        	Crouton.showText(this, "Please verifiy your Email address", Style.INFO);
+        	Crouton.showText(this, R.string.verify_email_address, Style.INFO);
         }
 
         getFragmentManager().beginTransaction().add(R.id.login_container, new LoginMainFragment()).commit();

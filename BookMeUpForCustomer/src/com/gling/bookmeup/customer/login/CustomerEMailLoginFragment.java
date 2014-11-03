@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.gling.bookmeup.customer.CustomerMainActivity;
+import com.gling.bookmeup.sharedlib.R;
 import com.gling.bookmeup.sharedlib.login.EMailLoginFragmentBase;
 import com.gling.bookmeup.sharedlib.parse.Customer;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper;
@@ -26,7 +27,7 @@ public class CustomerEMailLoginFragment extends EMailLoginFragmentBase {
 		if (!user.getBoolean("emailVerified"))
 		{
 			Log.i(TAG, "User hasn't verified Email address");
-			Crouton.showText(getActivity(), "Please verifiy your Email address", Style.ALERT);
+			Crouton.showText(getActivity(), R.string.verify_email_address, Style.ALERT);
 			return;
 		}
 		
