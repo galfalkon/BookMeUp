@@ -27,6 +27,19 @@
         <item name="android:activatedBackgroundIndicator">@drawable/bookmeup_widgets_activated_background_holo_light</item>
         <item name="android:fastScrollThumbDrawable">@drawable/bookmeup_widgets_fastscroll_thumb_holo</item>
         <item name="android:windowBackground">@drawable/background</item>
+        
+        <item name="textAppearanceLargePopupMenu">@style/myPopupMenuTextAppearanceLarge</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/myPopupMenuTextAppearanceLarge</item>
+        <item name="textAppearanceSmallPopupMenu">@style/myPopupMenuTextAppearanceSmall</item>
+        <item name="android:textAppearanceSmallPopupMenu">@style/myPopupMenuTextAppearanceSmall</item>
+    </style>
+
+    <style name="myPopupMenuTextAppearanceSmall" parent="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Small">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="myPopupMenuTextAppearanceLarge" parent="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Large">
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
 </resources>
