@@ -33,7 +33,8 @@
                 android:layout_height="wrap_content"
                 android:cursorVisible="false"
                 android:hint="@string/business_customer_list_edtSearchHint"
-                android:maxLines="1" />
+                android:imeOptions="actionDone"
+                android:inputType="textPersonName" />
         </LinearLayout>
 
         <ImageButton
