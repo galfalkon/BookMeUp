@@ -13,6 +13,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -166,6 +167,43 @@ public class ServicesFragment extends Fragment {
         public AddServiceExpand(Context context) {
             super(context, R.layout.business_profile_wizard_add_service_card_expand);
         }
+        
+        public boolean validateInput(EditText edtName, EditText edtPrice, EditText edtDuration) {
+        	// Reset errors.
+            edtName.setError(null);
+            edtPrice.setError(null);
+            edtDuration.setError(null);
+            
+            View firstInvalidInput = null;
+            
+            String duration = edtDuration.getText().toString();
+            if (TextUtils.isEmpty(duration))
+            {
+            	edtDuration.setError(getActivity().getString(R.string.error_required_field));
+            	firstInvalidInput = edtDuration;
+            }
+            
+            String price = edtPrice.getText().toString();
+            if (TextUtils.isEmpty(price))
+            {
+            	edtPrice.setError(getActivity().getString(R.string.error_required_field));
+            	firstInvalidInput = edtPrice;
+            }
+        	
+        	String name = edtName.getText().toString();
+        	if (TextUtils.isEmpty(name))
+        	{
+        		edtName.setError(getActivity().getString(R.string.error_required_field));
+        		firstInvalidInput = edtName;
+        	}
+        	
+        	if (firstInvalidInput != null)
+        	{
+        		firstInvalidInput.requestFocus();
+        	}
+        	
+        	return (firstInvalidInput == null);
+        }
 
         @Override
         public void setupInnerViewElements(ViewGroup parent, final View view) {
@@ -177,15 +215,19 @@ public class ServicesFragment extends Fragment {
 
                 @Override
                 public void onClick(View v) {
-
-                    _servicesListViewWrapperView.setDisplayMode(DisplayMode.LOADING_VIEW);
-
+                	
                     final EditText edtName = (EditText) view
                                                             .findViewById(R.id.business_profile_wizard_services_edtName);
                     final EditText edtPrice = (EditText) view
                                                              .findViewById(R.id.business_profile_wizard_services_edtPrice);
                     final EditText edtDuration = (EditText) view
                                                                 .findViewById(R.id.business_profile_wizard_services_edtDuration);
+                    
+                    if (!validateInput(edtName, edtPrice, edtDuration)) {
+                    	return;
+                    }
+                    
+                    _servicesListViewWrapperView.setDisplayMode(DisplayMode.LOADING_VIEW);
 
                     final Service service = new Service();
                     service.setBusiness(Business.getCurrentBusiness())
