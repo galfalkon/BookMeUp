@@ -147,6 +147,7 @@ public class CustomerOffersFragment extends OnClickListenerFragment {
 			_offer = offer;
 			
 			setOnClickListener(onClickListener);
+			setId(_offer.getObjectId());
 		}
 		
 		@Override
