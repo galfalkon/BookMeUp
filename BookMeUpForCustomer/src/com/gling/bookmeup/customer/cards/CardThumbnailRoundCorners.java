@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 
 import com.gling.bookmeup.main.Utils;
@@ -29,16 +30,25 @@ public class CardThumbnailRoundCorners extends CardThumbnail {
         int cornerRadius = (int) (CORNER_RADIUS * density + 0.5f);
         int margin = 0;
 
-        // Bitmap scaledImage = Bitmap.createScaledBitmap(bitmap, IMAGE_WIDTH,
-        // IMAGE_WIDTH
-        // * bitmap.getHeight() / bitmap.getWidth(), false);
+        bitmap = Utils.scaleImageToDp(bitmap, dpToPx(IMAGE_WIDTH));
+        
+        LayoutParams params = (LayoutParams) imageView.getLayoutParams();
+        params.width = bitmap.getWidth();
+        params.height = bitmap.getHeight();
+        imageView.setLayoutParams(params);
+        
         RoundCornersDrawable round = new RoundCornersDrawable(bitmap, cornerRadius, margin);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             imageView.setBackground(round);
         } else {
             imageView.setBackgroundDrawable(round);
         }
-        //Utils.scaleImageToImageView((ImageView) imageView, IMAGE_WIDTH);
         return true;
+    }
+    
+    private int dpToPx(int dp)
+    {
+        float density = getContext().getApplicationContext().getResources().getDisplayMetrics().density;
+        return Math.round((float)dp * density);
     }
 }
