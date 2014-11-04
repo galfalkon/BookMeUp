@@ -285,8 +285,8 @@ public class CustomerCalendarFragment extends Fragment {
 
 						AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			            builder.setTitle(R.string.customer_booking_title);
-			            builder.setMessage("Book an appointment for: " + bookingToSave.getServiceName() + 
-			            					" at: " + Constants.DATE_TIME_FORMAT.format(bookingToSave.getDate()) + "?");
+			            builder.setMessage("For service:   " + bookingToSave.getServiceName() +
+			            					"\nAt time:          " + Constants.DATE_TIME_FORMAT.format(bookingToSave.getDate()));
 			            
 						// Set up the buttons
 			            builder.setPositiveButton(R.string.customer_booking_ok_button, new DialogInterface.OnClickListener() {
