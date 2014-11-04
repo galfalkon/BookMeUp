@@ -4,6 +4,9 @@
     
     <!-- My Bookings -->
 	<string name="customer_my_bookings_multichoice_cancel">Cancel</string>
+	<string name="customer_my_bookings_booking_card_service">"Service: "</string>
+	<string name="customer_my_bookings_booking_card_date">"Date: "</string>
+	<string name="customer_my_bookings_booking_card_status">"Status: "</string>
 	
 	<!-- Offers -->
 	<string name="customer_offer_list_offer_card_business_name">"Business name: "</string>
