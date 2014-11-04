@@ -64,75 +64,87 @@
             android:layout_height="fill_parent"
             android:orientation="vertical" >
 
-            <LinearLayout
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal" >
+                android:layout_height="0dp"
+                android:layout_weight="1" >
 
-                <TextView
-                    style="@style/WizardFormLabel"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/customer_booking_profile_description_header_text" />
+                    android:orientation="vertical" >
 
-                <TextView
-                    android:id="@+id/customer_booking_profile_description_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal" >
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal" >
+                        <TextView
+                            style="@style/WizardFormLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/customer_booking_profile_description_header_text" />
 
-                <TextView
-                    android:id="@+id/customer_booking_profile_phone_header_textView"
-                    style="@style/WizardFormLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/customer_booking_profile_phone_header_text" />
+                        <TextView
+                            android:id="@+id/customer_booking_profile_description_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
 
-                <TextView
-                    android:id="@+id/customer_booking_profile_phone_number_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_toRightOf="@id/customer_booking_profile_phone_header_textView" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal" >
 
-                <ImageView
-                    android:id="@+id/customer_booking_profile_callImageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:contentDescription="@string/customer_booking_profile_callDescription"
-                    android:scaleType="center"
-                    android:src="@drawable/ic_action_call" />
-            </RelativeLayout>
+                        <TextView
+                            android:id="@+id/customer_booking_profile_phone_header_textView"
+                            style="@style/WizardFormLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/customer_booking_profile_phone_header_text" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal" >
+                        <TextView
+                            android:id="@+id/customer_booking_profile_phone_number_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_toRightOf="@id/customer_booking_profile_phone_header_textView" />
 
-                <TextView
-                    style="@style/WizardFormLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/customer_booking_profile_opening_hours_header_text" />
+                        <ImageView
+                            android:id="@+id/customer_booking_profile_callImageView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:contentDescription="@string/customer_booking_profile_callDescription"
+                            android:scaleType="center"
+                            android:src="@drawable/ic_action_call" />
+                    </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/customer_booking_profile_opening_hours_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            style="@style/WizardFormLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/customer_booking_profile_opening_hours_header_text" />
+
+                        <TextView
+                            android:id="@+id/customer_booking_profile_opening_hours_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
         </LinearLayout>
 
         <LinearLayout
