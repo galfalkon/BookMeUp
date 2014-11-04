@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ListView;
@@ -38,6 +39,8 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 	private static final String TAG = "CustomerMainActivity";
 	
 	final private Fragment _thisFragment = this;
+	
+	EditText _edtSearch;
 
 	private HashMap<String, Business> _allBusinesses;
 	private HashMap<String, com.gling.bookmeup.sharedlib.parse.Business> _allParseBusinesses;
@@ -61,12 +64,20 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 		_businessesCardListView.setAdapter(_businessesCardAdapter);
 		_businessesCardListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 
-		EditText edtSearch = (EditText)view.findViewById(R.id.customer_favourites_business_list_edtSearch);
-		edtSearch.addTextChangedListener(this);
+		_edtSearch = (EditText)view.findViewById(R.id.customer_favourites_business_list_edtSearch);
+		_edtSearch.addTextChangedListener(this);
 
 		new PopulateFavouritesBusinessesTask().execute();
 		return view;
 	}
+	
+    @Override
+    public void onPause() {
+    	InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+		_edtSearch.clearFocus();
+		imm.hideSoftInputFromWindow(_edtSearch.getWindowToken(), 0);
+    	super.onPause();
+    }
 
 	@Override
 	protected int getFragmentLayoutId() {

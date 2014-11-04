@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ViewSwitcher;
@@ -102,6 +103,14 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
         inflateListWithAllBusinesses();
         
         return view;
+    }
+    
+    @Override
+    public void onPause() {
+    	InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+		_edtSearch.clearFocus();
+		imm.hideSoftInputFromWindow(_edtSearch.getWindowToken(), 0);
+    	super.onPause();
     }
 
     @Override

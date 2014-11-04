@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ListView;
@@ -40,6 +41,8 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 	private static final String TAG = "CustomerHistoryFragment";
 	
 	final private Fragment _thisFragment = this;
+	
+	EditText _edtSearch;
 	
 	private HashMap<String, Business> _allBusinesses;
 	private HashMap<String, com.gling.bookmeup.sharedlib.parse.Business> _allParseBusinesses;
@@ -63,8 +66,8 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 		_businessesCardListView.setAdapter(_businessesCardAdapter);
 		_businessesCardListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 
-		EditText edtSearch = (EditText)view.findViewById(R.id.customer_history_business_list_edtSearch);
-		edtSearch.addTextChangedListener(this);
+		_edtSearch = (EditText)view.findViewById(R.id.customer_history_business_list_edtSearch);
+		_edtSearch.addTextChangedListener(this);
 
 		ParseQuery<Booking> query = new ParseQuery<Booking>(Booking.CLASS_NAME).
 				whereEqualTo(Booking.Keys.CUSTOMER_POINTER, Customer.getCurrentCustomer()).
@@ -109,6 +112,10 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 								customerActivity.setChosenBusiness(business);
 								customerActivity.setLastFragment(_thisFragment);
 							}
+
+							InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+							_edtSearch.clearFocus();
+							imm.hideSoftInputFromWindow(_edtSearch.getWindowToken(), 0);
 							
 							Fragment fragment = new CustomerBookingProfileFragment();
 							getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
@@ -135,6 +142,14 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 		
 		return view;
 	}
+    
+    @Override
+    public void onPause() {
+    	InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+		_edtSearch.clearFocus();
+		imm.hideSoftInputFromWindow(_edtSearch.getWindowToken(), 0);
+    	super.onPause();
+    }
 
 	
 	@Override
