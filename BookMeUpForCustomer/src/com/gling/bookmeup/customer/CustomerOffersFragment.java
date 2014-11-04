@@ -2,19 +2,18 @@ package com.gling.bookmeup.customer;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
-import it.gmariotti.cardslib.library.internal.CardExpand;
-import it.gmariotti.cardslib.library.internal.CardHeader;
 
-import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.gling.bookmeup.main.Constants;
 import com.gling.bookmeup.main.GenericCardArrayAdapter;
@@ -99,31 +98,22 @@ public class CustomerOffersFragment extends OnClickListenerFragment {
 	private class OfferCardsGenerator implements ICardGenerator<Offer>
 	{
 		@Override
-		public Card generateCard(Offer offer) {
-			CardHeader cardHeader= new CardHeader(getActivity());
-			cardHeader.setButtonExpandVisible(true);
-			
-			CardExpand cardExpand = new CardExpand(getActivity());
-			cardExpand.setTitle("Valid until " + Constants.DATE_TIME_FORMAT.format(offer.getExpirationData()));
-			//TODO: move from expand to the card itself
-			
-			Card card = new Card(getActivity());
-			card.setId(offer.getObjectId());
-			card.addCardHeader(cardHeader);
-			card.setTitle(offer.getDiscount() + "% off @ " + offer.getBusinessName());
-			card.addCardExpand(cardExpand);
-			
-			card.setOnClickListener(new OnCardClickListener() {
+		public Card generateCard(Offer offer) 
+		{
+			return new OfferCard(getActivity(), offer, new OnCardClickListener() 
+			{
 				
 				@Override
 				public void onClick(Card offerCard, View arg1) {					
 					Log.i(TAG, "offer was clicked");
 					String offerId = offerCard.getId();
 					for (Offer offer : _offers) {
-						if (offer.getObjectId().equals(offerId)) {
+						if (offer.getObjectId().equals(offerId)) 
+						{
 							Business business = offer.getBusiness();
 							Activity activity = getActivity();
-							if (activity instanceof CustomerMainActivity) {
+							if (activity instanceof CustomerMainActivity) 
+							{
 								CustomerMainActivity customerActivity = (CustomerMainActivity)activity;
 								customerActivity.setChosenBusiness(business);
 								customerActivity.setLastFragment(_thisFragment);
@@ -143,8 +133,33 @@ public class CustomerOffersFragment extends OnClickListenerFragment {
 					return;
 				}
 			});
-			
-			return card;
 		}
 	}
+	
+	private static class OfferCard extends Card
+    {
+    	private final Offer _offer;
+    	
+		public OfferCard(Context context, Offer offer, OnCardClickListener onClickListener) 
+		{
+			super(context, R.layout.customer_offer_list_offer_card);
+			
+			_offer = offer;
+			
+			setOnClickListener(onClickListener);
+		}
+		
+		@Override
+		public void setupInnerViewElements(ViewGroup parent, View view) 
+		{
+			TextView txtBusinessName = (TextView) view.findViewById(R.id.customer_offer_list_offer_card_business_name);
+			txtBusinessName.setText(_offer.getBusiness().getName());
+			
+			TextView txtDiscount = (TextView) view.findViewById(R.id.customer_offer_list_offer_card_discount);
+			txtDiscount.setText(_offer.getDiscount() + "%");
+			
+			TextView txtExpirationDate = (TextView) view.findViewById(R.id.customer_offer_list_offer_card_expiration_date);
+			txtExpirationDate.setText(Constants.DATE_FORMAT.format(_offer.getExpirationData()));
+		}
+    }
 }
