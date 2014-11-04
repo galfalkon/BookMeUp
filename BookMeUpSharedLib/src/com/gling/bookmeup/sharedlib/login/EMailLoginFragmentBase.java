@@ -8,16 +8,12 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.sharedlib.R;

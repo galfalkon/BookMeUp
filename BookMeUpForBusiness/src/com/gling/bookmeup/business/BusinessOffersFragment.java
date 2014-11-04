@@ -1,16 +1,17 @@
 package com.gling.bookmeup.business;
 
 import it.gmariotti.cardslib.library.internal.Card;
-import it.gmariotti.cardslib.library.internal.CardExpand;
-import it.gmariotti.cardslib.library.internal.CardHeader;
 
+import java.util.Date;
 import java.util.List;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.gling.bookmeup.main.Constants;
 import com.gling.bookmeup.main.GenericCardArrayAdapter;
@@ -86,19 +87,40 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 	private class OfferCardsGenerator implements ICardGenerator<Offer>
 	{
 		@Override
-		public Card generateCard(Offer offer) {
-			CardHeader cardHeader= new CardHeader(getActivity());
-			cardHeader.setButtonExpandVisible(true);
-			
-			CardExpand cardExpand = new CardExpand(getActivity());
-			cardExpand.setTitle("Valid until " + Constants.DATE_TIME_FORMAT.format(offer.getExpirationData()));
-			
-			Card card = new Card(getActivity());
-			card.addCardHeader(cardHeader);
-			card.setTitle(offer.getDiscount() + "% off @ " + offer.getBusinessName());
-			card.addCardExpand(cardExpand);
-			
-			return card;
+		public Card generateCard(Offer offer) 
+		{
+			return new OfferCard(getActivity(), offer);
 		}
 	}
+	
+	private static class OfferCard extends Card
+    {
+    	private final Offer _offer;
+    	private final Context _context;
+    	
+		public OfferCard(Context context, Offer offer) 
+		{
+			super(context, R.layout.business_offer_list_offer_card);
+			
+			_context = context;
+			_offer = offer;
+		}
+		
+		@Override
+		public void setupInnerViewElements(ViewGroup parent, View view) 
+		{
+			TextView txtDiscount = (TextView) view.findViewById(R.id.business_offer_list_offer_card_discount);
+			txtDiscount.setText(_offer.getDiscount() + "%");
+			
+			TextView txtExpirationDate = (TextView) view.findViewById(R.id.business_offer_list_offer_card_expiration_date);
+			txtExpirationDate.setText(Constants.DATE_FORMAT.format(_offer.getExpirationData()));
+			
+			TextView txtStatus = (TextView) view.findViewById(R.id.business_offer_list_offer_card_status);
+			boolean isActive = _offer.getExpirationData().after(new Date());
+			String statusDescription = isActive? "Active" : "Not Active";
+			int statusColorResource = isActive? android.R.color.holo_green_light : android.R.color.holo_red_light;    
+			txtStatus.setText(statusDescription);
+			txtStatus.setTextColor(_context.getApplicationContext().getResources().getColor(statusColorResource));
+		}
+    }
 }
