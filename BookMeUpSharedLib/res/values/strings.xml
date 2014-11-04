@@ -218,5 +218,6 @@
     <string name="mailto_support">mailto:gling.team@gmail.com</string>
     <string name="verify_email_address">Please check your Email address</string>
     <string name="generic_exception_message">Oops... Something went wrong\nPlease try again...</string>
+    <string name="search">Search</string>
 
 </resources>
