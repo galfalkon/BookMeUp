@@ -30,7 +30,7 @@ import com.parse.RequestPasswordResetCallback;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-public abstract class EMailLoginFragmentBase extends OnClickListenerFragment implements OnEditorActionListener 
+public abstract class EMailLoginFragmentBase extends OnClickListenerFragment 
 {
 
     private static final String TAG = "EMailLoginFragmentBase";
@@ -50,8 +50,6 @@ public abstract class EMailLoginFragmentBase extends OnClickListenerFragment imp
         _edtUserName = (EditText) view.findViewById(R.id.email_login_edtUserName);
         _edtPassword = (EditText) view.findViewById(R.id.email_login_edtPassword);
         
-        _edtPassword.setOnEditorActionListener(this);
-
         return view;
     }
 
@@ -68,19 +66,6 @@ public abstract class EMailLoginFragmentBase extends OnClickListenerFragment imp
 		}
     }
     
-    @Override
-	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) 
-	{
-		switch (actionId)
-		{
-		case EditorInfo.IME_ACTION_DONE:
-			handleLoginReuest();
-			return true;
-		default:
-			return false;
-		}
-	}
-
     private void handleForgotPassword() {
         Log.i(TAG, "handleForgotPassword");
 

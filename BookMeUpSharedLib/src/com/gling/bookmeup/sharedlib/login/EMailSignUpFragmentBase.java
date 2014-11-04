@@ -5,15 +5,11 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 
 import com.gling.bookmeup.main.FragmentsManagerUtils;
 import com.gling.bookmeup.main.OnClickListenerFragment;
@@ -28,7 +24,7 @@ import com.parse.SignUpCallback;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-public abstract class EMailSignUpFragmentBase extends OnClickListenerFragment implements OnEditorActionListener 
+public abstract class EMailSignUpFragmentBase extends OnClickListenerFragment 
 {
     private static final String TAG = "EMailSignUpFragmentBase";
 
@@ -49,8 +45,6 @@ public abstract class EMailSignUpFragmentBase extends OnClickListenerFragment im
         _edtPassword = (EditText) view.findViewById(R.id.email_signup_edtPassword);
         _edtPasswordVerification = (EditText) view.findViewById(R.id.email_signup_edtPasswordVerification);
         
-        _edtPasswordVerification.setOnEditorActionListener(this);
-
         InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         
@@ -70,20 +64,7 @@ public abstract class EMailSignUpFragmentBase extends OnClickListenerFragment im
 			return;
 		}
     }
-    
-    @Override
-	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) 
-	{
-		switch (actionId)
-		{
-		case EditorInfo.IME_ACTION_DONE:
-			handleSignupClick();
-			return true;
-		default:
-			return false;
-		}
-	}
-    
+
     private void handleSignupClick()
     {
     	if (!validateInput()) 
