@@ -42,6 +42,7 @@
                 android:layout_height="wrap_content"
                 android:saveEnabled="false"
                 android:inputType="textMultiLine"
+                android:maxLength="150"
                 android:hint="Free Text" />
 
         </LinearLayout>
