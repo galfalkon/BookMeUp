@@ -18,7 +18,8 @@
             android:layout_margin="5dp"
             android:gravity="center"
             android:text="@string/customer_profile_creation_txtWelcome"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@android:color/holo_blue_dark" />
 
         <TextView
             android:layout_width="match_parent"
@@ -36,22 +37,21 @@
             android:id="@+id/customer_profile_creation_edtName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
             android:hint="@string/customer_profile_creation_edtName_hint"
             android:imeOptions="actionNext"
-            android:maxLength="15"
-            android:inputType="text" />
-        
+            android:inputType="text"
+            android:maxLength="15" />
+
         <EditText
             android:id="@+id/customer_profile_creation_edtPhoneNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/customer_profile_creation_edtPhoneNumber_hint"
             android:imeOptions="actionDone"
-            android:maxLength="13"
-            android:inputType="phone" />
-        
+            android:inputType="phone"
+            android:maxLength="13" />
     </LinearLayout>
 
     <Button
