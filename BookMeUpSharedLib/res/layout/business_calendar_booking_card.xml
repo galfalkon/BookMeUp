@@ -13,7 +13,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Service: " />
+            android:text="Service: " 
+            android:textColor="@color/bookmeup_widgets_color" />
 
         <TextView
             android:id="@+id/business_calendar_booking_card_service"
@@ -28,7 +29,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Time: " />
+            android:text="Time: " 
+            android:textColor="@color/bookmeup_widgets_color" />
 
         <TextView
             android:id="@+id/business_calendar_booking_card_time"
@@ -48,7 +50,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Status: " />
+            android:text="Status: " 
+            android:textColor="@color/bookmeup_widgets_color" />
 
         <TextView
             android:id="@+id/business_calendar_booking_card_status"
