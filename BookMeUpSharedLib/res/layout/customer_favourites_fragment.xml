@@ -1,25 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout 
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bookmeup="http://schemas.android.com/apk/res/com.gling.bookmeup"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:layout_margin="10dp" >
 
-    <EditText
-        android:id="@+id/customer_favourites_business_list_edtSearch"
+    <LinearLayout
+        android:id="@+id/customer_favourites_search_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:cursorVisible="false"
-        android:hint="@string/customer_favourites_business_list_search_edtSearchHint"
-        android:maxLines="1" />
+        android:layout_gravity="center"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="@string/search"
+            android:src="@drawable/ic_action_search" />
+
+        <EditText
+            android:id="@+id/customer_favourites_business_list_edtSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cursorVisible="false"
+            android:hint="@string/customer_favourites_business_list_search_edtSearchHint"
+            android:imeOptions="actionDone"
+            android:inputType="textPersonName" />
+    </LinearLayout>
 
     <com.gling.bookmeup.main.views.CardListViewWrapperView
         android:id="@+id/customer_favourites_business_list_listViewBusinesses"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/customer_favourites_business_list_edtSearch" />
+        android:layout_below="@id/customer_favourites_search_header" />
 
 </RelativeLayout>
