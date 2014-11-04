@@ -195,6 +195,10 @@ public abstract class EMailLoginFragmentBase extends OnClickListenerFragment imp
     
     private boolean validateInput()
     {
+    	// Reset errors.
+        _edtUserName.setError(null);
+        _edtPassword.setError(null);
+    	
     	View firstInvalidInput = null;
     	
     	String password = _edtPassword.getText().toString();
@@ -202,14 +206,20 @@ public abstract class EMailLoginFragmentBase extends OnClickListenerFragment imp
     	{
     		_edtPassword.setError(getActivity().getString(R.string.error_required_field));
     		firstInvalidInput = _edtPassword;
-    	}
+    	} else if (password.length() < 4) {
+            _edtPassword.setError("Passwords should be at least 4 characters long");
+            firstInvalidInput = _edtPassword;
+        }
     	
     	String userName = _edtUserName.getText().toString();
     	if (TextUtils.isEmpty(userName))
     	{
     		_edtUserName.setError(getActivity().getString(R.string.error_required_field));
     		firstInvalidInput = _edtUserName;
-    	}
+    	} else if (userName.length() < 4) {
+            _edtUserName.setError("User name should be at least 4 characters long");
+            firstInvalidInput = _edtUserName;
+        }
     	
     	if (firstInvalidInput != null)
     	{
