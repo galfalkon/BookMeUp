@@ -2,12 +2,15 @@ package com.gling.bookmeup.business;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.Card.OnLongCardClickListener;
+import it.gmariotti.cardslib.library.internal.CardHeader.OnClickCardHeaderOtherButtonListener;
 import it.gmariotti.cardslib.library.internal.CardHeader;
 
 import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ActionMode;
@@ -302,7 +305,7 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
     {
     	private final Booking _booking; 
     	
-		public BookingCard(Context context, Booking booking, OnLongCardClickListener onLongClickListener) 
+		public BookingCard(final Context context, final Booking booking, OnLongCardClickListener onLongClickListener) 
 		{
 			super(context, R.layout.business_booking_list_booking_card);
 			
@@ -310,8 +313,22 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 			
 			CardHeader cardHeader = new CardHeader(context);
 	    	cardHeader.setTitle(_booking.getCustomer().getName());
-	    	addCardHeader(cardHeader);
+	    	cardHeader.setOtherButtonDrawable(R.drawable.btn_action_call);
+	    	cardHeader.setOtherButtonVisible(true);
+	    	cardHeader.setOtherButtonClickListener(new OnClickCardHeaderOtherButtonListener() 
+			{
+				@Override
+				public void onButtonItemClick(Card card, View view) 
+				{
+					Log.i(TAG, "btn_action_call clicked");
+					Intent callIntent = new Intent(Intent.ACTION_CALL);
+					callIntent.setData(Uri.parse("tel:" + booking.getCustomer().getPhoneNumber()));
+					context.startActivity(callIntent);
+				}
+			});
+			
 	    	
+	    	addCardHeader(cardHeader);
 	    	setOnLongClickListener(onLongClickListener); 
 		}
 		
