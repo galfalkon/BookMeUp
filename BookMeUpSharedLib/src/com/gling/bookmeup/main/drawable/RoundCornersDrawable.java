@@ -43,7 +43,7 @@ import android.graphics.drawable.Drawable;
  */
 public class RoundCornersDrawable extends Drawable {
 
-    private static final boolean USE_VIGNETTE = true;
+    private static final boolean USE_VIGNETTE = false;
 
     private final float mCornerRadius;
     private final RectF mRect = new RectF();

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card="http://schemas.android.com/apk/res-auto"
+    style="@style/card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <!-- Card visible layout -->
+
+    <LinearLayout
+        android:id="@+id/card_main_layout"
+        style="@style/card.main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="30dip"
+        android:layout_marginStart="30dip"
+        android:background="@drawable/customer_business_card_selector"
+        android:orientation="vertical" >
+
+        <!-- Main Content View -->
+
+        <FrameLayout
+            android:id="@+id/card_main_content_layout"
+            style="@style/card.content_outer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dip"
+            android:layout_marginStart="60dip" />
+    </LinearLayout>
+
+    <it.gmariotti.cardslib.library.view.component.CardThumbnailView
+        android:id="@+id/card_thumbnail_layout"
+        style="@style/card_thumbnail_outer_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="10dip"
+        android:layout_marginStart="10dip"
+        android:layout_marginTop="15dip"
+        card:card_thumbnail_layout_resourceID="@layout/customer_business_card_thumbnail" />
+
+</RelativeLayout>

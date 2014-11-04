@@ -184,9 +184,11 @@ public class CardThumbnail extends BaseCard {
      * Sets the resource ID for Thumbnail
      *
      * @param drawableResource resource ID
+     * @return 
      */
-    public void setDrawableResource(int drawableResource) {
+    public CardThumbnail setDrawableResource(int drawableResource) {
         this.drawableResource = drawableResource;
+        return this;
     }
 
     /**

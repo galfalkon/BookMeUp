@@ -4,6 +4,7 @@ import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import it.gmariotti.cardslib.library.internal.CardGridArrayAdapter;
+import it.gmariotti.cardslib.library.internal.CardThumbnail;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +25,7 @@ import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ViewSwitcher;
 
+import com.gling.bookmeup.customer.cards.BusinessCard;
 import com.gling.bookmeup.customer.cards.CardThumbnailRoundCorners;
 import com.gling.bookmeup.customer.cards.CategoryCard;
 import com.gling.bookmeup.main.OnClickListenerFragment;
@@ -364,15 +366,7 @@ public class CustomerAllBusinessesFragment extends OnClickListenerFragment imple
 	}
     
     private static Card businessToCard(Business business, Activity activity) {
-    	Card card = new Card(activity);
-    	card.setTitle(business.getName());
-//    	card.setBackgroundResourceId(android.R.color.holo_orange_dark);
-    	if (business.getImageFile() != null) {
-    		CardThumbnailRoundCorners thumb = new CardThumbnailRoundCorners(activity, business.getImageFile().getUrl());
-    		card.addCardThumbnail(thumb);
-    	} else {
-    		//TODO
-    	}
+    	Card card = new BusinessCard(activity, business);
     	card.setId(business.getObjectId());
     	return card;
     }

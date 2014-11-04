@@ -6,10 +6,9 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="try_again">Try Again</string>
-    
-     <!-- Contextual action bar -->
+
+    <!-- Contextual action bar -->
     <string name="contextual_action_bar_btnSelectAll">Select All</string>
-    
     <string name="default_no_items_in_list_text">No items</string>
 
     <!-- Login screen -->
@@ -48,6 +47,7 @@
     <!-- Business Activity -->
     <string name="business_activity_title">BookMeUp! - For Business</string>
     <string name="business_activity_title_section_calendar">Calendar</string>
+
     <string-array name="business_navigation_drawer_items">
         <item>Bookings</item>
         <item>Customers</item>
@@ -57,6 +57,7 @@
     <!-- Customer Activity -->
     <string name="customer_main_activity_title">BookMeUp! - For Customers</string>
     <string name="customer_profile_creation_activity_title">Customer Profile Configuration</string>
+
     <string-array name="customer_navigation_drawer_items">
         <item>All Businesses</item>
         <item>History</item>
@@ -74,7 +75,7 @@
     <!-- Book Up Appointment -->
     <string name="customer_booking_title">Book Up An Appointment</string>
     <string name="customer_booking_ok_button">Book Me Up!!</string>
-    
+
     <!-- Customer All Businesses -->
     <string name="customer_all_businesses_list_search_edtSearchHint">Search for...</string>
     <string name="customer_business_list_search_edtSearchHint">Search for...</string>
@@ -85,7 +86,7 @@
     <string name="customer_all_businesses_list_no_businesses_by_type">No businesses exists at this type</string>
 
     <!-- Customer History -->
-	<string name="customer_history_business_list_search_edtSearchHint">Search for...</string>
+    <string name="customer_history_business_list_search_edtSearchHint">Search for...</string>
 
     <!-- Customer Favourite -->
     <string name="customer_favourites_business_list_search_edtSearchHint">Search for...</string>
@@ -105,11 +106,11 @@
     <string name="customer_booking_profile_to_much_favourites_error">You already have too much favourites!</string>
     <string name="customer_booking_profile_btnSwitchToServicesText">Choose Service</string>
     <string name="customer_booking_profile_btnSwitchToDetailsText">Back To Business Details</string>
-    
+
     <!-- Customer Choose Services -->
     <string name="customer_choose_services_btnScheduleTxt">Schedule</string>
     <string name="customer_choose_services_btnCancelTxt">Cancel</string>
-    
+
     <!-- Customer My Bookings -->
     <string name="customer_my_bookings_no_bookings">No bookings</string>
     <string name="customer_my_bookings_booking_approved">Approved</string>
@@ -125,7 +126,7 @@
 
     <!-- Customer offer list -->
     <string name="customer_offer_list_no_offers">No offers</string>
-    
+
     <!-- Business profile creation -->
     <string name="business_profile_creation_edtName">Business name</string>
     <string name="business_profile_creation_edtDescriptionHint">Business description</string>
@@ -168,7 +169,7 @@
     <string name="business_booking_list_pending_mutlichoice_action_bar_menu_approve">Approve</string>
     <string name="business_booking_list_booking_card_date">"Date: "</string>
     <string name="business_booking_list_booking_card_service">"Service: "</string>
-    
+
     <!-- Business offer list -->
     <string name="business_offer_list_no_offers">No offers</string>
     <string name="business_offer_list_offer_card_discount">"Discount: "</string>
@@ -189,18 +190,16 @@
     <!-- Errors -->
     <string name="error_required_field">This field is required</string>
     <string name="error_no_internet_connection">This app requires an active internet connection\nPlease check your internet connection or try again later</string>
-    
     <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
-    
     <string name="title_activity_business_profile_wizard">Business Profile Wizard</string>
     <string name="business_profile_wizard_previous">Previous</string>
     <string name="business_profile_wizard_next">Next</string>
     <string name="progress_dialog_please_wait">Please wait...</string>
     <string name="progress_dialog_saving_profile">Saving your profile...</string>
-    
+
     <!-- Customer profile creation -->
     <string name="customer_profile_creation_txtWelcome">Welcome to BookMeUp!</string>
     <string name="customer_profile_creation_txtSubtitle">You\'ve just made your first step of making your life a lot more easier!</string>
@@ -218,5 +217,6 @@
     <string name="no_email_clients_installed">There are no email clients installed</string>
     <string name="mailto_support">mailto:gling.team@gmail.com</string>
     <string name="verify_email_address">Please check your Email address</string>
-    
+    <string name="generic_exception_message">Oops... Something went wrong\nPlease try again...</string>
+
 </resources>
