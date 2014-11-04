@@ -26,8 +26,10 @@ import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Filter;
@@ -211,29 +213,40 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 		
 		builder.setTitle(R.string.business_customer_list_spendings_filter_dialog_title);
 		
-		// Set up the buttons
-		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() { 
-		    @Override
-		    public void onClick(DialogInterface dialog, int which) {
-		    	Log.i(TAG, "Filtering by total spendings");
-		    	String spendingLimitInput = ((TextView)view.findViewById(R.id.business_customer_list_spendings_filter_dialog_edtSpendings)).getText().toString();
+		Button btnCancel = (Button) view.findViewById(R.id.business_customer_list_spendings_filter_dialog_btnCancel);
+		Button btnOk = (Button) view.findViewById(R.id.business_customer_list_spendings_filter_dialog_btnOk);
+		final EditText edtSpendings = (EditText) view.findViewById(R.id.business_customer_list_spendings_filter_dialog_edtSpendings);
+		
+		final AlertDialog dialog = builder.create();
+		btnCancel.setOnClickListener(new OnClickListener() 
+		{
+			@Override
+			public void onClick(View view) 
+			{
+				Log.i(TAG, "btnCancel click");
+				dialog.cancel();
+			}
+		});
+		btnOk.setOnClickListener(new OnClickListener() 
+		{
+			@Override
+			public void onClick(View view) 
+			{
+				Log.i(TAG, "btnOk click");
+		    	String spendingLimitInput = edtSpendings.getText().toString();
 		    	if (spendingLimitInput.isEmpty()) {
-		    		Crouton.showText(getActivity(), "Invalid spendings limit", Style.ALERT);
+		    		edtSpendings.setError("Please insert a value");
 		    		return;
 		    	}
-		    	int spendingsLimit = Integer.parseInt(spendingLimitInput);
 		    	
+		    	dialog.dismiss();
+		    	int spendingsLimit = Integer.parseInt(spendingLimitInput);
 		    	_customerCardsAdapter._customersFilter.filterBySpendings(spendingsLimit);
 		    	_imgViewBtnFilter.setActivated(true);
-		    }
+			}
 		});
-		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-		    @Override
-		    public void onClick(DialogInterface dialog, int which) {
-		        dialog.cancel();
-		    }
-		});
-		builder.show();
+		
+		dialog.show();
 	}
 	
 	private void handleClearFilter() 
