@@ -71,13 +71,13 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 		return view;
 	}
 	
-    @Override
-    public void onPause() {
-    	InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-		_edtSearch.clearFocus();
-		imm.hideSoftInputFromWindow(_edtSearch.getWindowToken(), 0);
-    	super.onPause();
-    }
+//    @Override
+//    public void onPause() {
+//    	InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//		_edtSearch.clearFocus();
+//		imm.hideSoftInputFromWindow(_edtSearch.getWindowToken(), 0);
+//    	super.onPause();
+//    }
 
 	@Override
 	protected int getFragmentLayoutId() {

@@ -113,10 +113,6 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 								customerActivity.setLastFragment(_thisFragment);
 							}
 
-							InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-							_edtSearch.clearFocus();
-							imm.hideSoftInputFromWindow(_edtSearch.getWindowToken(), 0);
-							
 							Fragment fragment = new CustomerBookingProfileFragment();
 							getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
 						}
@@ -143,13 +139,13 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 		return view;
 	}
     
-    @Override
-    public void onPause() {
-    	InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-		_edtSearch.clearFocus();
-		imm.hideSoftInputFromWindow(_edtSearch.getWindowToken(), 0);
-    	super.onPause();
-    }
+//    @Override
+//    public void onPause() {
+//    	InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//		_edtSearch.clearFocus();
+//		imm.hideSoftInputFromWindow(_edtSearch.getWindowToken(), 0);
+//    	super.onPause();
+//    }
 
 	
 	@Override
