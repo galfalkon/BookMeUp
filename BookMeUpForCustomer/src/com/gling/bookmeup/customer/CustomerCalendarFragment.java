@@ -10,7 +10,10 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -18,10 +21,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.gling.bookmeup.main.Constants;
+import com.gling.bookmeup.main.PushUtils;
 import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
 import com.gling.bookmeup.main.views.NormalListViewWrapperView;
 import com.gling.bookmeup.sharedlib.parse.Business;
@@ -31,6 +37,7 @@ import com.gling.bookmeup.sharedlib.parse.Service;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.SendCallback;
 
 public class CustomerCalendarFragment extends Fragment {
 
@@ -218,97 +225,54 @@ public class CustomerCalendarFragment extends Fragment {
 		}
 		//		}
 
+		_bookingsListViewWrapperView.getListView().setOnItemClickListener( new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+				builder.setTitle(R.string.customer_booking_title);
+				final Booking bookingToSave = _possibleBookings.get(position);
+				builder.setMessage("For service:   " + bookingToSave.getServiceName() +
+						"\nAt time:   " + Constants.DATE_TIME_FORMAT.format(bookingToSave.getDate()));
+
+				// Set up the buttons
+				builder.setPositiveButton(R.string.customer_booking_ok_button, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						Log.i(TAG, "Sending booking to parse & business");
+						try {
+							bookingToSave.save();
+							SendCallback callback = new SendCallback() {
+
+								@Override
+								public void done(ParseException e) {
+									Intent intent = new Intent(getActivity(), CustomerMainActivity.class);
+									intent.putExtra(CustomerMainActivity.GO_TO_BOOKING_EXTRA, true);
+									startActivity(intent);
+								}
+							};
+							PushUtils.notifyBusinessAboutBookingRequest(bookingToSave.getBusiness().getObjectId(), 
+									bookingToSave.getCustomer().getName(), callback);
+						} catch (ParseException e1) {
+							Log.e(TAG, "Problem saving the booking");
+						}
+
+					}
+				});
+				builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				});
+				builder.show();
+			}
+
+		});
+
 
 		return view;
 	}
-
-	//	private class BookingCardGenerator implements ICardGenerator<Booking>
-	//	{
-	//		@Override
-	//		public Card generateCard(Booking booking) 
-	//		{
-	//			String status;
-	//			int statusColor;
-	//			switch (booking.getStatus())
-	//			{
-	//			case Booking.Status.PENDING:
-	//				status = getString(R.string.customer_my_bookings_booking_pending_for_approval);
-	//				statusColor = getResources().getColor(android.R.color.holo_purple);
-	//				break;
-	//			case Booking.Status.APPROVED:
-	//				status = getString(R.string.customer_my_bookings_booking_approved);
-	//				statusColor = getResources().getColor(android.R.color.holo_green_light);
-	//				break;
-	//			case Booking.Status.CANCELED:
-	//			default:
-	//				status = getString(R.string.customer_my_bookings_booking_canceled);
-	//				statusColor = getResources().getColor(android.R.color.holo_red_light);
-	//				break;
-	//			}
-	//
-	//			Card card = new CustomerCalendarBookingCard(
-	//					booking,
-	//					getActivity(), 
-	//					booking.getCustomer().getName(),
-	//					booking.getServiceName(), 
-	//					Constants.TIME_FORMAT.format(booking.getDate()), 
-	//					status, 
-	//					statusColor,
-	//					null);
-	//			
-	//			card.setId(booking.getDate().toString());
-	//			
-	//			card.setOnClickListener(new OnCardClickListener() {
-	//				
-	//				@Override
-	//				public void onClick(Card card, View arg1) {
-	//					if (card instanceof CustomerCalendarBookingCard) {
-	//						CustomerCalendarBookingCard bookingCard = (CustomerCalendarBookingCard) card;
-	//						final Booking bookingToSave = bookingCard.getBooking();
-	//
-	//						AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-	//			            builder.setTitle(R.string.customer_booking_title);
-	//			            builder.setMessage("For service:   " + bookingToSave.getServiceName() +
-	//			            					"\nAt time:          " + Constants.DATE_TIME_FORMAT.format(bookingToSave.getDate()));
-	//			            
-	//						// Set up the buttons
-	//			            builder.setPositiveButton(R.string.customer_booking_ok_button, new DialogInterface.OnClickListener() {
-	//						    @Override
-	//						    public void onClick(DialogInterface dialog, int which) {
-	//						    	Log.i(TAG, "Sending booking to parse & business");
-	//						    	try {
-	//						    		bookingToSave.save();
-	//						    		SendCallback callback = new SendCallback() {
-	//						    			
-	//						    			@Override
-	//						    			public void done(ParseException e) {
-	//						    				Intent intent = new Intent(getActivity(), CustomerMainActivity.class);
-	//											intent.putExtra(CustomerMainActivity.GO_TO_BOOKING_EXTRA, true);
-	//											startActivity(intent);
-	//						    			}
-	//						    		};
-	//						    		PushUtils.notifyBusinessAboutBookingRequest(bookingToSave.getBusiness().getObjectId(), 
-	//						    				bookingToSave.getCustomer().getName(), callback);
-	//						    	} catch (ParseException e1) {
-	//						    		Log.e(TAG, "Problem saving the booking");
-	//						    	}
-	//						    	
-	//						    }
-	//						});
-	//						builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-	//						    @Override
-	//						    public void onClick(DialogInterface dialog, int which) {
-	//						        dialog.cancel();
-	//						    }
-	//						});
-	//						builder.show();
-	//					}
-	//				}
-	//			});
-	//			
-	//			return card;
-	//		}
-	//	}
 
 	private class DatedBooking {
 		private Date _startDate = null;
@@ -339,7 +303,7 @@ public class CustomerCalendarFragment extends Fragment {
 			super(context, textViewResourceId, objects);
 			_bookings = objects;
 		}
-		
+
 		public void setDurtation(int duration) {
 			_duration = duration;
 		}
@@ -355,15 +319,15 @@ public class CustomerCalendarFragment extends Fragment {
 			String startTime = Constants.TIME_FORMAT.format(startDate);
 			startHourTextView.setText(startTime);
 			if (_duration != null) {
-//				CardView durationCard = ((CardView) rowView.findViewById(R.id.customer_calendar_list_item_txtDuration));
+//								CardView durationCard = ((CardView) rowView.findViewById(R.id.customer_calendar_list_item_txtDuration));
 				TextView DurationTextView = (TextView) rowView.findViewById(R.id.customer_calendar_list_item_txtDuration);
 				DateTime startDateTime = new DateTime(startDate);
 				DateTime endDate = startDateTime.plusMinutes(_duration);
 				String endTime = Constants.TIME_FORMAT.format(endDate.toDate());
-//				durationCard.setCard(new Card(getActivity()));
+//								durationCard.setCard(new Card(getActivity()));
 				DurationTextView.setText(startTime + " - " + endTime);
 			}
-			
+
 			return rowView;
 		}
 	}

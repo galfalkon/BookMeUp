@@ -20,19 +20,20 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/darker_gray" />
     </LinearLayout>
-    <!-- 
+    
     <TextView
     android:id="@+id/customer_calendar_list_item_txtDuration"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"    
-     /> -->
+     /> 
     
+    <!-- 
     <it.gmariotti.cardslib.library.view.CardView 
         android:id="@+id/customer_calendar_list_item_txtDuration"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center" />
+    android:gravity="center" /> -->
     
 
 </LinearLayout>
