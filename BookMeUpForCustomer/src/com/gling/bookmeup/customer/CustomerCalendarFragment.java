@@ -44,6 +44,7 @@ public class CustomerCalendarFragment extends Fragment {
 	private static final String ARG_DATE = "customer_calendar_fragment_date";
 
 	private DateTime _date;
+	private TextView _headerView;
 
 	String _businessId = null;
 	String _serviceId = null;
@@ -103,6 +104,13 @@ public class CustomerCalendarFragment extends Fragment {
 		_possibleBookings = new ArrayList<Booking>();
 		_bookingsCardAdapter = new CustomerCalendarAdapter(getActivity(), R.layout.customer_calendar_fragment_list_item, _possibleBookings);
 		_bookingsListViewWrapperView = (NormalListViewWrapperView) view.findViewById(R.id.customer_calendar_cardListViewWrapper);
+		
+		_headerView = new TextView(getActivity().getApplicationContext());
+		_headerView.setGravity(Gravity.CENTER);
+		_headerView.setTextSize(18);
+		_headerView.setTextColor(Color.BLACK);
+		_bookingsListViewWrapperView.getListView().addHeaderView(_headerView);
+		
 		_bookingsListViewWrapperView.setAdapter(_bookingsCardAdapter);
 
 		final Customer currentCustomer = Customer.getCurrentCustomer();
@@ -168,14 +176,9 @@ public class CustomerCalendarFragment extends Fragment {
 									int duration = service.getDuration();
 									_bookingsCardAdapter.setDurtation(duration);
 									String serviceName = service.getName();
-									TextView headerView = new TextView(getActivity().getApplicationContext());
-									headerView.setGravity(Gravity.CENTER);
-									headerView.setTextSize(18);
-									headerView.setTextColor(Color.BLACK);
 									String headerText = getActivity().getApplicationContext().getString(R.string.customer_calendar_choosing_instructions) +
 											" " + serviceName + " service?";
-									headerView.setText(headerText);
-									_bookingsListViewWrapperView.getListView().addHeaderView(headerView);
+									_headerView.setText(headerText);
 
 									DateTime startHour = _date.plusHours(8);
 									DateTime currentDate = new DateTime();
