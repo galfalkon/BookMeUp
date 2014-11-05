@@ -162,7 +162,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/customer_booking_profile_services_header_text" />
+                android:text="@string/customer_booking_profile_services_header_text"
+                android:paddingBottom="5dp" />
 
             <com.gling.bookmeup.main.views.CardListViewWrapperView
                 android:id="@+id/customer_booking_profile_list_listViewServices"

@@ -13,7 +13,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Price: " />
+            android:layout_marginRight="10dp"
+            android:text="Price: "
+            android:textColor="@color/bookmeup_widgets_color" />
 
         <TextView
             android:id="@+id/business_profile_wizard_service_price"
@@ -28,7 +30,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Duration: " />
+            android:layout_marginRight="10dp"
+            android:text="Duration: "
+            android:textColor="@color/bookmeup_widgets_color" />
 
         <TextView
             android:id="@+id/business_profile_wizard_service_duration"

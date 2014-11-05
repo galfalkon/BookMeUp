@@ -3,6 +3,7 @@ package com.gling.bookmeup.customer;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
+import it.gmariotti.cardslib.library.internal.CardHeader;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import android.widget.ViewSwitcher;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
 import com.gling.bookmeup.main.views.CardListViewWrapperView;
+import com.gling.bookmeup.sharedlib.R;
 import com.gling.bookmeup.sharedlib.parse.Business;
 import com.gling.bookmeup.sharedlib.parse.Customer;
 import com.gling.bookmeup.sharedlib.parse.ParseHelper.Category;
@@ -349,14 +351,40 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 	}
 
 	private Card serviceToCard(Service service, Activity activity) {
-		Card card = new Card(activity);
-		card.setTitle(service.getName());
+		Card card = new ServiceCard(service, activity);
 		card.setId(service.getObjectId());
 		//TODO pay attention to check if there is an offer discount to reduce it from the card
 		if (_offerDiscount != null && _offerExpirationDate != null) {			
 			Log.i(TAG, "There is an offer for discount of: " + _offerDiscount + "% until: " + _offerExpirationDate); 
 		}
 		return card;
+	}
+	
+	private class ServiceCard extends Card {
+
+        private Service _service;
+
+        public ServiceCard(Service service, Context context) {
+            super(context, R.layout.business_profile_wizard_service_card);
+            _service = service;
+            
+            CardHeader header = new CardHeader(context);
+            header.setTitle(service.getName());
+            addCardHeader(header);
+            
+            setBackgroundResourceId(R.drawable.customer_business_card_selector);
+        }
+        
+        @Override
+        public void setupInnerViewElements(ViewGroup parent, View view) {
+            ((TextView) view
+                    .findViewById(R.id.business_profile_wizard_service_price))
+                    .setText(String.valueOf(_service.getPrice()));
+
+            ((TextView) view.findViewById(R.id.business_profile_wizard_service_duration))
+                    .setText(String.valueOf(_service.getDuration()));
+        }
+	    
 	}
 
 	private class ServiceCardArrayAdapter extends CardArrayAdapter {
