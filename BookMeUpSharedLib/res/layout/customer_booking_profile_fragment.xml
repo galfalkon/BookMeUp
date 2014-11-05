@@ -6,6 +6,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        
         android:layout_marginBottom="10dp" >
 
         <com.parse.ParseImageView
@@ -52,7 +53,8 @@
     <ViewSwitcher
         android:id="@+id/customer_booking_profile_viewSwitcher"
         android:layout_width="fill_parent"
-        android:layout_height="345dp"
+        android:layout_height="0px"
+        android:layout_weight="0.75"
         android:layout_marginBottom="5dp"
         android:inAnimation="@android:anim/slide_in_left"
         android:outAnimation="@android:anim/slide_out_right" >
@@ -172,7 +174,8 @@
     <Button
         android:id="@+id/customer_booking_profile_btnSwitchView"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0px"
+        android:layout_weight="0.10"
         android:layout_marginBottom="10.0dip"
         android:layout_marginLeft="15.0dip"
         android:layout_marginRight="15.0dip"
