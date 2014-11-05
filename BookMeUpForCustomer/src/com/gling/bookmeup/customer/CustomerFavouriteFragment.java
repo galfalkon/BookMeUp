@@ -3,7 +3,6 @@ package com.gling.bookmeup.customer;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
-import it.gmariotti.cardslib.library.internal.CardHeader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +23,7 @@ import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ListView;
 
+import com.gling.bookmeup.customer.cards.BusinessCard;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
 import com.gling.bookmeup.main.views.CardListViewWrapperView;
@@ -62,6 +62,8 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 		_businessesCardListView = (CardListViewWrapperView) view.findViewById(R.id.customer_favourites_business_list_listViewBusinesses);
 		_businessesCardListView.setAdapter(_businessesCardAdapter);
 		_businessesCardListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		// should be called AFTER _businessesCardListView.setAdapter()
+        _businessesCardAdapter.setRowLayoutId(R.layout.customer_business_card_view);
 
 		_edtSearch = (EditText)view.findViewById(R.id.customer_favourites_business_list_edtSearch);
 		_edtSearch.addTextChangedListener(this);
@@ -209,10 +211,12 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 
 	private static class Business {
 		public final String _id, _businessName;
+		private com.gling.bookmeup.sharedlib.parse.Business _business;
 
 		public Business(com.gling.bookmeup.sharedlib.parse.Business business) {
 			_id = business.getObjectId();
 			_businessName = business.getName();
+			_business = business;
 		}
 
 		@Override
@@ -226,15 +230,9 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 		}
 
 		public Card toCard(Context context) {
-			CardHeader header = new CardHeader(context);
-			header.setTitle(_businessName);
-			header.setButtonExpandVisible(false);
-
-			Card card = new Card(context);
-			card.addCardHeader(header);
-			card.setId(_id);
-
-			return card;
+		    Card card = new BusinessCard(context, _business);
+            card.setId(_id);
+            return card;
 		}
 	}
 
