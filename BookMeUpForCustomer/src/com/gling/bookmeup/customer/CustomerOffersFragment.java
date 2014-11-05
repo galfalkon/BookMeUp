@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.gling.bookmeup.customer.cards.CardThumbnailRoundCorners;
 import com.gling.bookmeup.main.Constants;
 import com.gling.bookmeup.main.GenericCardArrayAdapter;
 import com.gling.bookmeup.main.ICardGenerator;
@@ -152,10 +153,7 @@ public class CustomerOffersFragment extends OnClickListenerFragment {
 			
 			if (_offer.getBusiness().getImageFile() != null)
 			{
-				CardThumbnail cardThumbnail = new CardThumbnail(context);
-				cardThumbnail.setUrlResource(_offer.getBusiness().getImageFile().getUrl());
-				cardThumbnail.setErrorResource(R.drawable.ic_error_loadingorangesmall);
-				
+				CardThumbnail cardThumbnail = new CardThumbnailRoundCorners(context, _offer.getBusiness().getImageFile().getUrl());
 				addCardThumbnail(cardThumbnail);
 			}
 			
