@@ -158,6 +158,7 @@ public class CustomerOffersFragment extends OnClickListenerFragment {
 			}
 			
 			setId(_offer.getObjectId());
+			setBackgroundResourceId(R.drawable.layout_rounded_corners);
 		}
 		
 		@Override
