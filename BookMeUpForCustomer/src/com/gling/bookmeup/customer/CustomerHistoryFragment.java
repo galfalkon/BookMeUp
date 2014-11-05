@@ -3,7 +3,6 @@ package com.gling.bookmeup.customer;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
-import it.gmariotti.cardslib.library.internal.CardHeader;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,11 +19,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ListView;
 
+import com.gling.bookmeup.customer.cards.BusinessCard;
 import com.gling.bookmeup.main.OnClickListenerFragment;
 import com.gling.bookmeup.main.views.BaseListViewWrapperView.DisplayMode;
 import com.gling.bookmeup.main.views.CardListViewWrapperView;
@@ -65,7 +64,9 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 		_businessesCardListView = (CardListViewWrapperView) view.findViewById(R.id.customer_history_business_list_listViewBusinesses);
 		_businessesCardListView.setAdapter(_businessesCardAdapter);
 		_businessesCardListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-
+		// should be called AFTER _businessesCardListView.setAdapter()
+		_businessesCardAdapter.setRowLayoutId(R.layout.customer_business_card_view);
+		
 		_edtSearch = (EditText)view.findViewById(R.id.customer_history_business_list_edtSearch);
 		_edtSearch.addTextChangedListener(this);
 
@@ -87,8 +88,7 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 					return;
 				}
 				for (Booking bookingParseObject : objects) {
-					com.gling.bookmeup.sharedlib.parse.Business businessItem = (com.gling.bookmeup.sharedlib.parse.Business) 
-							bookingParseObject.get(Booking.Keys.BUSINESS_POINTER);
+					com.gling.bookmeup.sharedlib.parse.Business businessItem = bookingParseObject.getBusiness();
 					
 					Business currentBusiness = new Business(businessItem);
 					Card businessCard = currentBusiness.toCard(getActivity());
@@ -175,10 +175,12 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 	
 	private static class Business {
 		public final String _id, _businessName;
+		private com.gling.bookmeup.sharedlib.parse.Business _business;
 		
 		public Business(com.gling.bookmeup.sharedlib.parse.Business business) {
 			_id = business.getObjectId();
 			_businessName = business.getName();
+			_business = business;
 		}
 
 		@Override
@@ -192,14 +194,8 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 		}
 		
 		public Card toCard(Context context) {
-			CardHeader header = new CardHeader(context);
-			header.setTitle(_businessName);
-			header.setButtonExpandVisible(false);
-			
-			Card card = new Card(context);
-			card.addCardHeader(header);
+		    Card card = new BusinessCard(context, _business);
 			card.setId(_id);
-			
 			return card;
 		}
 	}
