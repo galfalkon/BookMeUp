@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ListView;
@@ -92,31 +93,6 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 					
 					Business currentBusiness = new Business(businessItem);
 					Card businessCard = currentBusiness.toCard(getActivity());
-					businessCard.setOnClickListener(new OnCardClickListener() {
-						
-						@Override
-						public void onClick(Card businessCard, View arg1) {
-							if (!_allParseBusinesses.containsKey(businessCard.getId())) {
-								Log.i(TAG, "Business Dialog - could not find business");
-								Crouton.showText(getActivity(), "Could not find business", Style.ALERT);
-								return;
-							}
-							com.gling.bookmeup.sharedlib.parse.Business business = _allParseBusinesses.get(businessCard.getId());
-//							Log.i(TAG, "Business Dialog - " + business.getName());
-//							CustomerChooseBusinessDialogs dialog = new CustomerChooseBusinessDialogs();
-//							dialog.createBusinessProfileDialog(business, getActivity(), getResources(), Customer.getCurrentCustomer());
-							
-							Activity activity = getActivity();
-							if (activity instanceof CustomerMainActivity) {
-								CustomerMainActivity customerActivity = (CustomerMainActivity)activity;
-								customerActivity.setChosenBusiness(business);
-								customerActivity.setLastFragment(_thisFragment);
-							}
-
-							Fragment fragment = new CustomerBookingProfileFragment();
-							getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-						}
-					});
 					if (!_allBusinesses.containsKey(currentBusiness._id)) {						
 						_filteredBusinesses.add(businessCard);
 						_allBusinesses.put(currentBusiness._id, currentBusiness);
@@ -139,14 +115,12 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 		return view;
 	}
     
-//    @Override
-//    public void onPause() {
-//    	InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//		_edtSearch.clearFocus();
-//		imm.hideSoftInputFromWindow(_edtSearch.getWindowToken(), 0);
-//    	super.onPause();
-//    }
-
+    @Override
+    public void onPause() {
+    	InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(_edtSearch.getWindowToken(), 0);
+    	super.onPause();
+    }
 	
 	@Override
 	protected int getFragmentLayoutId() {
@@ -173,7 +147,8 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 		_businessesCardAdapter.getFilter().filter(s);
 	}
 	
-	private static class Business {
+	private class Business 
+	{
 		public final String _id, _businessName;
 		private com.gling.bookmeup.sharedlib.parse.Business _business;
 		
@@ -196,6 +171,34 @@ public class CustomerHistoryFragment extends OnClickListenerFragment implements 
 		public Card toCard(Context context) {
 		    Card card = new BusinessCard(context, _business);
 			card.setId(_id);
+			
+			card.setOnClickListener(new OnCardClickListener() {
+				
+				@Override
+				public void onClick(Card businessCard, View arg1) {
+					if (!_allParseBusinesses.containsKey(businessCard.getId())) {
+						Log.i(TAG, "Business Dialog - could not find business");
+						Crouton.showText(getActivity(), "Could not find business", Style.ALERT);
+						return;
+					}
+					com.gling.bookmeup.sharedlib.parse.Business business = _allParseBusinesses.get(businessCard.getId());
+//					Log.i(TAG, "Business Dialog - " + business.getName());
+//					CustomerChooseBusinessDialogs dialog = new CustomerChooseBusinessDialogs();
+//					dialog.createBusinessProfileDialog(business, getActivity(), getResources(), Customer.getCurrentCustomer());
+					
+					Activity activity = getActivity();
+					if (activity instanceof CustomerMainActivity) {
+						CustomerMainActivity customerActivity = (CustomerMainActivity)activity;
+						customerActivity.setChosenBusiness(business);
+						customerActivity.setLastFragment(_thisFragment);
+					}
+
+					Fragment fragment = new CustomerBookingProfileFragment();
+					getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+				}
+			});
+			
+			
 			return card;
 		}
 	}
