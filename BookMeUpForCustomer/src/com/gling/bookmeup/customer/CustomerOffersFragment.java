@@ -2,7 +2,6 @@ package com.gling.bookmeup.customer;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
-import it.gmariotti.cardslib.library.internal.CardThumbnail;
 
 import java.util.List;
 
@@ -16,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.gling.bookmeup.customer.cards.CardThumbnailRoundCorners;
 import com.gling.bookmeup.main.Constants;
 import com.gling.bookmeup.main.GenericCardArrayAdapter;
 import com.gling.bookmeup.main.ICardGenerator;
@@ -61,7 +59,6 @@ public class CustomerOffersFragment extends OnClickListenerFragment {
         _offersAdapter = new GenericCardArrayAdapter<Offer>(getActivity(), _offers, new OfferCardsGenerator());
         _offersListView = (CardListViewWrapperView) view.findViewById(R.id.customer_inbox_offersListView);
         _offersListView.setAdapter(_offersAdapter);
-        _offersAdapter.setRowLayoutId(R.layout.list_card_thumbnail_layout);
         
 		ParseQuery<ParseHelper.Offer> parseQuery = new ParseQuery<ParseHelper.Offer>(ParseHelper.Offer.class).
 				whereEqualTo(ParseHelper.Offer.Keys.CUSTOMER_POINTERS, Customer.getCurrentCustomer()).
@@ -150,12 +147,6 @@ public class CustomerOffersFragment extends OnClickListenerFragment {
 			_offer = offer;
 			
 			setOnClickListener(onClickListener);
-			
-			if (_offer.getBusiness().getImageFile() != null)
-			{
-				CardThumbnail cardThumbnail = new CardThumbnailRoundCorners(context, _offer.getBusiness().getImageFile().getUrl());
-				addCardThumbnail(cardThumbnail);
-			}
 			
 			setId(_offer.getObjectId());
 			setBackgroundResourceId(R.drawable.layout_rounded_corners);
