@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import com.gling.bookmeup.customer.BookMeUpForCustomerApplication;
 import com.gling.bookmeup.customer.CustomerMainActivity;
 import com.gling.bookmeup.main.PushUtils;
 import com.gling.bookmeup.sharedlib.login.SplashScreenActivityBase;
@@ -94,7 +93,7 @@ public class CustomerSplashScreenActivity extends SplashScreenActivityBase {
 
             PushUtils.PushNotificationType pushType = PushUtils.PushNotificationType
                                                                                     .valueOfAction(action);
-            Intent intent = new Intent(BookMeUpForCustomerApplication.getContext(), CustomerMainActivity.class);
+            Intent intent = new Intent(this, CustomerMainActivity.class);
             pushType.putIntoIntent(intent);
             startActivity(intent);
         } catch (JSONException e) {
