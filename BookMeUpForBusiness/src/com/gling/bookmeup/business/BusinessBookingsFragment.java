@@ -329,7 +329,8 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
 			
 	    	
 	    	addCardHeader(cardHeader);
-	    	setOnLongClickListener(onLongClickListener); 
+	    	setOnLongClickListener(onLongClickListener);
+	    	setBackgroundResourceId(R.drawable.layout_rounded_corners);
 		}
 		
 		@Override
