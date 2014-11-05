@@ -175,7 +175,7 @@
         android:id="@+id/customer_booking_profile_btnSwitchView"
         android:layout_width="fill_parent"
         android:layout_height="0px"
-        android:layout_weight="0.10"
+        android:layout_weight="0.13"
         android:layout_marginBottom="10.0dip"
         android:layout_marginLeft="15.0dip"
         android:layout_marginRight="15.0dip"
