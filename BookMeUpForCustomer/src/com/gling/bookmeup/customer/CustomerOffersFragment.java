@@ -58,9 +58,9 @@ public class CustomerOffersFragment extends OnClickListenerFragment {
 		final View view = super.onCreateView(inflater, container, savedInstanceState);
 		
         _offersAdapter = new GenericCardArrayAdapter<Offer>(getActivity(), _offers, new OfferCardsGenerator());
-        _offersAdapter.setRowLayoutId(R.layout.customer_business_card_view);
         _offersListView = (CardListViewWrapperView) view.findViewById(R.id.customer_inbox_offersListView);
         _offersListView.setAdapter(_offersAdapter);
+        _offersAdapter.setRowLayoutId(R.layout.list_card_thumbnail_layout);
         
 		ParseQuery<ParseHelper.Offer> parseQuery = new ParseQuery<ParseHelper.Offer>(ParseHelper.Offer.class).
 				whereEqualTo(ParseHelper.Offer.Keys.CUSTOMER_POINTERS, Customer.getCurrentCustomer()).
