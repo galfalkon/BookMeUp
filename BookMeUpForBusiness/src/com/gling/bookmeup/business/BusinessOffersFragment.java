@@ -104,7 +104,7 @@ public class BusinessOffersFragment extends OnClickListenerFragment {
 			
 			_context = context;
 			_offer = offer;
-			setBackgroundResourceId(R.drawable.layout_rounded_corners);
+			setBackgroundResourceId(R.drawable.customer_business_card_selector);
 		}
 		
 		@Override

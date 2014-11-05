@@ -579,7 +579,7 @@ public class BusinessCustomersListFragment  extends OnClickListenerFragment impl
 			
 			setId(customer._id);
 			setOnLongClickListener(onLongCardClickListener);
-			setBackgroundResourceId(R.drawable.layout_rounded_corners);
+			setBackgroundResourceId(R.drawable.customer_business_card_selector);
 		}
 		
 		@Override

@@ -10,10 +10,16 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.gling.bookmeup.CustomerCalendarActivity$CustomerCalendarFragment" >
 
-    <com.gling.bookmeup.main.views.CardListViewWrapperView
+    <com.gling.bookmeup.main.views.NormalListViewWrapperView
         android:id="@+id/customer_calendar_cardListViewWrapper"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         bookmeup:emptyListText="No bookings" />
+    <!-- 
+    <com.gling.bookmeup.main.views.CardListViewWrapperView
+        android:id="@+id/customer_calendar_cardListViewWrapper"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        bookmeup:emptyListText="No bookings" /> -->
 
 </RelativeLayout>

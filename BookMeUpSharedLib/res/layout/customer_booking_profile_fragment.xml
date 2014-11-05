@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/WizardPageContainer"
-    android:orientation="vertical" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
     <RelativeLayout
+        android:id="@+id/customer_booking_profile_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp" >
@@ -52,7 +54,9 @@
     <ViewSwitcher
         android:id="@+id/customer_booking_profile_viewSwitcher"
         android:layout_width="fill_parent"
-        android:layout_height="345dp"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/customer_booking_profile_header"
+        android:layout_above="@id/customer_booking_profile_btnSwitchView"
         android:layout_marginBottom="5dp"
         android:inAnimation="@android:anim/slide_in_left"
         android:outAnimation="@android:anim/slide_out_right" >
@@ -61,13 +65,12 @@
             android:id="@+id/customer_booking_profile_detailsView"
             style="@style/WizardPageContainer"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical" >
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" >
+                android:layout_height="wrap_content" >
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -173,10 +176,11 @@
         android:id="@+id/customer_booking_profile_btnSwitchView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_marginBottom="10.0dip"
         android:layout_marginLeft="15.0dip"
         android:layout_marginRight="15.0dip"
         android:text="@string/customer_booking_profile_btnSwitchToServicesText"
         android:textSize="20.0sp" />
 
-</LinearLayout>
+</RelativeLayout>
