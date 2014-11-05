@@ -195,10 +195,17 @@ public class CustomerCalendarFragment extends Fragment {
 									while (endHour.getHourOfDay() < 20) {
 										boolean conflicted = false;
 										for (DatedBooking booked : _datedBooked) {
+											
 											if ((startHour.toDate().before(booked.getStartDate()) &&
-													endHour.toDate().after(booked.getStartDate())) || 
+													endHour.toDate().after(booked.getStartDate())) ||
+													
 													(startHour.toDate().before(booked.getEndDate()) &&
-															startHour.toDate().after(booked.getStartDate()))) {
+															startHour.toDate().after(booked.getStartDate())) ||
+															
+													(startHour.toDate().equals(booked.getStartDate()))
+															
+													) {
+												
 												Log.i(TAG, startHour.toDate().toString() + " is conflicted");
 												conflicted = true;
 											}
@@ -242,7 +249,7 @@ public class CustomerCalendarFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 				builder.setTitle(R.string.customer_booking_title);
-				final Booking bookingToSave = _possibleBookings.get(position);
+				final Booking bookingToSave = _possibleBookings.get(position-1);
 				builder.setMessage("For service:   " + bookingToSave.getServiceName() +
 						"\nAt time:          " + Constants.DATE_TIME_FORMAT.format(bookingToSave.getDate()));
 
