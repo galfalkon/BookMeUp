@@ -2,6 +2,7 @@ package com.gling.bookmeup.customer;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.Card.OnCardClickListener;
+import it.gmariotti.cardslib.library.internal.CardThumbnail;
 
 import java.util.List;
 
@@ -57,6 +58,7 @@ public class CustomerOffersFragment extends OnClickListenerFragment {
 		final View view = super.onCreateView(inflater, container, savedInstanceState);
 		
         _offersAdapter = new GenericCardArrayAdapter<Offer>(getActivity(), _offers, new OfferCardsGenerator());
+        _offersAdapter.setRowLayoutId(R.layout.customer_business_card_view);
         _offersListView = (CardListViewWrapperView) view.findViewById(R.id.customer_inbox_offersListView);
         _offersListView.setAdapter(_offersAdapter);
         
@@ -147,6 +149,16 @@ public class CustomerOffersFragment extends OnClickListenerFragment {
 			_offer = offer;
 			
 			setOnClickListener(onClickListener);
+			
+			if (_offer.getBusiness().getImageFile() != null)
+			{
+				CardThumbnail cardThumbnail = new CardThumbnail(context);
+				cardThumbnail.setUrlResource(_offer.getBusiness().getImageFile().getUrl());
+				cardThumbnail.setErrorResource(R.drawable.ic_error_loadingorangesmall);
+				
+				addCardThumbnail(cardThumbnail);
+			}
+			
 			setId(_offer.getObjectId());
 		}
 		
