@@ -179,21 +179,21 @@ public class ServicesFragment extends Fragment {
             String duration = edtDuration.getText().toString();
             if (TextUtils.isEmpty(duration))
             {
-            	edtDuration.setError(getActivity().getString(R.string.error_required_field));
+            	edtDuration.setError(getActivity().getApplicationContext().getString(R.string.error_required_field));
             	firstInvalidInput = edtDuration;
             }
             
             String price = edtPrice.getText().toString();
             if (TextUtils.isEmpty(price))
             {
-            	edtPrice.setError(getActivity().getString(R.string.error_required_field));
+            	edtPrice.setError(getActivity().getApplicationContext().getString(R.string.error_required_field));
             	firstInvalidInput = edtPrice;
             }
         	
         	String name = edtName.getText().toString();
         	if (TextUtils.isEmpty(name))
         	{
-        		edtName.setError(getActivity().getString(R.string.error_required_field));
+        		edtName.setError(getActivity().getApplicationContext().getString(R.string.error_required_field));
         		firstInvalidInput = edtName;
         	}
         	

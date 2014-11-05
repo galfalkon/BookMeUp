@@ -213,7 +213,7 @@ public class CustomerMyBookingsFragment extends OnClickListenerFragment {
 			txtDate.setText(Constants.DATE_TIME_FORMAT.format(_booking.getDate()));
 			
 			TextView txtStatus = (TextView) view.findViewById(R.id.customer_my_bookings_booking_card_status);
-			Resources resources = _context.getApplicationContext().getResources();
+			Resources resources = getContext().getResources();
 			int statusStringResourceId, statusColorResourceId;
 			switch (_booking.getStatus())
 			{

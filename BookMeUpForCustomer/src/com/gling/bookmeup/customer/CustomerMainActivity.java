@@ -65,7 +65,7 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
 			Log.e(TAG, "No current customer");
 			
 			ParseUser.logOut();
-			Intent intent = new Intent(getApplicationContext(),
+			Intent intent = new Intent(BookMeUpForCustomerApplication.getContext(),
 					LoginMainActivityBase.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 			startActivity(intent);
@@ -119,10 +119,10 @@ public class CustomerMainActivity extends NavigationDrawerActivity {
             intent = new Intent("android.intent.action.SENDTO");
             intent.setType("message/rfc822");
             intent.setData(Uri.parse(getString(R.string.mailto_support)));
-            intent.putExtra("android.intent.extra.SUBJECT", this.getString(R.string.feedback_subject));
-            intent.putExtra("android.intent.extra.TEXT", this.getString(R.string.feedback_text));
+            intent.putExtra("android.intent.extra.SUBJECT", getString(R.string.feedback_subject));
+            intent.putExtra("android.intent.extra.TEXT", getString(R.string.feedback_text));
             try {
-                startActivity(Intent.createChooser(intent, this.getString(R.string.send_feedback)));
+                startActivity(Intent.createChooser(intent, getString(R.string.send_feedback)));
             } catch (ActivityNotFoundException localActivityNotFoundException) {
                 Crouton.showText(this, R.string.no_email_clients_installed, Style.ALERT);
             }

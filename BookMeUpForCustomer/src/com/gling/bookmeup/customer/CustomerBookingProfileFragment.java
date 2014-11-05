@@ -113,14 +113,14 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 
 			ParseFile image = business.getImageFile();
 			final ParseImageView imageView = (ParseImageView) view.findViewById(R.id.customer_booking_profile_businessParseImageView);
-			imageView.setPlaceholder(getActivity().getApplicationContext().getResources().getDrawable(R.drawable.ic_person));
+			imageView.setPlaceholder(getActivity().getResources().getDrawable(R.drawable.ic_person));
 			imageView.setParseFile(image);
 			imageView.loadInBackground(new GetDataCallback() {
 				@Override
 				public void done(byte[] data, ParseException e) {
 					if (e != null) {
 						Log.e(TAG, "" + e.getMessage());
-						imageView.setPlaceholder(getActivity().getApplicationContext().getResources().getDrawable(R.drawable.ic_person));
+						imageView.setPlaceholder(BookMeUpForCustomerApplication.getContext().getResources().getDrawable(R.drawable.ic_person));
 						return;
 					}
 					Log.i(TAG, "Fetched business image");
@@ -241,7 +241,7 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 				Business businessItem = (Business) parseObject;
 				if (business.getObjectId().equals(businessItem.getObjectId())) {
 					favourite = true;
-					favouriteIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_on));
+					favouriteIcon.setImageDrawable(getActivity().getApplicationContext().getResources().getDrawable(android.R.drawable.btn_star_big_on));
 					break;
 				}
 			}
@@ -254,7 +254,7 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 			@Override
 			public void onClick(View v) {
 				if (clicked) {
-					favouriteIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_off));
+					favouriteIcon.setImageDrawable(getActivity().getApplicationContext().getResources().getDrawable(android.R.drawable.btn_star_big_off));
 					@SuppressWarnings("unchecked")
 					ArrayList<ParseObject> businesses = (ArrayList<ParseObject>) currentCustomer.get(Customer.Keys.FAVOURITES);
 					ArrayList<ParseObject> toRemove = new ArrayList<ParseObject>();
@@ -274,7 +274,7 @@ public class CustomerBookingProfileFragment extends OnClickListenerFragment impl
 					@SuppressWarnings("unchecked")
 					ArrayList<ParseObject> businesses = (ArrayList<ParseObject>) currentCustomer.get(Customer.Keys.FAVOURITES);
 					if (businesses.size() < 10) {
-						favouriteIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_on));
+						favouriteIcon.setImageDrawable(getActivity().getApplicationContext().getResources().getDrawable(android.R.drawable.btn_star_big_on));
 						boolean exists = false;
 						for (ParseObject parseObject : businesses) {
 							if (parseObject instanceof Business) {

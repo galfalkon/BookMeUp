@@ -244,22 +244,26 @@ public class CustomerCalendarFragment extends Fragment {
 		@Override
 		public Card generateCard(Booking booking) 
 		{
+		    if (!isAdded()) {
+		        return null;
+		    }
+		    
 			String status;
 			int statusColor;
 			switch (booking.getStatus())
 			{
 			case Booking.Status.PENDING:
-				status = getString(R.string.customer_my_bookings_booking_pending_for_approval);
-				statusColor = getResources().getColor(android.R.color.holo_purple);
+				status = getActivity().getApplicationContext().getString(R.string.customer_my_bookings_booking_pending_for_approval);
+				statusColor = getActivity().getApplicationContext().getResources().getColor(android.R.color.holo_purple);
 				break;
 			case Booking.Status.APPROVED:
-				status = getString(R.string.customer_my_bookings_booking_approved);
-				statusColor = getResources().getColor(android.R.color.holo_green_light);
+				status = getActivity().getApplicationContext().getString(R.string.customer_my_bookings_booking_approved);
+				statusColor = getActivity().getApplicationContext().getResources().getColor(android.R.color.holo_green_light);
 				break;
 			case Booking.Status.CANCELED:
 			default:
-				status = getString(R.string.customer_my_bookings_booking_canceled);
-				statusColor = getResources().getColor(android.R.color.holo_red_light);
+				status = getActivity().getApplicationContext().getString(R.string.customer_my_bookings_booking_canceled);
+				statusColor = getActivity().getApplicationContext().getResources().getColor(android.R.color.holo_red_light);
 				break;
 			}
 

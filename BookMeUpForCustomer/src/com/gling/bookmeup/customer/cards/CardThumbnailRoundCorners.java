@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.ImageView;
 
 import com.gling.bookmeup.main.Utils;
 import com.gling.bookmeup.main.drawable.RoundCornersDrawable;
@@ -48,7 +47,7 @@ public class CardThumbnailRoundCorners extends CardThumbnail {
     
     private int dpToPx(int dp)
     {
-        float density = getContext().getApplicationContext().getResources().getDisplayMetrics().density;
+        float density = getContext().getResources().getDisplayMetrics().density;
         return Math.round((float)dp * density);
     }
 }

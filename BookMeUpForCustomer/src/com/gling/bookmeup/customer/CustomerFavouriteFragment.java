@@ -117,6 +117,10 @@ public class CustomerFavouriteFragment extends OnClickListenerFragment implement
 		@Override
 		protected Void doInBackground(Void... params) 
 		{
+		    if (Customer.getCurrentCustomer() == null) {
+		        return null;
+		    }
+		    
 			@SuppressWarnings("unchecked")
 			ArrayList<ParseObject> favouriteBusinesses = (ArrayList<ParseObject>) Customer.getCurrentCustomer().get(Customer.Keys.FAVOURITES);
 			

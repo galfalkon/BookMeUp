@@ -74,7 +74,7 @@
 
     <!-- Book Up Appointment -->
     <string name="customer_booking_title">Book Up An Appointment</string>
-    <string name="customer_booking_ok_button">Book Me Up!!</string>
+    <string name="customer_booking_ok_button">Book Me Up!</string>
 
     <!-- Customer All Businesses -->
     <string name="customer_all_businesses_list_search_edtSearchHint">Search for...</string>

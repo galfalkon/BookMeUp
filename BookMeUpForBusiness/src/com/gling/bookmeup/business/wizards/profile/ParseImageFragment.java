@@ -230,7 +230,7 @@ public class ParseImageFragment extends Fragment {
         ProgressDialog progressDialog = ProgressDialog
                                                       .show(getActivity(),
                                                             null,
-                                                            getString(R.string.progress_dialog_please_wait));
+                                                            getActivity().getApplicationContext().getString(R.string.progress_dialog_please_wait));
         byte[] scaledImage = Utils.getScaledImage(getActivity().getBaseContext(), mNewImageUri);
         imageView.setImageBitmap(BitmapFactory.decodeByteArray(scaledImage, 0, scaledImage.length));
         mPage.getData().putByteArray(Page.SIMPLE_DATA_KEY, scaledImage);

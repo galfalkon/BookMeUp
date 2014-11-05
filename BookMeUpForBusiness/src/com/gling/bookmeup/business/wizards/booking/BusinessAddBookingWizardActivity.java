@@ -65,7 +65,7 @@ public class BusinessAddBookingWizardActivity extends FragmentActivity implement
         final ProgressDialog progressDialog = ProgressDialog
                                                             .show(_context,
                                                                   null,
-                                                                  getString(R.string.progress_dialog_please_wait));
+                                                                  getApplicationContext().getString(R.string.progress_dialog_please_wait));
 
         new AsyncTask<Void, Void, Void>() {
             @Override

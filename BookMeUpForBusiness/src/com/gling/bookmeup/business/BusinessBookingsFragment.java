@@ -194,7 +194,7 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
     {
     	// Update title
     	if (isAdded()) {
-    		_btnPending.setText(String.format("%s (%d)",getString(R.string.business_bookings_list_pending_header), _pendingBookings.size()));
+    		_btnPending.setText(String.format("%s (%d)",getActivity().getApplicationContext().getString(R.string.business_bookings_list_pending_header), _pendingBookings.size()));
     	}
     	
     	
@@ -207,7 +207,7 @@ public class BusinessBookingsFragment extends OnClickListenerFragment {
     {
     	// Update title
     	if (isAdded()) {
-    		_btnApproved.setText(String.format("%s (%d)",getString(R.string.business_bookings_list_approved_header), _approvedBookings.size()));
+    		_btnApproved.setText(String.format("%s (%d)",getActivity().getApplicationContext().getString(R.string.business_bookings_list_approved_header), _approvedBookings.size()));
     	}
     	
     	// Update display mode

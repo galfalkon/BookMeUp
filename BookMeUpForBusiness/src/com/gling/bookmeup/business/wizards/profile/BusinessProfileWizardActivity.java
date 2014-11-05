@@ -63,7 +63,7 @@ public class BusinessProfileWizardActivity extends FragmentActivity implements
         final ProgressDialog progressDialog = ProgressDialog
                                                             .show(_context,
                                                                   null,
-                                                                  getString(R.string.progress_dialog_saving_profile));
+                                                                  getApplicationContext().getString(R.string.progress_dialog_saving_profile));
 
         new AsyncTask<Void, Void, Void>() {
             @Override
