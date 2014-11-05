@@ -167,7 +167,10 @@ public class CustomerCalendarFragment extends Fragment {
 							serviceQuery.findInBackground(new FindCallback<Service>() {
 								@Override
 								public void done(List<Service> objects, ParseException e) {
-
+								    if (!isAdded()) {
+								        return;
+								    }
+								    
 									if (objects.size() != 1) {
 										Log.e(TAG, "problem");
 										return;
@@ -176,7 +179,7 @@ public class CustomerCalendarFragment extends Fragment {
 									int duration = service.getDuration();
 									_bookingsCardAdapter.setDurtation(duration);
 									String serviceName = service.getName();
-									String headerText = getActivity().getApplicationContext().getString(R.string.customer_calendar_choosing_instructions) +
+									String headerText = getActivity().getString(R.string.customer_calendar_choosing_instructions) +
 											" " + serviceName + " service?";
 									_headerView.setText(headerText);
 
