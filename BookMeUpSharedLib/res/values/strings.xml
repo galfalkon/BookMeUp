@@ -173,7 +173,7 @@
     <!-- Business offer list -->
     <string name="business_offer_list_no_offers">No offers</string>
     <string name="business_offer_list_offer_card_discount">"Discount: "</string>
-    <string name="business_offer_list_offer_card_expiration_date">"Expiration date: "</string>
+    <string name="business_offer_list_offer_card_expiration_date">"Expires on: "</string>
     <string name="business_offer_list_offer_card_status">"Status: "</string>
 
     <!-- Shared prefs -->

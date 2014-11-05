@@ -9,7 +9,7 @@
 	<string name="customer_my_bookings_booking_card_status">"Status: "</string>
 	
 	<!-- Offers -->
-	<string name="customer_offer_list_offer_card_business_name">"Business name: "</string>
+	<string name="customer_offer_list_offer_card_business_name">"Business: "</string>
 	<string name="customer_offer_list_offer_card_discount">"Discount: "</string>
-	<string name="customer_offer_list_offer_card_expiration_date">"Expiration date: "</string>
+	<string name="customer_offer_list_offer_card_expiration_date">"Expires on: "</string>
 </resources>
